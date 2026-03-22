@@ -14,6 +14,7 @@ import { Home as DashboardHome } from "./pages/dashboard/Home.tsx";
 import { Analytics } from "./pages/dashboard/Analytics.tsx";
 import { BrandDeals } from "./pages/dashboard/BrandDeals.tsx";
 import { ContentStudio } from "./pages/dashboard/ContentStudio.tsx";
+import { Calendar } from "./pages/dashboard/Calendar.tsx";
 import { ComingSoon } from "./pages/dashboard/ComingSoon.tsx";
 
 const queryClient = new QueryClient();
@@ -36,7 +37,7 @@ const App = () => (
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/deals" element={<BrandDeals />} />
             <Route path="/studio" element={<ContentStudio />} />
-            <Route path="/calendar" element={<ComingSoon title="Smart Content Calendar" />} />
+            <Route path="/calendar" element={<Calendar />} />
             <Route path="/growth" element={<ComingSoon title="Growth Strategy Engine" />} />
             <Route path="/network" element={<ComingSoon title="Creator Network" />} />
             <Route path="/revenue" element={<ComingSoon title="Monetisation & Revenue" />} />
