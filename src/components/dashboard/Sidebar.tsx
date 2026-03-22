@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { 
   Home, BarChart3, Handshake, BrainCircuit, Calendar, 
   TrendingUp, Globe, DollarSign, ShieldCheck, Palette, 
-  MessageSquare, Bell, Settings, Menu, Sparkles
+  MessageSquare, Bell, Settings, Menu, Sparkles, Briefcase
 } from "lucide-react";
 
 const navItems = [
@@ -101,8 +101,18 @@ export const Sidebar = () => {
             <span className="text-xs text-muted-foreground">@alexcreates</span>
           </div>
         </div>
+        <Link 
+          to="/brand"
+          className="mt-2 relative w-full rounded-lg bg-indigo-500/10 border border-indigo-500/30 p-2 text-indigo-400 font-bold overflow-hidden group mb-2"
+          title={!isExpanded ? "Switch to Brand Mode" : undefined}
+        >
+          <div className="flex items-center justify-center gap-2">
+            <Briefcase className="w-4 h-4" />
+            {isExpanded && <span className="text-sm">Brand Mode</span>}
+          </div>
+        </Link>
         <button 
-          className="mt-2 relative w-full rounded-lg bg-primary/10 border border-primary/30 p-2 text-primary font-bold overflow-hidden group"
+          className="relative w-full rounded-lg bg-primary/10 border border-primary/30 p-2 text-primary font-bold overflow-hidden group"
           title={!isExpanded ? "AI Chat" : undefined}
         >
           <span className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 group-hover:animate-pulse transition-opacity" />

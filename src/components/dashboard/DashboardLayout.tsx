@@ -4,6 +4,7 @@ import { Sidebar } from "./Sidebar";
 import { Header } from "./Header";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageSquare, X, Sparkles } from "lucide-react";
+import { FloatingAiChat } from "./FloatingAiChat";
 
 const getPageTitle = (pathname: string) => {
   switch (pathname) {
@@ -56,73 +57,8 @@ export const DashboardLayout = () => {
         </main>
       </div>
 
-      {/* Floating AI Chat Assistant */}
-      <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-4">
-        <AnimatePresence>
-          {isAIChatOpen && (
-            <motion.div 
-              initial={{ opacity: 0, y: 20, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 20, scale: 0.95 }}
-              transition={{ duration: 0.3, type: "spring", bounce: 0.4 }}
-              className="w-[380px] h-[560px] bg-card/95 backdrop-blur-xl border border-border/50 rounded-2xl shadow-2xl flex flex-col overflow-hidden"
-            >
-              <div className="h-14 border-b border-border/40 flex items-center justify-between px-4 bg-muted/20">
-                <div className="flex items-center gap-2 font-bold">
-                  <Sparkles className="w-4 h-4 text-primary" />
-                  CreatorForge AI Assistant
-                </div>
-                <button 
-                  onClick={() => setIsAIChatOpen(false)}
-                  className="p-1.5 rounded-full hover:bg-muted/50 transition-colors"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-              
-              <div className="flex-1 p-4 overflow-y-auto space-y-4 text-sm flex flex-col">
-                <div className="bg-primary/10 border border-primary/20 rounded-xl rounded-tl-sm p-3 max-w-[85%]">
-                  👋 Hey Alex! Your follower growth is performing well today. How can I help you scale faster?
-                </div>
-              </div>
-
-              <div className="p-3 border-t border-border/40 bg-muted/10">
-                <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-none">
-                  {[
-                    "What should I post today?",
-                    "Write a pitch for Zomato",
-                    "Why is my reach dropping?"
-                  ].map((prompt) => (
-                    <button key={prompt} className="whitespace-nowrap px-3 py-1.5 text-xs bg-background border border-border/50 rounded-full hover:border-primary/50 transition-colors">
-                      {prompt}
-                    </button>
-                  ))}
-                </div>
-                <div className="relative">
-                  <input 
-                    type="text" 
-                    placeholder="Ask your AI coach anything..." 
-                    className="w-full h-10 bg-background border border-border/50 rounded-xl pl-3 pr-10 text-sm focus:outline-none focus:ring-1 focus:ring-primary"
-                  />
-                  <button className="absolute right-1 top-1 bottom-1 w-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center hover:bg-primary/20 transition-colors">
-                    ▲
-                  </button>
-                </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        <motion.button 
-          onClick={() => setIsAIChatOpen(!isAIChatOpen)}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="w-14 h-14 rounded-full bg-primary flex items-center justify-center text-primary-foreground shadow-[0_0_30px_-5px_hsl(var(--primary))] relative z-50 group hover:animate-none"
-        >
-          <div className="absolute inset-0 rounded-full border border-primary/50 animate-ping opacity-20" />
-          {isAIChatOpen ? <X className="w-6 h-6" /> : <MessageSquare className="w-6 h-6" />}
-        </motion.button>
-      </div>
+      {/* Floating AI Chat Assistant (Section 12) */}
+      <FloatingAiChat />
     </div>
   );
 };

@@ -22,6 +22,10 @@ import { Revenue } from "./pages/dashboard/Revenue.tsx";
 import { Contracts } from "./pages/dashboard/Contracts.tsx";
 import { MediaKit } from "./pages/dashboard/MediaKit.tsx";
 import { Messages } from "./pages/dashboard/Messages.tsx";
+import { BrandLayout } from "./components/brand/BrandLayout.tsx";
+import { BrandHome } from "./pages/brand/BrandHome.tsx";
+import { DiscoverCreators } from "./pages/brand/DiscoverCreators.tsx";
+import { PostBrief } from "./pages/brand/PostBrief.tsx";
 import { ComingSoon } from "./pages/dashboard/ComingSoon.tsx";
 
 const queryClient = new QueryClient();
@@ -52,6 +56,17 @@ const App = () => (
             <Route path="/contracts" element={<Contracts />} />
             <Route path="/mediakit" element={<MediaKit />} />
             <Route path="/messages" element={<Messages />} />
+          </Route>
+
+          {/* Brand Mode Routes (Section 13) */}
+          <Route path="/brand" element={<BrandLayout />}>
+            <Route index element={<BrandHome />} />
+            <Route path="discover" element={<DiscoverCreators />} />
+            <Route path="post-brief" element={<PostBrief />} />
+            <Route path="analytics" element={<ComingSoon title="Campaign Analytics" />} />
+            <Route path="messages" element={<ComingSoon title="Brand Messages" />} />
+            <Route path="deals" element={<ComingSoon title="Active Deals" />} />
+            <Route path="contracts" element={<ComingSoon title="Brand Contracts" />} />
           </Route>
 
           <Route path="*" element={<NotFound />} />
