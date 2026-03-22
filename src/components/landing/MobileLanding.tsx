@@ -1,6 +1,12 @@
 import { motion } from "framer-motion";
 import { Sparkles, ArrowRight, Wand2, BarChart3, Handshake } from "lucide-react";
-import { Link } from "react-router-dom";
+import { toast } from "sonner";
+
+const handleAction = () => {
+  toast("Mobile App Coming Soon!", {
+    description: "We're currently optimizing the mobile experience.",
+  });
+};
 
 const MobileLanding = () => {
   return (
@@ -12,9 +18,9 @@ const MobileLanding = () => {
           <span>CREATORX</span>
           <span className="text-primary text-sm font-semibold">AI</span>
         </div>
-        <Link to="/login" className="text-sm font-semibold text-primary">
+        <button onClick={handleAction} className="text-sm font-semibold text-primary">
           Log In
-        </Link>
+        </button>
       </nav>
 
       {/* Mobile Hero */}
@@ -51,16 +57,15 @@ const MobileLanding = () => {
           Manage your brands, insights, and AI content creation directly from your pocket.
         </motion.p>
 
-        <motion.div
+        <motion.button 
+          onClick={handleAction}
+          className="w-full flex items-center justify-center gap-2 rounded-xl bg-primary px-6 py-4 font-semibold text-primary-foreground shadow-[0_0_30px_-5px_hsl(318,100%,62%,0.4)] active:scale-[0.98] transition-transform"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}
-          className="w-full"
         >
-          <Link to="/dashboard" className="w-full flex items-center justify-center gap-2 rounded-xl bg-primary px-6 py-4 font-semibold text-primary-foreground shadow-[0_0_30px_-5px_hsl(318,100%,62%,0.4)] active:scale-[0.98] transition-transform">
-            Download App <ArrowRight className="w-4 h-4"/>
-          </Link>
-        </motion.div>
+          Download App <ArrowRight className="w-4 h-4"/>
+        </motion.button>
       </section>
 
       {/* Mobile Features Grid */}
