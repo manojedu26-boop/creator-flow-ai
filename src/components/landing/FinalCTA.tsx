@@ -34,6 +34,7 @@ const FinalCTA = () => {
       </button>
     </motion.div>
   </section>
-);
+  );
+};
 
 export default FinalCTA;
