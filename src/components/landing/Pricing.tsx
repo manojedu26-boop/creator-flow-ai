@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Check, ArrowRight } from "lucide-react";
-
+import { useNavigate } from "react-router-dom";
 const plans = [
   {
     name: "Starter",
