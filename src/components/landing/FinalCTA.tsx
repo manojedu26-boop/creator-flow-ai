@@ -1,7 +1,10 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Sparkles } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
-const FinalCTA = () => (
+const FinalCTA = () => {
+  const navigate = useNavigate();
+  return (
   <section className="py-24 md:py-32 px-4 relative overflow-hidden">
     <div className="absolute inset-0 bg-gradient-to-t from-primary/[0.04] to-transparent" />
     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] rounded-full bg-primary/5 blur-[150px]" />
