@@ -31,8 +31,9 @@ const plans = [
   },
 ];
 
-const Pricing = () => (
-  <section className="py-24 md:py-32 px-4" id="pricing">
+const Pricing = () => {
+  const navigate = useNavigate();
+  return (
     <div className="container max-w-5xl">
       <motion.div
         className="text-center mb-16"
