@@ -11,6 +11,7 @@ import NotFound from "./pages/NotFound.tsx";
 
 import { DashboardLayout } from "./components/dashboard/DashboardLayout.tsx";
 import { Home as DashboardHome } from "./pages/dashboard/Home.tsx";
+import { Analytics } from "./pages/dashboard/Analytics.tsx";
 import { ContentStudio } from "./pages/dashboard/ContentStudio.tsx";
 import { ComingSoon } from "./pages/dashboard/ComingSoon.tsx";
 
@@ -31,7 +32,7 @@ const App = () => (
           {/* Post-Login CreatorForge Architecture */}
           <Route element={<DashboardLayout />}>
             <Route path="/dashboard" element={<DashboardHome />} />
-            <Route path="/analytics" element={<ComingSoon title="Analytics Command Centre" />} />
+            <Route path="/analytics" element={<Analytics />} />
             <Route path="/deals" element={<ComingSoon title="Brand Deals & Collab Hub" />} />
             <Route path="/studio" element={<ContentStudio />} />
             <Route path="/calendar" element={<ComingSoon title="Smart Content Calendar" />} />
