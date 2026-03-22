@@ -10,6 +10,7 @@ import {
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, 
   BarChart, Bar, PieChart, Pie, Cell, ScatterChart, Scatter, ZAxis
 } from "recharts";
+import { PageTransition, CountUp } from "../../components/shared/MotionComponents";
 
 const performanceData = [
   { name: "Mon", ig: 4000, yt: 2400, tt: 2400 },
@@ -51,11 +52,7 @@ export const Analytics = () => {
   const renderOverview = () => (
     <div className="space-y-6">
       {/* ROW 1 — MASTER GROWTH CHART */}
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="bg-card border border-border/40 rounded-3xl p-8 shadow-sm"
-      >
+      <div className="premium-card bg-card border border-border/40 rounded-3xl p-8 shadow-sm">
         <div className="flex items-center justify-between mb-8">
           <div>
             <h3 className="text-xl font-black tracking-tight uppercase">Master Growth Chart</h3>
@@ -75,55 +72,121 @@ export const Analytics = () => {
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={performanceData}>
               <defs>
+                <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur stdDeviation="3" result="blur" />
+                  <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                </filter>
                 <linearGradient id="colorIg" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#ec4899" stopOpacity={0.3}/>
-                  <stop offset="95%" stopColor="#ec4899" stopOpacity={0}/>
+                  <stop offset="0%" stopColor="#ec4899" stopOpacity={0.5}/>
+                  <stop offset="50%" stopColor="#ec4899" stopOpacity={0.1}/>
+                  <stop offset="100%" stopColor="#ec4899" stopOpacity={0}/>
                 </linearGradient>
                 <linearGradient id="colorYt" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#ef4444" stopOpacity={0.3}/>
-                  <stop offset="95%" stopColor="#ef4444" stopOpacity={0}/>
+                  <stop offset="0%" stopColor="#ef4444" stopOpacity={0.5}/>
+                  <stop offset="50%" stopColor="#ef4444" stopOpacity={0.1}/>
+                  <stop offset="100%" stopColor="#ef4444" stopOpacity={0}/>
                 </linearGradient>
                 <linearGradient id="colorTt" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#a855f7" stopOpacity={0.3}/>
-                  <stop offset="95%" stopColor="#a855f7" stopOpacity={0}/>
+                  <stop offset="0%" stopColor="#a855f7" stopOpacity={0.5}/>
+                  <stop offset="50%" stopColor="#a855f7" stopOpacity={0.1}/>
+                  <stop offset="100%" stopColor="#a855f7" stopOpacity={0}/>
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.05)" />
-              <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#64748b' }} dy={10} />
-              <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#64748b' }} />
-              <Tooltip 
-                contentStyle={{ backgroundColor: '#0f172a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', fontSize: '11px', fontWeight: 'bold' }}
-                itemStyle={{ padding: '0 2px' }}
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.03)" />
+              <XAxis 
+                dataKey="name" 
+                axisLine={false} 
+                tickLine={false} 
+                tick={{ fontSize: 10, fill: '#64748b', fontWeight: 'bold' }} 
+                dy={10} 
               />
-              <Area type="monotone" dataKey="ig" stroke="#ec4899" strokeWidth={3} fillOpacity={1} fill="url(#colorIg)" name="Instagram" />
-              <Area type="monotone" dataKey="yt" stroke="#ef4444" strokeWidth={3} fillOpacity={1} fill="url(#colorYt)" name="YouTube" />
-              <Area type="monotone" dataKey="tt" stroke="#a855f7" strokeWidth={3} fillOpacity={1} fill="url(#colorTt)" name="TikTok" />
+              <YAxis 
+                axisLine={false} 
+                tickLine={false} 
+                tick={{ fontSize: 10, fill: '#64748b', fontWeight: 'bold' }} 
+              />
+              <Tooltip 
+                contentStyle={{ 
+                  backgroundColor: 'rgba(15, 23, 42, 0.9)', 
+                  backdropFilter: 'blur(12px)',
+                  border: '1px solid rgba(255,255,255,0.1)', 
+                  borderRadius: '16px', 
+                  fontSize: '11px', 
+                  fontWeight: '900',
+                  boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.5)'
+                }}
+                itemStyle={{ padding: '2px 0' }}
+              />
+              <Area 
+                type="monotone" 
+                dataKey="ig" 
+                stroke="#ec4899" 
+                strokeWidth={4} 
+                fillOpacity={1} 
+                fill="url(#colorIg)" 
+                name="Instagram" 
+                isAnimationActive={true} 
+                animationDuration={1500}
+                filter="url(#glow)"
+                dot={{ r: 4, fill: '#ec4899', strokeWidth: 2, stroke: '#fff', fillOpacity: 1 }}
+                activeDot={{ r: 6, strokeWidth: 0, fill: '#fff' }}
+              />
+              <Area 
+                type="monotone" 
+                dataKey="yt" 
+                stroke="#ef4444" 
+                strokeWidth={4} 
+                fillOpacity={1} 
+                fill="url(#colorYt)" 
+                name="YouTube" 
+                isAnimationActive={true} 
+                animationDuration={1500}
+                filter="url(#glow)"
+                dot={{ r: 4, fill: '#ef4444', strokeWidth: 2, stroke: '#fff', fillOpacity: 1 }}
+                activeDot={{ r: 6, strokeWidth: 0, fill: '#fff' }}
+              />
+              <Area 
+                type="monotone" 
+                dataKey="tt" 
+                stroke="#a855f7" 
+                strokeWidth={4} 
+                fillOpacity={1} 
+                fill="url(#colorTt)" 
+                name="TikTok" 
+                isAnimationActive={true} 
+                animationDuration={1500}
+                filter="url(#glow)"
+                dot={{ r: 4, fill: '#a855f7', strokeWidth: 2, stroke: '#fff', fillOpacity: 1 }}
+                activeDot={{ r: 6, strokeWidth: 0, fill: '#fff' }}
+              />
             </AreaChart>
           </ResponsiveContainer>
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8 pt-8 border-t border-border/20">
           {[
-            { label: "Total Impressions", value: "2.4M", delta: "+18%" },
-            { label: "Total Reach", value: "1.1M", delta: "+24.2%" },
-            { label: "Avg Engagement", value: "4.8%", delta: "-0.5%" },
-            { label: "Best Day", value: "Friday", info: "8:00 PM" }
+            { label: "Total Impressions", value: 2400000, suffix: "M", divisor: 1000000, decimals: 1, delta: "+18%" },
+            { label: "Total Reach", value: 1100000, suffix: "M", divisor: 1000000, decimals: 1, delta: "+24.2%" },
+            { label: "Avg Engagement", value: 4.8, suffix: "%", decimals: 1, delta: "-0.5%" },
+            { label: "Best Day", value: "Friday", info: "8:00 PM", isStatic: true }
           ].map((stat, i) => (
             <div key={i} className="flex flex-col gap-1">
               <span className="text-[10px] text-muted-foreground font-black uppercase tracking-widest leading-none">{stat.label}</span>
               <div className="flex items-baseline gap-2">
-                <span className="text-2xl font-black">{stat.value}</span>
+                <span className="text-2xl font-black">
+                  {stat.isStatic ? (stat.value as string) : <CountUp value={stat.divisor ? (stat.value as number) / stat.divisor : (stat.value as number)} decimals={stat.decimals} suffix={stat.suffix} />}
+                </span>
                 {stat.delta && <span className={`text-[10px] font-bold ${stat.delta.startsWith('+') ? 'text-emerald-500' : 'text-rose-500'}`}>{stat.delta}</span>}
                 {stat.info && <span className="text-[10px] text-muted-foreground font-medium">{stat.info}</span>}
               </div>
             </div>
           ))}
         </div>
-      </motion.div>
+      </div>
 
       {/* ROW 2 — TWO CHARTS SIDE BY SIDE */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-card border border-border/40 rounded-3xl p-8 shadow-sm">
+        <div className="premium-card bg-card border border-border/40 rounded-3xl p-8 shadow-sm">
           <h3 className="text-lg font-black tracking-tight mb-8 uppercase">Engagement Breakdown</h3>
           <div className="h-[260px] w-full">
             <ResponsiveContainer width="100%" height="100%">
@@ -136,16 +199,16 @@ export const Analytics = () => {
                   contentStyle={{ backgroundColor: '#0f172a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px' }} 
                 />
                 <Legend iconType="circle" wrapperStyle={{ paddingTop: '20px', fontSize: '10px', textTransform: 'uppercase', fontWeight: 'bold' }} />
-                <Bar dataKey="likes" fill="#a855f7" radius={[4, 4, 0, 0]} barSize={32} name="Likes" />
-                <Bar dataKey="comments" fill="#ec4899" radius={[4, 4, 0, 0]} barSize={32} name="Comments" />
-                <Bar dataKey="shares" fill="#06b6d4" radius={[4, 4, 0, 0]} barSize={32} name="Shares" />
-                <Bar dataKey="saves" fill="#f59e0b" radius={[4, 4, 0, 0]} barSize={32} name="Saves" />
+                <Bar dataKey="likes" fill="#a855f7" radius={[4, 4, 0, 0]} barSize={32} name="Likes" isAnimationActive={true} animationDuration={800} />
+                <Bar dataKey="comments" fill="#ec4899" radius={[4, 4, 0, 0]} barSize={32} name="Comments" isAnimationActive={true} animationDuration={800} />
+                <Bar dataKey="shares" fill="#06b6d4" radius={[4, 4, 0, 0]} barSize={32} name="Shares" isAnimationActive={true} animationDuration={800} />
+                <Bar dataKey="saves" fill="#f59e0b" radius={[4, 4, 0, 0]} barSize={32} name="Saves" isAnimationActive={true} animationDuration={800} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
 
-        <div className="bg-card border border-border/40 rounded-3xl p-8 shadow-sm">
+        <div className="premium-card bg-card border border-border/40 rounded-3xl p-8 shadow-sm relative">
           <h3 className="text-lg font-black tracking-tight mb-8 uppercase">Content Format Performance</h3>
           <div className="h-[260px] w-full flex items-center justify-center">
              <ResponsiveContainer width="100%" height="100%">
@@ -159,6 +222,8 @@ export const Analytics = () => {
                    paddingAngle={4}
                    dataKey="value"
                    stroke="none"
+                   isAnimationActive={true}
+                   animationDuration={800}
                  >
                    {contentFormatData.map((entry, index) => (
                      <Cell key={`cell-${index}`} fill={entry.color} />
@@ -169,7 +234,9 @@ export const Analytics = () => {
                </PieChart>
              </ResponsiveContainer>
              <div className="absolute flex flex-col items-center justify-center">
-                <span className="text-2xl font-black">55%</span>
+                <span className="text-2xl font-black">
+                  <CountUp value={55} suffix="%" />
+                </span>
                 <span className="text-[9px] text-muted-foreground uppercase tracking-widest font-black">Reels</span>
              </div>
           </div>
@@ -177,11 +244,7 @@ export const Analytics = () => {
       </div>
 
       {/* ROW 3 — AI ANALYTICS INSIGHT */}
-      <motion.div 
-        initial={{ opacity: 0, scale: 0.98 }}
-        whileInView={{ opacity: 1, scale: 1 }}
-        className="bg-primary/10 border border-primary/20 rounded-3xl p-8 shadow-xl relative overflow-hidden group"
-      >
+      <div className="premium-card bg-primary/10 border border-primary/20 rounded-3xl p-8 shadow-xl relative overflow-hidden group">
         <div className="absolute top-0 right-0 p-8 text-primary opacity-10 group-hover:opacity-20 transition-opacity">
           <Sparkles className="w-32 h-32 rotate-12" />
         </div>
@@ -199,15 +262,15 @@ export const Analytics = () => {
              </p>
              <div className="flex flex-wrap gap-3 pt-2">
                <button className="px-5 py-2.5 rounded-xl bg-primary text-primary-foreground text-xs font-black uppercase tracking-widest hover:shadow-[0_0_20px_-5px_hsl(var(--primary))] transition-all active:scale-95">Generate Content Plan</button>
-               <button className="px-5 py-2.5 rounded-xl bg-background border border-border/40 text-xs font-black uppercase tracking-widest hover:bg-muted/30 transition-all transition-all active:scale-95">Schedule Posts</button>
-               <button className="px-5 py-2.5 rounded-xl bg-background border border-border/40 text-xs font-black uppercase tracking-widest hover:bg-muted/30 transition-all transition-all active:scale-95">View Trend Radar</button>
+               <button className="px-5 py-2.5 rounded-xl bg-background border border-border/40 text-xs font-black uppercase tracking-widest hover:bg-muted/30 transition-all active:scale-95">Schedule Posts</button>
+               <button className="px-5 py-2.5 rounded-xl bg-background border border-border/40 text-xs font-black uppercase tracking-widest hover:bg-muted/30 transition-all active:scale-95">View Trend Radar</button>
              </div>
           </div>
         </div>
-      </motion.div>
+      </div>
 
       {/* ROW 4 — BEST PERFORMING POSTS */}
-      <div className="bg-card border border-border/40 rounded-3xl p-8 shadow-sm">
+      <div className="premium-card bg-card border border-border/40 rounded-3xl p-8 shadow-sm">
         <div className="flex items-center justify-between mb-8">
            <h3 className="text-xl font-black tracking-tight uppercase">Best Performing Posts</h3>
            <div className="flex items-center gap-2">
@@ -251,7 +314,7 @@ export const Analytics = () => {
   const renderAudience = () => (
     <div className="space-y-6">
        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-card border border-border/40 rounded-3xl p-8">
+          <div className="premium-card bg-card border border-border/40 rounded-3xl p-8">
              <h3 className="text-lg font-black tracking-tight mb-8 uppercase">Age Range</h3>
              <div className="h-[260px] w-full">
                 <ResponsiveContainer width="100%" height="100%">
@@ -261,34 +324,44 @@ export const Analytics = () => {
                     <XAxis type="number" hide />
                     <YAxis dataKey="age" type="category" axisLine={false} tickLine={false} tick={{ fontSize: 11, fontWeight: 'bold' }} width={60} />
                     <Tooltip cursor={{ fill: 'transparent' }} contentStyle={{ backgroundColor: '#0f172a', border: 'none' }} />
-                    <Bar dataKey="value" fill="#primary" radius={[0, 4, 4, 0]}>
+                    <Bar dataKey="value" fill="#primary" radius={[0, 4, 4, 0]} isAnimationActive={true} animationDuration={800}>
                        { [1,2,3,4,5].map((_, i) => <Cell key={i} fill={i === 1 ? "#a855f7" : "#334155"} />) }
                     </Bar>
                   </BarChart>
                 </ResponsiveContainer>
              </div>
           </div>
-          <div className="bg-card border border-border/40 rounded-3xl p-8">
+          <div className="premium-card bg-card border border-border/40 rounded-3xl p-8 relative">
              <h3 className="text-lg font-black tracking-tight mb-8 uppercase">Gender Split</h3>
              <div className="h-[260px] w-full flex items-center justify-center">
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
-                    <Pie data={[{ name: "female", v: 62 }, { name: "male", v: 38 }]} innerRadius={60} outerRadius={90} dataKey="v" stroke="none">
+                    <Pie data={[{ name: "female", v: 62 }, { name: "male", v: 38 }]} innerRadius={60} outerRadius={90} dataKey="v" stroke="none" isAnimationActive={true} animationDuration={800}>
                        <Cell fill="#ec4899" /> <Cell fill="#06b6d4" />
                     </Pie>
                     <Tooltip />
                   </PieChart>
                 </ResponsiveContainer>
                 <div className="absolute flex gap-8">
-                   <div className="flex flex-col items-center"><span className="text-xl font-black text-[#ec4899]">62%</span><span className="text-[10px] font-black text-muted-foreground">FEMALE</span></div>
-                   <div className="flex flex-col items-center"><span className="text-xl font-black text-[#06b6d4]">38%</span><span className="text-[10px] font-black text-muted-foreground">MALE</span></div>
+                   <div className="flex flex-col items-center">
+                    <span className="text-xl font-black text-[#ec4899]">
+                      <CountUp value={62} suffix="%" />
+                    </span>
+                    <span className="text-[10px] font-black text-muted-foreground">FEMALE</span>
+                   </div>
+                   <div className="flex flex-col items-center">
+                    <span className="text-xl font-black text-[#06b6d4]">
+                      <CountUp value={38} suffix="%" />
+                    </span>
+                    <span className="text-[10px] font-black text-muted-foreground">MALE</span>
+                   </div>
                 </div>
              </div>
           </div>
        </div>
 
        {/* ACTIVE HOURS HEATMAP */}
-       <div className="bg-card border border-border/40 rounded-3xl p-8">
+       <div className="premium-card bg-card border border-border/40 rounded-3xl p-8">
           <h3 className="text-lg font-black tracking-tight mb-8 uppercase">Active Hours Heatmap</h3>
           <div className="h-[240px] w-full">
              <ResponsiveContainer width="100%" height="100%">
@@ -296,7 +369,7 @@ export const Analytics = () => {
                   <XAxis dataKey="hour" type="category" axisLine={false} tickLine={false} tick={{ fontSize: 9 }} />
                   <YAxis dataKey="day" type="category" axisLine={false} tickLine={false} tick={{ fontSize: 9 }} />
                   <Tooltip cursor={{ strokeDasharray: '3 3' }} />
-                  <Scatter data={heatmapData}>
+                  <Scatter data={heatmapData} isAnimationActive={true} animationDuration={800}>
                     {heatmapData.map((entry, index) => (
                       <Cell key={index} fill={`rgba(168, 85, 247, ${entry.value / 120})`} />
                     ))}
@@ -322,10 +395,10 @@ export const Analytics = () => {
 
        <div className="grid grid-cols-1 gap-4">
           {[
-            { handle: "@creator_x", er: "5.2%", followers: "1.2M", posts: "42", format: "Reels" },
-            { handle: "@daily_vlogs", er: "3.1%", followers: "850K", posts: "124", format: "Videos" },
+            { handle: "@creator_x", er: 5.2, followers: "1.2M", posts: "42", format: "Reels" },
+            { handle: "@daily_vlogs", er: 3.1, followers: "850K", posts: "124", format: "Videos" },
           ].map((comp, i) => (
-            <div key={i} className="bg-card border border-border/40 rounded-3xl p-6 flex flex-col md:flex-row items-center justify-between gap-8 group hover:border-primary/40 transition-colors">
+            <div key={i} className="premium-card bg-card border border-border/40 rounded-3xl p-6 flex flex-col md:flex-row items-center justify-between gap-8 group transition-colors">
                <div className="flex items-center gap-4">
                   <div className="w-14 h-14 rounded-full bg-gradient-to-tr from-muted to-muted-foreground shrink-0" />
                   <div>
@@ -339,7 +412,9 @@ export const Analytics = () => {
                </div>
                <div className="flex gap-12 items-center">
                   <div className="flex flex-col items-center">
-                    <span className="text-lg font-black text-emerald-500">{comp.er}</span>
+                    <span className="text-lg font-black text-emerald-500">
+                      <CountUp value={comp.er} suffix="%" decimals={1} />
+                    </span>
                     <span className="text-[10px] font-bold text-muted-foreground uppercase">Engagement</span>
                   </div>
                   <div className="flex flex-col items-center">
@@ -357,52 +432,54 @@ export const Analytics = () => {
   );
 
   return (
-    <div className="max-w-7xl mx-auto space-y-8 pb-12">
-      {/* TOP — PLATFORM TAB BAR */}
-      <div className="sticky top-[60px] z-30 bg-background/80 backdrop-blur-md -mx-8 px-8 py-2 border-b border-border/30">
-        <div className="flex items-center gap-2 overflow-x-auto scrollbar-none">
-          {tabs.map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`px-5 py-3 text-xs font-black uppercase tracking-widest relative transition-all whitespace-nowrap ${
-                activeTab === tab ? "text-primary" : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              {tab}
-              {activeTab === tab && (
-                <motion.div 
-                  layoutId="activeAnalyticsTab"
-                  className="absolute bottom-0 left-2 right-2 h-0.5 bg-primary shadow-[0_0_8px_hsl(var(--primary))]"
-                />
-              )}
-            </button>
-          ))}
+    <PageTransition>
+      <div className="max-w-7xl mx-auto space-y-8 pb-12">
+        {/* TOP — PLATFORM TAB BAR */}
+        <div className="sticky top-[60px] z-30 bg-background/80 backdrop-blur-md -mx-8 px-8 py-2 border-b border-border/30">
+          <div className="flex items-center gap-2 overflow-x-auto scrollbar-none">
+            {tabs.map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`px-5 py-3 text-xs font-black uppercase tracking-widest relative transition-all whitespace-nowrap ${
+                  activeTab === tab ? "text-primary" : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {tab}
+                {activeTab === tab && (
+                  <motion.div 
+                    layoutId="activeAnalyticsTab"
+                    className="absolute bottom-0 left-2 right-2 h-0.5 bg-primary shadow-[0_0_8px_hsl(var(--primary))]"
+                  />
+                )}
+              </button>
+            ))}
+          </div>
         </div>
-      </div>
 
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={activeTab}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          transition={{ duration: 0.3 }}
-        >
-          {activeTab === "Overview" && renderOverview()}
-          {activeTab === "Audience" && renderAudience()}
-          {activeTab === "Competitor Intel" && renderCompetitor()}
-          {(activeTab !== "Overview" && activeTab !== "Audience" && activeTab !== "Competitor Intel") && (
-            <div className="flex flex-col items-center justify-center h-[60vh] text-center gap-4">
-              <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-2">
-                <BarChart3 className="w-8 h-8 text-primary animate-pulse" />
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeTab}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+          >
+            {activeTab === "Overview" && renderOverview()}
+            {activeTab === "Audience" && renderAudience()}
+            {activeTab === "Competitor Intel" && renderCompetitor()}
+            {(activeTab !== "Overview" && activeTab !== "Audience" && activeTab !== "Competitor Intel") && (
+              <div className="flex flex-col items-center justify-center h-[60vh] text-center gap-4">
+                <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-2">
+                  <BarChart3 className="w-8 h-8 text-primary animate-pulse" />
+                </div>
+                <h3 className="text-xl font-bold">{activeTab} Details</h3>
+                <p className="text-muted-foreground max-w-sm">Deep diving into {activeTab} analytics patterns... This will include specific {activeTab} metrics and growth forecasts.</p>
               </div>
-              <h3 className="text-xl font-bold">{activeTab} Details</h3>
-              <p className="text-muted-foreground max-w-sm">Deep diving into {activeTab} analytics patterns... This will include specific {tab} metrics and growth forecasts.</p>
-            </div>
-          )}
-        </motion.div>
-      </AnimatePresence>
-    </div>
+            )}
+          </motion.div>
+        </AnimatePresence>
+      </div>
+    </PageTransition>
   );
 };

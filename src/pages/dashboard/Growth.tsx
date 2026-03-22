@@ -232,37 +232,53 @@ export const Growth = () => {
             <ResponsiveContainer width="100%" height="100%">
                <AreaChart data={growthData}>
                   <defs>
+                     <filter id="areaGlow" x="-20%" y="-20%" width="140%" height="140%">
+                        <feGaussianBlur stdDeviation="3" result="blur" />
+                        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                     </filter>
                      <linearGradient id="colorAi" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.3}/>
-                        <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0}/>
+                        <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity={0.6}/>
+                        <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity={0}/>
                      </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border))" opacity={0.3} />
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border))" opacity={0.1} />
                   <XAxis 
                     dataKey="day" 
                     axisLine={false} 
                     tickLine={false} 
-                    tick={{ fontSize: 10, fontWeight: 900 }} 
+                    tick={{ fontSize: 10, fontWeight: 900, fill: 'hsl(var(--muted-foreground))' }} 
                   />
                   <YAxis hide />
                   <Tooltip 
-                    contentStyle={{ borderRadius: '20px', border: 'none', boxShadow: '0 20px 40px rgba(0,0,0,0.1)', fontWeight: 900 }}
+                    contentStyle={{ 
+                        borderRadius: '24px', 
+                        border: '1px solid rgba(255,255,255,0.1)', 
+                        backgroundColor: 'rgba(15, 23, 42, 0.95)',
+                        backdropFilter: 'blur(16px)',
+                        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)', 
+                        fontWeight: 900 
+                    }}
                   />
                   <Area 
                     type="monotone" 
                     dataKey="current" 
                     stroke="hsl(var(--muted-foreground))" 
                     strokeWidth={2} 
-                    strokeDasharray="5 5"
+                    strokeDasharray="8 8"
                     fill="transparent" 
+                    isAnimationActive={true}
+                    animationDuration={1500}
                   />
                   <Area 
                     type="monotone" 
                     dataKey="ai" 
                     stroke="hsl(var(--primary))" 
-                    strokeWidth={4} 
+                    strokeWidth={5} 
                     fillOpacity={1} 
                     fill="url(#colorAi)" 
+                    isAnimationActive={true}
+                    animationDuration={2000}
+                    filter="url(#areaGlow)"
                   />
                </AreaChart>
             </ResponsiveContainer>

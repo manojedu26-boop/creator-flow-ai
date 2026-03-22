@@ -6,6 +6,7 @@ import {
   Phone, AlertCircle, ChevronRight, X, Sparkles,
   Instagram, Youtube, Twitter, CheckCircle2
 } from "lucide-react";
+import { PageTransition } from "../../components/shared/MotionComponents";
 
 type DealStatus = 'prospecting' | 'outreach' | 'negotiating' | 'signed' | 'live' | 'paid';
 
@@ -61,7 +62,7 @@ export const BrandDeals = () => {
         </button>
       </div>
 
-      <div className="flex gap-4 overflow-x-auto pb-6 scrollbar-thin scrollbar-thumb-primary/10 scrollbar-track-transparent min-h-[600px]">
+      <div className="flex gap-4 overflow-x-auto pb-6 scrollbar-thin scrollbar-thumb-primary/20 scrollbar-track-transparent min-h-[600px]">
         {columns.map((col) => (
           <div key={col.id} className="min-w-[280px] flex flex-col gap-4">
             <div className="flex items-center justify-between px-3 py-2 bg-card/40 border border-border/30 rounded-xl">
@@ -80,8 +81,10 @@ export const BrandDeals = () => {
                   layoutId={deal.id}
                   key={deal.id}
                   onClick={() => setSelectedDeal(deal)}
-                  className="bg-card border border-border/40 p-4 rounded-3xl cursor-pointer hover:border-primary/50 hover:shadow-xl transition-all group relative overflow-hidden"
-                  whileHover={{ y: -4 }}
+                  drag
+                  dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
+                  whileDrag={{ scale: 1.05, boxShadow: "0 20px 40px rgba(0,0,0,0.2)", zIndex: 50 }}
+                  className="premium-card bg-card border border-border/40 p-4 rounded-3xl cursor-pointer transition-all group relative overflow-hidden"
                 >
                   <div className="flex items-center gap-3 mb-4">
                     <img src={deal.logo} alt="" className="w-8 h-8 rounded-full border border-border/20 shadow-sm" />
@@ -143,14 +146,14 @@ export const BrandDeals = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setSelectedDeal(null)}
-              className="fixed inset-0 bg-background/80 backdrop-blur-sm z-[60]"
+              className="fixed inset-0 bg-background/80 backdrop-blur-sm z-[150]"
             />
             <motion.div
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
-              transition={{ type: "spring", damping: 20 }}
-              className="fixed right-0 top-0 bottom-0 w-[400px] bg-card border-l border-border/40 shadow-2xl z-[70] flex flex-col"
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="fixed right-0 top-0 bottom-0 w-[450px] bg-card border-l border-border/40 shadow-2xl z-[160] flex flex-col"
             >
               <div className="p-6 border-b border-border/30 flex items-center justify-between">
                 <div className="flex items-center gap-4">
@@ -160,12 +163,12 @@ export const BrandDeals = () => {
                     <span className="text-xs text-muted-foreground font-bold uppercase">{selectedDeal.type}</span>
                   </div>
                 </div>
-                <button onClick={() => setSelectedDeal(null)} className="p-2 hover:bg-muted rounded-full">
+                <button onClick={() => setSelectedDeal(null)} className="p-2 hover:bg-muted rounded-full transition-all">
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
-              <div className="flex-1 overflow-y-auto p-6 space-y-8">
+              <div className="flex-1 overflow-y-auto p-6 space-y-8 no-scrollbar">
                 <div className="grid grid-cols-2 gap-4">
                    <div className="p-4 rounded-2xl bg-muted/20 border border-border/30">
                       <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest block mb-1">Value</span>
@@ -219,7 +222,7 @@ export const BrandDeals = () => {
               <div className="p-6 border-t border-border/30 bg-muted/10 grid grid-cols-2 gap-3">
                  <button className="px-4 py-3 rounded-xl bg-background border border-border/40 text-[10px] font-black uppercase tracking-widest hover:bg-muted transition-all">Write Follow-Up</button>
                  <button className="px-4 py-3 rounded-xl bg-background border border-border/40 text-[10px] font-black uppercase tracking-widest hover:bg-muted transition-all">Upload Contract</button>
-                 <button className="px-4 py-3 rounded-xl bg-primary text-primary-foreground text-[10px] font-black uppercase tracking-widest col-span-2 hover:shadow-lg transition-all">Generate Invoice</button>
+                 <button className="px-4 py-3 rounded-xl bg-primary text-primary-foreground text-[10px] font-black uppercase tracking-widest col-span-2 hover:shadow-lg transition-all active:scale-95">Generate Invoice</button>
               </div>
             </motion.div>
           </>
@@ -250,7 +253,7 @@ export const BrandDeals = () => {
           { name: 'Uber Eats', cat: 'Food & Travel', budget: '₹40K - ₹1.5L', logo: 'https://logo.clearbit.com/ubereats.com' },
           { name: 'Airbnb', cat: 'Travel & Decor', budget: '₹2L - ₹10L', logo: 'https://logo.clearbit.com/airbnb.com' },
         ].map((brand, i) => (
-          <div key={i} className="bg-card border border-border/40 rounded-3xl p-6 group hover:border-primary/40 transition-all flex flex-col">
+          <div key={i} className="premium-card bg-card border border-border/40 rounded-3xl p-6 group transition-all flex flex-col">
             <div className="flex items-start justify-between mb-6">
               <img src={brand.logo} alt="" className="w-14 h-14 rounded-2xl border border-border/20 shadow-sm" />
               <button className="p-2 rounded-xl bg-muted/20 text-muted-foreground hover:text-primary transition-colors">
@@ -267,7 +270,7 @@ export const BrandDeals = () => {
                <button className="flex-1 py-3 bg-muted/30 border border-border/40 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-muted transition-all">Save Brand</button>
                <button 
                  onClick={() => setSelectedDeal({ ...initialDeals[0], brand: brand.name, logo: brand.logo })}
-                 className="flex-1 py-3 bg-primary text-primary-foreground rounded-xl text-[10px] font-black uppercase tracking-widest hover:shadow-lg transition-all"
+                 className="flex-1 py-3 bg-primary text-primary-foreground rounded-xl text-[10px] font-black uppercase tracking-widest hover:shadow-lg transition-all active:scale-95"
                >
                  Generate Pitch
                </button>
@@ -279,44 +282,46 @@ export const BrandDeals = () => {
   );
 
   return (
-    <div className="max-w-7xl mx-auto space-y-8">
-      {/* SHARED NAV TABS */}
-      <div className="flex items-center gap-6 border-b border-border/30">
-        <button 
-          onClick={() => setActiveTab('pipeline')}
-          className={`px-4 py-4 text-xs font-black uppercase tracking-widest relative transition-colors ${
-            activeTab === 'pipeline' ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
-          }`}
-        >
-          Deal Pipeline 
-          {activeTab === 'pipeline' && (
-            <motion.div layoutId="dealTab" className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary shadow-[0_0_8px_hsl(var(--primary))]" />
-          )}
-        </button>
-        <button 
-          onClick={() => setActiveTab('discovery')}
-          className={`px-4 py-4 text-xs font-black uppercase tracking-widest relative transition-colors ${
-            activeTab === 'discovery' ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
-          }`}
-        >
-          Brand Discovery
-          {activeTab === 'discovery' && (
-            <motion.div layoutId="dealTab" className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary shadow-[0_0_8px_hsl(var(--primary))]" />
-          )}
-        </button>
-      </div>
+    <PageTransition>
+      <div className="max-w-7xl mx-auto space-y-8">
+        {/* SHARED NAV TABS */}
+        <div className="flex items-center gap-6 border-b border-border/30">
+          <button 
+            onClick={() => setActiveTab('pipeline')}
+            className={`px-4 py-4 text-xs font-black uppercase tracking-widest relative transition-colors ${
+              activeTab === 'pipeline' ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
+            }`}
+          >
+            Deal Pipeline 
+            {activeTab === 'pipeline' && (
+              <motion.div layoutId="dealTab" className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary shadow-[0_0_8px_hsl(var(--primary))]" />
+            )}
+          </button>
+          <button 
+            onClick={() => setActiveTab('discovery')}
+            className={`px-4 py-4 text-xs font-black uppercase tracking-widest relative transition-colors ${
+              activeTab === 'discovery' ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
+            }`}
+          >
+            Brand Discovery
+            {activeTab === 'discovery' && (
+              <motion.div layoutId="dealTab" className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary shadow-[0_0_8px_hsl(var(--primary))]" />
+            )}
+          </button>
+        </div>
 
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={activeTab}
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -10 }}
-          transition={{ duration: 0.2 }}
-        >
-          {activeTab === 'pipeline' ? renderPipeline() : renderDiscovery()}
-        </motion.div>
-      </AnimatePresence>
-    </div>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeTab}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+          >
+            {activeTab === 'pipeline' ? renderPipeline() : renderDiscovery()}
+          </motion.div>
+        </AnimatePresence>
+      </div>
+    </PageTransition>
   );
 };

@@ -7,6 +7,7 @@ import {
   Sparkles, Download, ExternalLink, ChevronRight, UploadCloud,
   ChevronDown, Eye, FileText, Share2
 } from "lucide-react";
+import { PageTransition, SkeletonCard } from "../../components/shared/MotionComponents";
 
 type ToolType = 'caption' | 'script' | 'reel' | 'carousel' | 'hashtag' | 'audio' | 'hook' | 'pitch' | 'thumbnail' | 'bio';
 
@@ -31,10 +32,11 @@ export const ContentStudio = () => {
 
   const handleGenerate = () => {
     setIsGenerating(true);
+    setShowOutput(false);
     setTimeout(() => {
       setIsGenerating(false);
       setShowOutput(true);
-    }, 2000);
+    }, 2500);
   };
 
   const renderToolContent = () => {
@@ -135,7 +137,20 @@ export const ContentStudio = () => {
         </button>
       </div>
 
-      <AnimatePresence>
+      <AnimatePresence mode="wait">
+        {isGenerating && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-8"
+          >
+             <SkeletonCard className="h-48" />
+             <SkeletonCard className="h-48" />
+             <SkeletonCard className="h-48" />
+          </motion.div>
+        )}
+
         {showOutput && (
           <motion.div 
             initial={{ opacity: 0, y: 40 }}
@@ -148,7 +163,7 @@ export const ContentStudio = () => {
                  { label: 'Engaging & Medium', text: 'Struggling to wake up? Here is my 10-minute movement ritual that changes everything. Try it tomorrow! ⬇️' },
                  { label: 'Story-Led & Long', text: 'I used to skip mobility. I paid the price with back pain for years. Then I discovered this flow. It is not just about physical health, it is a mental reset.' },
                ].map((c, i) => (
-                 <div key={i} className="bg-card border border-border/40 rounded-3xl p-6 flex flex-col justify-between group hover:border-primary/40 transition-all shadow-sm relative overflow-hidden">
+                 <div key={i} className="premium-card bg-card border border-border/40 rounded-3xl p-6 flex flex-col justify-between group transition-all shadow-sm relative overflow-hidden">
                     <div>
                       <div className="flex justify-between items-start mb-4">
                         <span className="text-[10px] font-black uppercase tracking-widest text-primary">{c.label}</span>
@@ -184,7 +199,7 @@ export const ContentStudio = () => {
                ))}
             </div>
 
-            <div className="bg-card border border-border/40 rounded-3xl p-8">
+            <div className="premium-card bg-card border border-border/40 rounded-3xl p-8">
                <div className="flex items-center justify-between mb-6">
                   <h4 className="text-lg font-black tracking-tight uppercase">Your Hashtags</h4>
                   <button className="px-4 py-2 bg-primary/10 border border-primary/20 text-[10px] font-black uppercase tracking-widest text-primary flex items-center gap-2 rounded-xl hover:bg-primary hover:text-primary-foreground transition-all">
@@ -212,7 +227,7 @@ export const ContentStudio = () => {
 
       <AnimatePresence>
         {previewSocial && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
+          <div className="fixed inset-0 z-[200] flex items-center justify-center p-6">
              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setPreviewSocial(null)} className="absolute inset-0 bg-background/90 backdrop-blur-md" />
              <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} className="relative w-full max-w-sm bg-card border border-border/40 rounded-[3rem] shadow-2xl overflow-hidden aspect-[9/19] flex flex-col">
                 <div className="h-10 border-b border-border/20 flex items-center px-8 justify-between">
@@ -297,7 +312,7 @@ export const ContentStudio = () => {
             <button 
               onClick={handleGenerate} 
               disabled={isGenerating}
-              className="w-full py-4 bg-primary text-primary-foreground rounded-2xl font-black uppercase tracking-widest hover:shadow-lg transition-all"
+              className="w-full py-4 bg-primary text-primary-foreground rounded-2xl font-black uppercase tracking-widest hover:shadow-lg transition-all active:scale-95"
             >
               {isGenerating ? "Generating..." : "Generate Script"}
             </button>
@@ -305,6 +320,11 @@ export const ContentStudio = () => {
 
          <div className="md:col-span-3 min-h-[500px]">
            <AnimatePresence mode="wait">
+             {isGenerating && (
+               <motion.div key="skeleton" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="h-full">
+                  <SkeletonCard className="h-full" />
+               </motion.div>
+             )}
              {showOutput ? (
                <motion.div key="output" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-6 h-full flex flex-col">
                   <div className="flex-1 bg-card border border-border/40 rounded-3xl p-8 relative scrollbar-thin overflow-y-auto max-h-[600px] border-l-[6px] border-l-primary/60 bg-gradient-to-br from-card to-muted/20 shadow-inner">
@@ -332,7 +352,7 @@ export const ContentStudio = () => {
                      <button className="py-4 bg-background border border-border/40 rounded-2xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-muted transition-all active:scale-95"><FileText className="w-4 h-4" /> Export to Google Docs</button>
                   </div>
                </motion.div>
-             ) : (
+             ) : !isGenerating && (
                <div key="placeholder" className="h-full border-2 border-dashed border-border/40 rounded-3xl flex flex-col items-center justify-center text-center p-12 text-muted-foreground/50">
                   <Video className="w-12 h-12 mb-4 opacity-10" />
                   <p className="text-sm font-bold uppercase tracking-widest">Your script will appear here</p>
@@ -359,7 +379,14 @@ export const ContentStudio = () => {
             </button>
          </div>
 
-         <AnimatePresence>
+         <AnimatePresence mode="wait">
+         {isGenerating && (
+           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="grid grid-cols-1 gap-4">
+              <SkeletonCard className="h-24" />
+              <SkeletonCard className="h-24" />
+              <SkeletonCard className="h-24" />
+           </motion.div>
+         )}
          {showOutput && (
            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="grid grid-cols-1 gap-4">
               {[
@@ -376,13 +403,13 @@ export const ContentStudio = () => {
                   animate={{ opacity: 1, x: 0 }} 
                   transition={{ delay: i * 0.05 }}
                   key={i} 
-                  className="bg-card border border-border/40 p-6 rounded-3xl flex items-center justify-between group hover:border-primary/40 transition-colors cursor-pointer relative overflow-hidden"
+                  className="premium-card bg-card border border-border/40 p-6 rounded-3xl flex items-center justify-between group transition-colors cursor-pointer relative overflow-hidden"
                 >
                    <div className="flex flex-col gap-1.5 flex-1 pr-8">
                       <span className="text-[10px] font-black text-primary uppercase tracking-widest">{h.type}</span>
                       <p className="text-md font-bold leading-tight">{h.text}</p>
                    </div>
-                   <button className="p-3 bg-primary/10 text-primary border border-primary/20 rounded-2xl opacity-0 group-hover:opacity-100 hover:bg-primary hover:text-primary-foreground transition-all shadow-sm"><Copy className="w-4 h-4" /></button>
+                   <button className="p-3 bg-primary/10 text-primary border border-primary/20 rounded-2xl opacity-0 group-hover:opacity-100 hover:bg-primary hover:text-primary-foreground transition-all shadow-sm active:scale-90"><Copy className="w-4 h-4" /></button>
                 </motion.div>
               ))}
            </motion.div>
@@ -393,62 +420,58 @@ export const ContentStudio = () => {
   );
 
   return (
-    <div className="h-[calc(100vh-160px)] -mx-8 -my-6 flex overflow-hidden">
-      {/* LEFT TOOL PANEL */}
-      <div className="w-[280px] border-r border-border/30 bg-card/10 overflow-y-auto overflow-x-hidden pt-6 relative shadow-2xl z-10">
-        <div className="px-6 mb-8 text-[11px] font-black uppercase tracking-[0.2em] text-muted-foreground/60 flex items-center gap-2">
-           <Zap className="w-3 h-3 text-primary fill-primary" /> AI Content Suite
-        </div>
-        <div className="px-3 space-y-1">
-          {tools.map((tool) => (
-            <button
-              key={tool.id}
-              onClick={() => {
-                setActiveTool(tool.id as ToolType);
-                setShowOutput(false);
-              }}
-              className={`w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all relative group ${
-                activeTool === tool.id ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:bg-muted/10 hover:text-foreground'
-              }`}
-            >
-              <tool.icon className={`w-4 h-4 ${activeTool === tool.id ? 'text-primary' : 'group-hover:text-primary'}`} />
-              <span className="text-[11px] font-black uppercase tracking-wide truncate">{tool.label}</span>
-              {activeTool === tool.id && (
-                <motion.div 
-                  layoutId="toolHighlight"
-                  className="absolute left-0 top-3 bottom-3 w-1 bg-primary rounded-full shadow-[0_0_8px_hsl(var(--primary))]"
-                />
-              )}
-            </button>
-          ))}
-        </div>
-        <div className="absolute top-0 right-0 bottom-0 w-[1px] bg-gradient-to-b from-transparent via-border/40 to-transparent" />
-      </div>
-
-      {/* RIGHT WORKSPACE */}
-      <div className="flex-1 overflow-y-auto p-12 relative bg-background scroll-smooth">
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] pointer-events-none" />
-        <div className="max-w-4xl mx-auto relative z-10">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeTool}
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.3 }}
-            >
-              {renderToolContent()}
-            </motion.div>
-          </AnimatePresence>
+    <PageTransition>
+      <div className="h-[calc(100vh-160px)] -mx-8 -my-6 flex overflow-hidden">
+        {/* LEFT TOOL PANEL */}
+        <div className="w-[280px] border-r border-border/30 bg-card/10 overflow-y-auto overflow-x-hidden pt-6 relative shadow-2xl z-[150]">
+          <div className="px-6 mb-8 text-[11px] font-black uppercase tracking-[0.2em] text-muted-foreground/60 flex items-center gap-2">
+             <Zap className="w-3 h-3 text-primary fill-primary" /> AI Content Suite
+          </div>
+          <div className="px-3 space-y-1">
+            {tools.map((tool) => (
+              <button
+                key={tool.id}
+                onClick={() => {
+                  setActiveTool(tool.id as ToolType);
+                  setShowOutput(false);
+                }}
+                className={`w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all relative group ${
+                  activeTool === tool.id ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:bg-muted/10 hover:text-foreground'
+                }`}
+              >
+                <tool.icon className={`w-4 h-4 ${activeTool === tool.id ? 'text-primary' : 'group-hover:text-primary'}`} />
+                <span className="text-[11px] font-black uppercase tracking-wide truncate">{tool.label}</span>
+                {activeTool === tool.id && (
+                  <motion.div 
+                    layoutId="toolHighlight"
+                    className="absolute left-0 top-3 bottom-3 w-1 bg-primary rounded-full shadow-[0_0_8px_hsl(var(--primary))]"
+                  />
+                )}
+              </button>
+            ))}
+          </div>
+          <div className="absolute top-0 right-0 bottom-0 w-[1px] bg-gradient-to-b from-transparent via-border/40 to-transparent" />
         </div>
 
-        {/* PERSISTENT AI CHAT BUTTON (Mock) */}
-        <button className="fixed bottom-12 right-12 w-14 h-14 rounded-full bg-primary text-primary-foreground flex items-center justify-center shadow-2xl hover:scale-110 transition-all group z-50">
-           <Sparkles className="w-6 h-6" />
-           <span className="absolute right-full mr-4 px-3 py-1 bg-black text-white text-[10px] font-black uppercase tracking-widest rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">Ask Forge AI</span>
-        </button>
+        {/* RIGHT WORKSPACE */}
+        <div className="flex-1 overflow-y-auto p-12 relative bg-background scroll-smooth no-scrollbar">
+          <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] pointer-events-none" />
+          <div className="max-w-4xl mx-auto relative z-10">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeTool}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.3 }}
+              >
+                {renderToolContent()}
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        </div>
       </div>
-    </div>
+    </PageTransition>
   );
 };
 
@@ -456,3 +479,4 @@ export const ContentStudio = () => {
 const X = ({ className }: { className?: string }) => (
   <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
 );
+

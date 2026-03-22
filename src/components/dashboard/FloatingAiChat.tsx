@@ -5,6 +5,7 @@ import {
   MessageSquare, BrainCircuit, Zap, 
   TrendingUp, IndianRupee, Users, Target
 } from "lucide-react";
+import { Typewriter } from "../shared/MotionComponents";
 
 export const FloatingAiChat = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -73,20 +74,20 @@ export const FloatingAiChat = () => {
 
             {/* CHAT AREA */}
             <div className="flex-1 overflow-y-auto p-6 space-y-6 no-scrollbar">
-               {history.map((h, i) => (
-                 <motion.div 
-                   initial={{ opacity: 0, x: h.role === 'user' ? 20 : -20 }} 
-                   animate={{ opacity: 1, x: 0 }} 
-                   key={i} 
-                   className={`flex ${h.role === 'user' ? 'justify-end' : 'justify-start'}`}
-                 >
-                    <div className={`max-w-[85%] p-4 rounded-2xl text-[13px] font-medium leading-relaxed ${
-                      h.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted/10 border border-border/40'
-                    }`}>
-                       {h.content}
-                    </div>
-                 </motion.div>
-               ))}
+                {history.map((h, i) => (
+                  <motion.div 
+                    initial={{ opacity: 0, x: h.role === 'user' ? 20 : -20 }} 
+                    animate={{ opacity: 1, x: 0 }} 
+                    key={i} 
+                    className={`flex ${h.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                  >
+                     <div className={`max-w-[85%] p-4 rounded-2xl text-[13px] font-medium leading-relaxed ${
+                       h.role === 'user' ? 'bg-primary text-primary-foreground' : 'bg-muted/10 border border-border/40'
+                     }`}>
+                        {h.role === 'assistant' ? <Typewriter text={h.content} speed={25} /> : h.content}
+                     </div>
+                  </motion.div>
+                ))}
                <div ref={chatEndRef} />
             </div>
 

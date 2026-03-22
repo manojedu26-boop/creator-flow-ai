@@ -93,4 +93,35 @@
   .glow-blue {
     box-shadow: 0 0 40px -10px hsla(204, 64%, 47%, 0.3);
   }
+
+  /* Section 14: Premium Interaction Rules */
+  .premium-card {
+    @apply transition-all duration-300;
+  }
+
+  .premium-card:hover {
+    @apply -translate-y-[2px];
+    box-shadow: 0 0 20px -5px hsla(var(--primary), 0.2);
+    border-color: hsla(var(--primary), 0.4);
+  }
+
+  @keyframes shimmer {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(200%); }
+  }
+
+  .animate-shimmer {
+    animation: shimmer 2s linear infinite;
+  }
+
+  .skeleton-shimmer {
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      hsla(var(--primary), 0.05) 50%,
+      transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite linear;
+  }
 }

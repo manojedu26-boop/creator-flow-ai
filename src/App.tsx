@@ -1,3 +1,5 @@
+import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -22,58 +24,70 @@ import { Revenue } from "./pages/dashboard/Revenue.tsx";
 import { Contracts } from "./pages/dashboard/Contracts.tsx";
 import { MediaKit } from "./pages/dashboard/MediaKit.tsx";
 import { Messages } from "./pages/dashboard/Messages.tsx";
-import { BrandLayout } from "./components/brand/BrandLayout.tsx";
+import { BrandLayout } from "./components/brand/BrandLayout";
 import { BrandHome } from "./pages/brand/BrandHome.tsx";
 import { DiscoverCreators } from "./pages/brand/DiscoverCreators.tsx";
 import { PostBrief } from "./pages/brand/PostBrief.tsx";
 import { ComingSoon } from "./pages/dashboard/ComingSoon.tsx";
+import { Intro } from "./components/shared/Intro.tsx";
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/onboarding" element={<Onboarding />} />
-          
-          {/* Post-Login CreatorForge Architecture */}
-          <Route element={<DashboardLayout />}>
-            <Route path="/dashboard" element={<DashboardHome />} />
-            <Route path="/analytics" element={<Analytics />} />
-            <Route path="/deals" element={<BrandDeals />} />
-            <Route path="/studio" element={<ContentStudio />} />
-            <Route path="/calendar" element={<Calendar />} />
-            <Route path="/growth" element={<Growth />} />
-            <Route path="/network" element={<Network />} />
-            <Route path="/network/profile/:id" element={<Profile />} />
-            <Route path="/revenue" element={<Revenue />} />
-            <Route path="/contracts" element={<Contracts />} />
-            <Route path="/mediakit" element={<MediaKit />} />
-            <Route path="/messages" element={<Messages />} />
-          </Route>
+const App = () => {
+  const [showIntro, setShowIntro] = useState(true);
 
-          {/* Brand Mode Routes (Section 13) */}
-          <Route path="/brand" element={<BrandLayout />}>
-            <Route index element={<BrandHome />} />
-            <Route path="discover" element={<DiscoverCreators />} />
-            <Route path="post-brief" element={<PostBrief />} />
-            <Route path="analytics" element={<ComingSoon title="Campaign Analytics" />} />
-            <Route path="messages" element={<ComingSoon title="Brand Messages" />} />
-            <Route path="deals" element={<ComingSoon title="Active Deals" />} />
-            <Route path="contracts" element={<ComingSoon title="Brand Contracts" />} />
-          </Route>
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <AnimatePresence mode="wait">
+          {showIntro ? (
+            <Intro key="intro" onComplete={() => setShowIntro(false)} />
+          ) : (
+            <BrowserRouter key="app">
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/onboarding" element={<Onboarding />} />
+                
+                {/* Post-Login CreatorForge Architecture */}
+                <Route element={<DashboardLayout />}>
+                  <Route path="/dashboard" element={<DashboardHome />} />
+                  <Route path="/analytics" element={<Analytics />} />
+                  <Route path="/deals" element={<BrandDeals />} />
+                  <Route path="/studio" element={<ContentStudio />} />
+                  <Route path="/calendar" element={<Calendar />} />
+                  <Route path="/growth" element={<Growth />} />
+                  <Route path="/network" element={<Network />} />
+                  <Route path="/network/profile/:id" element={<Profile />} />
+                  <Route path="/revenue" element={<Revenue />} />
+                  <Route path="/contracts" element={<Contracts />} />
+                  <Route path="/mediakit" element={< MediaKit />} />
+                  <Route path="/messages" element={<Messages />} />
+                </Route>
 
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+                {/* Brand Mode Routes (Section 13) */}
+                <Route path="/brand" element={<BrandLayout />}>
+                  <Route index element={<BrandHome />} />
+                  <Route path="discover" element={<DiscoverCreators />} />
+                  <Route path="post-brief" element={<PostBrief />} />
+                  <Route path="analytics" element={<ComingSoon title="Campaign Analytics" />} />
+                  <Route path="messages" element={<ComingSoon title="Brand Messages" />} />
+                  <Route path="deals" element={<ComingSoon title="Active Deals" />} />
+                  <Route path="contracts" element={<ComingSoon title="Brand Contracts" />} />
+                </Route>
+
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </BrowserRouter>
+          )}
+        </AnimatePresence>
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
+};
+
 
 export default App;
