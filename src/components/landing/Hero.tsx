@@ -53,11 +53,11 @@ const Hero = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
         >
-          <button className="group relative inline-flex items-center gap-2 rounded-lg bg-primary px-8 py-3.5 font-semibold text-primary-foreground transition-all hover:shadow-[0_0_30px_-5px_hsl(318,100%,62%,0.4)] active:scale-[0.97]">
+          <button onClick={() => navigate("/register")} className="group relative inline-flex items-center gap-2 rounded-lg bg-primary px-8 py-3.5 font-semibold text-primary-foreground transition-all hover:shadow-[0_0_30px_-5px_hsl(318,100%,62%,0.4)] active:scale-[0.97]">
             Start Free — No Card Needed
             <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
           </button>
-          <button className="inline-flex items-center gap-2 rounded-lg bg-glass px-8 py-3.5 font-medium text-foreground transition-all hover:bg-muted active:scale-[0.97]">
+          <button onClick={() => navigate("/login")} className="inline-flex items-center gap-2 rounded-lg bg-glass px-8 py-3.5 font-medium text-foreground transition-all hover:bg-muted active:scale-[0.97]">
             Watch Demo
           </button>
         </motion.div>
