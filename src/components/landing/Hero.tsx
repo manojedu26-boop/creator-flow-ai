@@ -1,9 +1,11 @@
-import { motion } from "framer-motion";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowRight, Sparkles, Play, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const Hero = () => {
   const navigate = useNavigate();
+  const [showVideo, setShowVideo] = useState(false);
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-hero px-4">
       {/* Ambient orbs */}
@@ -22,18 +24,22 @@ const Hero = () => {
           </div>
         </motion.div>
 
-        <motion.h1
-          className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[0.95] mb-6"
+        <motion.p
+          className="text-lg md:text-2xl font-bold tracking-widest uppercase text-muted-foreground mb-4"
           initial={{ opacity: 0, y: 30, filter: "blur(8px)" }}
           animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-          style={{ textWrap: "balance" }}
         >
-          Grow Your
-          <br />
-          <span className="text-gradient-primary">Creator Empire</span>
-          <br />
-          With AI
+          Grow Your Creator Empire
+        </motion.p>
+
+        <motion.h1
+          className="text-5xl sm:text-7xl md:text-8xl lg:text-[8rem] font-black tracking-tighter leading-[0.9] mb-6"
+          initial={{ opacity: 0, y: 30, filter: "blur(8px)" }}
+          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <span className="text-gradient-primary">CREATORX AI</span>
         </motion.h1>
 
         <motion.p
@@ -57,7 +63,8 @@ const Hero = () => {
             Start Free — No Card Needed
             <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
           </button>
-          <button onClick={() => navigate("/login")} className="inline-flex items-center gap-2 rounded-lg bg-glass px-8 py-3.5 font-medium text-foreground transition-all hover:bg-muted active:scale-[0.97]">
+          <button onClick={() => setShowVideo(true)} className="inline-flex items-center gap-2 rounded-lg bg-glass px-8 py-3.5 font-medium text-foreground transition-all hover:bg-muted active:scale-[0.97]">
+            <Play className="w-4 h-4 fill-current" />
             Watch Demo
           </button>
         </motion.div>
@@ -91,9 +98,13 @@ const Hero = () => {
               ))}
             </div>
             <div className="mt-4 grid grid-cols-3 gap-3">
-              {[1, 2, 3].map((i) => (
-                <div key={i} className="rounded-lg bg-muted/30 h-24 md:h-32 flex items-center justify-center">
-                  <div className="w-3/4 h-2/3 rounded bg-gradient-to-t from-primary/20 to-secondary/10" />
+              {[
+                "https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=400&auto=format&fit=crop", 
+                "https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?q=80&w=400&auto=format&fit=crop",
+                "https://images.unsplash.com/photo-1611162618071-b39a2ec05525?q=80&w=400&auto=format&fit=crop"
+              ].map((img, i) => (
+                <div key={i} className="rounded-lg bg-muted/30 h-24 md:h-32 flex items-center justify-center overflow-hidden border border-border/20">
+                  <img src={img} alt="Platform stats display" className="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity" />
                 </div>
               ))}
             </div>
@@ -101,6 +112,35 @@ const Hero = () => {
           <div className="absolute inset-0 -z-10 bg-gradient-to-t from-background via-transparent to-transparent" />
         </motion.div>
       </div>
+
+      <AnimatePresence>
+        {showVideo && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-background/80 backdrop-blur-sm p-4"
+          >
+            <div className="relative w-full max-w-5xl aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl border border-border/50">
+              <button 
+                onClick={() => setShowVideo(false)}
+                className="absolute top-4 right-4 z-10 p-2 rounded-full bg-black/50 hover:bg-black/80 text-white transition-colors"
+              >
+                <X className="w-6 h-6" />
+              </button>
+              <iframe 
+                width="100%" 
+                height="100%" 
+                src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1" 
+                title="CreatorX AI Demo" 
+                frameBorder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                allowFullScreen
+              ></iframe>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 };
