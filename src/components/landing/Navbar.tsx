@@ -7,6 +7,20 @@ const navLinks = [
   { label: "FAQ", href: "#faq" },
 ];
 
+import { toast } from "sonner";
+
+const handleLogin = () => {
+  toast("Login functionality is currently limited for this demo.", {
+    description: "Please check back later or contact support.",
+  });
+};
+
+const handleGetStarted = () => {
+  toast.success("Welcome to CreatorX AI!", {
+    description: "Your journey starts here. Signups are currently invite-only.",
+  });
+};
+
 const Navbar = () => (
   <motion.nav
     className="fixed top-0 left-0 right-0 z-50 bg-glass border-b border-border/30"
@@ -30,10 +44,10 @@ const Navbar = () => (
       </div>
 
       <div className="flex items-center gap-3">
-        <button className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:block">
+        <button onClick={handleLogin} className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:block">
           Log In
         </button>
-        <button className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-all hover:shadow-[0_0_20px_-5px_hsl(318,100%,62%,0.3)] active:scale-[0.97]">
+        <button onClick={handleGetStarted} className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-all hover:shadow-[0_0_20px_-5px_hsl(318,100%,62%,0.3)] active:scale-[0.97]">
           Get Started
         </button>
       </div>

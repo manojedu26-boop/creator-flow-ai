@@ -44,6 +44,7 @@ const Features = () => (
 
       <motion.div
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
+        style={{ perspective: 1000 }}
         variants={container}
         initial="hidden"
         whileInView="show"
@@ -53,9 +54,18 @@ const Features = () => (
           <motion.div
             key={f.title}
             variants={item}
-            className="group rounded-xl bg-glass p-5 transition-all hover:border-primary/20 cursor-default"
+            whileHover={{ 
+              scale: 1.05, 
+              rotateX: 5, 
+              rotateY: -5,
+              z: 50,
+              boxShadow: "0px 20px 40px rgba(0,0,0,0.15)"
+            }}
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            className="group rounded-xl bg-glass p-5 transition-all cursor-default"
+            style={{ transformStyle: "preserve-3d" }}
           >
-            <f.icon className={`w-8 h-8 ${f.color} mb-3 transition-transform group-hover:scale-110`} />
+            <f.icon className={`w-8 h-8 ${f.color} mb-3`} />
             <h3 className="font-semibold mb-1.5">{f.title}</h3>
             <p className="text-sm text-muted-foreground leading-relaxed">{f.desc}</p>
           </motion.div>
