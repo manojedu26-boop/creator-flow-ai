@@ -28,7 +28,7 @@ const FinalCTA = () => {
       <p className="text-lg text-muted-foreground mb-8 max-w-xl mx-auto" style={{ textWrap: "pretty" }}>
         Your AI-powered creator growth engine is ready. Connect your accounts, get your first AI-generated content plan, and start scaling — all in under 4 minutes.
       </p>
-      <button className="group relative inline-flex items-center gap-2 rounded-lg bg-primary px-10 py-4 text-lg font-semibold text-primary-foreground transition-all hover:shadow-[0_0_40px_-5px_hsl(318,100%,62%,0.4)] active:scale-[0.97]">
+      <button onClick={() => navigate("/register")} className="group relative inline-flex items-center gap-2 rounded-lg bg-primary px-10 py-4 text-lg font-semibold text-primary-foreground transition-all hover:shadow-[0_0_40px_-5px_hsl(318,100%,62%,0.4)] active:scale-[0.97]">
         Start Free — No Credit Card Needed
         <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
       </button>
