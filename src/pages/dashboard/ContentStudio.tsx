@@ -426,8 +426,9 @@ export const ContentStudio = () => {
       </div>
 
       {/* RIGHT WORKSPACE */}
-      <div className="flex-1 overflow-y-auto p-12 relative bg-[url('https://grainy-gradients.vercel.app/noise.svg')] bg-repeat opacity-95 scroll-smooth">
-        <div className="max-w-4xl mx-auto">
+      <div className="flex-1 overflow-y-auto p-12 relative bg-background scroll-smooth">
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] pointer-events-none" />
+        <div className="max-w-4xl mx-auto relative z-10">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeTool}

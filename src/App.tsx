@@ -15,6 +15,9 @@ import { Analytics } from "./pages/dashboard/Analytics.tsx";
 import { BrandDeals } from "./pages/dashboard/BrandDeals.tsx";
 import { ContentStudio } from "./pages/dashboard/ContentStudio.tsx";
 import { Calendar } from "./pages/dashboard/Calendar.tsx";
+import { Growth } from "./pages/dashboard/Growth.tsx";
+import { Network } from "./pages/dashboard/Network.tsx";
+import { Profile } from "./pages/dashboard/Profile.tsx";
 import { ComingSoon } from "./pages/dashboard/ComingSoon.tsx";
 
 const queryClient = new QueryClient();
@@ -38,8 +41,9 @@ const App = () => (
             <Route path="/deals" element={<BrandDeals />} />
             <Route path="/studio" element={<ContentStudio />} />
             <Route path="/calendar" element={<Calendar />} />
-            <Route path="/growth" element={<ComingSoon title="Growth Strategy Engine" />} />
-            <Route path="/network" element={<ComingSoon title="Creator Network" />} />
+            <Route path="/growth" element={<Growth />} />
+            <Route path="/network" element={<Network />} />
+            <Route path="/network/profile/:id" element={<Profile />} />
             <Route path="/revenue" element={<ComingSoon title="Monetisation & Revenue" />} />
             <Route path="/contracts" element={<ComingSoon title="Contract Shield" />} />
             <Route path="/mediakit" element={<ComingSoon title="Media Kit Builder" />} />

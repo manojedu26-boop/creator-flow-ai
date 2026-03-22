@@ -2,7 +2,7 @@ import { Bell, Search, ChevronDown } from "lucide-react";
 
 export const Header = ({ title = "Dashboard" }: { title?: string }) => {
   return (
-    <header className="fixed top-0 left-[72px] lg:left-[260px] right-0 h-[60px] bg-background/80 backdrop-blur-md border-b border-border/40 z-40 flex items-center justify-between px-6 transition-all duration-300">
+    <header className="fixed top-0 left-[72px] lg:left-[260px] right-0 h-[60px] bg-background/80 backdrop-blur-md border-b border-border/40 z-[100] flex items-center justify-between px-6 transition-all duration-300">
       <div className="flex items-center gap-8">
         <h1 className="text-xl font-bold tracking-tight">{title}</h1>
         
