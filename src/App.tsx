@@ -18,6 +18,8 @@ import { Calendar } from "./pages/dashboard/Calendar.tsx";
 import { Growth } from "./pages/dashboard/Growth.tsx";
 import { Network } from "./pages/dashboard/Network.tsx";
 import { Profile } from "./pages/dashboard/Profile.tsx";
+import { Revenue } from "./pages/dashboard/Revenue.tsx";
+import { Contracts } from "./pages/dashboard/Contracts.tsx";
 import { ComingSoon } from "./pages/dashboard/ComingSoon.tsx";
 
 const queryClient = new QueryClient();
@@ -44,8 +46,8 @@ const App = () => (
             <Route path="/growth" element={<Growth />} />
             <Route path="/network" element={<Network />} />
             <Route path="/network/profile/:id" element={<Profile />} />
-            <Route path="/revenue" element={<ComingSoon title="Monetisation & Revenue" />} />
-            <Route path="/contracts" element={<ComingSoon title="Contract Shield" />} />
+            <Route path="/revenue" element={<Revenue />} />
+            <Route path="/contracts" element={<Contracts />} />
             <Route path="/mediakit" element={<ComingSoon title="Media Kit Builder" />} />
             <Route path="/messages" element={<ComingSoon title="Messages & DMs" />} />
           </Route>

@@ -242,7 +242,7 @@ export const Growth = () => {
                     dataKey="day" 
                     axisLine={false} 
                     tickLine={false} 
-                    tick={{ fontSize: 10, fontWeight: 900, textTransform: 'uppercase' }} 
+                    tick={{ fontSize: 10, fontWeight: 900 }} 
                   />
                   <YAxis hide />
                   <Tooltip 
