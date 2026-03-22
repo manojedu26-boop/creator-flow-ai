@@ -84,6 +84,7 @@ const Pricing = () => {
               ))}
             </ul>
             <button
+              onClick={() => navigate("/register")}
               className={`group w-full inline-flex items-center justify-center gap-2 rounded-lg px-6 py-3 font-semibold transition-all active:scale-[0.97] ${
                 plan.highlighted
                   ? "bg-primary text-primary-foreground hover:shadow-[0_0_30px_-5px_hsl(318,100%,62%,0.4)]"
