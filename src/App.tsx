@@ -20,6 +20,8 @@ import { Network } from "./pages/dashboard/Network.tsx";
 import { Profile } from "./pages/dashboard/Profile.tsx";
 import { Revenue } from "./pages/dashboard/Revenue.tsx";
 import { Contracts } from "./pages/dashboard/Contracts.tsx";
+import { MediaKit } from "./pages/dashboard/MediaKit.tsx";
+import { Messages } from "./pages/dashboard/Messages.tsx";
 import { ComingSoon } from "./pages/dashboard/ComingSoon.tsx";
 
 const queryClient = new QueryClient();
@@ -48,8 +50,8 @@ const App = () => (
             <Route path="/network/profile/:id" element={<Profile />} />
             <Route path="/revenue" element={<Revenue />} />
             <Route path="/contracts" element={<Contracts />} />
-            <Route path="/mediakit" element={<ComingSoon title="Media Kit Builder" />} />
-            <Route path="/messages" element={<ComingSoon title="Messages & DMs" />} />
+            <Route path="/mediakit" element={<MediaKit />} />
+            <Route path="/messages" element={<Messages />} />
           </Route>
 
           <Route path="*" element={<NotFound />} />
