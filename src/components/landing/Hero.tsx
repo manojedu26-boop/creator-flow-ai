@@ -1,14 +1,21 @@
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight, Sparkles } from "lucide-react";
+import { Link } from "react-router-dom";
+import { useRef } from "react";
 
 const Hero = () => {
-  return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-hero px-4">
-      {/* Ambient orbs */}
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-primary/5 blur-[120px] animate-pulse-glow" />
-      <div className="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full bg-secondary/5 blur-[100px] animate-pulse-glow" style={{ animationDelay: "1.5s" }} />
+  const containerRef = useRef(null);
+  const { scrollYProgress } = useScroll({ target: containerRef, offset: ["start start", "end start"] });
+  const yBg = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+  const yText = useTransform(scrollYProgress, [0, 1], ["0%", "80%"]);
 
-      <div className="container relative z-10 max-w-5xl text-center">
+  return (
+    <section ref={containerRef} className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-hero px-4">
+      {/* Ambient orbs with Parallax effect */}
+      <motion.div style={{ y: yBg }} className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-primary/5 blur-[120px] animate-pulse-glow" />
+      <motion.div style={{ y: yBg }} className="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full bg-secondary/5 blur-[100px] animate-pulse-glow" />
+
+      <motion.div style={{ y: yText }} className="container relative z-10 max-w-5xl text-center">
         <motion.div
           initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
           animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
@@ -51,13 +58,13 @@ const Hero = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
         >
-          <button className="group relative inline-flex items-center gap-2 rounded-lg bg-primary px-8 py-3.5 font-semibold text-primary-foreground transition-all hover:shadow-[0_0_30px_-5px_hsl(318,100%,62%,0.4)] active:scale-[0.97]">
+          <Link to="/dashboard" className="group relative inline-flex items-center gap-2 rounded-lg bg-primary px-8 py-3.5 font-semibold text-primary-foreground transition-all hover:shadow-[0_0_30px_-5px_hsl(318,100%,62%,0.4)] active:scale-[0.97]">
             Start Free — No Card Needed
             <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-          </button>
-          <button className="inline-flex items-center gap-2 rounded-lg bg-glass px-8 py-3.5 font-medium text-foreground transition-all hover:bg-muted active:scale-[0.97]">
+          </Link>
+          <Link to="/dashboard" className="inline-flex items-center gap-2 rounded-lg bg-glass px-8 py-3.5 font-medium text-foreground transition-all hover:bg-muted active:scale-[0.97]">
             Watch Demo
-          </button>
+          </Link>
         </motion.div>
 
         {/* Dashboard mockup */}
@@ -98,7 +105,7 @@ const Hero = () => {
           </div>
           <div className="absolute inset-0 -z-10 bg-gradient-to-t from-background via-transparent to-transparent" />
         </motion.div>
-      </div>
+      </motion.div>
     </section>
   );
 };

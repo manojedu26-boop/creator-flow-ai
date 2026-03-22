@@ -1,25 +1,12 @@
 import { motion } from "framer-motion";
 import { Sparkles } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const navLinks = [
   { label: "Features", href: "#features" },
   { label: "Pricing", href: "#pricing" },
   { label: "FAQ", href: "#faq" },
 ];
-
-import { toast } from "sonner";
-
-const handleLogin = () => {
-  toast("Login functionality is currently limited for this demo.", {
-    description: "Please check back later or contact support.",
-  });
-};
-
-const handleGetStarted = () => {
-  toast.success("Welcome to CreatorX AI!", {
-    description: "Your journey starts here. Signups are currently invite-only.",
-  });
-};
 
 const Navbar = () => (
   <motion.nav
@@ -44,12 +31,12 @@ const Navbar = () => (
       </div>
 
       <div className="flex items-center gap-3">
-        <button onClick={handleLogin} className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:block">
+        <Link to="/login" className="text-sm text-muted-foreground hover:text-foreground transition-colors hidden sm:block">
           Log In
-        </button>
-        <button onClick={handleGetStarted} className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-all hover:shadow-[0_0_20px_-5px_hsl(318,100%,62%,0.3)] active:scale-[0.97]">
+        </Link>
+        <Link to="/login" className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-all hover:shadow-[0_0_20px_-5px_hsl(318,100%,62%,0.3)] active:scale-[0.97]">
           Get Started
-        </button>
+        </Link>
       </div>
     </div>
   </motion.nav>
