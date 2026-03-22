@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Check, ArrowRight } from "lucide-react";
-
+import { useNavigate } from "react-router-dom";
 const plans = [
   {
     name: "Starter",
@@ -31,8 +31,10 @@ const plans = [
   },
 ];
 
-const Pricing = () => (
-  <section className="py-24 md:py-32 px-4" id="pricing">
+const Pricing = () => {
+  const navigate = useNavigate();
+  return (
+    <section className="py-24 md:py-32 px-4" id="pricing">
     <div className="container max-w-5xl">
       <motion.div
         className="text-center mb-16"
@@ -83,6 +85,7 @@ const Pricing = () => (
               ))}
             </ul>
             <button
+              onClick={() => navigate("/register")}
               className={`group w-full inline-flex items-center justify-center gap-2 rounded-lg px-6 py-3 font-semibold transition-all active:scale-[0.97] ${
                 plan.highlighted
                   ? "bg-primary text-primary-foreground hover:shadow-[0_0_30px_-5px_hsl(318,100%,62%,0.4)]"
@@ -96,7 +99,7 @@ const Pricing = () => (
         ))}
       </div>
     </div>
-  </section>
-);
-
+    </section>
+  );
+};
 export default Pricing;
