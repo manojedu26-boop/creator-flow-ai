@@ -27,17 +27,17 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const mockUser: User = {
+export const mockUser: User = {
   id: "u1",
   name: "Naveen Kumar",
   firstName: "Naveen",
-  handle: "@naveencreates",
+  handle: "@naveenfitlife",
   email: "naveen@example.com",
   photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Naveen",
-  niche: "Fitness",
-  platforms: ["Instagram", "YouTube"],
+  niche: "Fitness & Lifestyle",
+  platforms: ["Instagram", "YouTube", "TikTok"],
   type: "Creator",
-  followerCounts: { "Instagram": "120K", "YouTube": "85K" },
+  followerCounts: { "Instagram": "48.2K", "YouTube": "12.8K", "TikTok": "31.5K" },
   onboarded: true
 };
 
@@ -50,14 +50,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     } else {
-      // For development/demo, we'll start with the mock user if nothing is stored
-      // setUser(mockUser); 
+      // Seed with Naveen for demo purposes
+      setUser(mockUser);
+      localStorage.setItem("cf_user", JSON.stringify(mockUser));
     }
     setIsLoading(false);
   }, []);
 
   const login = (email: string, password: string) => {
-    // Mock login
     const newUser = { ...mockUser, email };
     setUser(newUser);
     localStorage.setItem("cf_user", JSON.stringify(newUser));
@@ -72,11 +72,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       handle: `@${name.toLowerCase().replace(/\s+/g, '')}`,
       email,
       photo: `https://api.dicebear.com/7.x/initials/svg?seed=${name}`,
-      niche: "",
-      platforms: [],
+      niche: "Fitness & Lifestyle", // Default for demo
+      platforms: ["Instagram", "YouTube", "TikTok"],
       type: 'Creator',
-      followerCounts: {},
-      onboarded: false
+      followerCounts: { "Instagram": "12.5K", "YouTube": "1.2K", "TikTok": "5.4K" },
+      onboarded: true
     };
     setUser(newUser);
     localStorage.setItem("cf_user", JSON.stringify(newUser));

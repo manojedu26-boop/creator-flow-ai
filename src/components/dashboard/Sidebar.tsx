@@ -5,7 +5,7 @@ import {
   Home, BarChart3, Handshake, BrainCircuit, Calendar, 
   TrendingUp, Globe, DollarSign, ShieldCheck, Palette, 
   MessageSquare, Bell, Settings, Menu, Sparkles, Briefcase,
-  LogOut, Instagram, Youtube
+  LogOut, Instagram, Youtube, Play
 } from "lucide-react";
 import { useAuth } from "../../contexts/AuthContext";
 
@@ -38,57 +38,55 @@ export const Sidebar = () => {
 
   return (
     <motion.div 
-      className="fixed left-0 top-0 bottom-0 z-50 bg-card border-r border-border/40 hidden lg:flex flex-col shadow-2xl overflow-hidden"
-      animate={{ width: isExpanded ? 260 : 72 }}
+      className="fixed left-0 top-0 bottom-0 z-50 bg-black/40 backdrop-blur-3xl border-r border-white/5 hidden lg:flex flex-col shadow-2xl overflow-hidden"
+      animate={{ width: isExpanded ? 280 : 80 }}
       transition={springTransition}
       onMouseEnter={() => setIsExpanded(true)}
       onMouseLeave={() => setIsExpanded(false)}
     >
-      <div className="flex items-center h-16 px-5 mb-4 gap-3 cursor-pointer border-b border-border/30 relative shrink-0">
+      <div className="flex items-center h-20 px-6 gap-3 cursor-pointer border-b border-white/5 relative shrink-0">
         <Sparkles className="w-8 h-8 text-primary shrink-0" />
         <AnimatePresence>
           {isExpanded && (
             <motion.span 
-              className="font-black tracking-tighter text-xl whitespace-nowrap"
+              className="font-black tracking-tighter text-xl whitespace-nowrap uppercase"
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -10 }}
               transition={{ duration: 0.2 }}
             >
-              CREATORFORGE
+              CreatorForge<span className="text-primary italic">AI</span>
             </motion.span>
           )}
         </AnimatePresence>
-        <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-primary to-transparent opacity-50 shadow-[0_0_10px_hsl(var(--primary))]" />
       </div>
 
-      <nav className="flex-1 overflow-y-auto no-scrollbar py-2 px-3 space-y-0.5">
+      <nav className="flex-1 overflow-y-auto no-scrollbar py-6 px-3 space-y-1">
         {navItems.map((item) => {
-          const isActive = location.pathname.startsWith(item.href);
+          const isActive = location.pathname === item.href || (item.href !== '/dashboard' && location.pathname.startsWith(item.href));
           return (
             <Link 
               key={item.label} 
               to={item.href}
-              className={`flex items-center gap-4 px-3 py-2.5 rounded-lg relative transition-all group ${
-                isActive ? "bg-primary/10 text-white" : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+              className={`flex items-center gap-4 px-4 py-3 rounded-xl relative transition-all group ${
+                isActive ? "bg-[#FF3CAC]/[0.08] text-white" : "text-zinc-500 hover:bg-white/5 hover:text-white"
               }`}
               title={!isExpanded ? item.label : undefined}
             >
               {isActive && (
                 <motion.div 
                   layoutId="activeNav"
-                  className="absolute left-0 top-0 bottom-0 w-[3px] bg-primary shadow-[4px_0_15px_rgba(255,60,172,0.4)]"
+                  className="absolute left-0 top-0 bottom-0 w-[3px] bg-[#FF3CAC] shadow-[2px_0_10px_rgba(255,60,172,0.5)]"
                 />
               )}
-              <item.icon className="w-4.5 h-4.5 shrink-0 transition-transform group-hover:-translate-y-0.5" />
+              <item.icon className={`w-5 h-5 shrink-0 transition-all ${isActive ? "text-[#FF3CAC]" : "group-hover:text-white"}`} />
               <AnimatePresence>
                 {isExpanded && (
                   <motion.span 
-                    className="font-medium text-[13px] whitespace-nowrap"
+                    className="font-black text-[11px] uppercase tracking-widest whitespace-nowrap"
                     initial={{ opacity: 0, x: -5 }}
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -5 }}
-                    transition={{ duration: 0.15 }}
                   >
                     {item.label}
                   </motion.span>
@@ -99,86 +97,42 @@ export const Sidebar = () => {
         })}
       </nav>
 
-      {/* FOOTER SECTION — SETTINGS & PROFILE */}
-      <div className="mt-auto p-3 border-t border-border/30 flex flex-col gap-2 bg-muted/5 backdrop-blur-md shrink-0">
-        <Link 
-          to="/settings"
-          className={`flex items-center gap-4 px-3 py-2.5 rounded-lg transition-colors group ${
-            location.pathname === "/settings" ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
-          }`}
-          title={!isExpanded ? "Settings" : undefined}
-        >
-          <Settings className="w-4.5 h-4.5 shrink-0 transition-transform group-hover:rotate-45" />
-          <AnimatePresence>
-            {isExpanded && (
-              <motion.span 
-                className="font-medium text-[13px] whitespace-nowrap"
-                initial={{ opacity: 0, x: -5 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -5 }}
-                transition={{ duration: 0.15 }}
-              >
-                Settings
-              </motion.span>
-            )}
-          </AnimatePresence>
-        </Link>
+      <div className="mt-auto p-4 border-t border-white/5 bg-white/[0.02] flex flex-col gap-4">
+        <div className="flex items-center gap-3 p-2 rounded-2xl bg-white/5 border border-white/5 group relative overflow-hidden">
+           <div className="w-9 h-9 shrink-0 relative">
+             {user?.photo ? (
+               <img src={user.photo} alt="" className="w-full h-full rounded-full object-cover border border-white/10" />
+             ) : (
+               <div className="w-full h-full rounded-full bg-gradient-to-br from-primary to-blue-500 flex items-center justify-center text-[10px] font-black text-white">
+                 {user?.firstName?.[0]}
+               </div>
+             )}
+             <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 border-2 border-black rounded-full" />
+           </div>
 
-        <div className="flex items-center h-14 p-1.5 rounded-xl border border-border/20 bg-background/50 group relative">
-           {user?.photo ? (
-             <img src={user.photo} alt={user.name} className="w-9 h-9 rounded-lg object-cover shrink-0" />
-           ) : (
-             <div className="w-9 h-9 rounded-lg bg-gradient-to-tr from-primary to-indigo-500 shrink-0 flex items-center justify-center text-white text-[10px] font-black uppercase">
-               {user?.name?.split(' ').map(n => n[0]).join('')}
-             </div>
-           )}
            <AnimatePresence>
              {isExpanded && (
                <motion.div 
-                className="ml-3 flex flex-col min-w-0 flex-1"
-                initial={{ opacity: 0, x: -5 }}
+                className="flex flex-col min-w-0 flex-1"
+                initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -5 }}
-                transition={{ duration: 0.15 }}
+                exit={{ opacity: 0, x: -10 }}
                >
-                  <span className="text-xs font-black truncate">{user?.name || "Anonymous"}</span>
-                  <span className="text-[9px] text-muted-foreground font-bold truncate">{user?.handle || "@creator"}</span>
-                  <div className="flex gap-1 mt-0.5 opacity-60">
-                    {user?.platforms.includes("Instagram") && <Instagram className="w-2.5 h-2.5" />}
-                    {user?.platforms.includes("YouTube") && <Youtube className="w-2.5 h-2.5" />}
+                  <span className="text-[11px] font-black text-white truncate uppercase tracking-tight">{user?.handle || "@creator"}</span>
+                  <div className="flex gap-1.5 mt-0.5">
+                    {user?.platforms.includes("Instagram") && <Instagram className="w-3 h-3 text-pink-500" />}
+                    {user?.platforms.includes("YouTube") && <Youtube className="w-3 h-3 text-red-500" />}
+                    {user?.platforms.includes("TikTok") && <Play className="w-3 h-3 text-white" />}
                   </div>
                </motion.div>
              )}
            </AnimatePresence>
+           
            {isExpanded && (
-             <button 
-              onClick={logout}
-              className="p-2 opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-rose-500 transition-all"
-             >
-                <LogOut className="w-3.5 h-3.5" />
+             <button onClick={logout} className="p-2 opacity-0 group-hover:opacity-100 text-zinc-500 hover:text-white transition-all">
+                <LogOut className="w-4 h-4" />
              </button>
            )}
-        </div>
-
-        <div className="flex flex-col gap-1 mt-1">
-          <Link 
-            to="/brand"
-            className="w-full h-10 rounded-lg bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 font-bold overflow-hidden flex items-center justify-center gap-2 hover:bg-indigo-500/20 transition-all active:scale-95"
-          >
-            <Briefcase className="w-3.5 h-3.5" />
-            <AnimatePresence>
-              {isExpanded && (
-                <motion.span 
-                  className="text-[10px] uppercase font-black tracking-widest"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                >
-                  Brand Mode
-                </motion.span>
-              )}
-            </AnimatePresence>
-          </Link>
         </div>
       </div>
     </motion.div>

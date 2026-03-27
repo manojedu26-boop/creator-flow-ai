@@ -3,9 +3,11 @@ import { motion } from "framer-motion";
 import { Sparkles, ArrowLeft, Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { useAuth } from "../contexts/AuthContext";
 
 const Login = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -16,6 +18,9 @@ const Login = () => {
       toast.error("Please fill in all fields.");
       return;
     }
+    
+    login(email, password); // Updates context and localStorage
+
     toast.success("Welcome back! 🔥", {
       description: "Redirecting to your dashboard...",
     });

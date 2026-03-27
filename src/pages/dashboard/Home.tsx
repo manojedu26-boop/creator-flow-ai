@@ -2,511 +2,400 @@ import { motion } from "framer-motion";
 import { 
   ChevronRight, ExternalLink, Zap, Network, Calendar,
   MessageCircle, Heart, Share2, DollarSign as RevenueIcon,
-  Eye, Users, TrendingUp, DollarSign, Briefcase, 
-  CheckCircle2, Clock, Instagram, Youtube, Twitter, Play,
-  Copy, Check
+  CheckCircle2, TrendingUp, Search, Bell, Copy,
+  ArrowRight, Users, MousePointer2, MessageSquare, Wallet, Briefcase, 
+  Download, Instagram, Youtube, Star, MoreHorizontal, Check, Play,
+  Settings, Clock
 } from "lucide-react";
 import { ResponsiveContainer, LineChart, Line, YAxis, XAxis, Tooltip } from "recharts";
 import { PageTransition, CountUp } from "../../components/shared/MotionComponents";
-import { useAuth } from "../../contexts/AuthContext";
 import { 
-  KpiSkeleton, ChartSkeleton, PostSkeleton, TextSkeleton 
+  SkeletonCard, SkeletonHeader, SkeletonText 
 } from "../../components/shared/Skeleton";
 import { useState, useEffect } from "react";
 import { EmptyState } from "../../components/shared/EmptyState";
-import { Plus, Search, Star } from "lucide-react";
+import { Plus } from "lucide-react";
 import { toast } from "../../components/ui/sonner";
+import { useAuth } from "../../contexts/AuthContext";
 
 const sparklineData = [
-  { value: 40 }, { value: 45 }, { value: 42 }, { value: 50 }, { value: 48 }, { value: 55 }, { value: 60 }
-];
-
-const kpiStats = [
-  { label: "Total Reach", value: 1200000, delta: "+12.4%", icon: Eye, up: true, data: sparklineData, suffix: "M", divisor: 1000000, decimals: 1 },
-  { label: "Follower Growth", value: 8241, delta: "+3.1%", icon: Users, up: true, data: sparklineData, prefix: "+" },
-  { label: "Engagement Rate", value: 4.8, delta: "-0.2%", icon: TrendingUp, up: false, data: sparklineData, suffix: "%", decimals: 1 },
-  { label: "Est. Revenue", value: 2.4, delta: "+18.9%", icon: DollarSign, up: true, data: sparklineData, prefix: "₹", suffix: "L", decimals: 1 },
-  { label: "Active Brand Deals", value: 4, delta: "2 waiting", icon: Briefcase, up: true, data: sparklineData }
-];
-
-const dashboardPosts = [
-  { id: 1, thumb: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=100&h=100&fit=crop", type: "Reel", platform: "IG", reach: "42.5K", engagement: "4.2%", saves: "1.2K", status: "Trending" },
-  { id: 2, thumb: "https://images.unsplash.com/photo-1611606063065-ee7946f0787a?w=100&h=100&fit=crop", type: "Video", platform: "YT", reach: "128K", engagement: "8.1%", saves: "4.5K", status: "Stable" },
-  { id: 3, thumb: "https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?w=100&h=100&fit=crop", type: "Post", platform: "TT", reach: "12.1K", engagement: "3.2%", saves: "400", status: "Draft" },
-];
-
-const upcomingDocs = [
-  { title: "Tuesday Reel: Morning Routine", time: "Tomorrow, 6:30 PM", thumb: "https://images.unsplash.com/photo-1490730141103-6cac27aaab94?w=100&h=100&fit=crop" },
-  { title: "YT Shorts: AI Tools Review", time: "Thursday, 12:00 PM", thumb: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=100&h=100&fit=crop" },
-  { title: "Carousel: Growth Strategies", time: "Friday, 8:00 PM", thumb: "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=100&h=100&fit=crop" },
-];
-
-const networkItems = [
-  { user: "@alex_vlogs", text: "Sent you a collab request for 'Tech Setup 2024'", icon: <MessageCircle className="w-4 h-4 text-blue-500" /> },
-  { user: "@creative_maya", text: "Liked your recent 'Morning Routine' reel", icon: <Heart className="w-4 h-4 text-rose-500" /> },
-  { user: "@brand_boost", text: "Wants to discuss a potential partnership", icon: <RevenueIcon className="w-4 h-4 text-emerald-500" /> },
+  { value: 400 }, { value: 600 }, { value: 550 }, { value: 700 }, 
+  { value: 800 }, { value: 750 }, { value: 900 }
 ];
 
 export const Home = () => {
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
-  const [aiTasks, setAiTasks] = useState([
-    { id: 1, task: "Post your Tuesday Reel by 6:30 PM", time: "12 min", done: true, plat: <Instagram className="w-3.5 h-3.5" /> },
-    { id: 2, task: "Reply to 8 unanswered comments on your posts", time: "8 min", done: true, plat: <Instagram className="w-3.5 h-3.5" /> },
-    { id: 3, task: "Follow up with Nike on your pending deal", time: "3 min", done: false, plat: <Briefcase className="w-3.5 h-3.5" /> },
-    { id: 4, task: "Generate 3 caption options for Thursday", time: "2 min", done: false, plat: <Youtube className="w-3.5 h-3.5" /> },
-    { id: 5, task: "Check your Trend Radar — 2 new matches", time: "5 min", done: false, plat: <Zap className="w-3.5 h-3.5" /> },
+  const [tasks, setTasks] = useState([
+    { id: 1, text: 'Post your Tuesday Reel by 7:00 PM — "3 exercises for desk workers"', time: '10 min', completed: false, category: 'Content' },
+    { id: 2, text: 'Reply to 12 unanswered comments on last post', time: '5 min', completed: true, category: 'Community' },
+    { id: 3, text: 'Follow up with Nike Brand Partnership — no reply in 5 days', time: '3 min', completed: false, category: 'Deals' },
+    { id: 4, text: 'Generate captions for Thursday\'s carousel post', time: '2 min', completed: false, category: 'Content' },
+    { id: 5, text: 'Check Trend Radar — "no-equipment workout" is trending in your niche', time: '1 min', completed: false, category: 'Strategy' },
   ]);
-  const [copyingId, setCopyingId] = useState<number | null>(null);
+
+  const stats = [
+    { label: 'Total Reach', value: 384200, delta: '+14.3%', up: true, icon: Users, color: 'text-blue-500' },
+    { label: 'Follower Growth', value: 892, delta: '+6.1%', up: true, icon: MousePointer2, color: 'text-indigo-500' },
+    { label: 'Engagement Rate', value: 4.8, delta: '+0.4%', up: true, icon: MessageSquare, color: 'text-primary' },
+    { label: 'Est. Revenue', value: 68000, delta: '₹', up: true, icon: Wallet, color: 'text-emerald-500' },
+    { label: 'Active Brand Deals', value: 3, delta: 'View Hub', up: true, icon: Briefcase, color: 'text-amber-500' },
+  ];
+
+  const recentPosts = [
+    { id: 1, type: 'Reel', title: '5 min morning stretch', platform: 'IG', reach: '42,800', eng: '6.2%', saves: '1,840' },
+    { id: 2, type: 'Carousel', title: 'What I eat in a day', platform: 'IG', reach: '28,300', eng: '4.1%', saves: '920' },
+    { id: 3, type: 'Video', title: 'My gym bag essentials', platform: 'YT', reach: '8,200 views', eng: '3.2%', saves: '67 comments' },
+    { id: 4, type: 'Reel', title: '3 mistakes beginners make', platform: 'TikTok', reach: '61,400', eng: '7.8%', saves: '4.2k likes' },
+    { id: 5, type: 'Story', title: 'Protein shake recipe', platform: 'IG', reach: '9,800', eng: '3.4%', saves: '340 taps' },
+  ];
+
+  const platformHealth = [
+    { platform: 'Instagram', followers: '48,200', growth: '+312 this week', engagement: '4.8%', status: 'Healthy', color: 'bg-primary' },
+    { platform: 'YouTube', followers: '12,800', growth: '+88 this week', engagement: '3.2%', status: 'Growing', color: 'bg-red-500' },
+    { platform: 'TikTok', followers: '31,500', growth: '+492 this week', engagement: '5.1%', status: 'Healthy', color: 'bg-zinc-800' },
+  ];
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 1200);
+    const timer = setTimeout(() => setIsLoading(false), 800);
     return () => clearTimeout(timer);
   }, []);
 
-  const handleCopy = (id: number) => {
-    setCopyingId(id);
-    toast.success("Link copied!", { description: "Copied to clipboard ✓" });
-    setTimeout(() => setCopyingId(null), 1500);
+  const toggleTask = (id: number) => {
+    setTasks(tasks.map(t => t.id === id ? { ...t, completed: !t.completed } : t));
+    const task = tasks.find(t => t.id === id);
+    if (!task?.completed) {
+      toast.success("Task completed! Keep it up. 🚀");
+    }
   };
 
-  const completedCount = aiTasks.filter(t => t.done).length;
-  
+  const completedCount = tasks.filter(t => t.completed).length;
+
+  if (isLoading) {
+    return (
+      <div className="p-8 space-y-8">
+        <SkeletonHeader />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+          {[1,2,3,4,5].map(i => <SkeletonCard key={i} />)}
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <SkeletonCard className="lg:col-span-2 h-[400px]" />
+          <SkeletonCard className="h-[400px]" />
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <PageTransition>
-      <div className="max-w-7xl mx-auto space-y-8 pb-12">
-        
-        {/* ROW 1 — PERSONALISED AI GREETING BANNER */}
-        <div className="premium-card w-full h-[140px] rounded-3xl relative overflow-hidden bg-card border border-border/40 p-8 flex items-center justify-between shadow-2xl group">
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-transparent to-primary/5 animate-shimmer pointer-events-none" 
-               style={{ backgroundSize: '200% 100%' }} />
-          
-          <div className="relative z-10 flex flex-col justify-center gap-1.5">
-            <motion.h2 
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.2 }}
-              className="text-3xl md:text-4xl font-black tracking-tight"
-            >
-              Good morning, {user?.firstName || "Creator"} 👋
-            </motion.h2>
-            <p className="text-muted-foreground text-sm md:text-base max-w-2xl leading-relaxed">
-              Your engagement is up 14% this week. Your best window to post today is <span className="text-primary font-bold">6:30 PM</span>. 
-              You have <span className="border-b border-primary/50 text-foreground font-medium">2 brand deals</span> waiting for a reply.
-            </p>
-          </div>
+    <PageTransition className="p-4 md:p-8 space-y-8 max-w-7xl mx-auto pb-24 lg:pb-8">
+      {/* Header Section */}
+      <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div className="space-y-2">
+          <motion.div 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-primary"
+          >
+            <Zap className="w-3 h-3 fill-current" />
+            Command Centre Overview
+          </motion.div>
+          <motion.h1 
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="text-4xl md:text-6xl font-black tracking-tighter leading-[0.9]"
+          >
+            Good morning, <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary/80 to-purple-500 italic">
+              {user?.firstName || 'Naveen'}
+            </span> 👋
+          </motion.h1>
+          <p className="text-muted-foreground font-bold text-sm md:text-base max-w-xl leading-relaxed mt-4">
+            Your engagement is up <span className="text-emerald-500">11%</span> this week. Best time to post today is <span className="text-primary tracking-widest uppercase">7:00 PM</span>. Nike has not replied to your pitch — send a follow-up now.
+          </p>
+        </div>
+        <div className="flex gap-3">
+          <button className="h-12 px-6 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all flex items-center gap-2 font-black text-[10px] uppercase tracking-widest">
+            <Plus className="w-4 h-4" /> New Campaign
+          </button>
+          <button className="h-12 px-6 rounded-2xl bg-primary text-white hover:scale-105 transition-all flex items-center gap-2 font-black text-[10px] uppercase tracking-widest shadow-xl shadow-primary/20">
+            <Search className="w-4 h-4" /> Trend Radar
+          </button>
+        </div>
+      </header>
 
-          <div className="relative z-10 hidden md:flex flex-col items-center">
-            <div className="relative w-20 h-20 flex items-center justify-center">
-              <svg className="absolute inset-0 w-full h-full -rotate-90">
-                <circle cx="40" cy="40" r="36" fill="none" stroke="currentColor" strokeWidth="4" className="text-muted/20" />
-                <motion.circle 
-                  cx="40" cy="40" r="36" fill="none" stroke="currentColor" strokeWidth="4" 
-                  className="text-primary drop-shadow-[0_0_8px_hsl(var(--primary))]" 
-                  strokeDasharray="226" 
-                  initial={{ strokeDashoffset: 226 }}
-                  animate={{ strokeDashoffset: 226 - (226 * 0.82) }}
-                  transition={{ duration: 1.5, ease: "easeOut" }}
-                />
-              </svg>
-              <div className="flex flex-col items-center justify-center">
-                <span className="text-2xl font-black">
-                  <CountUp value={82} />
-                </span>
+      {/* KPI Stats Strip */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+        {stats.map((stat, i) => (
+          <motion.div
+            key={stat.label}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: i * 0.1 }}
+            className="group relative overflow-hidden rounded-[2rem] bg-black/40 backdrop-blur-3xl p-6 border border-white/5 hover:border-primary/30 transition-all shadow-xl"
+          >
+            <div className={`p-3 rounded-2xl w-fit ${stat.color} bg-current/10 mb-4 group-hover:scale-110 transition-transform`}>
+              <stat.icon className="w-5 h-5" />
+            </div>
+            <div className="space-y-1">
+              <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{stat.label}</p>
+              <div className="flex items-end gap-2">
+                <h3 className="text-2xl font-black tracking-tight">
+                  <CountUp end={stat.value} prefix={stat.label === 'Est. Revenue' ? '₹ ' : ''} />
+                </h3>
+              </div>
+              <div className={`text-[10px] font-black ${stat.up ? 'text-emerald-500' : 'text-primary'} flex items-center gap-1 mt-1`}>
+                {stat.up ? <TrendingUp className="w-3 h-3" /> : <ChevronRight className="w-3 h-3" />}
+                {stat.delta}
               </div>
             </div>
-            <div className="flex gap-2 mt-2">
-              <span className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">Engage ↑</span>
-              <span className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">Content ↓</span>
-              <span className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">Deals →</span>
+          </motion.div>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Main Content Area */}
+        <div className="lg:col-span-2 space-y-8">
+          {/* AI Action Plan */}
+          <div className="rounded-[2.5rem] bg-black/40 backdrop-blur-3xl border border-white/5 overflow-hidden shadow-2xl">
+            <div className="p-8 border-b border-white/5 flex items-center justify-between">
+              <div>
+                <h3 className="text-xl font-black tracking-tight flex items-center gap-3">
+                  <Zap className="w-5 h-5 text-primary fill-primary" />
+                  Today's AI Action Plan
+                </h3>
+                <p className="text-xs font-bold text-muted-foreground mt-1">
+                  Generated at 8:00 AM based on your niche trends
+                </p>
+              </div>
+              <div className="bg-primary/20 text-primary text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-tighter">
+                {completedCount}/{tasks.length} Complete
+              </div>
+            </div>
+            <div className="p-4 md:p-8 space-y-4">
+              {tasks.map((task) => (
+                <motion.div
+                  key={task.id}
+                  layout
+                  className={`group flex items-center gap-4 p-4 rounded-2xl transition-all ${task.completed ? 'bg-white/[0.02] opacity-50' : 'bg-white/5 border border-white/5 hover:border-primary/30'}`}
+                >
+                  <button
+                    onClick={() => toggleTask(task.id)}
+                    className={`shrink-0 w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all ${task.completed ? 'bg-primary border-primary' : 'border-white/20 hover:border-primary'}`}
+                  >
+                    {task.completed && <Check className="w-4 h-4 text-white" />}
+                  </button>
+                  <div className="flex-1 min-w-0">
+                    <p className={`text-sm font-bold truncate ${task.completed ? 'line-through text-muted-foreground' : ''}`}>
+                      {task.text}
+                    </p>
+                    <div className="flex items-center gap-3 mt-1">
+                      <span className="text-[10px] uppercase font-black tracking-widest opacity-40">{task.category}</span>
+                      <span className="flex items-center gap-1 text-[10px] font-bold text-muted-foreground">
+                        <Clock className="w-3 h-3" /> {task.time}
+                      </span>
+                    </div>
+                  </div>
+                  <button className="hidden group-hover:flex items-center gap-2 text-[10px] font-black uppercase text-primary tracking-widest p-2">
+                    Action <ArrowRight className="w-3 h-3" />
+                  </button>
+                </motion.div>
+              ))}
             </div>
           </div>
-        </div>
 
-        {/* ROW 2 — LIVE KPI STRIP */}
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
-          {isLoading ? (
-            Array(5).fill(0).map((_, i) => <KpiSkeleton key={i} />)
-          ) : (
-            kpiStats.map((stat, i) => (
-              <motion.div 
-                key={stat.label}
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: i * 0.1 }}
-                className="premium-card p-6 rounded-2xl bg-card border border-border/40 flex flex-col relative overflow-hidden group shadow-sm"
-              >
-                <div className="flex justify-between items-start mb-4">
-                  <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest">{stat.label}</span>
-                  <stat.icon className={`w-4 h-4 text-muted-foreground/40 group-hover:text-primary transition-colors`} />
-                </div>
-                
-                <div className="flex flex-col mb-1">
-                  <span className="text-3xl font-black tracking-tight">
-                    <CountUp 
-                      value={stat.divisor ? stat.value / stat.divisor : stat.value} 
-                      prefix={stat.prefix} 
-                      suffix={stat.suffix} 
-                      decimals={stat.decimals} 
-                    />
-                  </span>
-                  <div className={`text-xs font-bold flex items-center mt-1 ${stat.up ? 'text-emerald-500 animate-bounce-in' : 'text-rose-500'}`}>
-                    {stat.up ? "↑" : "↓"} {stat.delta}
-                    <span className="text-[10px] text-muted-foreground font-normal ml-1">vs last period</span>
-                  </div>
-                </div>
-
-                <div className="absolute bottom-0 right-0 w-24 h-12 opacity-50 group-hover:opacity-100 transition-opacity">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={stat.data}>
-                      <Line 
-                        type="monotone" 
-                        dataKey="value" 
-                        stroke={stat.up ? "#10b981" : "#f43f5e"} 
-                        strokeWidth={2} 
-                        dot={false} 
-                        isAnimationActive={true}
-                        animationDuration={800}
-                      />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </div>
-              </motion.div>
-            ))
-          )}
-        </div>
-
-        {/* ROW 3 — TWO COLUMN LAYOUT (60% / 40%) */}
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
-          
-          {/* LEFT COLUMN (60%) */}
-          <div className="lg:col-span-3 space-y-6">
-            <div className="premium-card bg-card border border-border/40 rounded-3xl p-8 shadow-sm">
-              <div className="flex items-center justify-between mb-8">
-                <div>
-                  <h3 className="text-xl font-black tracking-tight flex items-center gap-2 uppercase">
-                    <Zap className="w-5 h-5 text-primary fill-primary" />
-                    Today's AI Action Plan
-                  </h3>
-                  <p className="text-sm text-muted-foreground mt-1">Your AI Coach has 5 tasks for you today</p>
-                </div>
-                {!isLoading && (
-                  <div className="h-10 w-10 rounded-full border border-border/40 flex items-center justify-center text-sm font-bold">
-                    {completedCount}/5
-                  </div>
-                )}
-              </div>
-
+          {/* Recent Content Performance */}
+          <div className="rounded-[2.5rem] bg-black/40 backdrop-blur-3xl border border-white/5 overflow-hidden shadow-2xl">
+            <div className="p-8 border-b border-white/5 flex items-center justify-between">
+              <h3 className="text-xl font-black tracking-tight flex items-center gap-3">
+                <Play className="w-5 h-5 text-primary fill-primary" />
+                Recent Content Stream
+              </h3>
+              <button className="text-[10px] font-black uppercase text-muted-foreground hover:text-primary transition-colors tracking-widest">
+                Full Studio <ChevronRight className="w-4 h-4 inline" />
+              </button>
+            </div>
+            <div className="p-4 md:p-8">
               <div className="space-y-4">
-                {isLoading ? (
-                  Array(5).fill(0).map((_, i) => <div key={i} className="h-16 w-full rounded-2xl bg-muted/10 animate-pulse" />)
-                ) : (
-                  aiTasks.map((item, i) => (
-                    <div 
-                      key={item.id} 
-                      onClick={() => {
-                        if (!item.done) {
-                          const newTasks = aiTasks.map(t => t.id === item.id ? { ...t, done: true } : t);
-                          setAiTasks(newTasks);
-                          toast.success("Task completed!", {
-                            description: `"${item.task}" marked as done.`,
-                          });
-                        }
-                      }}
-                      className={`flex items-center justify-between p-4 rounded-2xl border transition-all ${item.done ? 'bg-muted/5 border-transparent opacity-60' : 'bg-muted/10 border-border/30 hover:border-primary/40 hover:bg-muted/20 group cursor-pointer'}`}
-                    >
-                      <div className="flex items-center gap-4">
-                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${item.done ? 'bg-primary border-primary' : 'border-border/60 group-hover:border-primary'}`}>
-                          {item.done && <CheckCircle2 className="w-3 h-3 text-white" />}
-                        </div>
-                        <div>
-                          <span className={`text-sm tracking-tight transition-all ${item.done ? 'line-through text-muted-foreground font-medium strikethrough-animation' : 'font-bold'}`}>{item.task}</span>
-                          <div className="flex items-center gap-2 mt-0.5">
-                            <span className="text-[10px] text-muted-foreground flex items-center gap-1">{item.plat} {item.time}</span>
-                          </div>
+                {recentPosts.map((post) => (
+                  <div key={post.id} className="flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-white/5 group hover:border-white/10 transition-all">
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-white/10 to-white/5 flex items-center justify-center relative overflow-hidden group-hover:scale-105 transition-all">
+                        <span className="text-[10px] font-black uppercase tracking-widest opacity-50 z-10">{post.platform}</span>
+                        <div className="absolute inset-0 bg-primary opacity-0 group-hover:opacity-10 transition-opacity" />
+                      </div>
+                      <div>
+                        <h4 className="text-sm font-black truncate max-w-[150px] md:max-w-none">{post.title}</h4>
+                        <div className="flex gap-3 text-[10px] font-bold text-muted-foreground uppercase tracking-widest mt-1">
+                           <span>{post.type}</span>
+                           <span className="text-primary/60">•</span>
+                           <span>{post.reach} Reach</span>
                         </div>
                       </div>
-                      {!item.done && <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:translate-x-1 transition-transform" />}
                     </div>
-                  ))
-                )}
+                    <div className="flex items-center gap-6">
+                      <div className="hidden md:block text-right">
+                         <p className="text-xs font-black text-white">{post.eng}</p>
+                         <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground opacity-50">Engagement</p>
+                      </div>
+                      <div className="hidden md:block text-right">
+                         <p className="text-xs font-black text-white">{post.saves}</p>
+                         <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground opacity-50 text-right">Saves/Clicks</p>
+                      </div>
+                      <button className="p-2.5 rounded-xl bg-white/5 hover:bg-primary hover:text-white transition-all">
+                        <ArrowRight className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Sidebar Widgets */}
+        <div className="space-y-8">
+          {/* Creator Profile Summary Widget */}
+          <div className="rounded-[2.5rem] bg-gradient-to-br from-primary/20 to-purple-500/10 border border-white/10 p-8 relative overflow-hidden group">
+            <div className="absolute top-0 right-0 p-4 opacity-30 group-hover:opacity-100 transition-opacity">
+               <Stars className="w-12 h-12 text-white blur-xl animate-pulse" />
+            </div>
+            <div className="relative z-10 space-y-6">
+              <div className="flex items-center gap-4">
+                <div className="w-16 h-16 rounded-3xl bg-white/10 border border-white/20 p-1">
+                  <img 
+                    src={user?.photo || "https://api.dicebear.com/7.x/avataaars/svg?seed=Naveen"} 
+                    alt="Profile" 
+                    className="w-full h-full rounded-2xl object-cover"
+                  />
+                </div>
+                <div>
+                  <h4 className="text-xl font-black tracking-tight leading-none">{user?.name || 'Naveen Kumar'}</h4>
+                  <p className="text-xs font-bold text-white/60 mt-1 uppercase tracking-widest">{user?.handle || '@naveenfitlife'}</p>
+                </div>
               </div>
               
-              {!isLoading && (
-                <div className="mt-8 overflow-hidden h-2 bg-muted/30 rounded-full relative">
+              <div className="space-y-4 py-4 border-y border-white/5">
+                <div className="flex justify-between items-center">
+                   <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40">Creator Score</span>
+                   <span className="text-xl font-black text-white">74<span className="text-xs opacity-40">/100</span></span>
+                </div>
+                <div className="h-2 rounded-full bg-white/10 overflow-hidden">
                   <motion.div 
                     initial={{ width: 0 }}
-                    animate={{ width: `${(completedCount / 5) * 100}%` }}
-                    className="absolute inset-y-0 left-0 bg-primary shadow-[0_0_10px_hsl(var(--primary))]"
+                    animate={{ width: '74%' }}
+                    className="h-full bg-white"
                   />
                 </div>
-              )}
-            </div>
-
-            {/* RECENT POST PERFORMANCE */}
-            <div className="premium-card bg-card border border-border/40 rounded-3xl p-8 shadow-sm">
-              <h3 className="text-xl font-black tracking-tight mb-6 uppercase">Recent Post Performance</h3>
-              <div className="overflow-x-auto">
-                <table className="w-full text-left">
-                  <thead>
-                    <tr className="border-b border-border/30">
-                      <th className="pb-4 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Post</th>
-                      <th className="pb-4 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Platform</th>
-                      <th className="pb-4 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Reach</th>
-                      <th className="pb-4 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Engagement</th>
-                      <th className="pb-4 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Saves</th>
-                      <th className="pb-4 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Status</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-border/20">
-                    {isLoading ? (
-                      Array(3).fill(0).map((_, i) => (
-                        <tr key={i}>
-                          <td colSpan={6} className="py-4">
-                            <div className="h-10 w-full bg-muted/10 animate-pulse rounded-lg" />
-                          </td>
-                        </tr>
-                      ))
-                    ) : (
-                      dashboardPosts.map((post) => (
-                        <tr key={post.id} className="group hover:bg-muted/10 cursor-pointer transition-colors">
-                          <td className="py-4">
-                            <div className="flex items-center gap-3">
-                              <img src={post.thumb} alt="" className="w-10 h-10 rounded-lg object-cover" />
-                              <div className="flex flex-col">
-                                <span className="text-xs font-bold">{post.type}</span>
-                                <div className="flex items-center gap-1.5 mt-0.5">
-                                  <button onClick={(e) => {
-                                    e.stopPropagation();
-                                    toast.success("Saved!", { description: "Post added to your inspiration gallery." });
-                                  }} className="text-muted-foreground hover:text-primary transition-colors">
-                                    <Star className="w-3 h-3 hover:animate-pop-scale" />
-                                  </button>
-                                  <span className="text-[9px] text-zinc-500 font-bold uppercase">{post.saves}</span>
-                                </div>
-                              </div>
-                            </div>
-                          </td>
-                          <td className="py-4 text-xs font-medium">{post.platform}</td>
-                          <td className="py-4 text-xs font-black">{post.reach}</td>
-                          <td className="py-4 text-xs font-bold text-emerald-500">{post.engagement}</td>
-                          <td className="py-4 text-xs font-medium text-muted-foreground">{post.saves}</td>
-                          <td className="py-4">
-                            <button 
-                              onClick={() => handleCopy(post.id)}
-                              className={`flex items-center gap-2 px-2 py-1 rounded-lg transition-all text-[9px] font-black uppercase tracking-widest ${
-                                copyingId === post.id ? "bg-emerald-500/20 text-emerald-500" : "bg-muted/30 text-muted-foreground hover:text-foreground"
-                              }`}
-                            >
-                              {copyingId === post.id ? (
-                                <><Check className="w-3 h-3" /> Copied!</>
-                              ) : (
-                                <><Copy className="w-3 h-3" /> Copy Link</>
-                              )}
-                            </button>
-                          </td>
-                        </tr>
-                      ))
-                    )}
-                  </tbody>
-                </table>
               </div>
-            </div>
-          </div>
 
-          {/* RIGHT COLUMN (40%) */}
-          <div className="lg:col-span-2 space-y-6">
-            <div className="premium-card bg-card border border-border/40 rounded-3xl p-8 shadow-sm">
-              <h3 className="text-xl font-black tracking-tight mb-6 uppercase">Platform Health</h3>
-              <div className="space-y-6">
-                {isLoading ? (
-                  Array(3).fill(0).map((_, i) => (
-                    <div key={i} className="flex items-center justify-between p-4 rounded-2xl bg-muted/5 animate-pulse">
-                      <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 rounded-xl bg-muted/20" />
-                        <div className="space-y-2">
-                          <div className="h-4 w-20 bg-muted/20 rounded" />
-                          <div className="h-3 w-12 bg-muted/20 rounded" />
-                        </div>
-                      </div>
-                      <div className="h-8 w-12 bg-muted/20 rounded-lg" />
-                    </div>
-                  ))
-                ) : (
-                  [
-                    { name: "Instagram", followers: "142K", growth: "+1.2%", er: "4.2%", health: "bg-emerald-500", icon: <Instagram className="w-5 h-5 text-pink-500" /> },
-                    { name: "YouTube", followers: "89K", growth: "+4.5%", er: "8.1%", health: "bg-emerald-500", icon: <Youtube className="w-5 h-5 text-red-500" /> },
-                    { name: "TikTok", followers: "410K", growth: "-0.8%", er: "3.2%", health: "bg-amber-500", icon: <Play className="w-5 h-5 fill-foreground" /> }
-                  ].map(platform => (
-                    <div key={platform.name} className="flex items-center justify-between p-4 rounded-2xl bg-muted/10 hover:bg-muted/20 cursor-pointer transition-all border border-transparent hover:border-border/50">
-                      <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 rounded-xl bg-background flex items-center justify-center shadow-sm">
-                          {platform.icon}
-                        </div>
-                        <div>
-                          <div className="font-black text-sm">{platform.name}</div>
-                          <div className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest">{platform.followers} followers</div>
-                        </div>
-                      </div>
-                      <div className="flex flex-col items-end gap-1">
-                        <div className="flex items-center gap-2">
-                           <span className={`text-xs font-black ${platform.growth.startsWith('+') ? 'text-emerald-500' : 'text-rose-500'}`}>{platform.growth}</span>
-                           <span className={`w-2 h-2 rounded-full ${platform.health} shadow-[0_0_8px_currentColor]`} />
-                        </div>
-                        <span className="text-[10px] text-muted-foreground font-medium">ER: {platform.er}</span>
-                      </div>
-                    </div>
-                  ))
-                )}
-              </div>
-            </div>
-
-            <div className="premium-card bg-card border border-border/40 rounded-3xl p-8 shadow-sm overflow-hidden relative">
-              <h3 className="text-xl font-black tracking-tight mb-6 uppercase">Deal Pipeline Snapshot</h3>
-              <div className="flex gap-2 mb-6 overflow-x-auto pb-2 scrollbar-none">
-                {isLoading ? (
-                  Array(5).fill(0).map((_, i) => (
-                    <div key={i} className="min-w-[60px] h-12 rounded-xl bg-muted/10 animate-pulse" />
-                  ))
-                ) : (
-                  [
-                    { label: "Pros", count: 3 },
-                    { label: "Outr", count: 2 },
-                    { label: "Nego", count: 1 },
-                    { label: "Sign", count: 2 },
-                    { label: "Live", count: 1 },
-                  ].map(p => (
-                    <div key={p.label} className="min-w-[60px] h-12 rounded-xl bg-muted/20 border border-border/30 flex flex-col items-center justify-center relative">
-                      <span className="text-[10px] font-bold text-muted-foreground">{p.label}</span>
-                      <span className="font-black text-sm">{p.count}</span>
-                      {p.count > 0 && <div className="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-primary" />}
-                    </div>
-                  ))
-                )}
-              </div>
-              <div className="flex flex-col gap-1">
-                <span className="text-xs text-muted-foreground font-bold uppercase tracking-widest">Total Pipeline Value</span>
-                {isLoading ? (
-                  <div className="h-8 w-32 bg-muted/10 animate-pulse rounded mt-1" />
-                ) : (
-                  <span className="text-2xl font-black text-primary">₹ 2,40,000</span>
-                )}
-              </div>
-              {!isLoading && (
-                <button className="mt-6 w-full flex items-center justify-between text-xs font-black uppercase tracking-widest group">
-                  View All Deals 
-                  <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </button>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* ROW 4 — THREE COLUMN LAYOUT */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          
-          {/* UPCOMING SCHEDULED POSTS */}
-          <div className="premium-card bg-card border border-border/40 rounded-3xl p-8 shadow-sm h-full">
-             <div className="flex items-center justify-between mb-6">
-               <h3 className="text-lg font-black tracking-tight uppercase">Upcoming Posts</h3>
-               <button className="text-[10px] font-bold text-primary uppercase tracking-widest">Calendar →</button>
-             </div>
-             <div className="space-y-4">
-               {upcomingDocs.length > 0 ? (
-                 upcomingDocs.map((post, i) => (
-                   <div key={i} className="flex gap-4 p-3 rounded-2xl bg-muted/10 border border-border/10">
-                     <img src={post.thumb} alt="" className="w-12 h-12 rounded-xl object-cover shrink-0" />
-                     <div className="flex flex-col justify-center min-w-0">
-                        <span className="text-xs font-black truncate">{post.title}</span>
-                        <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest mt-0.5">{post.time}</span>
-                     </div>
-                   </div>
-                 ))
-               ) : (
-                 <EmptyState 
-                   icon={Calendar}
-                   title="No scheduled posts"
-                   description="Your calendar is empty this week — let's fix that"
-                   ctaText="Schedule a Post"
-                   onCtaClick={() => console.log("Schedule a Post")}
-                   className="p-6 rounded-2xl min-h-[200px]"
-                 />
-               )}
-             </div>
-          </div>
-
-          {/* TREND RADAR — LIVE */}
-          <div className="premium-card bg-card border border-border/40 rounded-3xl p-8 shadow-sm h-full relative overflow-hidden">
-             <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center gap-2">
-                   <h3 className="text-lg font-black tracking-tight uppercase">Trend Radar</h3>
-                   <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
+              <div className="flex gap-4">
+                <div className="flex-1 text-center py-3 bg-white/5 rounded-2xl border border-white/5">
+                   <p className="text-xs font-black">48.2k</p>
+                   <p className="text-[8px] font-black uppercase text-white/30 tracking-widest mt-1">Followers</p>
                 </div>
-                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Live</span>
+                <div className="flex-1 text-center py-3 bg-white/5 rounded-2xl border border-white/5">
+                   <p className="text-xs font-black">4.8%</p>
+                   <p className="text-[8px] font-black uppercase text-white/30 tracking-widest mt-1">Engagement</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Platform Health Section */}
+          <div className="rounded-[2.5rem] bg-black/40 backdrop-blur-3xl border border-white/5 p-8 shadow-2xl">
+            <h3 className="text-xl font-black tracking-tight flex items-center gap-3 mb-6">
+              <Network className="w-5 h-5 text-primary fill-primary" />
+              Platform Health
+            </h3>
+            <div className="space-y-4">
+              {platformHealth.map((plat) => (
+                <div key={plat.platform} className="p-4 rounded-2xl bg-white/5 border border-white/5 space-y-3">
+                  <div className="flex justify-between items-center">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-2 h-2 rounded-full ${plat.color} animate-pulse`} />
+                      <span className="text-xs font-black uppercase tracking-widest">{plat.platform}</span>
+                    </div>
+                    <span className={`text-[10px] font-black px-2 py-0.5 rounded-full ${plat.status === 'Healthy' ? 'bg-emerald-500/20 text-emerald-500' : 'bg-primary/20 text-primary'}`}>
+                      {plat.status}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-end">
+                    <div>
+                      <p className="text-lg font-black leading-none">{plat.followers}</p>
+                      <p className="text-[9px] font-bold text-muted-foreground mt-1">{plat.growth}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-xs font-black">{plat.engagement}</p>
+                      <p className="text-[8px] font-black uppercase tracking-widest text-muted-foreground opacity-40 text-right">Avg ENG</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Pipeline Snapshot Widget */}
+          <div className="rounded-[2.5rem] bg-black/40 backdrop-blur-3xl border border-white/5 p-8 shadow-2xl relative overflow-hidden">
+             <div className="absolute top-0 right-0 p-6">
+               <div className="w-12 h-12 bg-primary/20 rounded-full blur-2xl animate-pulse" />
              </div>
+             <h3 className="text-xl font-black tracking-tight flex items-center gap-3 mb-2">
+               <Briefcase className="w-5 h-5 text-primary fill-primary" />
+               Deal Pipeline
+             </h3>
+             <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-6">Current Value: ₹ 3,20,000</p>
+             
              <div className="space-y-4">
-               {[
-                 { name: "Desk Setups 2024", velocity: "92%", color: "bg-emerald-500" },
-                 { name: "AI Productivity", velocity: "78%", color: "bg-emerald-500" },
-                 { name: "Quiet Luxury Decor", velocity: "45%", color: "bg-amber-500" },
-               ].map((trend, i) => (
-                 <div key={i} className="space-y-1.5 p-3 rounded-2xl hover:bg-muted/10 transition-colors">
-                   <div className="flex justify-between items-center min-w-0">
-                     <span className="text-xs font-bold truncate">{trend.name}</span>
-                     <span className="text-[10px] text-muted-foreground">{trend.velocity}</span>
-                   </div>
-                   <div className="h-1 bg-muted/30 rounded-full overflow-hidden">
-                      <motion.div 
+                {[
+                  { label: 'Outreach', count: 3, percent: 60 },
+                  { label: 'Negotiating', count: 1, percent: 20 },
+                  { label: 'Signed/Live', count: 3, percent: 75 },
+                ].map((stage) => (
+                  <div key={stage.label} className="space-y-1.5">
+                    <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest">
+                       <span className="text-muted-foreground">{stage.label}</span>
+                       <span>{stage.count} Deals</span>
+                    </div>
+                    <div className="h-1.5 rounded-full bg-white/5 overflow-hidden">
+                       <motion.div 
                         initial={{ width: 0 }}
-                        whileInView={{ width: trend.velocity }}
-                        className={`h-full ${trend.color}`} 
-                      />
-                   </div>
-                   <button className="text-[9px] font-black uppercase tracking-widest text-primary pt-1">Create Content</button>
-                 </div>
-               ))}
-             </div>
-          </div>
-
-          {/* CREATOR NETWORK — ACTIVITY */}
-          <div className="premium-card bg-card border border-border/40 rounded-3xl p-8 shadow-sm h-full">
-             <div className="flex items-center justify-between mb-6">
-               <h3 className="text-lg font-black tracking-tight uppercase">Network Activity</h3>
-               <Network className="w-5 h-5 text-muted-foreground/30" />
-             </div>
-             <div className="space-y-4">
-                {networkItems.length > 0 ? (
-                  networkItems.map((item, i) => (
-                    <div key={i} className="flex gap-3 items-start p-2 hover:bg-muted/10 rounded-xl transition-colors cursor-pointer group">
-                      <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-sm shrink-0">
-                        {item.icon}
-                      </div>
-                      <div className="min-w-0">
-                        <span className="text-xs font-black group-hover:text-primary transition-colors">{item.user}</span>
-                        <p className="text-[11px] text-muted-foreground leading-tight mt-0.5">{item.text}</p>
-                      </div>
+                        animate={{ width: `${stage.percent}%` }}
+                        className="h-full bg-primary"
+                       />
                     </div>
-                  ))
-                ) : (
-                  <EmptyState 
-                    icon={Network}
-                    title="No network connections"
-                    description="You haven't connected with any creators yet."
-                    ctaText="Discover Creators"
-                    onCtaClick={() => console.log("Discover Creators")}
-                    className="p-6 rounded-2xl min-h-[200px]"
-                  />
-                )}
+                  </div>
+                ))}
              </div>
-             {networkItems.length > 0 && (
-               <button className="mt-6 w-full py-2.5 rounded-xl border border-border/50 text-[10px] font-black uppercase tracking-widest hover:bg-muted/10 transition-colors">
-                 Go to Network
-               </button>
-             )}
+             
+             <button className="w-full mt-6 h-12 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all font-black text-[10px] uppercase tracking-widest">
+                Go to Deal Hub
+             </button>
           </div>
         </div>
-
       </div>
     </PageTransition>
   );
 };
+
+// Missing Lucide Icons that were used but not imported
+const Stars = (props: any) => (
+  <svg
+    {...props}
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275z" />
+    <path d="M5 3v4" />
+    <path d="M19 17v4" />
+    <path d="M3 5h4" />
+    <path d="M17 19h4" />
+  </svg>
+);

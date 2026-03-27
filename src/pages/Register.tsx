@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Sparkles, ArrowLeft, Mail, Lock, User, Eye, EyeOff } from "lucide-react";
+import { 
+  Sparkles, ArrowLeft, Mail, 
+  Lock, User, ChevronRight, Check,
+  Eye, EyeOff
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { useAuth } from "../contexts/AuthContext";
@@ -8,6 +12,7 @@ import { useAuth } from "../contexts/AuthContext";
 const Register = () => {
   const navigate = useNavigate();
   const { register } = useAuth();
+  const [step, setStep] = useState(1);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -21,23 +26,22 @@ const Register = () => {
     }
     
     register(name, email);
-    
-    toast.success("Account created! 🎉", {
-      description: "Let's set up your creator profile...",
+
+    toast.success("Account created successfully! 🎉", {
+      description: "Welcome to CreatorForge. Let's finish your setup.",
     });
-    setTimeout(() => navigate("/onboarding"), 1200);
+    setTimeout(() => navigate("/onboarding"), 1500);
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center px-4">
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-primary/5 blur-[120px]" />
-      <div className="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full bg-secondary/5 blur-[100px]" />
-
+    <div className="min-h-screen bg-background flex items-center justify-center px-4 overflow-hidden">
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-primary/5 blur-[120px]" />
+      
       <motion.div
         className="relative z-10 w-full max-w-md"
-        initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
-        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
       >
         <button
           onClick={() => navigate("/")}
@@ -47,74 +51,81 @@ const Register = () => {
           Back to home
         </button>
 
-        <div className="flex items-center gap-2 font-bold text-2xl tracking-tight mb-2">
+        <div className="flex items-center gap-2 font-black text-2xl tracking-tighter mb-2 uppercase">
           <Sparkles className="w-6 h-6 text-primary" />
-          <span>CREATORX</span>
-          <span className="text-primary text-lg font-semibold">AI</span>
+          <span>CreatorForge</span>
+          <span className="text-primary">AI</span>
         </div>
-        <p className="text-muted-foreground mb-8">Create your free account and start growing.</p>
+        <p className="text-muted-foreground mb-8 text-sm font-medium">Join 5,000+ creators scaling their influence.</p>
 
-        <div className="rounded-xl bg-glass p-6 md:p-8 border border-border/50">
-          <form onSubmit={handleRegister} className="space-y-5">
-            <div>
-              <label className="text-sm font-medium mb-1.5 block">Creator Name</label>
+        <div className="rounded-[2.5rem] bg-black/40 backdrop-blur-3xl p-8 md:p-10 border border-white/10 shadow-2xl">
+          <form onSubmit={handleRegister} className="space-y-6">
+            <div className="space-y-1.5">
+              <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground ml-1">Full Name</label>
               <div className="relative">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <input
                   type="text"
+                  required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="Your creator name"
-                  className="w-full rounded-lg bg-muted/50 border border-border/50 pl-10 pr-4 py-2.5 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
+                  placeholder="Naveen Kumar"
+                  className="w-full h-14 rounded-2xl bg-white/5 border border-white/10 pl-12 pr-4 text-sm font-bold text-white placeholder:text-zinc-600 focus:outline-none focus:ring-1 focus:ring-primary/50 transition-all"
                 />
               </div>
             </div>
-            <div>
-              <label className="text-sm font-medium mb-1.5 block">Email</label>
+
+            <div className="space-y-1.5">
+              <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground ml-1">Email Address</label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <input
                   type="email"
+                  required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="you@example.com"
-                  className="w-full rounded-lg bg-muted/50 border border-border/50 pl-10 pr-4 py-2.5 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
+                  placeholder="name@example.com"
+                  className="w-full h-14 rounded-2xl bg-white/5 border border-white/10 pl-12 pr-4 text-sm font-bold text-white placeholder:text-zinc-600 focus:outline-none focus:ring-1 focus:ring-primary/50 transition-all"
                 />
               </div>
             </div>
-            <div>
-              <label className="text-sm font-medium mb-1.5 block">Password</label>
+
+            <div className="space-y-1.5">
+              <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground ml-1">Secure Password</label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <input
                   type={showPassword ? "text" : "password"}
+                  required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Min. 8 characters"
-                  className="w-full rounded-lg bg-muted/50 border border-border/50 pl-10 pr-10 py-2.5 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
+                  placeholder="••••••••"
+                  className="w-full h-14 rounded-2xl bg-white/5 border border-white/10 pl-12 pr-12 text-sm font-bold text-white placeholder:text-zinc-600 focus:outline-none focus:ring-1 focus:ring-primary/50 transition-all"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-white transition-colors"
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
               </div>
             </div>
+
             <button
               type="submit"
-              className="w-full rounded-lg bg-primary px-6 py-3 font-semibold text-primary-foreground transition-all hover:shadow-[0_0_30px_-5px_hsl(318,100%,62%,0.4)] active:scale-[0.97]"
+              className="w-full h-14 mt-4 rounded-2xl bg-primary text-white font-black uppercase tracking-widest text-[10px] shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2"
             >
-              Create Account
+              Construct Account <ChevronRight className="w-4 h-4" />
             </button>
           </form>
-          <p className="text-sm text-muted-foreground text-center mt-5">
-            Already have an account?{" "}
-            <button onClick={() => navigate("/login")} className="text-primary hover:underline font-medium">
-              Sign in
-            </button>
-          </p>
+
+          <div className="mt-8 pt-8 border-t border-white/5 text-center">
+             <p className="text-xs font-bold text-muted-foreground">
+               Already have an account?{" "}
+               <button onClick={() => navigate("/login")} className="text-primary hover:underline">Sign In</button>
+             </p>
+          </div>
         </div>
       </motion.div>
     </div>
