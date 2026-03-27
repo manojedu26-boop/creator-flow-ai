@@ -68,3 +68,28 @@ export const TextSkeleton = ({ lines = 3 }: { lines?: number }) => (
 export const AvatarSkeleton = ({ size = "w-10 h-10" }: { size?: string }) => (
   <Skeleton className={cn("rounded-full", size)} />
 );
+
+// Compatibility exports for Home.tsx
+export const SkeletonCard = ({ className }: { className?: string }) => (
+  <div className={cn("p-6 rounded-[2rem] bg-white/5 border border-white/10 space-y-4", className)}>
+    <Skeleton className="h-4 w-1/2" />
+    <Skeleton className="h-10 w-3/4" />
+    <Skeleton className="h-2 w-full" />
+  </div>
+);
+
+export const SkeletonHeader = () => (
+  <div className="space-y-4 mb-10">
+    <Skeleton className="h-4 w-24" />
+    <Skeleton className="h-12 w-1/3" />
+    <Skeleton className="h-4 w-1/2" />
+  </div>
+);
+
+export const SkeletonText = ({ lines = 3 }: { lines?: number }) => (
+  <div className="space-y-2">
+    {Array.from({ length: lines }).map((_, i) => (
+      <Skeleton key={i} className={cn("h-3", i === lines - 1 ? "w-1/2" : "w-full")} />
+    ))}
+  </div>
+);
