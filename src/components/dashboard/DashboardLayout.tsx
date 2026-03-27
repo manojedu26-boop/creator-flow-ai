@@ -38,88 +38,96 @@ export const DashboardLayout = () => {
       <Sidebar />
       
       {/* Mobile Top Header (Visible only on mobile) */}
-      <div className="lg:hidden h-16 w-full border-b border-border/40 bg-background/80 backdrop-blur-md flex items-center justify-between px-6 sticky top-0 z-[100]">
+      <div className="lg:hidden h-16 w-full border-b border-white/5 bg-[#07071A]/90 backdrop-blur-xl flex items-center justify-between px-6 sticky top-0 z-[100]">
         <div className="flex items-center gap-3">
-          <Sparkles className="w-6 h-6 text-primary" />
-          <span className="font-black tracking-tighter text-lg uppercase">CreatorForge</span>
+          <div className="w-7 h-7 bg-primary/20 rounded-lg flex items-center justify-center border border-primary/30">
+            <Sparkles className="w-4.5 h-4.5 text-primary" />
+          </div>
+          <span className="font-bebas text-xl tracking-[2px] text-white">FORGE</span>
         </div>
-        <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
-          <SheetTrigger asChild>
-            <button className="p-2 hover:bg-muted/50 rounded-xl transition-all active:scale-95 border border-border/20 shadow-sm">
-              <Menu className="w-5 h-5" />
-            </button>
-          </SheetTrigger>
-          <SheetContent side="left" className="w-[300px] p-0 bg-background border-r border-border/40">
-            <div className="flex flex-col h-full">
-              <div className="p-6 border-b border-border/30">
-                <div className="flex items-center gap-3">
-                  <Sparkles className="w-8 h-8 text-primary" />
-                  <span className="font-black tracking-tighter text-xl uppercase">CreatorForge</span>
+        
+        <div className="flex items-center gap-3">
+          <Link to="/settings" className="p-2 text-muted-foreground hover:text-white transition-colors">
+            <Settings className="w-4.5 h-4.5" />
+          </Link>
+          <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
+            <SheetTrigger asChild>
+              <button className="h-9 px-3 bg-white/5 hover:bg-white/10 rounded-lg transition-all active:scale-95 border border-white/10 flex items-center gap-2">
+                <Menu className="w-4 h-4 text-white" />
+              </button>
+            </SheetTrigger>
+            <SheetContent side="left" className="w-[280px] p-0 bg-[#07071A] border-r border-white/5">
+              <div className="flex flex-col h-full overflow-hidden">
+                <div className="p-6 border-b border-white/5 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="w-5 h-5 text-primary" />
+                    <span className="font-bebas text-xl tracking-[2px] text-white">CREATORFORGE</span>
+                  </div>
+                  <button onClick={() => setIsMobileMenuOpen(false)} className="p-1.5 text-muted-foreground hover:text-white"><X className="w-4.5 h-4.5" /></button>
                 </div>
-              </div>
-              <nav className="flex-1 overflow-y-auto py-6 px-4 space-y-2">
-                {navItems.map((item) => {
-                  const isActive = location.pathname.startsWith(item.href);
-                  return (
-                    <Link 
-                      key={item.label} 
-                      to={item.href}
+                
+                <nav className="flex-1 py-4 px-4 space-y-1.5 flex flex-col justify-start">
+                  {navItems.map((item) => {
+                    const isActive = location.pathname.startsWith(item.href);
+                    return (
+                      <Link 
+                        key={item.label} 
+                        to={item.href}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className={`flex items-center gap-3.5 px-3.5 py-3 rounded-xl transition-all ${
+                          isActive ? "bg-primary/20 text-white border border-primary/30" : "text-muted-foreground hover:bg-white/5"
+                        }`}
+                      >
+                        <item.icon className={`w-4 h-4 ${isActive ? 'text-primary' : ''}`} />
+                        <span className="font-syne text-[10px] uppercase font-bold tracking-[1.5px]">{item.label}</span>
+                      </Link>
+                    );
+                  })}
+                </nav>
+
+                <div className="p-6 border-t border-white/5 bg-white/[0.01] space-y-3">
+                  <div className="flex items-center p-2.5 rounded-xl bg-white/[0.02] border border-white/5">
+                     <div className="w-10 h-10 rounded-lg bg-gradient-to-tr from-primary to-secondary shrink-0 flex items-center justify-center text-white text-[10px] font-black uppercase">AC</div>
+                     <div className="ml-3 flex-1 min-w-0">
+                        <p className="text-[10px] font-syne font-black text-white uppercase truncate">ALEX_CREATOR</p>
+                        <p className="text-[8px] text-muted-foreground font-mono uppercase tracking-wider">L1_CORE</p>
+                     </div>
+                     <div className="flex gap-0.5">
+                        <Link to="/settings" onClick={() => setIsMobileMenuOpen(false)} className="p-1.5 text-muted-foreground hover:text-white transition-colors"><Settings className="w-3.5 h-3.5" /></Link>
+                        <button className="p-1.5 text-muted-foreground hover:text-rose-500 transition-colors"><LogOut className="w-3.5 h-3.5" /></button>
+                     </div>
+                  </div>
+                  
+                  <Link 
+                      to="/brand"
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className={`flex items-center gap-4 px-4 py-3 rounded-xl transition-all ${
-                        isActive ? "bg-primary/10 text-primary shadow-sm border border-primary/20" : "text-muted-foreground hover:bg-muted/50"
-                      }`}
+                      className="w-full h-11 rounded-xl bg-secondary/10 border border-secondary/20 text-secondary font-mono text-[9px] uppercase font-bold tracking-[2px] flex items-center justify-center gap-2 transition-all active:scale-[0.97]"
                     >
-                      <item.icon className="w-5 h-5" />
-                      <span className="font-bold text-sm tracking-tight">{item.label}</span>
-                    </Link>
-                  );
-                })}
-              </nav>
-              <div className="p-6 border-t border-border/30 bg-muted/5 space-y-3">
-                <Link 
-                  to="/settings" 
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="flex items-center gap-4 px-4 py-3 rounded-xl text-muted-foreground hover:bg-muted/50 transition-all font-bold text-sm"
-                >
-                  <Settings className="w-5 h-5" />
-                  Settings
-                </Link>
-                <div className="h-px bg-border/20 mx-2" />
-                <div className="flex items-center gap-4 px-4 py-3 rounded-xl bg-card border border-border/20 shadow-sm">
-                   <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-primary to-indigo-500 shrink-0 flex items-center justify-center text-white text-[10px] font-black uppercase">AC</div>
-                   <div className="flex flex-col min-w-0">
-                      <span className="text-xs font-black truncate">Alex Creator</span>
-                      <span className="text-[9px] text-muted-foreground font-bold truncate">@alexcreates</span>
-                   </div>
-                   <button className="ml-auto p-2 text-muted-foreground hover:text-rose-500 transition-colors">
-                      <LogOut className="w-4 h-4" />
-                   </button>
+                      <Briefcase className="w-3.5 h-3.5" />
+                      BRAND_MODE
+                  </Link>
                 </div>
-                <Link 
-                    to="/brand"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="w-full h-12 rounded-xl bg-indigo-500 text-white font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/20 active:scale-95 transition-all"
-                  >
-                    <Briefcase className="w-4 h-4" />
-                    Switch to Brand Mode
-                </Link>
               </div>
-            </div>
-          </SheetContent>
-        </Sheet>
+            </SheetContent>
+          </Sheet>
+        </div>
       </div>
       
       {/* Main Content Wrapper */}
       <div className="flex-1 flex flex-col lg:ml-[72px] relative z-10 w-full overflow-hidden">
-        {/* Header (Top Zone) - Adjusted for mobile */}
+        {/* Header (Top Zone) - Desktop Only */}
         <div className="hidden lg:block">
           <Header title={pageTitle} />
         </div>
         
-        {/* Simple Mobile Title (Optional, since Header is hidden on mobile in this pattern) */}
+        {/* Mobile Page Header */}
         {!location.pathname.includes('index') && (
-           <div className="lg:hidden px-6 py-4 border-b border-border/10 bg-muted/5">
-              <h2 className="text-xs font-black uppercase tracking-widest text-muted-foreground">{pageTitle}</h2>
+           <div className="lg:hidden px-6 py-4 bg-white/[0.01]">
+              <div className="flex items-center gap-2 mb-1">
+                 <div className="w-1 h-2.5 bg-primary rounded-full" />
+                 <h2 className="font-mono text-[8.5px] font-bold uppercase tracking-[2.5px] text-muted-foreground opacity-50">CORE_SESSION</h2>
+              </div>
+              <h1 className="text-3xl font-bebas text-white tracking-[1px]">{pageTitle}</h1>
            </div>
         )}
         
@@ -128,10 +136,10 @@ export const DashboardLayout = () => {
           <AnimatePresence mode="wait">
             <motion.div
               key={location.pathname}
-              initial={{ opacity: 0, y: 10 }}
+              initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.25, ease: "easeOut" }}
+              exit={{ opacity: 0, y: -16 }}
+              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
             >
               <Outlet />
             </motion.div>

@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { 
   IndianRupee, TrendingUp, Clock, Calendar, 
   BarChart3, PieChart, Calculator, FileText, 
-  Download, Send, CheckCircle2, AlertCircle,
+  Download, Send, CheckCircle2, AlertCircle, ShieldCheck,
   MoreHorizontal, ChevronDown, Sparkles, Plus,
   ArrowUpRight, ArrowDownRight, Printer, Share2
 } from "lucide-react";
@@ -64,164 +64,173 @@ export const Revenue = () => {
 
   return (
     <PageTransition>
-      <motion.div 
-        variants={staggerContainer}
-        initial="hidden"
-        animate="show"
-        className="max-w-7xl mx-auto space-y-10 pb-20"
-      >
+      <div className="max-w-[1600px] mx-auto space-y-12 pb-32">
+        {/* HEADER SECTION */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-4">
+           <div>
+              <h1 className="text-7xl font-bebas tracking-[4px] text-white leading-none">Capital & Payouts</h1>
+              <p className="font-mono text-[10px] font-bold text-primary uppercase tracking-[0.5em] mt-4">Revenue Intelligence • FY 2026</p>
+           </div>
+           <div className="flex gap-4">
+              <button 
+                onClick={() => setShowInvoiceDrawer(true)}
+                className="h-14 px-10 bg-primary text-white rounded-2xl font-mono text-[10px] font-bold uppercase tracking-widest shadow-[0_0_30px_-5px_hsl(var(--primary))] hover:shadow-primary/40 transition-all flex items-center gap-3 active:scale-95"
+              >
+                 <Plus className="w-4 h-4" /> Create Invoice
+              </button>
+           </div>
+        </div>
+
+        {/* TOP METRICS BENTO ROW */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
            {[
-             { label: 'Revenue This Month', numericValue: 157000, change: '+24%', icon: IndianRupee, color: 'text-emerald-500' },
-             { label: 'Outstanding Invoices', numericValue: 45000, count: '3 Pending', icon: Clock, color: 'text-amber-500', clickable: true },
-             { label: 'Revenue This Year', numericValue: 842000, change: '+12%', icon: TrendingUp, color: 'text-indigo-500' },
-             { label: 'Projected (30 Days)', numericValue: 185000, subtitle: 'AI Estimate', icon: Sparkles, color: 'text-primary' },
+             { label: 'GROSS EARNINGS', value: 157240, change: '+18.4%', icon: IndianRupee, glow: 'bg-emerald-500/20' },
+             { label: 'PENDING PAYOUTS', value: 12400, count: '3 Active Labels', icon: Clock, glow: 'bg-amber-500/20' },
+             { label: 'PROJECTED (Q3)', value: 245000, change: '+4.2%', icon: TrendingUp, glow: 'bg-indigo-500/20' },
+             { label: 'TAX RESERVE (18%)', value: 28300, subtitle: 'Saves Automatically', icon: ShieldCheck, glow: 'bg-rose-500/20' },
            ].map((stat, i) => (
              <motion.div 
-              key={stat.label} 
-              variants={staggerItem}
-              className={`premium-card bg-card border border-border/40 p-6 rounded-[2rem] shadow-sm transition-all group ${stat.clickable ? 'cursor-pointer hover:border-primary/40' : ''}`}
-              onClick={stat.clickable ? () => setShowInvoiceDrawer(true) : undefined}
-            >
-                <div className="flex justify-between items-start mb-4">
-                   <div className={`p-3 rounded-2xl bg-muted/10 ${stat.color}`}>
+               key={stat.label} 
+               variants={staggerItem}
+               className="glass-card p-8 group relative overflow-hidden"
+             >
+                <div className={`absolute -right-4 -top-4 w-24 h-24 ${stat.glow} blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity`} />
+                <div className="flex justify-between items-start mb-6">
+                   <div className="p-3.5 rounded-2xl glass-elevated border border-white/5 text-primary">
                       <stat.icon className="w-5 h-5" />
                    </div>
                    {stat.change && (
-                     <span className="text-[10px] font-black text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded-lg flex items-center gap-1">
-                        <ArrowUpRight className="w-3 h-3" /> {stat.change}
+                     <span className="font-mono text-[10px] font-bold text-success bg-success/10 px-3 py-1.5 rounded-xl border border-success/20">
+                        {stat.change}
                      </span>
                    )}
                 </div>
                 <div>
-                   <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-1">{stat.label}</p>
-                   <h3 className="text-2xl font-black tracking-tight">
-                     <CountUp value={stat.numericValue} prefix="₹ " />
+                   <p className="font-mono text-[9px] font-bold text-muted-foreground uppercase tracking-[0.2em] mb-2">{stat.label}</p>
+                   <h3 className="text-4xl font-mono font-bold text-white tracking-tighter">
+                     <CountUp value={stat.value} prefix="$" />
                    </h3>
-                   {stat.count && <p className="text-[10px] font-bold text-amber-500 uppercase mt-2">{stat.count}</p>}
-                   {stat.subtitle && <p className="text-[10px] font-bold text-primary uppercase mt-2 italic">{stat.subtitle}</p>}
+                   {stat.count && <p className="font-syne text-[10px] font-bold text-amber-400 uppercase mt-3 tracking-wider">{stat.count}</p>}
+                   {stat.subtitle && <p className="font-syne text-[10px] font-bold text-muted-foreground uppercase mt-3 tracking-wider opacity-60">{stat.subtitle}</p>}
                 </div>
-                {stat.label === 'Revenue This Month' && (
-                  <div className="mt-4 h-1 w-full bg-muted/20 rounded-full overflow-hidden">
-                     <motion.div initial={{ width: 0 }} animate={{ width: '75%' }} transition={{ duration: 1, ease: "easeOut" }} className="h-full bg-emerald-500" />
-                  </div>
-                )}
              </motion.div>
            ))}
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-           <motion.div variants={staggerItem} className="premium-card lg:col-span-2 bg-card border border-border/40 rounded-[2.5rem] p-8 shadow-2xl relative overflow-hidden">
-              <div className="flex items-center justify-between mb-8 relative z-10">
+        {/* MAIN BENTO GRID */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 h-auto lg:h-[600px]">
+           {/* REVENUE CHART — LARGE PIECE */}
+           <motion.div variants={staggerItem} className="lg:col-span-8 glass-card p-10 flex flex-col relative overflow-hidden group">
+              <div className="flex items-center justify-between mb-12 relative z-10">
                  <div>
-                    <h3 className="text-xl font-black uppercase tracking-tight">Revenue Breakdown</h3>
-                    <p className="text-[10px] font-bold text-muted-foreground uppercase">Income Streams by Category</p>
+                    <h3 className="text-2xl font-bebas tracking-[2px] text-white">Revenue Velocity</h3>
+                    <p className="font-mono text-[9px] font-bold text-muted-foreground uppercase tracking-widest mt-1">Multi-platform Income Stream</p>
                  </div>
-                 <div className="flex bg-muted/10 p-1 rounded-xl border border-border/40">
-                    <button onClick={() => setView('monthly')} className={`px-4 py-1.5 rounded-lg text-[10px] font-black uppercase transition-all ${view === 'monthly' ? 'bg-background shadow-md' : 'text-muted-foreground hover:text-foreground'}`}>Monthly</button>
-                    <button onClick={() => setView('quarterly')} className={`px-4 py-1.5 rounded-lg text-[10px] font-black uppercase transition-all ${view === 'quarterly' ? 'bg-background shadow-md' : 'text-muted-foreground hover:text-foreground'}`}>Quarterly</button>
+                 <div className="flex glass-elevated p-1 rounded-xl border border-white/5">
+                    <button onClick={() => setView('monthly')} className={`px-5 py-2 rounded-lg text-[9px] font-mono font-bold uppercase transition-all ${view === 'monthly' ? 'bg-primary text-white shadow-xl' : 'text-muted-foreground hover:text-white'}`}>Monthly</button>
+                    <button onClick={() => setView('quarterly')} className={`px-5 py-2 rounded-lg text-[9px] font-mono font-bold uppercase transition-all ${view === 'quarterly' ? 'bg-primary text-white shadow-xl' : 'text-muted-foreground hover:text-white'}`}>Quarterly</button>
                  </div>
               </div>
-              <div className="h-[400px] w-full relative z-10">
+              <div className="flex-1 w-full min-h-[350px]">
                  <RevenueChart data={revenueData} />
               </div>
            </motion.div>
 
-           {/* RIGHT — AI RATE CALCULATOR */}
-           <motion.div variants={staggerItem} className="premium-card bg-card border border-border/40 rounded-[2.5rem] p-8 shadow-2xl space-y-8 flex flex-col">
-              <div className="space-y-2">
-                 <div className="inline-flex items-center gap-2 text-primary">
-                    <Calculator className="w-5 h-5" />
-                    <h3 className="text-lg font-black uppercase tracking-tight">AI Rate Calculator</h3>
+           {/* AI RATE CALCULATOR — TALL PIECE */}
+           <motion.div variants={staggerItem} className="lg:col-span-4 glass-card p-10 flex flex-col bg-primary/5 relative overflow-hidden border-primary/20">
+              <div className="absolute top-[-10%] right-[-10%] w-64 h-64 bg-primary/10 blur-[80px] rounded-full" />
+              <div className="relative z-10 space-y-10">
+                 <div className="space-y-3">
+                    <div className="flex items-center gap-3 text-primary">
+                       <Sparkles className="w-6 h-6" />
+                       <h3 className="text-2xl font-bebas tracking-[2px]">Rate Intelligence</h3>
+                    </div>
+                    <p className="font-syne text-[11px] font-bold text-muted-foreground uppercase leading-relaxed tracking-wide">Dynamic pricing recommendations based on your current engagement velocity (5.2%)</p>
                  </div>
-                 <p className="text-[10px] font-bold text-muted-foreground uppercase leading-relaxed">Based on your live engagement (4.8%) and audience niche (Tech/Travel)</p>
-              </div>
 
-              <div className="space-y-4 flex-1">
-                 {[
-                   { platform: 'IG Post', range: '₹ 25k – ₹ 40k' },
-                   { platform: 'IG Reel', range: '₹ 35k – ₹ 55k', primary: true },
-                   { platform: 'IG Story (3x)', range: '₹ 12k – ₹ 20k' },
-                   { platform: 'YT Integration', range: '₹ 60k – ₹ 1.1L' },
-                   { platform: 'TikTok Video', range: '₹ 20k – ₹ 35k' },
-                 ].map(r => (
-                   <div key={r.platform} className={`p-4 rounded-2xl border transition-all ${r.primary ? 'bg-primary/5 border-primary/30' : 'bg-muted/10 border-border/40 hover:bg-muted/20'}`}>
-                      <div className="flex justify-between items-center">
-                         <span className="text-[11px] font-black uppercase tracking-widest">{r.platform}</span>
-                         <span className={`text-xs font-black ${r.primary ? 'text-primary' : 'text-foreground'}`}>{r.range}</span>
+                 <div className="space-y-3">
+                    {[
+                      { platform: 'YouTube Integration', range: '$1,200 – $2.4k', trend: 'up' },
+                      { platform: 'Instagram Reel + Story', range: '$850 – $1.2k', trend: 'up' },
+                      { platform: 'TikTok Sequence', range: '$400 – $750', trend: 'stable' },
+                      { platform: 'Exclusive UGC (Pack)', range: '$500 – $900', trend: 'up' },
+                    ].map(r => (
+                      <div key={r.platform} className="p-5 rounded-2xl glass-elevated border border-white/5 hover:border-primary/30 transition-all group">
+                         <div className="flex justify-between items-center">
+                            <span className="font-syne text-[11px] font-bold text-white/70 group-hover:text-white transition-colors">{r.platform}</span>
+                            <span className="font-mono text-[13px] font-bold text-primary">{r.range}</span>
+                         </div>
                       </div>
-                   </div>
-                 ))}
-              </div>
+                    ))}
+                 </div>
 
-              <div className="bg-amber-500/5 border border-amber-500/20 p-5 rounded-2xl flex items-start gap-4">
-                 <AlertCircle className="w-5 h-5 text-amber-500 shrink-0" />
-                 <p className="text-[10px] font-bold text-foreground leading-[1.6]">
-                    <span className="text-amber-500 font-black">MARKET INSIGHT:</span><br/>
-                    You are currently 22% below market rate for your engagement tier.
-                 </p>
-              </div>
+                 <div className="p-6 bg-black/40 rounded-2xl border border-white/5 flex items-start gap-4">
+                    <AlertCircle className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
+                    <p className="font-syne text-[10px] font-bold text-white/80 leading-relaxed uppercase">
+                       <span className="text-amber-500">Benchmark Alert:</span> Creators in your niche have raised rates by 15% this quarter. You are technically "Low".
+                    </p>
+                 </div>
 
-              <button className="w-full py-4 bg-primary text-primary-foreground rounded-2xl font-black uppercase tracking-widest shadow-lg hover:shadow-2xl transition-all flex items-center justify-center gap-3 active:scale-95">
-                 <FileText className="w-4 h-4" /> Update Rate Card
-              </button>
+                 <button className="w-full h-14 glass-elevated border border-white/10 rounded-2xl font-mono text-[10px] font-bold uppercase tracking-[2px] text-white hover:bg-primary transition-all active:scale-95">Update Rate Card</button>
+              </div>
            </motion.div>
         </div>
 
-        {/* ROW 3 — INVOICE MANAGER */}
-        <motion.div variants={staggerItem} className="premium-card bg-card border border-border/40 rounded-[2.5rem] shadow-2xl overflow-hidden">
-           <div className="p-8 border-b border-border/30 flex flex-col md:flex-row md:items-center justify-between gap-6 bg-muted/10">
+        {/* RECENT INVOICES — FULL WIDTH BENTO PIECE */}
+        <motion.div variants={staggerItem} className="glass-card overflow-hidden">
+           <div className="p-10 border-b border-white/5 flex items-center justify-between bg-white/[0.02]">
               <div>
-                 <h3 className="text-xl font-black uppercase tracking-tight">Invoice Manager</h3>
-                 <p className="text-[10px] font-bold text-muted-foreground uppercase">Track and manage your earnings</p>
+                 <h3 className="text-2xl font-bebas tracking-[2px] text-white">Invoice Records</h3>
+                 <p className="font-mono text-[9px] font-bold text-muted-foreground uppercase tracking-widest mt-1">Transaction History & Settlement Status</p>
               </div>
-              <button 
-                onClick={() => setShowInvoiceDrawer(true)}
-                className="h-12 px-8 bg-black text-white rounded-2xl text-[11px] font-black uppercase tracking-widest flex items-center gap-3 hover:scale-105 transition-all shadow-xl active:scale-95"
-              >
-                 <Plus className="w-4 h-4" /> Create New Invoice
-              </button>
+              <div className="flex gap-4">
+                 <button className="h-11 px-6 glass-elevated border border-white/5 rounded-xl font-mono text-[9px] font-bold uppercase tracking-widest text-primary hover:bg-primary hover:text-white transition-all">Export Report</button>
+              </div>
            </div>
 
-           <div className="overflow-x-auto">
+           <div className="overflow-x-auto no-scrollbar">
               <table className="w-full text-left border-collapse">
                  <thead>
-                    <tr className="bg-muted/5">
-                       <th className="px-8 py-4 text-[10px] font-black uppercase text-muted-foreground tracking-widest">Brand</th>
-                       <th className="px-8 py-4 text-[10px] font-black uppercase text-muted-foreground tracking-widest">Deal Type</th>
-                       <th className="px-8 py-4 text-[10px] font-black uppercase text-muted-foreground tracking-widest text-right">Amount</th>
-                       <th className="px-8 py-4 text-[10px] font-black uppercase text-muted-foreground tracking-widest">Due Date</th>
-                       <th className="px-8 py-4 text-[10px] font-black uppercase text-muted-foreground tracking-widest">Status</th>
-                       <th className="px-8 py-4 text-[10px] font-black uppercase text-muted-foreground tracking-widest text-center">Actions</th>
+                    <tr className="bg-white/[0.01]">
+                       <th className="px-10 py-5 font-mono text-[9px] font-bold uppercase text-muted-foreground tracking-[0.2em]">Partner</th>
+                       <th className="px-10 py-5 font-mono text-[9px] font-bold uppercase text-muted-foreground tracking-[0.2em]">Asset Type</th>
+                       <th className="px-10 py-5 font-mono text-[9px] font-bold uppercase text-muted-foreground tracking-[0.2em] text-right">Settlement</th>
+                       <th className="px-10 py-5 font-mono text-[9px] font-bold uppercase text-muted-foreground tracking-[0.2em]">Maturity Date</th>
+                       <th className="px-10 py-5 font-mono text-[9px] font-bold uppercase text-muted-foreground tracking-[0.2em]">Status</th>
+                       <th className="px-10 py-5 font-mono text-[9px] font-bold uppercase text-muted-foreground tracking-[0.2em] text-center">Protocol</th>
                     </tr>
                  </thead>
-                 <tbody className="divide-y divide-border/20">
+                 <tbody className="divide-y divide-white/[0.03]">
                     {[
-                      { brand: 'Nike', type: 'Sponsored Reel', amount: '₹ 45,000', due: '24 Mar 2026', status: 'Paid', color: 'bg-emerald-500/10 text-emerald-500' },
-                      { brand: 'Adobe', type: 'UGC Content', amount: '₹ 15,000', due: '28 Mar 2026', status: 'Pending', color: 'bg-amber-500/10 text-amber-500' },
-                      { brand: 'Samsung', type: 'Product Reveal', amount: '₹ 85,000', due: '15 Mar 2026', status: 'Overdue', color: 'bg-rose-500/10 text-rose-500' },
-                      { brand: 'GoPro', type: 'App Integration', amount: '₹ 32,000', due: '05 Apr 2026', status: 'Pending', color: 'bg-amber-500/10 text-amber-500' },
+                      { brand: 'NIKE LABS', type: 'Sponsored Sequence', amount: '$4,200', due: '24 MARCH', status: 'PAID', color: 'success' },
+                      { brand: 'ADOBE INC', type: 'UGC Asset Pack', amount: '$1,500', due: '28 MARCH', status: 'PENDING', color: 'amber' },
+                      { brand: 'REVOLUT', type: 'Platform Intro', amount: '$8,500', due: '12 MARCH', status: 'OVERDUE', color: 'rose' },
+                      { brand: 'PELOTON', type: 'Integration (Q1)', amount: '$3,200', due: '05 APRIL', status: 'PENDING', color: 'amber' },
                     ].map((inv, i) => (
-                      <tr key={i} className="group hover:bg-muted/5 transition-colors">
-                         <td className="px-8 py-6">
-                            <div className="flex items-center gap-3">
-                               <div className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center font-black text-[10px]">{inv.brand[0]}</div>
-                               <span className="font-black text-sm">{inv.brand}</span>
+                      <tr key={i} className="group hover:bg-white/[0.02] transition-colors cursor-pointer">
+                         <td className="px-10 py-8">
+                            <div className="flex items-center gap-4">
+                               <div className="w-10 h-10 rounded-xl glass-elevated border border-white/5 flex items-center justify-center font-bebas text-lg text-primary">{inv.brand[0]}</div>
+                               <span className="font-syne font-bold text-[13px] text-white tracking-tight">{inv.brand}</span>
                             </div>
                          </td>
-                         <td className="px-8 py-6 text-xs font-bold text-muted-foreground uppercase">{inv.type}</td>
-                         <td className="px-8 py-6 text-sm font-black text-right">{inv.amount}</td>
-                         <td className="px-8 py-6 text-[10px] font-black text-muted-foreground uppercase tracking-tighter">{inv.due}</td>
-                         <td className="px-8 py-6">
-                            <span className={`px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest border border-current/20 ${inv.color}`}>
+                         <td className="px-10 py-8 font-syne text-[11px] font-bold text-muted-foreground uppercase">{inv.type}</td>
+                         <td className="px-10 py-8 font-mono text-[14px] font-bold text-white text-right">{inv.amount}</td>
+                         <td className="px-10 py-8 font-mono text-[10px] font-bold text-muted-foreground uppercase">{inv.due}</td>
+                         <td className="px-10 py-8">
+                            <span className={`px-4 py-1.5 rounded-full text-[8px] font-mono font-bold border ${
+                              inv.color === 'success' ? 'bg-success/10 text-success border-success/20' : 
+                              inv.color === 'amber' ? 'bg-amber-500/10 text-amber-500 border-amber-500/20' : 
+                              'bg-rose-500/10 text-rose-500 border-rose-500/20'
+                            }`}>
                                {inv.status}
                             </span>
                          </td>
-                         <td className="px-8 py-6">
-                            <div className="flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                               <button title="Download" className="p-2 hover:bg-primary/10 hover:text-primary rounded-lg transition-all"><Download className="w-4 h-4" /></button>
-                               <button title="Send Reminder" className="p-2 hover:bg-primary/10 hover:text-primary rounded-lg transition-all"><Send className="w-4 h-4" /></button>
-                               <button title="Options" className="p-2 hover:bg-muted rounded-lg transition-all"><MoreHorizontal className="w-4 h-4" /></button>
+                         <td className="px-10 py-8">
+                            <div className="flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-all translate-x-4 group-hover:translate-x-0">
+                               <button className="p-2.5 glass-elevated rounded-xl hover:text-primary border border-white/5"><Download className="w-4 h-4" /></button>
+                               <button className="p-2.5 glass-elevated rounded-xl hover:text-primary border border-white/5"><Share2 className="w-4 h-4" /></button>
+                               <button className="p-2.5 glass-elevated rounded-xl hover:text-white border border-white/5"><MoreHorizontal className="w-4 h-4" /></button>
                             </div>
                          </td>
                       </tr>
@@ -231,76 +240,76 @@ export const Revenue = () => {
            </div>
         </motion.div>
 
-        {/* INVOICE DRAWER (MOCKED) */}
+        {/* DRAWER REMAINS LARGELY SAME BUT WITH THEMED CLASSES */}
         <AnimatePresence>
            {showInvoiceDrawer && (
               <div className="fixed inset-0 z-[200] flex justify-end">
-                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setShowInvoiceDrawer(false)} className="absolute inset-0 bg-background/80 backdrop-blur-sm" />
+                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setShowInvoiceDrawer(false)} className="absolute inset-0 bg-black/80 backdrop-blur-xl" />
                  <motion.div 
                   initial={{ x: '100%' }} 
                   animate={{ x: 0 }} 
                   exit={{ x: '100%' }} 
-                  transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                  className="relative w-full max-w-xl bg-card border-l border-border/40 shadow-2xl h-screen flex flex-col p-10 overflow-y-auto no-scrollbar"
+                  transition={{ type: "spring", damping: 30, stiffness: 200 }}
+                  className="relative w-full max-w-xl bg-[#07071A] border-l border-white/10 shadow-2xl h-screen flex flex-col p-12 overflow-y-auto no-scrollbar"
                 >
-                    <div className="flex items-center justify-between mb-12">
-                       <h2 className="text-3xl font-black uppercase tracking-tight">Create Invoice</h2>
-                       <button onClick={() => setShowInvoiceDrawer(false)} className="p-2 hover:bg-muted rounded-full transition-all">
+                    <div className="flex items-center justify-between mb-16">
+                       <h2 className="text-5xl font-bebas tracking-[2px] text-white">Issue Protocol</h2>
+                       <button onClick={() => setShowInvoiceDrawer(false)} className="w-12 h-12 glass-elevated rounded-full flex items-center justify-center hover:bg-rose-500/20 hover:text-rose-500 transition-all border border-white/5">
                           <Plus className="w-6 h-6 rotate-45" />
                        </button>
                     </div>
                     
-                    <div className="space-y-8">
+                    <div className="space-y-10">
                        <div className="space-y-4">
-                          <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Select Active Deal</label>
-                          <select className="w-full h-14 px-6 bg-muted/10 border border-border/40 rounded-[1.5rem] text-sm font-bold focus:outline-none focus:ring-1 focus:ring-primary">
-                             <option>Nike — Sponsored Reel (₹ 45k)</option>
-                             <option>Adobe — UGC Pack (₹ 15k)</option>
-                             <option>New Custom Invoice...</option>
+                          <label className="font-mono text-[9px] font-bold text-muted-foreground uppercase tracking-widest">Select Counterparty</label>
+                          <select className="w-full h-16 px-6 bg-white/[0.02] border border-white/10 rounded-2xl font-syne text-sm font-bold text-white focus:outline-none focus:border-primary">
+                             <option className="bg-[#07071A]">Nike Labs — Active Contract ($4,200)</option>
+                             <option className="bg-[#07071A]">Adobe Inc — Digital License ($1,500)</option>
+                             <option className="bg-[#07071A]">New Counterparty Protocol...</option>
                           </select>
                        </div>
 
-                       <div className="grid grid-cols-2 gap-6">
+                       <div className="grid grid-cols-2 gap-8">
                           <div className="space-y-4">
-                             <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Due Date</label>
-                             <input type="date" className="w-full h-14 px-6 bg-muted/10 border border-border/40 rounded-[1.5rem] text-sm focus:outline-none" />
+                             <label className="font-mono text-[9px] font-bold text-muted-foreground uppercase tracking-widest">Effective Date</label>
+                             <input type="date" className="w-full h-16 px-6 bg-white/[0.02] border border-white/10 rounded-2xl text-white focus:outline-none" />
                           </div>
                           <div className="space-y-4">
-                             <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Payment Method</label>
-                             <select className="w-full h-14 px-6 bg-muted/10 border border-border/40 rounded-[1.5rem] text-sm font-bold focus:outline-none">
-                                <option>UPI / Bank Transfer</option>
-                                <option>Stripe / PayPal</option>
-                                <option>Crypto (USDT)</option>
+                             <label className="font-mono text-[9px] font-bold text-muted-foreground uppercase tracking-widest">Clearing Method</label>
+                             <select className="w-full h-16 px-6 bg-white/[0.02] border border-white/10 rounded-2xl font-syne text-sm font-bold text-white focus:outline-none">
+                                <option className="bg-[#07071A]">Direct Settlement</option>
+                                <option className="bg-[#07071A]">Digital Escrow (Stripe)</option>
+                                <option className="bg-[#07071A]">Crypto Proof (USDT)</option>
                              </select>
                           </div>
                        </div>
 
-                       <div className="bg-primary/5 border border-dashed border-primary/30 p-8 rounded-[2rem] space-y-4">
-                          <div className="flex justify-between items-center text-xs font-black uppercase">
-                             <span>Base Amount</span>
-                             <span>₹ 45,000</span>
+                       <div className="glass-card bg-primary/5 p-10 space-y-6 border-primary/20">
+                          <div className="flex justify-between items-center font-mono text-[10px] font-bold text-white uppercase tracking-widest">
+                             <span>Base Liquidity</span>
+                             <span>$4,200.00</span>
                           </div>
-                          <div className="flex justify-between items-center text-xs font-black uppercase text-muted-foreground">
-                             <span>Tax (GST 18%)</span>
-                             <span>₹ 8,100</span>
+                          <div className="flex justify-between items-center font-mono text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
+                             <span>Platform Protocol (2.5%)</span>
+                             <span>- $105.00</span>
                           </div>
-                          <div className="h-px bg-border/40 my-4" />
-                          <div className="flex justify-between items-center text-lg font-black uppercase">
-                             <span>Total Payable</span>
-                             <span className="text-primary">₹ 53,100</span>
+                          <div className="h-px bg-white/5 my-4" />
+                          <div className="flex justify-between items-center">
+                             <span className="font-bebas text-2xl text-white tracking-[1px]">Final Settlement</span>
+                             <span className="font-mono text-2xl font-bold text-primary">$4,095.00</span>
                           </div>
                        </div>
 
-                       <div className="grid grid-cols-2 gap-4 pt-10">
-                          <button className="h-16 rounded-[1.5rem] border border-border/40 font-black uppercase tracking-widest text-xs hover:bg-muted transition-all">Save Draft</button>
-                          <button className="h-16 rounded-[1.5rem] bg-primary text-primary-foreground font-black uppercase tracking-widest text-xs shadow-xl hover:shadow-2xl transition-all active:scale-95">Send Invoice</button>
+                       <div className="grid grid-cols-2 gap-6 pt-12">
+                          <button className="h-16 rounded-2xl glass-elevated border border-white/5 font-mono text-[10px] font-bold uppercase tracking-[2px] text-white hover:bg-white/5 transition-all">Store Draft</button>
+                          <button className="h-16 rounded-2xl bg-primary text-white font-mono text-[10px] font-bold uppercase tracking-[2px] shadow-2xl hover:shadow-primary/40 transition-all active:scale-95">Initiate Request</button>
                        </div>
                     </div>
                  </motion.div>
               </div>
            )}
         </AnimatePresence>
-      </motion.div>
+      </div>
     </PageTransition>
   );
 };

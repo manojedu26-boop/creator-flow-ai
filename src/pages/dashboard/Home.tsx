@@ -31,69 +31,65 @@ export const Home = () => {
       <div className="max-w-7xl mx-auto space-y-8 pb-12">
         
         {/* ROW 1 — PERSONALISED AI GREETING BANNER */}
-        <div className="premium-card w-full h-[140px] rounded-3xl relative overflow-hidden bg-card border border-border/40 p-8 flex items-center justify-between shadow-2xl group">
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-transparent to-primary/5 animate-shimmer pointer-events-none" 
+        <div className="glass-elevated w-full h-[180px] md:h-[140px] rounded-3xl relative overflow-hidden p-8 flex flex-col md:flex-row items-center justify-between shadow-2xl group border border-white/10">
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-transparent to-secondary/5 animate-shimmer pointer-events-none" 
                style={{ backgroundSize: '200% 100%' }} />
           
-          <div className="relative z-10 flex flex-col justify-center gap-1.5">
+          <div className="relative z-10 flex flex-col justify-center gap-1.5 text-center md:text-left">
             <motion.h2 
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.2 }}
-              className="text-3xl md:text-4xl font-black tracking-tight"
+              className="font-bebas text-4xl md:text-5xl tracking-[4px] text-white"
             >
-              Good morning, Alex 👋
+              Good morning, Alex
             </motion.h2>
-            <p className="text-muted-foreground text-sm md:text-base max-w-2xl leading-relaxed">
-              Your engagement is up 14% this week. Your best window to post today is <span className="text-primary font-bold">6:30 PM</span>. 
-              You have <span className="border-b border-primary/50 text-foreground font-medium">2 brand deals</span> waiting for a reply.
+            <p className="text-muted-foreground text-sm font-syne font-medium max-w-2xl leading-relaxed">
+              Your engagement is up <span className="text-success font-bold">14%</span> this week. Best post time: <span className="text-secondary font-bold font-mono">18:30</span>. 
+              You have <span className="border-b border-primary/50 text-foreground font-bold">2 deals</span> pending.
             </p>
           </div>
 
           <div className="relative z-10 hidden md:flex flex-col items-center">
-            <div className="relative w-20 h-20 flex items-center justify-center">
+            <div className="relative w-24 h-24 flex items-center justify-center">
               <svg className="absolute inset-0 w-full h-full -rotate-90">
-                <circle cx="40" cy="40" r="36" fill="none" stroke="currentColor" strokeWidth="4" className="text-muted/20" />
+                <circle cx="48" cy="48" r="42" fill="none" stroke="currentColor" strokeWidth="4" className="text-white/5" />
                 <motion.circle 
-                  cx="40" cy="40" r="36" fill="none" stroke="currentColor" strokeWidth="4" 
-                  className="text-primary drop-shadow-[0_0_8px_hsl(var(--primary))]" 
-                  strokeDasharray="226" 
-                  initial={{ strokeDashoffset: 226 }}
-                  animate={{ strokeDashoffset: 226 - (226 * 0.82) }}
+                  cx="48" cy="48" r="42" fill="none" stroke="currentColor" strokeWidth="6" 
+                  className="text-primary drop-shadow-[0_0_12px_hsla(325,100%,62%,0.6)]" 
+                  strokeDasharray="264" 
+                  initial={{ strokeDashoffset: 264 }}
+                  animate={{ strokeDashoffset: 264 - (264 * 0.82) }}
                   transition={{ duration: 1.5, ease: "easeOut" }}
                 />
               </svg>
               <div className="flex flex-col items-center justify-center">
-                <span className="text-2xl font-black">
+                <span className="text-3xl font-bebas tracking-tighter text-white">
                   <CountUp value={82} />
                 </span>
+                <span className="text-[8px] font-mono text-muted-foreground uppercase tracking-widest -mt-1">Rank</span>
               </div>
-            </div>
-            <div className="flex gap-2 mt-2">
-              <span className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">Engage ↑</span>
-              <span className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">Content ↓</span>
-              <span className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">Deals →</span>
             </div>
           </div>
         </div>
 
-        {/* ROW 2 — LIVE KPI STRIP */}
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+        {/* ROW 2 — BENTO KPI STRIP */}
+        <div className="bento-grid">
           {kpiStats.map((stat, i) => (
             <motion.div 
               key={stat.label}
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: i * 0.1 }}
-              className="premium-card p-6 rounded-2xl bg-card border border-border/40 flex flex-col relative overflow-hidden group shadow-sm"
+              transition={{ delay: i * 0.05 }}
+              className={`${i === 0 ? 'bento-span-4' : 'bento-span-2'} glass-card p-6 flex flex-col relative overflow-hidden group`}
             >
               <div className="flex justify-between items-start mb-4">
-                <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest">{stat.label}</span>
-                <stat.icon className={`w-4 h-4 text-muted-foreground/40 group-hover:text-primary transition-colors`} />
+                <span className="text-[10px] text-muted-foreground font-mono font-bold uppercase tracking-[2px]">{stat.label}</span>
+                <stat.icon className="w-4 h-4 text-muted-foreground/40 group-hover:text-primary transition-colors" />
               </div>
               
-              <div className="flex flex-col mb-1">
-                <span className="text-3xl font-black tracking-tight">
+              <div className="flex flex-col mb-1 z-10">
+                <span className="text-3xl font-mono font-bold tracking-tighter text-white">
                   <CountUp 
                     value={stat.divisor ? stat.value / stat.divisor : stat.value} 
                     prefix={stat.prefix} 
@@ -101,19 +97,18 @@ export const Home = () => {
                     decimals={stat.decimals} 
                   />
                 </span>
-                <div className={`text-xs font-bold flex items-center mt-1 ${stat.up ? 'text-emerald-500' : 'text-rose-500'}`}>
+                <div className={`text-[10px] font-mono font-bold flex items-center mt-1.5 ${stat.up ? 'text-success' : 'text-rose-500'}`}>
                   {stat.up ? "↑" : "↓"} {stat.delta}
-                  <span className="text-[10px] text-muted-foreground font-normal ml-1">vs last period</span>
                 </div>
               </div>
 
-              <div className="absolute bottom-0 right-0 w-24 h-12 opacity-50 group-hover:opacity-100 transition-opacity">
+              <div className="absolute bottom-0 right-0 w-full h-12 opacity-30 group-hover:opacity-60 transition-opacity">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={stat.data}>
                     <Line 
                       type="monotone" 
                       dataKey="value" 
-                      stroke={stat.up ? "#10b981" : "#f43f5e"} 
+                      stroke={stat.up ? "#00E5A0" : "#ff4d4d"} 
                       strokeWidth={2} 
                       dot={false} 
                       isAnimationActive={true}
@@ -126,249 +121,212 @@ export const Home = () => {
           ))}
         </div>
 
-        {/* ROW 3 — TWO COLUMN LAYOUT (60% / 40%) */}
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+        {/* ROW 3 — ASYMMETRIC BENTO GRID */}
+        <div className="bento-grid">
           
-          {/* LEFT COLUMN (60%) */}
-          <div className="lg:col-span-3 space-y-6">
-            <div className="premium-card bg-card border border-border/40 rounded-3xl p-8 shadow-sm">
-              <div className="flex items-center justify-between mb-8">
-                <div>
-                  <h3 className="text-xl font-black tracking-tight flex items-center gap-2 uppercase">
-                    <Zap className="w-5 h-5 text-primary fill-primary" />
-                    Today's AI Action Plan
-                  </h3>
-                  <p className="text-sm text-muted-foreground mt-1">Your AI Coach has 5 tasks for you today</p>
-                </div>
-                <div className="h-10 w-10 rounded-full border border-border/40 flex items-center justify-center text-sm font-bold">
-                  2/5
-                </div>
+          {/* AI ACTION PLAN (Span 8) */}
+          <div className="bento-span-8 glass-card p-8 border border-white/5 relative group">
+            <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
+               <Zap className="w-32 h-32 text-primary" />
+            </div>
+            
+            <div className="flex items-center justify-between mb-8 relative z-10">
+              <div>
+                <h1 className="text-2xl font-bebas tracking-[3px] text-white flex items-center gap-3">
+                  AI Action Plan
+                </h1>
+                <p className="font-mono text-[10px] uppercase font-bold text-muted-foreground tracking-widest mt-1">High Priority Tasks: 05</p>
               </div>
-
-              <div className="space-y-4">
-                {[
-                  { task: "Post your Tuesday Reel by 6:30 PM", time: "12 min", done: true, plat: <Instagram className="w-3.5 h-3.5" /> },
-                  { task: "Reply to 8 unanswered comments on your posts", time: "8 min", done: true, plat: <Instagram className="w-3.5 h-3.5" /> },
-                  { task: "Follow up with Nike on your pending deal", time: "3 min", done: false, plat: <Briefcase className="w-3.5 h-3.5" /> },
-                  { task: "Generate 3 caption options for Thursday", time: "2 min", done: false, plat: <Youtube className="w-3.5 h-3.5" /> },
-                  { task: "Check your Trend Radar — 2 new matches", time: "5 min", done: false, plat: <Zap className="w-3.5 h-3.5" /> },
-                ].map((item, i) => (
-                  <div key={i} className={`flex items-center justify-between p-4 rounded-2xl border transition-all ${item.done ? 'bg-muted/5 border-transparent opacity-60' : 'bg-muted/10 border-border/30 hover:border-primary/40 hover:bg-muted/20 group cursor-pointer'}`}>
-                    <div className="flex items-center gap-4">
-                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${item.done ? 'bg-primary border-primary' : 'border-border/60 group-hover:border-primary'}`}>
-                        {item.done && <CheckCircle2 className="w-3 h-3 text-white" />}
-                      </div>
-                      <div>
-                        <span className={`text-sm ${item.done ? 'line-through text-muted-foreground font-medium' : 'font-bold'}`}>{item.task}</span>
-                        <div className="flex items-center gap-2 mt-0.5">
-                          <span className="text-[10px] text-muted-foreground flex items-center gap-1">{item.plat} {item.time}</span>
-                        </div>
-                      </div>
-                    </div>
-                    {!item.done && <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:translate-x-1 transition-transform" />}
-                  </div>
-                ))}
-              </div>
-              
-              <div className="mt-8 overflow-hidden h-2 bg-muted/30 rounded-full relative">
-                <motion.div 
-                  initial={{ width: 0 }}
-                  animate={{ width: "40%" }}
-                  className="absolute inset-y-0 left-0 bg-primary shadow-[0_0_10px_hsl(var(--primary))]"
-                />
+              <div className="h-12 w-12 rounded-xl glass-elevated flex items-center justify-center font-mono font-bold text-primary">
+                2/5
               </div>
             </div>
 
-            {/* RECENT POST PERFORMANCE */}
-            <div className="premium-card bg-card border border-border/40 rounded-3xl p-8 shadow-sm">
-              <h3 className="text-xl font-black tracking-tight mb-6 uppercase">Recent Post Performance</h3>
-              <div className="overflow-x-auto">
-                <table className="w-full text-left">
-                  <thead>
-                    <tr className="border-b border-border/30">
-                      <th className="pb-4 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Post</th>
-                      <th className="pb-4 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Platform</th>
-                      <th className="pb-4 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Reach</th>
-                      <th className="pb-4 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Engagement</th>
-                      <th className="pb-4 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Saves</th>
-                      <th className="pb-4 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Status</th>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 relative z-10">
+              {[
+                { task: "Post Tuesday Reel", time: "18:30", done: true, plat: <Instagram className="w-4 h-4" /> },
+                { task: "Reply to Comments", time: "08m", done: true, plat: <Instagram className="w-4 h-4" /> },
+                { task: "Nike Follow-up", time: "03m", done: false, plat: <Briefcase className="w-4 h-4" /> },
+                { task: "Thursday Captions", time: "02m", done: false, plat: <Youtube className="w-4 h-4" /> },
+                { task: "Trend Radar Check", time: "05m", done: false, plat: <Zap className="w-4 h-4" /> },
+              ].map((item, i) => (
+                <div key={i} className={`flex items-center justify-between p-4 rounded-xl border border-white/5 transition-all ${item.done ? 'bg-white/[0.02] opacity-40' : 'bg-white/[0.04] hover:bg-white/[0.08] group/item cursor-pointer shadow-inner'}`}>
+                  <div className="flex items-center gap-4">
+                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${item.done ? 'bg-primary border-primary' : 'border-white/20 group-hover/item:border-primary'}`}>
+                      {item.done && <CheckCircle2 className="w-3 h-3 text-white" />}
+                    </div>
+                    <span className={`text-sm ${item.done ? 'line-through text-muted-foreground' : 'font-syne font-bold text-foreground'}`}>{item.task}</span>
+                  </div>
+                  <span className="font-mono text-[10px] text-muted-foreground">{item.time}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* PLATFORM HEALTH (Span 4) */}
+          <div className="bento-span-4 glass-card p-8 border border-white/5">
+            <h1 className="text-2xl font-bebas tracking-[3px] text-white mb-6 uppercase">Platform Health</h1>
+            <div className="space-y-4">
+              {[
+                { name: "Instagram", val: "142K", icon: <Instagram className="w-4 h-4" />, status: "bg-success" },
+                { name: "YouTube", val: "89K", icon: <Youtube className="w-4 h-4" />, status: "bg-success" },
+                { name: "TikTok", val: "410K", icon: <Twitter className="w-4 h-4" />, status: "bg-warning" }
+              ].map(p => (
+                <div key={p.name} className="flex items-center justify-between p-4 rounded-xl glass-elevated group cursor-pointer hover:border-primary/30 transition-all">
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center">{p.icon}</div>
+                    <div>
+                      <div className="font-syne font-bold text-sm">{p.name}</div>
+                      <div className="font-mono text-[9px] uppercase font-bold text-muted-foreground tracking-widest">{p.val} Foll</div>
+                    </div>
+                  </div>
+                  <div className={`w-2 h-2 rounded-full ${p.status} shadow-[0_0_10px_currentColor]`} />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* RECENT PERFORMANCE (Span 8) */}
+          <div className="bento-span-8 glass-card p-8 border border-white/5">
+            <h1 className="text-2xl font-bebas tracking-[3px] text-white mb-6 uppercase text-center md:text-left">Recent Performance</h1>
+            <div className="overflow-x-auto no-scrollbar">
+              <table className="w-full text-left font-syne">
+                <thead>
+                  <tr className="border-b border-white/5 font-mono text-[10px] font-bold uppercase tracking-[2px] text-muted-foreground">
+                    <th className="pb-4">Content</th>
+                    <th className="pb-4">Reach</th>
+                    <th className="pb-4">Eng.</th>
+                    <th className="pb-4">Status</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-white/5">
+                  {dashboardPosts.map((post) => (
+                    <tr key={post.id} className="group hover:bg-white/[0.02] cursor-pointer transition-colors">
+                      <td className="py-4 flex items-center gap-3">
+                        <img src={post.thumb} alt="" className="w-10 h-10 rounded-lg object-cover" />
+                        <span className="text-xs font-bold font-mono tracking-widest">{post.type}</span>
+                      </td>
+                      <td className="py-4 text-xs font-mono font-bold">{post.reach}</td>
+                      <td className="py-4 text-xs font-mono font-bold text-success">{post.engagement}</td>
+                      <td className="py-4">
+                        <span className={`font-mono text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full ${
+                          post.status === 'Trending' ? 'text-success bg-success/10' : 'text-muted-foreground'
+                        }`}>
+                          {post.status}
+                        </span>
+                      </td>
                     </tr>
-                  </thead>
-                  <tbody className="divide-y divide-border/20">
-                    {dashboardPosts.map((post) => (
-                      <tr key={post.id} className="group hover:bg-muted/10 cursor-pointer transition-colors">
-                        <td className="py-4">
-                          <div className="flex items-center gap-3">
-                            <img src={post.thumb} alt="" className="w-10 h-10 rounded-lg object-cover" />
-                            <span className="text-xs font-bold">{post.type}</span>
-                          </div>
-                        </td>
-                        <td className="py-4 text-xs font-medium">{post.platform}</td>
-                        <td className="py-4 text-xs font-black">{post.reach}</td>
-                        <td className="py-4 text-xs font-bold text-emerald-500">{post.engagement}</td>
-                        <td className="py-4 text-xs font-medium text-muted-foreground">{post.saves}</td>
-                        <td className="py-4">
-                          <span className={`text-[10px] font-black uppercase px-2 py-0.5 rounded-full ${
-                            post.status === 'Trending' ? 'bg-emerald-500/10 text-emerald-500' :
-                            post.status === 'Stable' ? 'bg-blue-500/10 text-blue-500' : 'bg-muted text-muted-foreground'
-                          }`}>
-                            {post.status}
-                          </span>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
 
-          {/* RIGHT COLUMN (40%) */}
-          <div className="lg:col-span-2 space-y-6">
-            <div className="premium-card bg-card border border-border/40 rounded-3xl p-8 shadow-sm">
-              <h3 className="text-xl font-black tracking-tight mb-6 uppercase">Platform Health</h3>
-              <div className="space-y-6">
+          {/* DEAL PIPELINE snapshot (Span 4) */}
+          <div className="bento-span-4 glass-card p-8 border border-white/5 flex flex-col justify-between">
+            <div>
+              <h1 className="text-2xl font-bebas tracking-[3px] text-white mb-6 uppercase">Active Pipeline</h1>
+              <div className="grid grid-cols-2 gap-3 mb-8">
                 {[
-                  { name: "Instagram", followers: "142K", growth: "+1.2%", er: "4.2%", health: "bg-emerald-500", icon: <Instagram className="w-5 h-5 text-pink-500" /> },
-                  { name: "YouTube", followers: "89K", growth: "+4.5%", er: "8.1%", health: "bg-emerald-500", icon: <Youtube className="w-5 h-5 text-red-500" /> },
-                  { name: "TikTok", followers: "410K", growth: "-0.8%", er: "3.2%", health: "bg-amber-500", icon: <Play className="w-5 h-5 fill-foreground" /> }
-                ].map(platform => (
-                  <div key={platform.name} className="flex items-center justify-between p-4 rounded-2xl bg-muted/10 hover:bg-muted/20 cursor-pointer transition-all border border-transparent hover:border-border/50">
-                    <div className="flex items-center gap-4">
-                      <div className="w-10 h-10 rounded-xl bg-background flex items-center justify-center shadow-sm">
-                        {platform.icon}
-                      </div>
-                      <div>
-                        <div className="font-black text-sm">{platform.name}</div>
-                        <div className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest">{platform.followers} followers</div>
-                      </div>
-                    </div>
-                    <div className="flex flex-col items-end gap-1">
-                      <div className="flex items-center gap-2">
-                         <span className={`text-xs font-black ${platform.growth.startsWith('+') ? 'text-emerald-500' : 'text-rose-500'}`}>{platform.growth}</span>
-                         <span className={`w-2 h-2 rounded-full ${platform.health} shadow-[0_0_8px_currentColor]`} />
-                      </div>
-                      <span className="text-[10px] text-muted-foreground font-medium">ER: {platform.er}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="premium-card bg-card border border-border/40 rounded-3xl p-8 shadow-sm overflow-hidden relative">
-              <h3 className="text-xl font-black tracking-tight mb-6 uppercase">Deal Pipeline Snapshot</h3>
-              <div className="flex gap-2 mb-6 overflow-x-auto pb-2 scrollbar-none">
-                {[
-                  { label: "Pros", count: 3 },
-                  { label: "Outr", count: 2 },
-                  { label: "Nego", count: 1 },
-                  { label: "Sign", count: 2 },
-                  { label: "Live", count: 1 },
+                  { l: "Neg", c: "01" },
+                  { l: "Sign", c: "02" },
+                  { l: "Live", c: "01" },
+                  { l: "Opp", c: "04" },
                 ].map(p => (
-                  <div key={p.label} className="min-w-[60px] h-12 rounded-xl bg-muted/20 border border-border/30 flex flex-col items-center justify-center relative">
-                    <span className="text-[10px] font-bold text-muted-foreground">{p.label}</span>
-                    <span className="font-black text-sm">{p.count}</span>
-                    {p.count > 0 && <div className="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-primary" />}
+                  <div key={p.l} className="p-3 rounded-xl glass-elevated flex flex-col items-center">
+                    <span className="font-mono text-[9px] font-bold uppercase tracking-widest text-muted-foreground mb-1">{p.l}</span>
+                    <span className="font-mono text-xl font-bold text-white">{p.c}</span>
                   </div>
                 ))}
               </div>
-              <div className="flex flex-col gap-1">
-                <span className="text-xs text-muted-foreground font-bold uppercase tracking-widest">Total Pipeline Value</span>
-                <span className="text-2xl font-black text-primary">₹ 2,40,000</span>
-              </div>
-              <button className="mt-6 w-full flex items-center justify-between text-xs font-black uppercase tracking-widest group">
-                View All Deals 
-                <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </button>
+            </div>
+            
+            <div className="p-4 rounded-xl bg-gradient-to-r from-primary/20 to-secondary/20 border border-white/10 flex flex-col gap-1 items-center">
+              <span className="font-mono text-[9px] font-bold uppercase tracking-[2px] text-muted-foreground">Est. Value</span>
+              <span className="font-mono text-2xl font-bold text-white">₹ 2,40,000</span>
             </div>
           </div>
+
         </div>
 
-        {/* ROW 4 — THREE COLUMN LAYOUT */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* ROW 4 — LIVE INSIGHTS BENTO */}
+        <div className="bento-grid">
           
-          {/* UPCOMING SCHEDULED POSTS */}
-          <div className="premium-card bg-card border border-border/40 rounded-3xl p-8 shadow-sm h-full">
+          {/* UPCOMING CONTENT (Span 4) */}
+          <div className="bento-span-4 glass-card p-8 border border-white/5">
              <div className="flex items-center justify-between mb-6">
-               <h3 className="text-lg font-black tracking-tight uppercase">Upcoming Posts</h3>
-               <button className="text-[10px] font-bold text-primary uppercase tracking-widest">Calendar →</button>
+                <h1 className="text-xl font-bebas tracking-[2px] text-white uppercase">Upcoming</h1>
+                <button className="font-mono text-[9px] font-bold text-primary uppercase tracking-widest hover:underline">Calendar →</button>
              </div>
              <div className="space-y-4">
                {[
-                 { plat: "IG", time: "Today, 6:30 PM", title: "Recovery Habits", thumb: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=80&h=80&fit=crop" },
-                 { plat: "YT", time: "Thu, 11:00 AM", title: "The 10K Journey", thumb: "https://images.unsplash.com/photo-1533035353720-f1c6a75cd8ab?w=80&h=80&fit=crop" },
+                 { plat: "IG", time: "Today, 18:30", title: "Recovery Habits", thumb: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=80&h=80&fit=crop" },
+                 { plat: "YT", time: "Thu, 11:00", title: "The 10K Journey", thumb: "https://images.unsplash.com/photo-1533035353720-f1c6a75cd8ab?w=80&h=80&fit=crop" },
                ].map((post, i) => (
-                 <div key={i} className="flex gap-4 p-3 rounded-2xl bg-muted/10 border border-border/10">
-                   <img src={post.thumb} alt="" className="w-12 h-12 rounded-xl object-cover shrink-0" />
+                 <div key={i} className="flex gap-4 p-3 rounded-xl glass-elevated border border-white/5 group cursor-pointer">
+                   <img src={post.thumb} alt="" className="w-12 h-12 rounded-lg object-cover shrink-0" />
                    <div className="flex flex-col justify-center min-w-0">
-                      <span className="text-xs font-black truncate">{post.title}</span>
-                      <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-widest mt-0.5">{post.time}</span>
+                      <span className="text-xs font-bold font-syne truncate group-hover:text-primary transition-colors">{post.title}</span>
+                      <span className="font-mono text-[9px] text-muted-foreground uppercase tracking-widest mt-0.5">{post.time}</span>
                    </div>
                  </div>
                ))}
              </div>
           </div>
 
-          {/* TREND RADAR — LIVE */}
-          <div className="premium-card bg-card border border-border/40 rounded-3xl p-8 shadow-sm h-full relative overflow-hidden">
+          {/* TREND RADAR (Span 4) */}
+          <div className="bento-span-4 glass-card p-8 border border-white/5 relative overflow-hidden">
              <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-2">
-                   <h3 className="text-lg font-black tracking-tight uppercase">Trend Radar</h3>
-                   <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse" />
+                   <h1 className="text-xl font-bebas tracking-[2px] text-white uppercase">Trend Radar</h1>
+                   <span className="w-2 h-2 rounded-full bg-rose-500 animate-pulse shadow-[0_0_10px_#f43f5e]" />
                 </div>
-                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">Live</span>
+                <span className="font-mono text-[9px] font-bold text-muted-foreground uppercase">Live</span>
              </div>
-             <div className="space-y-4">
+             <div className="space-y-5">
                {[
-                 { name: "Desk Setups 2024", velocity: "92%", color: "bg-emerald-500" },
-                 { name: "AI Productivity", velocity: "78%", color: "bg-emerald-500" },
-                 { name: "Quiet Luxury Decor", velocity: "45%", color: "bg-amber-500" },
-               ].map((trend, i) => (
-                 <div key={i} className="space-y-1.5 p-3 rounded-2xl hover:bg-muted/10 transition-colors">
-                   <div className="flex justify-between items-center min-w-0">
-                     <span className="text-xs font-bold truncate">{trend.name}</span>
-                     <span className="text-[10px] text-muted-foreground">{trend.velocity}</span>
+                 { name: "Desk Setups 2024", v: "92%", c: "bg-success" },
+                 { name: "AI Productivity", v: "78%", c: "bg-success" },
+                 { name: "Quiet Luxury", v: "45%", c: "bg-warning" },
+               ].map((t, i) => (
+                 <div key={i} className="space-y-2">
+                   <div className="flex justify-between items-center">
+                     <span className="text-xs font-bold font-syne">{t.name}</span>
+                     <span className="font-mono text-[9px] text-muted-foreground">{t.v}</span>
                    </div>
-                   <div className="h-1 bg-muted/30 rounded-full overflow-hidden">
-                      <motion.div 
-                        initial={{ width: 0 }}
-                        whileInView={{ width: trend.velocity }}
-                        className={`h-full ${trend.color}`} 
-                      />
+                   <div className="h-1 bg-white/5 rounded-full overflow-hidden">
+                      <motion.div initial={{ width: 0 }} whileInView={{ width: t.v }} className={`h-full ${t.c} shadow-[0_0_8px_currentColor]`} />
                    </div>
-                   <button className="text-[9px] font-black uppercase tracking-widest text-primary pt-1">Create Content</button>
                  </div>
                ))}
              </div>
           </div>
 
-          {/* CREATOR NETWORK — ACTIVITY */}
-          <div className="premium-card bg-card border border-border/40 rounded-3xl p-8 shadow-sm h-full">
-             <div className="flex items-center justify-between mb-6">
-               <h3 className="text-lg font-black tracking-tight uppercase">Network Activity</h3>
-               <Network className="w-5 h-5 text-muted-foreground/30" />
-             </div>
-             <div className="space-y-4">
-                {[
-                  { user: "@stylebypriya", text: "just posted a collab opportunity", icon: "✨" },
-                  { user: "@brandXYZ", text: "is looking for fitness creators", icon: "🔍" },
-                  { user: "@raj_vlogs", text: "reached 100K milestone!", icon: "🚀" },
-                ].map((item, i) => (
-                  <div key={i} className="flex gap-3 items-start p-2 hover:bg-muted/10 rounded-xl transition-colors cursor-pointer group">
-                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-sm shrink-0">
-                      {item.icon}
-                    </div>
-                    <div className="min-w-0">
-                      <span className="text-xs font-black group-hover:text-primary transition-colors">{item.user}</span>
-                      <p className="text-[11px] text-muted-foreground leading-tight mt-0.5">{item.text}</p>
-                    </div>
-                  </div>
-                ))}
-             </div>
-             <button className="mt-6 w-full py-2.5 rounded-xl border border-border/50 text-[10px] font-black uppercase tracking-widest hover:bg-muted/10 transition-colors">
-               Go to Network
-             </button>
+          {/* NETWORK (Span 4) */}
+          <div className="bento-span-4 glass-card p-8 border border-white/5">
+              <div className="flex items-center justify-between mb-6">
+                <h1 className="text-xl font-bebas tracking-[2px] text-white uppercase">Network</h1>
+                <Network className="w-5 h-5 text-muted-foreground/30" />
+              </div>
+              <div className="space-y-4">
+                 {[
+                   { u: "@stylebypriya", t: "Collab opportunity", i: "✨" },
+                   { u: "@brandXYZ", t: "Looking for fitness", i: "🔍" },
+                   { u: "@raj_vlogs", t: "100K milestone!", i: "🚀" },
+                 ].map((item, i) => (
+                   <div key={i} className="flex gap-3 items-center p-3 hover:bg-white/[0.04] rounded-xl transition-colors cursor-pointer group">
+                     <div className="w-8 h-8 rounded-lg glass-elevated flex items-center justify-center text-sm shrink-0">
+                       {item.i}
+                     </div>
+                     <div className="min-w-0">
+                       <span className="text-xs font-bold font-syne group-hover:text-primary transition-colors">{item.u}</span>
+                       <p className="font-mono text-[9px] text-muted-foreground uppercase truncate mt-0.5">{item.t}</p>
+                     </div>
+                   </div>
+                 ))}
+              </div>
           </div>
+
         </div>
 
       </div>
