@@ -4,9 +4,10 @@ import {
   Bell, Search, ChevronDown, CheckCircle2, 
   Sparkles, DollarSign, Users, Info, 
   TrendingUp, AlertTriangle, FileText, Target,
-  Menu, X
+  Menu, X, Trash2
 } from "lucide-react";
 import { useAuth } from "../../contexts/AuthContext";
+import { SwipeAction } from "../shared/MobileInteractions";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { SearchOverlay } from "./SearchOverlay";
 
@@ -22,7 +23,7 @@ export const Header = ({ title = "Dashboard" }: { title?: string }) => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   return (
-    <header className="fixed top-0 left-0 lg:left-[80px] right-0 h-[var(--header-h)] bg-black/60 backdrop-blur-3xl border-b border-white/5 z-[100] flex items-center justify-between px-4 md:px-10 transition-all duration-300">
+    <header className="sticky-header lg:fixed top-0 left-0 lg:left-[80px] right-0 h-[var(--header-h)] bg-black/60 backdrop-blur-3xl border-b border-white/5 z-[100] flex items-center justify-between px-4 md:px-10 transition-all duration-300">
       <div className="flex items-center gap-8">
         <h1 className="text-lg md:text-2xl font-black tracking-tight uppercase truncate max-w-[200px] md:max-w-none">{title}</h1>
         
@@ -74,6 +75,42 @@ export const Header = ({ title = "Dashboard" }: { title?: string }) => {
       </div>
 
       <SearchOverlay isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
+      
+      <AnimatePresence>
+        {showNotifications && (
+          <>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setShowNotifications(false)} className="fixed inset-0 bg-black/60 z-[150]" />
+            <motion.div initial={{ x: "100%" }} animate={{ x: 0 }} exit={{ x: "100%" }} transition={{ type: "spring", damping: 30 }} className="fixed top-0 right-0 bottom-0 w-[400px] bg-background border-l border-white/5 z-[160] flex flex-col pt-[var(--header-h)]">
+              <div className="p-6 border-b border-white/5 flex items-center justify-between">
+                <h3 className="text-xl font-black uppercase tracking-tight">Notifications</h3>
+                <button onClick={() => setShowNotifications(false)}><X className="w-5 h-5 text-zinc-500 hover:text-white" /></button>
+              </div>
+              <div className="flex-1 overflow-y-auto overflow-x-hidden p-4 space-y-2">
+                {[1, 2].map(id => (
+                  <SwipeAction
+                    key={id}
+                    onSwipeLeft={() => setShowNotifications(false)} // Simplification for demo
+                    rightAction={
+                      <div className="flex flex-col items-center justify-center p-4">
+                        <Trash2 className="w-5 h-5" />
+                        <span className="text-[10px] font-black uppercase mt-1">Dismiss</span>
+                      </div>
+                    }
+                  >
+                    <div className="p-4 rounded-2xl bg-white/5 border border-white/5 relative z-10 flex gap-4">
+                      <div className="w-2 h-2 rounded-full bg-primary mt-1.5 shrink-0" />
+                      <div>
+                        <p className="text-sm font-bold leading-tight">Decathlon accepted your final contract draft.</p>
+                        <p className="text-[10px] uppercase font-black tracking-widest text-zinc-500 mt-2">Just now</p>
+                      </div>
+                    </div>
+                  </SwipeAction>
+                ))}
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </header>
   );
 };

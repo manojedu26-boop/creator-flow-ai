@@ -346,7 +346,7 @@ export const Analytics = () => {
         </div>
       </header>
 
-      <div className="flex items-center gap-6 border-b border-white/5 overflow-x-auto scrollbar-none pb-0">
+      <div className="sticky-tabs h-scroll-fade flex items-center gap-6 border-b border-white/5 overflow-x-auto scrollbar-none pb-0 -mx-[var(--page-px)] px-[var(--page-px)]">
         {tabs.map((tab) => (
           <button
             key={tab}

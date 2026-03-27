@@ -139,7 +139,7 @@ export const Home = () => {
             <div className="space-y-1">
               <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{stat.label}</p>
               <div className="flex items-end gap-2">
-                <h3 className="text-2xl font-black tracking-tight">
+                <h3 className="text-2xl font-black tracking-tight kpi-number">
                   <CountUp value={stat.value} prefix={stat.label === 'Est. Revenue' ? '₹ ' : ''} />
                 </h3>
               </div>

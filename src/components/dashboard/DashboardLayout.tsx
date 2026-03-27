@@ -29,6 +29,8 @@ const getPageTitle = (pathname: string) => {
   }
 };
 
+import { PullToRefresh, IOSSwipeBack } from "../shared/MobileInteractions";
+
 export const DashboardLayout = () => {
   const { user, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -53,6 +55,11 @@ export const DashboardLayout = () => {
     };
   }, []);
 
+  const handleRefresh = async () => {
+    // Simulate data fetch
+    await new Promise(resolve => setTimeout(resolve, 1500));
+  };
+
   useEffect(() => {
     if (user) {
       document.title = `CF — ${user.name}'s Dashboard`;
@@ -75,18 +82,24 @@ export const DashboardLayout = () => {
         <Header title={pageTitle} />
         
         {/* Zone C */}
-        <main className="flex-1 overflow-y-auto pt-[var(--header-h)] pb-[var(--bottom-nav-h)] px-[var(--page-px)] relative no-scrollbar">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={location.pathname}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.25, ease: "easeOut" }}
-            >
-              <Outlet />
-            </motion.div>
-          </AnimatePresence>
+        <main className="flex-1 pt-[var(--header-h)] pb-[var(--bottom-nav-h)] relative">
+          <PullToRefresh onRefresh={handleRefresh}>
+            <IOSSwipeBack>
+              <div className="px-[var(--page-px)] py-6 no-scrollbar">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={location.pathname}
+                    initial={{ opacity: 0, scale: 0.98 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 1.02 }}
+                    transition={{ duration: 0.2, ease: "easeOut" }}
+                  >
+                    <Outlet />
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+            </IOSSwipeBack>
+          </PullToRefresh>
         </main>
       </div>
 

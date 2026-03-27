@@ -8,6 +8,7 @@ import {
   Zap
 } from "lucide-react";
 import { PageTransition } from "../../components/shared/MotionComponents";
+import { SwipeUpAction } from "../../components/shared/MobileInteractions";
 
 type DealStatus = 'prospecting' | 'outreach' | 'negotiating' | 'signed' | 'live' | 'paid';
 
@@ -128,53 +129,68 @@ export const BrandDeals = () => {
 
             <div className="space-y-4">
               {deals.filter(d => d.status === col.id).map((deal) => (
-                <motion.div
-                  layoutId={deal.id}
+                <SwipeUpAction
                   key={deal.id}
-                  onClick={() => setSelectedDeal(deal)}
-                  className="group relative bg-black/40 backdrop-blur-3xl border border-white/5 hover:border-primary/40 p-5 rounded-[2rem] cursor-pointer transition-all shadow-xl overflow-hidden"
+                  actions={
+                    <>
+                      <button className="flex flex-col items-center gap-1 hover:text-white transition-colors">
+                        <MessageSquare className="w-4 h-4" />
+                        <span className="text-[9px] font-black uppercase tracking-widest">Message</span>
+                      </button>
+                      <button className="flex flex-col items-center gap-1 hover:text-white transition-colors">
+                        <FileText className="w-4 h-4" />
+                        <span className="text-[9px] font-black uppercase tracking-widest">Contract</span>
+                      </button>
+                    </>
+                  }
                 >
-                  <div className="flex items-center gap-4 mb-5">
-                    <div className="w-10 h-10 rounded-xl bg-white/5 p-1 border border-white/10">
-                       <img src={deal.logo} alt="" className="w-full h-full object-contain rounded-lg" />
+                  <motion.div
+                    layoutId={deal.id}
+                    onClick={() => setSelectedDeal(deal)}
+                    className="group relative bg-black/40 backdrop-blur-3xl border border-white/5 hover:border-primary/40 p-5 rounded-[2rem] cursor-pointer transition-all shadow-xl overflow-hidden"
+                  >
+                    <div className="flex items-center gap-4 mb-5">
+                      <div className="w-10 h-10 rounded-xl bg-white/5 p-1 border border-white/10">
+                         <img src={deal.logo} alt="" className="w-full h-full object-contain rounded-lg" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h4 className="font-black text-sm truncate">{deal.brand}</h4>
+                        <div className="flex items-center gap-1.5 mt-1">
+                          {deal.platforms.map(p => (
+                            <span key={p} className="text-[8px] font-black px-1.5 py-0.5 rounded-md bg-white/5 border border-white/5 uppercase">{p}</span>
+                          ))}
+                        </div>
+                      </div>
+                      <button className="opacity-0 group-hover:opacity-100 p-2 hover:bg-white/5 rounded-xl transition-all">
+                        <MoreVertical className="w-4 h-4" />
+                      </button>
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <h4 className="font-black text-sm truncate">{deal.brand}</h4>
-                      <div className="flex items-center gap-1.5 mt-1">
-                        {deal.platforms.map(p => (
-                          <span key={p} className="text-[8px] font-black px-1.5 py-0.5 rounded-md bg-white/5 border border-white/5 uppercase">{p}</span>
-                        ))}
+
+                    <div className="flex items-end justify-between">
+                      <div>
+                        <p className="text-[9px] font-black text-muted-foreground uppercase tracking-widest mb-1">Estimated Value</p>
+                        <p className="text-lg font-black text-primary leading-none">{deal.value}</p>
+                      </div>
+                      <div className="text-right">
+                         <p className="text-[9px] font-black text-muted-foreground uppercase tracking-widest mb-1">Deadline</p>
+                         <div className={`flex items-center gap-1.5 text-[10px] font-black ${
+                          deal.deadlineColor === 'red' ? 'text-rose-500' : 
+                          deal.deadlineColor === 'yellow' ? 'text-amber-500' : 'text-emerald-500'
+                        }`}>
+                           <Calendar className="w-3 h-3" /> {deal.deadline}
+                         </div>
                       </div>
                     </div>
-                    <button className="opacity-0 group-hover:opacity-100 p-2 hover:bg-white/5 rounded-xl transition-all">
-                      <MoreVertical className="w-4 h-4" />
-                    </button>
-                  </div>
 
-                  <div className="flex items-end justify-between">
-                    <div>
-                      <p className="text-[9px] font-black text-muted-foreground uppercase tracking-widest mb-1">Estimated Value</p>
-                      <p className="text-lg font-black text-primary leading-none">{deal.value}</p>
-                    </div>
-                    <div className="text-right">
-                       <p className="text-[9px] font-black text-muted-foreground uppercase tracking-widest mb-1">Deadline</p>
-                       <div className={`flex items-center gap-1.5 text-[10px] font-black ${
-                        deal.deadlineColor === 'red' ? 'text-rose-500' : 
-                        deal.deadlineColor === 'yellow' ? 'text-amber-500' : 'text-emerald-500'
-                      }`}>
-                         <Calendar className="w-3 h-3" /> {deal.deadline}
-                       </div>
-                    </div>
-                  </div>
-
-                  {deal.notes && (
-                    <div className="mt-4 pt-4 border-t border-white/5">
-                       <p className="text-[10px] font-bold text-muted-foreground italic line-clamp-1">
-                         "{deal.notes}"
-                       </p>
-                    </div>
-                  )}
-                </motion.div>
+                    {deal.notes && (
+                      <div className="mt-4 pt-4 border-t border-white/5">
+                         <p className="text-[10px] font-bold text-muted-foreground italic line-clamp-1">
+                           "{deal.notes}"
+                         </p>
+                      </div>
+                    )}
+                  </motion.div>
+                </SwipeUpAction>
               ))}
               
               <button className="w-full flex items-center justify-center gap-2 py-6 rounded-[2rem] border-2 border-dashed border-white/5 text-muted-foreground/30 hover:text-primary hover:border-primary/30 hover:bg-primary/5 transition-all text-xs font-black uppercase tracking-widest">

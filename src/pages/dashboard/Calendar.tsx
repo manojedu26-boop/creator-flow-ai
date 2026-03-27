@@ -8,6 +8,7 @@ import {
   Zap, TrendingUp, AlertCircle
 } from "lucide-react";
 import { PageTransition } from "../../components/shared/MotionComponents";
+import { useLongPress } from "../../components/shared/MobileInteractions";
 
 type ViewMode = 'month' | 'week' | 'day' | 'list';
 
@@ -27,6 +28,23 @@ const posts: ScheduledPost[] = [
   { id: '3', platform: 'yt', type: 'video', caption: 'My gym bag essentials 2025', time: '8:00 AM', day: 29, status: 'scheduled' },
   { id: '4', platform: 'ig', type: 'meeting', caption: 'Decathlon Campaign Kickoff', time: '10:00 AM', day: 24, status: 'scheduled' },
 ];
+
+const CalendarPost = ({ post, onSelect }: { post: ScheduledPost; onSelect: () => void }) => {
+  const pressProps = useLongPress(
+    () => onSelect(), 
+    () => onSelect(),
+    { delay: 400, shouldPreventDefault: false }
+  );
+
+  return (
+    <div {...pressProps} className="p-2 rounded-xl bg-white/5 border border-white/5 hover:border-primary/40 cursor-pointer transition-all overflow-hidden group/item">
+      <div className="flex items-center gap-2 pointer-events-none">
+        {post.platform === 'ig' ? <Instagram className="w-3 h-3 text-primary" /> : post.platform === 'yt' ? <Youtube className="w-3 h-3 text-red-500" /> : <CalendarIcon className="w-3 h-3 text-blue-500" />}
+        <span className="text-[9px] font-black truncate uppercase tracking-tighter text-white/80">{post.caption}</span>
+      </div>
+    </div>
+  );
+};
 
 export const Calendar = () => {
   const [view, setView] = useState<ViewMode>('month');
@@ -57,12 +75,7 @@ export const Calendar = () => {
 
             <div className="space-y-2">
               {dayPosts.map(post => (
-                <div key={post.id} onClick={() => setSelectedPost(post)} className="p-2 rounded-xl bg-white/5 border border-white/5 hover:border-primary/40 cursor-pointer transition-all overflow-hidden group/item">
-                  <div className="flex items-center gap-2">
-                    {post.platform === 'ig' ? <Instagram className="w-3 h-3 text-primary" /> : post.platform === 'yt' ? <Youtube className="w-3 h-3 text-red-500" /> : <CalendarIcon className="w-3 h-3 text-blue-500" />}
-                    <span className="text-[9px] font-black truncate uppercase tracking-tighter text-white/80">{post.caption}</span>
-                  </div>
-                </div>
+                <CalendarPost key={post.id} post={post} onSelect={() => setSelectedPost(post)} />
               ))}
             </div>
 
