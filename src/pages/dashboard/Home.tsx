@@ -1,8 +1,10 @@
 import { motion } from "framer-motion";
 import { 
-  ArrowUpRight, TrendingUp, Users, Eye, DollarSign, Briefcase, 
+  ChevronRight, ExternalLink, Zap, Network, Calendar,
+  MessageCircle, Heart, Share2, DollarSign as RevenueIcon,
+  Eye, Users, TrendingUp, DollarSign, Briefcase, 
   CheckCircle2, Clock, Instagram, Youtube, Twitter, Play,
-  ChevronRight, ExternalLink, Zap, Network
+  Copy, Check
 } from "lucide-react";
 import { ResponsiveContainer, LineChart, Line, YAxis, XAxis, Tooltip } from "recharts";
 import { PageTransition, CountUp } from "../../components/shared/MotionComponents";
@@ -12,7 +14,8 @@ import {
 } from "../../components/shared/Skeleton";
 import { useState, useEffect } from "react";
 import { EmptyState } from "../../components/shared/EmptyState";
-import { Plus, Search } from "lucide-react";
+import { Plus, Search, Star } from "lucide-react";
+import { toast } from "../../components/ui/sonner";
 
 const sparklineData = [
   { value: 40 }, { value: 45 }, { value: 42 }, { value: 50 }, { value: 48 }, { value: 55 }, { value: 60 }
@@ -32,14 +35,42 @@ const dashboardPosts = [
   { id: 3, thumb: "https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?w=100&h=100&fit=crop", type: "Post", platform: "TT", reach: "12.1K", engagement: "3.2%", saves: "400", status: "Draft" },
 ];
 
+const upcomingDocs = [
+  { title: "Tuesday Reel: Morning Routine", time: "Tomorrow, 6:30 PM", thumb: "https://images.unsplash.com/photo-1490730141103-6cac27aaab94?w=100&h=100&fit=crop" },
+  { title: "YT Shorts: AI Tools Review", time: "Thursday, 12:00 PM", thumb: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=100&h=100&fit=crop" },
+  { title: "Carousel: Growth Strategies", time: "Friday, 8:00 PM", thumb: "https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?w=100&h=100&fit=crop" },
+];
+
+const networkItems = [
+  { user: "@alex_vlogs", text: "Sent you a collab request for 'Tech Setup 2024'", icon: <MessageCircle className="w-4 h-4 text-blue-500" /> },
+  { user: "@creative_maya", text: "Liked your recent 'Morning Routine' reel", icon: <Heart className="w-4 h-4 text-rose-500" /> },
+  { user: "@brand_boost", text: "Wants to discuss a potential partnership", icon: <RevenueIcon className="w-4 h-4 text-emerald-500" /> },
+];
+
 export const Home = () => {
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
+  const [aiTasks, setAiTasks] = useState([
+    { id: 1, task: "Post your Tuesday Reel by 6:30 PM", time: "12 min", done: true, plat: <Instagram className="w-3.5 h-3.5" /> },
+    { id: 2, task: "Reply to 8 unanswered comments on your posts", time: "8 min", done: true, plat: <Instagram className="w-3.5 h-3.5" /> },
+    { id: 3, task: "Follow up with Nike on your pending deal", time: "3 min", done: false, plat: <Briefcase className="w-3.5 h-3.5" /> },
+    { id: 4, task: "Generate 3 caption options for Thursday", time: "2 min", done: false, plat: <Youtube className="w-3.5 h-3.5" /> },
+    { id: 5, task: "Check your Trend Radar — 2 new matches", time: "5 min", done: false, plat: <Zap className="w-3.5 h-3.5" /> },
+  ]);
+  const [copyingId, setCopyingId] = useState<number | null>(null);
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 1200);
     return () => clearTimeout(timer);
   }, []);
+
+  const handleCopy = (id: number) => {
+    setCopyingId(id);
+    toast.success("Link copied!", { description: "Copied to clipboard ✓" });
+    setTimeout(() => setCopyingId(null), 1500);
+  };
+
+  const completedCount = aiTasks.filter(t => t.done).length;
   
   return (
     <PageTransition>
@@ -119,7 +150,7 @@ export const Home = () => {
                       decimals={stat.decimals} 
                     />
                   </span>
-                  <div className={`text-xs font-bold flex items-center mt-1 ${stat.up ? 'text-emerald-500' : 'text-rose-500'}`}>
+                  <div className={`text-xs font-bold flex items-center mt-1 ${stat.up ? 'text-emerald-500 animate-bounce-in' : 'text-rose-500'}`}>
                     {stat.up ? "↑" : "↓"} {stat.delta}
                     <span className="text-[10px] text-muted-foreground font-normal ml-1">vs last period</span>
                   </div>
@@ -161,7 +192,7 @@ export const Home = () => {
                 </div>
                 {!isLoading && (
                   <div className="h-10 w-10 rounded-full border border-border/40 flex items-center justify-center text-sm font-bold">
-                    2/5
+                    {completedCount}/5
                   </div>
                 )}
               </div>
@@ -170,20 +201,26 @@ export const Home = () => {
                 {isLoading ? (
                   Array(5).fill(0).map((_, i) => <div key={i} className="h-16 w-full rounded-2xl bg-muted/10 animate-pulse" />)
                 ) : (
-                  [
-                    { task: "Post your Tuesday Reel by 6:30 PM", time: "12 min", done: true, plat: <Instagram className="w-3.5 h-3.5" /> },
-                    { task: "Reply to 8 unanswered comments on your posts", time: "8 min", done: true, plat: <Instagram className="w-3.5 h-3.5" /> },
-                    { task: "Follow up with Nike on your pending deal", time: "3 min", done: false, plat: <Briefcase className="w-3.5 h-3.5" /> },
-                    { task: "Generate 3 caption options for Thursday", time: "2 min", done: false, plat: <Youtube className="w-3.5 h-3.5" /> },
-                    { task: "Check your Trend Radar — 2 new matches", time: "5 min", done: false, plat: <Zap className="w-3.5 h-3.5" /> },
-                  ].map((item, i) => (
-                    <div key={i} className={`flex items-center justify-between p-4 rounded-2xl border transition-all ${item.done ? 'bg-muted/5 border-transparent opacity-60' : 'bg-muted/10 border-border/30 hover:border-primary/40 hover:bg-muted/20 group cursor-pointer'}`}>
+                  aiTasks.map((item, i) => (
+                    <div 
+                      key={item.id} 
+                      onClick={() => {
+                        if (!item.done) {
+                          const newTasks = aiTasks.map(t => t.id === item.id ? { ...t, done: true } : t);
+                          setAiTasks(newTasks);
+                          toast.success("Task completed!", {
+                            description: `"${item.task}" marked as done.`,
+                          });
+                        }
+                      }}
+                      className={`flex items-center justify-between p-4 rounded-2xl border transition-all ${item.done ? 'bg-muted/5 border-transparent opacity-60' : 'bg-muted/10 border-border/30 hover:border-primary/40 hover:bg-muted/20 group cursor-pointer'}`}
+                    >
                       <div className="flex items-center gap-4">
                         <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors ${item.done ? 'bg-primary border-primary' : 'border-border/60 group-hover:border-primary'}`}>
                           {item.done && <CheckCircle2 className="w-3 h-3 text-white" />}
                         </div>
                         <div>
-                          <span className={`text-sm ${item.done ? 'line-through text-muted-foreground font-medium' : 'font-bold'}`}>{item.task}</span>
+                          <span className={`text-sm tracking-tight transition-all ${item.done ? 'line-through text-muted-foreground font-medium strikethrough-animation' : 'font-bold'}`}>{item.task}</span>
                           <div className="flex items-center gap-2 mt-0.5">
                             <span className="text-[10px] text-muted-foreground flex items-center gap-1">{item.plat} {item.time}</span>
                           </div>
@@ -199,7 +236,7 @@ export const Home = () => {
                 <div className="mt-8 overflow-hidden h-2 bg-muted/30 rounded-full relative">
                   <motion.div 
                     initial={{ width: 0 }}
-                    animate={{ width: "40%" }}
+                    animate={{ width: `${(completedCount / 5) * 100}%` }}
                     className="absolute inset-y-0 left-0 bg-primary shadow-[0_0_10px_hsl(var(--primary))]"
                   />
                 </div>
@@ -236,7 +273,18 @@ export const Home = () => {
                           <td className="py-4">
                             <div className="flex items-center gap-3">
                               <img src={post.thumb} alt="" className="w-10 h-10 rounded-lg object-cover" />
-                              <span className="text-xs font-bold">{post.type}</span>
+                              <div className="flex flex-col">
+                                <span className="text-xs font-bold">{post.type}</span>
+                                <div className="flex items-center gap-1.5 mt-0.5">
+                                  <button onClick={(e) => {
+                                    e.stopPropagation();
+                                    toast.success("Saved!", { description: "Post added to your inspiration gallery." });
+                                  }} className="text-muted-foreground hover:text-primary transition-colors">
+                                    <Star className="w-3 h-3 hover:animate-pop-scale" />
+                                  </button>
+                                  <span className="text-[9px] text-zinc-500 font-bold uppercase">{post.saves}</span>
+                                </div>
+                              </div>
                             </div>
                           </td>
                           <td className="py-4 text-xs font-medium">{post.platform}</td>
@@ -244,12 +292,18 @@ export const Home = () => {
                           <td className="py-4 text-xs font-bold text-emerald-500">{post.engagement}</td>
                           <td className="py-4 text-xs font-medium text-muted-foreground">{post.saves}</td>
                           <td className="py-4">
-                            <span className={`text-[10px] font-black uppercase px-2 py-0.5 rounded-full ${
-                              post.status === 'Trending' ? 'bg-emerald-500/10 text-emerald-500' :
-                              post.status === 'Stable' ? 'bg-blue-500/10 text-blue-500' : 'bg-muted text-muted-foreground'
-                            }`}>
-                              {post.status}
-                            </span>
+                            <button 
+                              onClick={() => handleCopy(post.id)}
+                              className={`flex items-center gap-2 px-2 py-1 rounded-lg transition-all text-[9px] font-black uppercase tracking-widest ${
+                                copyingId === post.id ? "bg-emerald-500/20 text-emerald-500" : "bg-muted/30 text-muted-foreground hover:text-foreground"
+                              }`}
+                            >
+                              {copyingId === post.id ? (
+                                <><Check className="w-3 h-3" /> Copied!</>
+                              ) : (
+                                <><Copy className="w-3 h-3" /> Copy Link</>
+                              )}
+                            </button>
                           </td>
                         </tr>
                       ))

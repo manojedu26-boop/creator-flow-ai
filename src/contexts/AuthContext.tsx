@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { toast } from "@/components/ui/sonner";
 
 export interface User {
   id: string;
@@ -21,6 +22,7 @@ interface AuthContextType {
   register: (name: string, email: string) => void;
   updateUser: (data: Partial<User>) => void;
   logout: () => void;
+  triggerSessionExpiry: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -95,8 +97,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.removeItem("cf_user");
   };
 
+  const triggerSessionExpiry = () => {
+    logout();
+    toast.error("Session Expired", {
+      description: "Your session expired. Please log in again.",
+    });
+  };
+
   return (
-    <AuthContext.Provider value={{ user, isLoading, login, register, updateUser, logout }}>
+    <AuthContext.Provider value={{ user, isLoading, login, register, updateUser, logout, triggerSessionExpiry }}>
       {children}
     </AuthContext.Provider>
   );

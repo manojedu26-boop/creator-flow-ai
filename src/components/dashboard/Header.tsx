@@ -129,7 +129,7 @@ export const Header = ({ title = "Dashboard" }: { title?: string }) => {
             onClick={() => setShowNotifications(!showNotifications)}
             className={`relative transition-colors ${showNotifications ? "text-primary" : "text-muted-foreground hover:text-foreground"}`}
           >
-            <Bell className="w-5 h-5" />
+            <Bell className={`w-5 h-5 ${notifications.some(n => !n.isRead) ? "animate-shake" : ""}`} />
             <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-destructive rounded-full border-2 border-background" />
           </button>
 

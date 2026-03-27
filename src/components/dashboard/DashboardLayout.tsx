@@ -8,7 +8,9 @@ import { FloatingAiChat } from "./FloatingAiChat";
 import { MobileBottomNav } from "./MobileBottomNav";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useAuth } from "../../contexts/AuthContext";
-import { useEffect } from "react";
+import { useEffect, useState as useReactState } from "react";
+import { Toaster } from "@/components/ui/sonner";
+import { AlertCircle, WifiOff } from "lucide-react";
 
 const getPageTitle = (pathname: string) => {
   switch (pathname) {
@@ -29,9 +31,27 @@ const getPageTitle = (pathname: string) => {
 
 export const DashboardLayout = () => {
   const { user, logout } = useAuth();
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useReactState(false);
+  const [isOffline, setIsOffline] = useReactState(!navigator.onLine);
+  const [showOfflineBanner, setShowOfflineBanner] = useReactState(true);
   const location = useLocation();
   const pageTitle = getPageTitle(location.pathname);
+
+  useEffect(() => {
+    const handleOnline = () => setIsOffline(false);
+    const handleOffline = () => {
+      setIsOffline(true);
+      setShowOfflineBanner(true);
+    };
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
 
   useEffect(() => {
     if (user) {
@@ -165,6 +185,32 @@ export const DashboardLayout = () => {
 
       {/* Mobile Bottom Navigation */}
       <MobileBottomNav />
+
+      {/* ERROR STATE: OFFLINE BANNER (Section 5) */}
+      <AnimatePresence>
+        {isOffline && showOfflineBanner && (
+          <motion.div 
+            initial={{ y: -100 }}
+            animate={{ y: 0 }}
+            exit={{ y: -100 }}
+            className="fixed top-0 left-0 right-0 z-[1000] bg-[#F5C842] text-black py-3 px-6 flex items-center justify-between shadow-2xl font-black text-[10px] uppercase tracking-widest"
+          >
+            <div className="flex items-center gap-3">
+              <WifiOff className="w-4 h-4" />
+              You're offline. Some features may be unavailable.
+            </div>
+            <button 
+              onClick={() => setShowOfflineBanner(false)}
+              className="p-1 hover:bg-black/10 rounded-full"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* TOAST SYSTEM (Section 7) */}
+      <Toaster />
     </div>
   );
 };

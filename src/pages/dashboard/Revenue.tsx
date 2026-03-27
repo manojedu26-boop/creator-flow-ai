@@ -5,8 +5,9 @@ import {
   BarChart3, PieChart, Calculator, FileText, 
   Download, Send, CheckCircle2, AlertCircle,
   MoreHorizontal, ChevronDown, Sparkles, Plus,
-  ArrowUpRight, ArrowDownRight, Printer, Share2
+  ArrowUpRight, ArrowDownRight, Printer, Share2, Trash2, Undo
 } from "lucide-react";
+import { toast } from "../../components/ui/sonner";
 import { 
   BarChart, Bar, XAxis, YAxis, CartesianGrid, 
   Tooltip, ResponsiveContainer, Legend, Cell 
@@ -66,11 +67,46 @@ export const Revenue = () => {
   const [view, setView] = useState<'monthly' | 'quarterly'>('monthly');
   const [showInvoiceDrawer, setShowInvoiceDrawer] = useState(false);
   const [invoices, setInvoices] = useState([
-    { brand: 'Nike', type: 'Sponsored Reel', amount: '₹ 45,000', due: '24 Mar 2026', status: 'Paid', color: 'bg-emerald-500/10 text-emerald-500' },
-    { brand: 'Adobe', type: 'UGC Content', amount: '₹ 15,000', due: '28 Mar 2026', status: 'Pending', color: 'bg-amber-500/10 text-amber-500' },
-    { brand: 'Samsung', type: 'Product Reveal', amount: '₹ 85,000', due: '15 Mar 2026', status: 'Overdue', color: 'bg-rose-500/10 text-rose-500' },
-    { brand: 'GoPro', type: 'App Integration', amount: '₹ 32,000', due: '05 Apr 2026', status: 'Pending', color: 'bg-amber-500/10 text-amber-500' },
+    { id: 1, brand: 'Nike', type: 'Sponsored Reel', amount: '₹ 45,000', due: '24 Mar 2026', status: 'Paid' },
+    { id: 2, brand: 'Adobe', type: 'UGC Content', amount: '₹ 15,000', due: '28 Mar 2026', status: 'Pending' },
+    { id: 3, brand: 'Samsung', type: 'Product Reveal', amount: '₹ 85,000', due: '15 Mar 2026', status: 'Overdue' },
+    { id: 4, brand: 'GoPro', type: 'App Integration', amount: '₹ 32,000', due: '05 Apr 2026', status: 'Pending' },
   ]);
+  const [flashingId, setFlashingId] = useState<number | null>(null);
+  const [deletingId, setDeletingId] = useState<number | null>(null);
+
+  const handleMarkPaid = (id: number) => {
+    setFlashingId(id);
+    setTimeout(() => {
+      setInvoices(prev => prev.map(inv => inv.id === id ? { ...inv, status: 'Paid' } : inv));
+      setFlashingId(null);
+      toast.success("Payment Received!", {
+        description: "Invoice marked as paid successfully.",
+        action: {
+          label: "Undo",
+          onClick: () => {
+             setInvoices(prev => prev.map(inv => inv.id === id ? { ...inv, status: 'Pending' } : inv));
+          }
+        }
+      });
+    }, 600);
+  };
+
+  const handleDelete = (id: number) => {
+    const backup = [...invoices];
+    setDeletingId(id);
+    setTimeout(() => {
+      setInvoices(prev => prev.filter(inv => inv.id !== id));
+      setDeletingId(null);
+      toast.info("Invoice deleted", {
+        description: "Items slide out to the right when deleted.",
+        action: {
+          label: "Undo",
+          onClick: () => setInvoices(backup)
+        }
+      });
+    }, 400);
+  };
 
   return (
     <PageTransition>
@@ -206,13 +242,11 @@ export const Revenue = () => {
                     </tr>
                  </thead>
                  <tbody className="divide-y divide-border/20">
-                    {[
-                      { brand: 'Nike', type: 'Sponsored Reel', amount: '₹ 45,000', due: '24 Mar 2026', status: 'Paid', color: 'bg-emerald-500/10 text-emerald-500' },
-                      { brand: 'Adobe', type: 'UGC Content', amount: '₹ 15,000', due: '28 Mar 2026', status: 'Pending', color: 'bg-amber-500/10 text-amber-500' },
-                      { brand: 'Samsung', type: 'Product Reveal', amount: '₹ 85,000', due: '15 Mar 2026', status: 'Overdue', color: 'bg-rose-500/10 text-rose-500' },
-                      { brand: 'GoPro', type: 'App Integration', amount: '₹ 32,000', due: '05 Apr 2026', status: 'Pending', color: 'bg-amber-500/10 text-amber-500' },
-                    ].map((inv, i) => (
-                      <tr key={i} className="group hover:bg-muted/5 transition-colors">
+                    {invoices.map((inv) => (
+                      <tr 
+                        key={inv.id} 
+                        className={`group hover:bg-muted/5 transition-all relative ${flashingId === inv.id ? 'animate-gold-flash' : ''} ${deletingId === inv.id ? 'animate-slide-out opacity-0 pointer-events-none' : ''}`}
+                      >
                          <td className="px-8 py-6">
                             <div className="flex items-center gap-3">
                                <div className="w-8 h-8 rounded-lg bg-muted flex items-center justify-center font-black text-[10px]">{inv.brand[0]}</div>
@@ -223,15 +257,20 @@ export const Revenue = () => {
                          <td className="px-8 py-6 text-sm font-black text-right">{inv.amount}</td>
                          <td className="px-8 py-6 text-[10px] font-black text-muted-foreground uppercase tracking-tighter">{inv.due}</td>
                          <td className="px-8 py-6">
-                            <span className={`px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest border border-current/20 ${inv.color}`}>
+                            <span className={`px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest border border-current/20 ${
+                              inv.status === 'Paid' ? 'bg-emerald-500/10 text-emerald-500' : 
+                              inv.status === 'Overdue' ? 'bg-rose-500/10 text-rose-500' : 'bg-amber-500/10 text-amber-500'
+                            }`}>
                                {inv.status}
                             </span>
                          </td>
                          <td className="px-8 py-6">
-                            <div className="flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <div className="flex items-center justify-center gap-2 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity">
+                               {inv.status !== 'Paid' && (
+                                 <button onClick={() => handleMarkPaid(inv.id)} title="Mark as Paid" className="p-2 hover:bg-emerald-500/10 hover:text-emerald-500 rounded-lg transition-all"><CheckCircle2 className="w-4 h-4" /></button>
+                               )}
+                               <button onClick={() => handleDelete(inv.id)} title="Delete" className="p-2 hover:bg-rose-500/10 hover:text-rose-500 rounded-lg transition-all"><Trash2 className="w-4 h-4" /></button>
                                <button title="Download" className="p-2 hover:bg-primary/10 hover:text-primary rounded-lg transition-all"><Download className="w-4 h-4" /></button>
-                               <button title="Send Reminder" className="p-2 hover:bg-primary/10 hover:text-primary rounded-lg transition-all"><Send className="w-4 h-4" /></button>
-                               <button title="Options" className="p-2 hover:bg-muted rounded-lg transition-all"><MoreHorizontal className="w-4 h-4" /></button>
                             </div>
                          </td>
                       </tr>

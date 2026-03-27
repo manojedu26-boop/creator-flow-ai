@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { toast } from "../../components/ui/sonner";
 import { 
   Search, Filter, Users, IndianRupee, 
   MapPin, Globe, Star, CheckCircle2,
@@ -9,11 +10,27 @@ import {
 
 export const DiscoverCreators = () => {
   const [selectedCreators, setSelectedCreators] = useState<string[]>([]);
+  const [isCelebrating, setIsCelebrating] = useState(false);
 
   const toggleCreator = (id: string) => {
-    setSelectedCreators(prev => 
-      prev.includes(id) ? prev.filter(c => c !== id) : [...prev, id]
-    );
+    setSelectedCreators(prev => {
+      const isSelecting = !prev.includes(id);
+      if (isSelecting) {
+        toast.info("Creator added", { description: "Added to potential campaign list." });
+      }
+      return isSelecting ? [...prev, id] : prev.filter(c => c !== id);
+    });
+  };
+
+  const handleBulkOutreach = () => {
+    setIsCelebrating(true);
+    toast.success("Outreach Sent!", {
+      description: `Messages sent to ${selectedCreators.length} creators via CreatorForge AI.`,
+    });
+    setTimeout(() => {
+      setIsCelebrating(false);
+      setSelectedCreators([]);
+    }, 2000);
   };
 
   return (
@@ -128,13 +145,32 @@ export const DiscoverCreators = () => {
               </div>
               <div className="flex gap-4">
                  <button className="h-12 px-6 rounded-2xl border border-white/10 text-[10px] font-black uppercase tracking-widest text-white hover:bg-white/10 transition-all">Add to Campaign</button>
-                 <button className="h-12 px-8 bg-primary text-white rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-primary/20 flex items-center gap-3 active:scale-95 transition-all">
-                    <Mail className="w-4 h-4" /> Bulk Outreach
-                 </button>
+                 <button 
+                    onClick={handleBulkOutreach}
+                    disabled={isCelebrating}
+                    className="h-12 px-8 bg-primary text-white rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-primary/20 flex items-center gap-3 active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden relative"
+                  >
+                     {isCelebrating && (
+                       <motion.div 
+                        initial={{ y: 20 }} animate={{ y: 0 }}
+                        className="absolute inset-0 bg-emerald-500 flex items-center justify-center"
+                       >
+                          <Check className="w-5 h-5 text-white" />
+                       </motion.div>
+                     )}
+                     <Mail className="w-4 h-4" /> Bulk Outreach
+                  </button>
               </div>
            </motion.div>
          )}
       </AnimatePresence>
+
+       {/* CONFETTI OVERLAY */}
+       {isCelebrating && (
+         <div className="fixed inset-0 z-[100] pointer-events-none flex items-center justify-center">
+            <div className="animate-confetti-burst w-full h-full" />
+         </div>
+       )}
     </div>
   );
 };
