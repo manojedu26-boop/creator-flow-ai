@@ -1,6 +1,8 @@
-import { motion } from "framer-motion";
-import { Sparkles } from "lucide-react";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Sparkles, Menu, X, ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 const navLinks = [
   { label: "Features", href: "#features" },
@@ -10,24 +12,29 @@ const navLinks = [
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <motion.nav
-      className="fixed top-0 left-0 right-0 z-50 bg-glass border-b border-border/30"
+      className="fixed top-0 left-0 right-0 z-[100] bg-background/80 backdrop-blur-md border-b border-border/30"
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
     >
-      <div className="container max-w-6xl flex items-center justify-between h-14 px-4">
-        <div className="flex items-center gap-2 font-bold text-lg tracking-tight cursor-pointer" onClick={() => navigate("/")}>
+      <div className="container max-w-6xl flex items-center justify-between h-16 px-4 md:px-6">
+        <div className="flex items-center gap-2 font-black text-xl tracking-tighter cursor-pointer" onClick={() => navigate("/")}>
           <Sparkles className="w-5 h-5 text-primary" />
-          <span>CREATORX</span>
-          <span className="text-primary text-sm font-semibold">AI</span>
+          <span>CREATORFORGE</span>
         </div>
 
+        {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => (
-            <a key={link.label} href={link.href} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+            <a 
+              key={link.label} 
+              href={link.href} 
+              className="text-sm font-bold text-muted-foreground hover:text-foreground transition-colors uppercase tracking-widest"
+            >
               {link.label}
             </a>
           ))}
@@ -36,28 +43,68 @@ const Navbar = () => {
         <div className="flex items-center gap-3">
           <button
             onClick={() => navigate("/login")}
-            className="relative inline-flex h-9 overflow-hidden rounded-lg p-[1px] focus:outline-none transition-colors hidden sm:inline-flex"
+            className="hidden xs:flex h-10 items-center justify-center rounded-xl bg-muted/10 border border-border/40 px-5 text-sm font-black uppercase tracking-widest hover:bg-muted/20 transition-all active:scale-95"
           >
-            <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" />
-            <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-lg bg-glass px-4 py-1 text-sm text-foreground backdrop-blur-3xl hover:bg-muted font-medium transition-all">
-              Log In
-            </span>
+            Log In
           </button>
 
           <button
             onClick={() => navigate("/register")}
-            className="relative inline-flex h-9 overflow-hidden rounded-lg p-[1px] focus:outline-none transition-all active:scale-[0.97]"
+            className="hidden sm:flex h-10 items-center justify-center rounded-xl bg-primary px-6 text-sm font-black uppercase tracking-widest text-primary-foreground shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all active:scale-95"
           >
-            <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,hsl(318,100%,62%)_0%,#393BB2_50%,hsl(318,100%,62%)_100%)]" />
-            <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-lg bg-primary px-4 py-1 text-sm text-primary-foreground font-semibold backdrop-blur-3xl hover:bg-primary/90 transition-all hover:shadow-[0_0_20px_-5px_hsl(318,100%,62%,0.3)]">
-              Get Started
-            </span>
+            Get Started
           </button>
+
+          {/* Mobile Menu Trigger */}
+          <Sheet open={isOpen} onOpenChange={setIsOpen}>
+            <SheetTrigger asChild>
+              <button className="md:hidden p-2 hover:bg-muted/50 rounded-xl border border-border/20 shadow-sm transition-all active:scale-95">
+                <Menu className="w-5 h-5" />
+              </button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-[300px] bg-background border-l border-border/40 p-0">
+               <div className="flex flex-col h-full">
+                  <div className="p-6 border-b border-border/30">
+                    <div className="flex items-center gap-2 font-black text-xl tracking-tighter">
+                      <Sparkles className="w-6 h-6 text-primary" />
+                      <span>CREATORFORGE</span>
+                    </div>
+                  </div>
+                  <nav className="flex-1 px-6 py-8 space-y-6">
+                    {navLinks.map((link) => (
+                      <a 
+                        key={link.label} 
+                        href={link.href} 
+                        onClick={() => setIsOpen(false)}
+                        className="block text-lg font-black uppercase tracking-widest text-muted-foreground hover:text-primary transition-all"
+                      >
+                        {link.label}
+                      </a>
+                    ))}
+                    <div className="h-px bg-border/20" />
+                    <button 
+                      onClick={() => { navigate("/login"); setIsOpen(false); }}
+                      className="w-full h-14 rounded-2xl bg-muted/20 border border-border/40 text-sm font-black uppercase tracking-widest flex items-center justify-center gap-2"
+                    >
+                      Log In
+                    </button>
+                    <button 
+                      onClick={() => { navigate("/register"); setIsOpen(false); }}
+                      className="w-full h-14 rounded-2xl bg-primary text-primary-foreground text-sm font-black uppercase tracking-widest flex items-center justify-center gap-2 shadow-xl shadow-primary/20"
+                    >
+                      Get Started <ArrowRight className="w-4 h-4" />
+                    </button>
+                  </nav>
+                  <div className="p-6 text-center text-[10px] text-muted-foreground font-bold uppercase tracking-widest border-t border-border/10">
+                    © 2026 CreatorForge AI
+                  </div>
+               </div>
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
     </motion.nav>
   );
 };
-
 
 export default Navbar;

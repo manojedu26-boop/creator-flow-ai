@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { Outlet, useLocation } from "react-router-dom";
-import { Sidebar } from "./Sidebar";
+import { Outlet, useLocation, Link } from "react-router-dom";
+import { Sidebar, navItems } from "./Sidebar";
 import { Header } from "./Header";
 import { motion, AnimatePresence } from "framer-motion";
-import { MessageSquare, X, Sparkles } from "lucide-react";
+import { MessageSquare, X, Sparkles, Menu, Briefcase, Settings, LogOut } from "lucide-react";
 import { FloatingAiChat } from "./FloatingAiChat";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 const getPageTitle = (pathname: string) => {
   switch (pathname) {
@@ -24,25 +25,106 @@ const getPageTitle = (pathname: string) => {
 };
 
 export const DashboardLayout = () => {
-  const [isAIChatOpen, setIsAIChatOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
   const pageTitle = getPageTitle(location.pathname);
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex overflow-hidden">
+    <div className="min-h-screen bg-background text-foreground flex flex-col lg:flex-row overflow-hidden">
       {/* Background grain texture for premium feel */}
       <div className="fixed inset-0 pointer-events-none opacity-20 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay z-0" />
       
-      {/* Zone A */}
+      {/* Desktop Sidebar (Left Zone) */}
       <Sidebar />
       
+      {/* Mobile Top Header (Visible only on mobile) */}
+      <div className="lg:hidden h-16 w-full border-b border-border/40 bg-background/80 backdrop-blur-md flex items-center justify-between px-6 sticky top-0 z-[100]">
+        <div className="flex items-center gap-3">
+          <Sparkles className="w-6 h-6 text-primary" />
+          <span className="font-black tracking-tighter text-lg uppercase">CreatorForge</span>
+        </div>
+        <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
+          <SheetTrigger asChild>
+            <button className="p-2 hover:bg-muted/50 rounded-xl transition-all active:scale-95 border border-border/20 shadow-sm">
+              <Menu className="w-5 h-5" />
+            </button>
+          </SheetTrigger>
+          <SheetContent side="left" className="w-[300px] p-0 bg-background border-r border-border/40">
+            <div className="flex flex-col h-full">
+              <div className="p-6 border-b border-border/30">
+                <div className="flex items-center gap-3">
+                  <Sparkles className="w-8 h-8 text-primary" />
+                  <span className="font-black tracking-tighter text-xl uppercase">CreatorForge</span>
+                </div>
+              </div>
+              <nav className="flex-1 overflow-y-auto py-6 px-4 space-y-2">
+                {navItems.map((item) => {
+                  const isActive = location.pathname.startsWith(item.href);
+                  return (
+                    <Link 
+                      key={item.label} 
+                      to={item.href}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className={`flex items-center gap-4 px-4 py-3 rounded-xl transition-all ${
+                        isActive ? "bg-primary/10 text-primary shadow-sm border border-primary/20" : "text-muted-foreground hover:bg-muted/50"
+                      }`}
+                    >
+                      <item.icon className="w-5 h-5" />
+                      <span className="font-bold text-sm tracking-tight">{item.label}</span>
+                    </Link>
+                  );
+                })}
+              </nav>
+              <div className="p-6 border-t border-border/30 bg-muted/5 space-y-3">
+                <Link 
+                  to="/settings" 
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="flex items-center gap-4 px-4 py-3 rounded-xl text-muted-foreground hover:bg-muted/50 transition-all font-bold text-sm"
+                >
+                  <Settings className="w-5 h-5" />
+                  Settings
+                </Link>
+                <div className="h-px bg-border/20 mx-2" />
+                <div className="flex items-center gap-4 px-4 py-3 rounded-xl bg-card border border-border/20 shadow-sm">
+                   <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-primary to-indigo-500 shrink-0 flex items-center justify-center text-white text-[10px] font-black uppercase">AC</div>
+                   <div className="flex flex-col min-w-0">
+                      <span className="text-xs font-black truncate">Alex Creator</span>
+                      <span className="text-[9px] text-muted-foreground font-bold truncate">@alexcreates</span>
+                   </div>
+                   <button className="ml-auto p-2 text-muted-foreground hover:text-rose-500 transition-colors">
+                      <LogOut className="w-4 h-4" />
+                   </button>
+                </div>
+                <Link 
+                    to="/brand"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="w-full h-12 rounded-xl bg-indigo-500 text-white font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/20 active:scale-95 transition-all"
+                  >
+                    <Briefcase className="w-4 h-4" />
+                    Switch to Brand Mode
+                </Link>
+              </div>
+            </div>
+          </SheetContent>
+        </Sheet>
+      </div>
+      
       {/* Main Content Wrapper */}
-      <div className="flex-1 flex flex-col ml-[72px] transition-all duration-300 relative z-10 w-full">
-        {/* Zone B */}
-        <Header title={pageTitle} />
+      <div className="flex-1 flex flex-col lg:ml-[72px] relative z-10 w-full overflow-hidden">
+        {/* Header (Top Zone) - Adjusted for mobile */}
+        <div className="hidden lg:block">
+          <Header title={pageTitle} />
+        </div>
+        
+        {/* Simple Mobile Title (Optional, since Header is hidden on mobile in this pattern) */}
+        {!location.pathname.includes('index') && (
+           <div className="lg:hidden px-6 py-4 border-b border-border/10 bg-muted/5">
+              <h2 className="text-xs font-black uppercase tracking-widest text-muted-foreground">{pageTitle}</h2>
+           </div>
+        )}
         
         {/* Zone C */}
-        <main className="flex-1 overflow-y-auto pt-[60px] p-4 md:p-8 relative">
+        <main className="flex-1 overflow-y-auto lg:pt-[60px] p-4 md:p-8 relative no-scrollbar">
           <AnimatePresence mode="wait">
             <motion.div
               key={location.pathname}
@@ -57,7 +139,7 @@ export const DashboardLayout = () => {
         </main>
       </div>
 
-      {/* Floating AI Chat Assistant (Section 12) */}
+      {/* Floating AI Chat Assistant */}
       <FloatingAiChat />
     </div>
   );

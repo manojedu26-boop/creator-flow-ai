@@ -396,13 +396,13 @@ export const Analytics = () => {
     <PageTransition>
       <div className="max-w-7xl mx-auto space-y-8 pb-12">
         {/* TOP — PLATFORM TAB BAR */}
-        <div className="sticky top-[60px] z-30 bg-background/80 backdrop-blur-md -mx-8 px-8 py-2 border-b border-border/30">
-          <div className="flex items-center gap-2 overflow-x-auto scrollbar-none">
+        <div className="sticky top-[60px] lg:top-[60px] z-30 bg-background/80 backdrop-blur-md -mx-4 md:-mx-8 px-4 md:px-8 py-3 border-b border-border/30">
+          <div className="flex items-center gap-4 overflow-x-auto scrollbar-none">
             {tabs.map((tab) => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`px-5 py-3 text-xs font-black uppercase tracking-widest relative transition-all whitespace-nowrap ${
+                className={`px-4 py-3 text-[10px] md:text-xs font-black uppercase tracking-widest relative transition-all whitespace-nowrap ${
                   activeTab === tab ? "text-primary" : "text-muted-foreground hover:text-foreground"
                 }`}
               >
