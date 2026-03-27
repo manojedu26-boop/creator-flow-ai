@@ -65,84 +65,17 @@ export const DashboardLayout = () => {
     <div className="min-h-screen bg-black text-white flex flex-col lg:flex-row overflow-hidden font-sans">
       
       {/* Desktop Sidebar (Left Zone) */}
-      <Sidebar />
-      
-      {/* Mobile Top Header (Visible only on mobile) */}
-      <div className="lg:hidden h-20 w-full border-b border-white/5 bg-black/60 backdrop-blur-3xl flex items-center justify-between px-6 sticky top-0 z-[100]">
-        <div className="flex items-center gap-3">
-          <Sparkles className="w-6 h-6 text-primary" />
-          <span className="font-black tracking-tighter text-lg uppercase">CreatorForge<span className="text-primary italic">AI</span></span>
-        </div>
-        <Sheet open={isMobileMenuOpen} onOpenChange={setIsMobileMenuOpen}>
-          <SheetTrigger asChild>
-            <button className="p-2.5 bg-white/5 rounded-xl border border-white/10 active:scale-95 transition-all">
-              <Menu className="w-5 h-5" />
-            </button>
-          </SheetTrigger>
-          <SheetContent side="left" className="w-[320px] p-0 bg-black border-r border-white/5">
-            <div className="flex flex-col h-full">
-              <div className="p-8 border-b border-white/5">
-                <div className="flex items-center gap-3">
-                  <Sparkles className="w-8 h-8 text-primary" />
-                  <span className="font-black tracking-tighter text-2xl uppercase">CreatorForge<span className="text-primary italic">AI</span></span>
-                </div>
-              </div>
-              <nav className="flex-1 overflow-y-auto py-8 px-5 space-y-2 no-scrollbar">
-                {navItems.map((item) => {
-                  const isActive = location.pathname === item.href || (item.href !== '/dashboard' && location.pathname.startsWith(item.href));
-                  return (
-                    <Link 
-                      key={item.label} 
-                      to={item.href}
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className={`flex items-center gap-4 px-5 py-4 rounded-2xl transition-all ${
-                        isActive ? "bg-primary/10 text-white border border-primary/20" : "text-zinc-500 hover:text-white"
-                      }`}
-                    >
-                      <item.icon className={`w-5 h-5 ${isActive ? "text-primary" : ""}`} />
-                      <span className="font-black text-xs uppercase tracking-widest">{item.label}</span>
-                    </Link>
-                  );
-                })}
-              </nav>
-              <div className="p-8 border-t border-white/5 bg-white/[0.02] space-y-4">
-                <div className="flex items-center gap-4 p-3 rounded-2xl bg-white/5 border border-white/5">
-                   <div className="w-10 h-10 rounded-full overflow-hidden">
-                      {user?.photo ? (
-                        <img src={user.photo} alt="" className="w-full h-full object-cover" />
-                      ) : (
-                        <div className="w-full h-full bg-primary flex items-center justify-center font-black text-xs uppercase">{user?.firstName?.[0]}</div>
-                      )}
-                   </div>
-                   <div className="flex-1 min-w-0">
-                      <p className="text-[11px] font-black uppercase tracking-tight truncate">{user?.name}</p>
-                      <p className="text-[9px] font-black text-primary uppercase tracking-widest">{user?.handle}</p>
-                   </div>
-                   <button onClick={logout} className="p-2 text-zinc-500"><LogOut className="w-4 h-4" /></button>
-                </div>
-                <Link 
-                    to="/brand"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="w-full h-14 rounded-2xl bg-indigo-600 text-white font-black uppercase tracking-widest text-[10px] flex items-center justify-center gap-2 shadow-xl shadow-indigo-600/20 active:scale-95 transition-all"
-                  >
-                    <Briefcase className="w-4 h-4" />
-                    Switch to Brand Mode
-                </Link>
-              </div>
-            </div>
-          </SheetContent>
-        </Sheet>
+      <div className="hidden lg:block">
+        <Sidebar />
       </div>
       
       {/* Main Content Wrapper */}
       <div className="flex-1 flex flex-col lg:ml-[80px] relative z-10 w-full overflow-hidden">
-        {/* Header (Top Zone) - Adjusted for mobile */}
-        <div className="hidden lg:block">
-          <Header title={pageTitle} />
-        </div>
+        {/* Header - Always visible but height is variable via CSS */}
+        <Header title={pageTitle} />
         
         {/* Zone C */}
-        <main className="flex-1 overflow-y-auto lg:pt-20 p-4 md:p-8 relative no-scrollbar">
+        <main className="flex-1 overflow-y-auto pt-[var(--header-h)] pb-[var(--bottom-nav-h)] px-[var(--page-px)] relative no-scrollbar">
           <AnimatePresence mode="wait">
             <motion.div
               key={location.pathname}

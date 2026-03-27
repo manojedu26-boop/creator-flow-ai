@@ -87,9 +87,8 @@ export const Home = () => {
   }
 
   return (
-    <PageTransition className="p-4 md:p-8 space-y-8 max-w-7xl mx-auto pb-24 lg:pb-8">
-      {/* Header Section */}
-      <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+    <PageTransition className="space-y-[var(--grid-gap)] pb-20 lg:pb-0">
+      <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-[var(--section-mb)]">
         <div className="space-y-2">
           <motion.div 
             initial={{ opacity: 0, y: 10 }}
@@ -103,36 +102,36 @@ export const Home = () => {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-4xl md:text-6xl font-black tracking-tighter leading-[0.9]"
+            className="text-5xl md:text-7xl font-black tracking-tighter leading-[0.8]"
           >
             Good morning, <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-primary/80 to-purple-500 italic">
+            <span className="text-primary italic animate-pulse">
               {user?.firstName || 'Naveen'}
             </span> 👋
           </motion.h1>
-          <p className="text-muted-foreground font-bold text-sm md:text-base max-w-xl leading-relaxed mt-4">
-            Your engagement is up <span className="text-emerald-500">11%</span> this week. Best time to post today is <span className="text-primary tracking-widest uppercase">7:00 PM</span>. Nike has not replied to your pitch — send a follow-up now.
+          <p className="text-muted-foreground font-bold text-sm md:text-base max-w-xl mt-4">
+            Your engagement is up <span className="text-emerald-500">11%</span> this week. Best time to post today is <span className="text-primary">7:00 PM</span>.
           </p>
         </div>
         <div className="flex gap-3">
-          <button className="h-12 px-6 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all flex items-center gap-2 font-black text-[10px] uppercase tracking-widest">
+          <button className="flex-1 md:flex-none h-12 px-6 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all flex items-center justify-center gap-2 font-black text-[10px] uppercase tracking-widest">
             <Plus className="w-4 h-4" /> New Campaign
           </button>
-          <button className="h-12 px-6 rounded-2xl bg-primary text-white hover:scale-105 transition-all flex items-center gap-2 font-black text-[10px] uppercase tracking-widest shadow-xl shadow-primary/20">
+          <button className="flex-1 md:flex-none h-12 px-6 rounded-2xl bg-primary text-white hover:scale-105 transition-all flex items-center justify-center gap-2 font-black text-[10px] uppercase tracking-widest shadow-xl shadow-primary/20">
             <Search className="w-4 h-4" /> Trend Radar
           </button>
         </div>
       </header>
 
-      {/* KPI Stats Strip */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+      {/* KPI Stats Strip - Refactored for mobile-first 2-column grid */}
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-[var(--grid-gap)] mb-6 kpi-grid-mobile">
         {stats.map((stat, i) => (
           <motion.div
             key={stat.label}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.1 }}
-            className="group relative overflow-hidden rounded-[2rem] bg-black/40 backdrop-blur-3xl p-6 border border-white/5 hover:border-primary/30 transition-all shadow-xl"
+            className="group relative overflow-hidden rounded-[2rem] bg-black/40 backdrop-blur-3xl p-[var(--card-p)] border border-white/5 hover:border-primary/30 transition-all shadow-xl"
           >
             <div className={`p-3 rounded-2xl w-fit ${stat.color} bg-current/10 mb-4 group-hover:scale-110 transition-transform`}>
               <stat.icon className="w-5 h-5" />

@@ -72,98 +72,111 @@ export const Contracts = () => {
   const selectedContract = mockContracts.find(c => c.id === selectedId) || mockContracts[0];
 
   return (
-    <PageTransition className="flex h-[calc(100vh-140px)] -mx-4 md:-mx-8 -my-8 overflow-hidden">
-      <div className="w-[380px] border-r border-white/5 bg-black/20 overflow-y-auto p-8 space-y-10 no-scrollbar hidden lg:block">
-         <div className="space-y-6">
-            <h2 className="text-xl font-black uppercase tracking-tight flex items-center gap-3">
-               <ShieldCheck className="w-6 h-6 text-primary" /> Contract Shield
-            </h2>
-            <button className="w-full py-4 bg-primary/10 text-primary border border-primary/20 rounded-2xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-primary hover:text-white transition-all">
-               <Upload className="w-4 h-4" /> Upload New Doc
-            </button>
-         </div>
+    <PageTransition className="space-y-[var(--grid-gap)] pb-20 lg:pb-0">
+      <header className="mb-[var(--section-mb)]">
+        <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-2">
+          <ShieldCheck className="w-3 h-3" />
+          Legal Protection
+        </div>
+        <h1 className="text-4xl md:text-5xl font-black tracking-tighter uppercase leading-none">
+           Contract<br/>
+           <span className="text-primary italic">Shield</span>
+        </h1>
+      </header>
 
-         <div className="space-y-4">
-            <h4 className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Recent Documents</h4>
-             <div className="space-y-3">
-                {mockContracts.map((c) => (
-                  <motion.div key={c.id} onClick={() => setSelectedId(c.id)} className={`p-5 rounded-[2rem] border transition-all cursor-pointer group ${selectedId === c.id ? 'bg-white/5 border-primary/40 shadow-xl' : 'bg-transparent border-white/5 hover:border-white/20'}`}>
-                     <div className="flex justify-between items-start mb-3">
-                        <span className="text-sm font-black text-white">{c.brand}</span>
-                        <div className={`w-2 h-2 rounded-full ${c.risk === 'low' ? 'bg-emerald-500' : c.risk === 'medium' ? 'bg-amber-500' : 'bg-rose-500'}`} />
-                     </div>
-                     <div className="flex justify-between items-center text-[9px] font-black text-muted-foreground uppercase">
-                        <span>{c.date}</span>
-                        <span>{c.value}</span>
-                     </div>
-                  </motion.div>
-                ))}
-             </div>
-         </div>
-      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+        {/* Sidebar / Top Section */}
+        <div className="space-y-6">
+           <button className="w-full py-4 bg-primary/10 text-primary border border-primary/20 rounded-2xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-primary hover:text-white transition-all">
+              <Upload className="w-4 h-4" /> Upload New Doc
+           </button>
 
-      <div className="flex-1 overflow-y-auto bg-black/40 p-8 md:p-12 relative no-scrollbar">
-         <div className="max-w-5xl mx-auto grid grid-cols-1 xl:grid-cols-5 gap-12">
-            <div className="xl:col-span-3 space-y-8">
-               <div className="bg-zinc-900/50 border border-white/5 rounded-[2.5rem] p-10 shadow-2xl space-y-10 min-h-[600px] relative">
-                  <div className="space-y-2 border-b border-white/5 pb-8">
-                     <h1 className="text-3xl font-black tracking-tight">{selectedContract.brand} Participation Agreement</h1>
-                     <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Analysed by CreatorForge AI • {selectedContract.date}</p>
-                  </div>
-
-                  <div className="prose prose-invert max-w-none text-white/60 font-bold leading-[1.8] space-y-8 text-sm">
-                     <p>...Clause 1.2: The Creator represents and warrants that they have the legal right to enter into this Agreement and perform the Services described herein...</p>
-                     <p className={`p-6 rounded-2xl border-l-4 ${selectedContract.risk === 'high' ? 'bg-rose-500/10 border-rose-500' : 'bg-amber-500/10 border-amber-500'}`}>
-                        <span className="block text-[10px] font-black uppercase mb-3 text-white">AI ALERT: RESTRICTIVE COVENANT DETECTED</span>
-                        {selectedContract.content}
-                     </p>
-                     <p>...Clause 15.1: This Agreement shall be governed by and construed in accordance with the laws of the Republic of India...</p>
-                  </div>
-                  
-                  <div className="flex gap-4 pt-10 border-t border-white/5 mt-10">
-                     <button className="flex-1 py-4 bg-white/5 border border-white/10 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-white/10 transition-all flex items-center justify-center gap-2">
-                        <Download className="w-4 h-4" /> Download PDF
-                     </button>
-                     <button className="flex-1 py-4 bg-primary text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:scale-105 transition-all flex items-center justify-center gap-2 shadow-xl shadow-primary/20">
-                        <FileSearch className="w-4 h-4" /> Deep Audit
-                     </button>
-                  </div>
-               </div>
-            </div>
-
-            <div className="xl:col-span-2 space-y-8">
-               <div className="space-y-6">
-                  <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground flex items-center gap-2">
-                     <ShieldAlert className="w-4 h-4 text-primary" /> Risk Intelligence
-                  </h3>
-                  
-                  <div className="space-y-4">
-                     {selectedContract.flags.map((f, i) => (
-                       <div key={i} className={`p-6 rounded-[2rem] border transition-all ${f.level === 'red' ? 'bg-rose-500/10 border-rose-500/30' : f.level === 'yellow' ? 'bg-amber-500/10 border-amber-500/30' : 'bg-emerald-500/10 border-emerald-500/30'}`}>
-                          <div className="flex justify-between items-start mb-2">
-                             <h4 className={`text-xs font-black uppercase ${f.level === 'red' ? 'text-rose-500' : f.level === 'yellow' ? 'text-amber-500' : 'text-emerald-500'}`}>{f.title}</h4>
-                             <span className="text-[8px] font-black text-white/20 uppercase">Clause {f.clause}</span>
-                          </div>
-                          <p className="text-[11px] font-bold text-white/70 leading-relaxed mb-4">{f.desc}</p>
-                          <button className="w-full py-2 bg-black/40 border border-white/10 rounded-xl text-[9px] font-black uppercase tracking-widest hover:bg-primary hover:text-white transition-all">
-                             {f.level === 'red' ? 'Generate Counter-Clause' : 'More Context'}
-                          </button>
+           <div className="space-y-4">
+              <h4 className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Recent Documents</h4>
+               <div className="flex lg:flex-col overflow-x-auto lg:overflow-x-hidden no-scrollbar gap-3 pb-2 lg:pb-0 -mx-[var(--page-px)] px-[var(--page-px)] lg:mx-0 lg:px-0">
+                  {mockContracts.map((c) => (
+                    <motion.div 
+                      key={c.id} 
+                      onClick={() => setSelectedId(c.id)} 
+                      className={`shrink-0 w-[240px] lg:w-full p-5 rounded-[2rem] border transition-all cursor-pointer group ${selectedId === c.id ? 'bg-white/5 border-primary/40 shadow-xl' : 'bg-transparent border-white/5 hover:border-white/20'}`}
+                    >
+                       <div className="flex justify-between items-start mb-3">
+                          <span className="text-sm font-black text-white line-clamp-1">{c.brand}</span>
+                          <div className={`w-2 h-2 rounded-full shrink-0 ${c.risk === 'low' ? 'bg-emerald-500' : c.risk === 'medium' ? 'bg-amber-500' : 'bg-rose-500'}`} />
                        </div>
-                     ))}
-                  </div>
+                       <div className="flex justify-between items-center text-[9px] font-black text-muted-foreground uppercase">
+                          <span>{c.date}</span>
+                          <span>{c.value}</span>
+                       </div>
+                    </motion.div>
+                  ))}
                </div>
+           </div>
+        </div>
 
-               <div className="p-8 rounded-[2rem] bg-indigo-500/10 border border-indigo-500/20 text-center space-y-4">
-                  <Gavel className="w-8 h-8 text-indigo-400 mx-auto" />
-                  <h5 className="text-[10px] font-black uppercase tracking-widest text-indigo-400">Legal Review Package</h5>
-                  <p className="text-[11px] font-bold text-white/60 leading-relaxed">
-                     Get this document reviewed by an actual human lawyer specializing in influencer law for ₹8,999.
-                  </p>
-                  <button className="w-full py-3 bg-indigo-500 text-white rounded-xl text-[9px] font-black uppercase tracking-widest hover:scale-105 transition-all shadow-xl shadow-indigo-500/20">Talk to a Lawyer</button>
-               </div>
-            </div>
-         </div>
+        {/* Content Area */}
+        <div className="lg:col-span-2 grid grid-cols-1 xl:grid-cols-5 gap-8">
+           <div className="xl:col-span-3 space-y-8">
+              <div className="bg-zinc-900/50 border border-white/5 rounded-[2.5rem] p-6 md:p-10 shadow-2xl space-y-8 relative">
+                 <div className="space-y-2 border-b border-white/5 pb-8">
+                    <h2 className="text-2xl font-black tracking-tight">{selectedContract.brand} Participation Agreement</h2>
+                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Analysed by CreatorForge AI • {selectedContract.date}</p>
+                 </div>
+
+                 <div className="prose prose-invert max-w-none text-white/60 font-medium leading-[1.8] space-y-6 text-sm">
+                    <p>...Clause 1.2: The Creator represents and warrants that they have the legal right to enter into this Agreement and perform the Services described herein...</p>
+                    <p className={`p-6 rounded-2xl border-l-4 ${selectedContract.risk === 'high' ? 'bg-rose-500/10 border-rose-500' : 'bg-amber-500/10 border-amber-500'}`}>
+                       <span className="block text-[10px] font-black uppercase mb-3 text-white">AI ALERT: RESTRICTIVE COVENANT DETECTED</span>
+                       {selectedContract.content}
+                    </p>
+                    <p>...Clause 15.1: This Agreement shall be governed by and construed in accordance with the laws of the Republic of India...</p>
+                 </div>
+                 
+                 <div className="flex flex-col sm:flex-row gap-4 pt-10 border-t border-white/5 mt-10">
+                    <button className="flex-1 py-4 bg-white/5 border border-white/10 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-white/10 transition-all flex items-center justify-center gap-2">
+                       <Download className="w-4 h-4" /> Download PDF
+                    </button>
+                    <button className="flex-1 py-4 bg-primary text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:scale-105 transition-all flex items-center justify-center gap-2 shadow-xl shadow-primary/20">
+                       <FileSearch className="w-4 h-4" /> Deep Audit
+                    </button>
+                 </div>
+              </div>
+           </div>
+
+           <div className="xl:col-span-2 space-y-8">
+              <div className="space-y-6">
+                 <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground flex items-center gap-2">
+                    <ShieldAlert className="w-4 h-4 text-primary" /> Risk Intelligence
+                 </h3>
+                 
+                 <div className="space-y-4">
+                    {selectedContract.flags.map((f, i) => (
+                      <div key={i} className={`p-6 rounded-[2rem] border transition-all ${f.level === 'red' ? 'bg-rose-500/10 border-rose-500/30' : f.level === 'yellow' ? 'bg-amber-500/10 border-amber-500/30' : 'bg-emerald-500/10 border-emerald-500/30'}`}>
+                         <div className="flex justify-between items-start mb-2">
+                            <h4 className={`text-xs font-black uppercase ${f.level === 'red' ? 'text-rose-500' : f.level === 'yellow' ? 'text-amber-500' : 'text-emerald-500'}`}>{f.title}</h4>
+                            <span className="text-[8px] font-black text-white/20 uppercase">Clause {f.clause}</span>
+                         </div>
+                         <p className="text-[11px] font-bold text-white/70 leading-relaxed mb-4">{f.desc}</p>
+                         <button className="w-full py-3 bg-black/40 border border-white/10 rounded-xl text-[9px] font-black uppercase tracking-widest hover:bg-primary hover:text-white transition-all">
+                            {f.level === 'red' ? 'Generate Counter-Clause' : 'More Context'}
+                         </button>
+                      </div>
+                    ))}
+                 </div>
+              </div>
+
+              <div className="p-8 rounded-[2rem] bg-indigo-500/10 border border-indigo-500/20 text-center space-y-4">
+                 <Gavel className="w-8 h-8 text-indigo-400 mx-auto" />
+                 <h5 className="text-[10px] font-black uppercase tracking-widest text-indigo-400">Legal Review Package</h5>
+                 <p className="text-[11px] font-bold text-white/60 leading-relaxed">
+                    Get this document reviewed by an actual human lawyer specializing in influencer law for ₹8,999.
+                 </p>
+                 <button className="w-full py-4 bg-indigo-500 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:scale-105 transition-all shadow-xl shadow-indigo-500/20 uppercase">Talk to a Lawyer</button>
+              </div>
+           </div>
+        </div>
       </div>
     </PageTransition>
   );
+
 };

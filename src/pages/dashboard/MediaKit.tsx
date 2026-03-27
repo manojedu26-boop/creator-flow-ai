@@ -8,6 +8,7 @@ import {
   Instagram, Youtube, ToggleLeft
 } from "lucide-react";
 import { useAuth } from "../../contexts/AuthContext";
+import { PageTransition } from "../../components/shared/MotionComponents";
 
 type Template = 'bold-dark' | 'clean-light' | 'pastel' | 'neon' | 'luxury';
 
@@ -36,13 +37,25 @@ export const MediaKit = () => {
   };
 
   return (
-    <div className="flex h-[calc(100vh-140px)] -mx-8 -my-6 overflow-hidden">
-      {/* LEFT — MEDIA KIT EDITOR */}
-      <div className="w-[450px] border-r border-border/30 bg-card/10 overflow-y-auto p-10 space-y-12 no-scrollbar">
-         <div className="space-y-6">
-            <h2 className="text-2xl font-black uppercase tracking-tight flex items-center gap-3">
-               <Layout className="w-6 h-6 text-primary" /> Media Kit Editor
-            </h2>
+    <PageTransition className="space-y-[var(--grid-gap)] pb-20 lg:pb-0">
+      <header className="mb-[var(--section-mb)]">
+        <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-2">
+          <Layout className="w-3 h-3" />
+          Brand Identity
+        </div>
+        <h1 className="text-4xl md:text-5xl font-black tracking-tighter uppercase leading-none">
+           Media Kit<br/>
+           <span className="text-primary italic">Architect</span>
+        </h1>
+      </header>
+
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        {/* LEFT — MEDIA KIT EDITOR */}
+        <div className="lg:col-span-4 bg-black/20 border-r lg:border-border/30 rounded-[2.5rem] p-6 lg:p-10 space-y-12">
+           <div className="space-y-6">
+              <h2 className="text-2xl font-black uppercase tracking-tight flex items-center gap-3">
+                 <Sparkles className="w-5 h-5 text-primary" /> Visual Identity
+              </h2>
             <div className="p-6 bg-muted/10 border border-border/40 rounded-[2rem] space-y-4">
                <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Select Template</span>
                <div className="flex flex-wrap gap-2">
@@ -139,9 +152,9 @@ export const MediaKit = () => {
          </div>
       </div>
 
-      {/* RIGHT — LIVE PREVIEW */}
-      <div className="flex-1 overflow-y-auto bg-muted/10 p-12 no-scrollbar scroll-smooth">
-         <div className="max-w-4xl mx-auto space-y-10">
+        {/* RIGHT — LIVE PREVIEW */}
+        <div className="lg:col-span-8 bg-muted/10 rounded-[2.5rem] border border-white/5 p-6 md:p-12 overflow-hidden">
+           <div className="max-w-4xl mx-auto space-y-10">
             <div className="flex items-center justify-between px-4">
                <div className="flex items-center gap-6">
                   <div className="flex items-center gap-2">
@@ -238,10 +251,11 @@ export const MediaKit = () => {
                         <span className="text-[9px] font-black uppercase">Verified Stats: Mar 2026</span>
                      </div>
                   </div>
-               </div>
-            </div>
-         </div>
+                </div>
+             </div>
+          </div>
+       </div>
       </div>
-    </div>
+    </PageTransition>
   );
 };

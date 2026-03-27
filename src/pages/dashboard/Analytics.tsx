@@ -4,7 +4,7 @@ import {
   BarChart3, TrendingUp, Users, Eye, ArrowUp, ArrowDown, 
   Sparkles, Calendar, Maximize2, Share2, Info, ChevronRight,
   TrendingDown, Search, Plus, Filter, Globe, MessageSquare,
-  Zap, Clock
+  Zap, Clock, Instagram, Youtube
 } from "lucide-react";
 import { 
   ResponsiveContainer, LineChart, Line, AreaChart, Area, 
@@ -14,10 +14,10 @@ import {
 import { PageTransition, CountUp, staggerContainer, staggerItem } from "../../components/shared/MotionComponents";
 import { useAuth } from "../../contexts/AuthContext";
 import { EmptyState } from "../../components/shared/EmptyState";
-import { Instagram, Youtube } from "lucide-react";
 import { 
   KpiSkeleton, ChartSkeleton, TextSkeleton 
 } from "../../components/shared/Skeleton";
+import { cn } from "@/lib/utils";
 
 const performanceData = [
   { name: "Week 1", ig: 46100, yt: 12200, tt: 29100 },
@@ -130,8 +130,8 @@ export const Analytics = () => {
   }, []);
 
   const renderOverview = () => (
-    <motion.div variants={staggerContainer} initial="hidden" animate="show" className="space-y-6">
-      <motion.div variants={staggerItem} className="premium-card bg-card border border-border/40 rounded-[2.5rem] p-8 shadow-xl">
+    <motion.div variants={staggerContainer} initial="hidden" animate="show" className="space-y-[var(--grid-gap)]">
+      <motion.div variants={staggerItem} className="premium-card bg-card border border-border/40 rounded-[2.5rem] p-[var(--card-p)] shadow-xl">
         <div className="flex items-center justify-between mb-8">
           <div>
             <h3 className="text-xl font-black tracking-tight uppercase">30-Day Follower Growth</h3>
@@ -147,7 +147,7 @@ export const Analytics = () => {
       </motion.div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <motion.div variants={staggerItem} className="premium-card bg-card border border-border/40 rounded-[2.5rem] p-8 shadow-xl">
+        <motion.div variants={staggerItem} className="premium-card bg-card border border-border/40 rounded-[2.5rem] p-[var(--card-p)] shadow-xl">
           <h3 className="text-lg font-black tracking-tight mb-8 uppercase">Engagement Rate by Week</h3>
           <div className="h-[260px] w-full">
             <EngagementChart data={engagementBreakdown} />
@@ -318,15 +318,32 @@ export const Analytics = () => {
   );
 
   return (
-    <PageTransition className="p-4 md:p-8 space-y-8 max-w-7xl mx-auto pb-24 lg:pb-8">
-      <header className="space-y-2">
-        <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-primary">
-          <BarChart3 className="w-3 h-3" />
-          Analytics Intelli-Room
+    <PageTransition className="space-y-[var(--grid-gap)] pb-20 lg:pb-0">
+      <header className="flex flex-col gap-6 mb-[var(--section-mb)]">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+          <div>
+            <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-2">
+              <BarChart3 className="w-3 h-3" />
+              Intelligence Engine
+            </div>
+            <h1 className="text-4xl md:text-5xl font-black tracking-tighter uppercase leading-[0.9]">
+               Impact <span className="text-primary italic">Intelligence</span>
+            </h1>
+          </div>
+          <div className="flex items-center gap-2 bg-white/5 p-1 rounded-2xl border border-white/10 w-fit">
+            {['7D', '30D', '90D', 'ALL'].map((range) => (
+              <button 
+                key={range}
+                className={cn(
+                  "px-4 py-2 rounded-xl text-[10px] font-black transition-all",
+                  range === '30D' ? "bg-primary text-white shadow-lg" : "text-zinc-500 hover:text-white"
+                )}
+              >
+                {range}
+              </button>
+            ))}
+          </div>
         </div>
-        <h1 className="text-4xl md:text-5xl font-black tracking-tighter uppercase leading-[0.9]">
-           Impact <span className="text-primary italic">Intelligence</span>
-        </h1>
       </header>
 
       <div className="flex items-center gap-6 border-b border-white/5 overflow-x-auto scrollbar-none pb-0">

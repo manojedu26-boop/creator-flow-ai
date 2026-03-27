@@ -100,9 +100,52 @@
   }
 
   .premium-card:hover {
-    @apply -translate-y-[2px];
+    @apply lg:-translate-y-[2px];
     box-shadow: 0 0 20px -5px hsla(var(--primary), 0.2);
     border-color: hsla(var(--primary), 0.4);
+  }
+
+  /* Mobile-First Layout Utilities (Phase 2) */
+  :root {
+    --page-px: 32px;
+    --card-p: 24px;
+    --grid-gap: 16px;
+    --section-mb: 28px;
+    --header-h: 80px;
+    --bottom-nav-h: 0px;
+  }
+
+  @media (max-width: 767px) {
+    :root {
+      --page-px: 16px;
+      --card-p: 16px;
+      --grid-gap: 12px;
+      --section-mb: 16px;
+      --header-h: 52px;
+      --bottom-nav-h: 64px;
+    }
+  }
+
+  .safe-area-pb {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .mobile-grid-collapse {
+    @apply grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4;
+  }
+
+  @media (max-width: 767px) {
+    .mobile-grid-collapse {
+      @apply grid-cols-1;
+    }
+    
+    .kpi-grid-mobile {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .kpi-grid-mobile > *:last-child {
+      grid-column: span 2;
+    }
   }
 
   @keyframes shimmer {
