@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   BarChart3, TrendingUp, Users, Eye, ArrowUp, ArrowDown, 
@@ -10,7 +10,7 @@ import {
   XAxis, YAxis, CartesianGrid, Tooltip, Legend, 
   BarChart, Bar, PieChart, Pie, Cell, ScatterChart, Scatter, ZAxis
 } from "recharts";
-import { PageTransition, CountUp } from "../../components/shared/MotionComponents";
+import { PageTransition, CountUp, staggerContainer, staggerItem } from "../../components/shared/MotionComponents";
 
 const performanceData = [
   { name: "Mon", ig: 4000, yt: 2400, tt: 2400 },
@@ -46,13 +46,93 @@ const heatmapData = [
 
 const tabs = ["Overview", "Instagram", "YouTube", "TikTok", "Audience", "Content Performance", "Competitor Intel"];
 
+const GrowthChart = memo(({ data }: { data: any[] }) => (
+  <ResponsiveContainer width="100%" height="100%">
+    <AreaChart data={data}>
+      <defs>
+        <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="3" result="blur" />
+          <feComposite in="SourceGraphic" in2="blur" operator="over" />
+        </filter>
+        <linearGradient id="colorIg" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#ec4899" stopOpacity={0.5}/>
+          <stop offset="50%" stopColor="#ec4899" stopOpacity={0.1}/>
+          <stop offset="100%" stopColor="#ec4899" stopOpacity={0}/>
+        </linearGradient>
+        <linearGradient id="colorYt" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#ef4444" stopOpacity={0.5}/>
+          <stop offset="50%" stopColor="#ef4444" stopOpacity={0.1}/>
+          <stop offset="100%" stopColor="#ef4444" stopOpacity={0}/>
+        </linearGradient>
+        <linearGradient id="colorTt" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#a855f7" stopOpacity={0.5}/>
+          <stop offset="50%" stopColor="#a855f7" stopOpacity={0.1}/>
+          <stop offset="100%" stopColor="#a855f7" stopOpacity={0}/>
+        </linearGradient>
+      </defs>
+      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.03)" />
+      <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#64748b', fontWeight: 'bold' }} dy={10} />
+      <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#64748b', fontWeight: 'bold' }} />
+      <Tooltip 
+        contentStyle={{ 
+          backgroundColor: 'rgba(15, 23, 42, 0.9)', 
+          backdropFilter: 'blur(12px)',
+          border: '1px solid rgba(255,255,255,0.1)', 
+          borderRadius: '16px', 
+          fontSize: '11px', 
+          fontWeight: '900',
+          boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.5)'
+        }}
+        itemStyle={{ padding: '2px 0' }}
+      />
+      <Area type="monotone" dataKey="ig" stroke="#ec4899" strokeWidth={4} fillOpacity={1} fill="url(#colorIg)" name="Instagram" isAnimationActive={true} animationDuration={1500} filter="url(#glow)" dot={{ r: 4, fill: '#ec4899', strokeWidth: 2, stroke: '#fff', fillOpacity: 1 }} activeDot={{ r: 6, strokeWidth: 0, fill: '#fff' }} />
+      <Area type="monotone" dataKey="yt" stroke="#ef4444" strokeWidth={4} fillOpacity={1} fill="url(#colorYt)" name="YouTube" isAnimationActive={true} animationDuration={1500} filter="url(#glow)" dot={{ r: 4, fill: '#ef4444', strokeWidth: 2, stroke: '#fff', fillOpacity: 1 }} activeDot={{ r: 6, strokeWidth: 0, fill: '#fff' }} />
+      <Area type="monotone" dataKey="tt" stroke="#a855f7" strokeWidth={4} fillOpacity={1} fill="url(#colorTt)" name="TikTok" isAnimationActive={true} animationDuration={1500} filter="url(#glow)" dot={{ r: 4, fill: '#a855f7', strokeWidth: 2, stroke: '#fff', fillOpacity: 1 }} activeDot={{ r: 6, strokeWidth: 0, fill: '#fff' }} />
+    </AreaChart>
+  </ResponsiveContainer>
+));
+
+const EngagementChart = memo(({ data }: { data: any[] }) => (
+  <ResponsiveContainer width="100%" height="100%">
+    <BarChart data={data}>
+      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.05)" />
+      <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#64748b' }} dy={10} />
+      <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#64748b' }} />
+      <Tooltip cursor={{ fill: 'rgba(255,255,255,0.05)' }} contentStyle={{ backgroundColor: '#0f172a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px' }} />
+      <Legend iconType="circle" wrapperStyle={{ paddingTop: '20px', fontSize: '10px', textTransform: 'uppercase', fontWeight: 'bold' }} />
+      <Bar dataKey="likes" fill="#a855f7" radius={[4, 4, 0, 0]} barSize={32} name="Likes" isAnimationActive={true} animationDuration={800} />
+      <Bar dataKey="comments" fill="#ec4899" radius={[4, 4, 0, 0]} barSize={32} name="Comments" isAnimationActive={true} animationDuration={800} />
+      <Bar dataKey="shares" fill="#06b6d4" radius={[4, 4, 0, 0]} barSize={32} name="Shares" isAnimationActive={true} animationDuration={800} />
+      <Bar dataKey="saves" fill="#f59e0b" radius={[4, 4, 0, 0]} barSize={32} name="Saves" isAnimationActive={true} animationDuration={800} />
+    </BarChart>
+  </ResponsiveContainer>
+));
+
+const ContentFormatChart = memo(({ data }: { data: any[] }) => (
+  <ResponsiveContainer width="100%" height="100%">
+    <PieChart>
+      <Pie data={data} cx="50%" cy="50%" innerRadius={60} outerRadius={90} paddingAngle={4} dataKey="value" stroke="none" isAnimationActive={true} animationDuration={800}>
+        {data.map((entry, index) => (
+          <Cell key={`cell-${index}`} fill={entry.color} />
+        ))}
+      </Pie>
+      <Tooltip contentStyle={{ backgroundColor: '#0f172a', border: 'none', borderRadius: '12px' }} />
+      <Legend verticalAlign="middle" align="right" layout="vertical" iconType="circle" wrapperStyle={{ fontSize: '11px', textTransform: 'uppercase', fontWeight: 'bold' }} />
+    </PieChart>
+  </ResponsiveContainer>
+));
+
 export const Analytics = () => {
   const [activeTab, setActiveTab] = useState("Overview");
 
   const renderOverview = () => (
-    <div className="space-y-6">
-      {/* ROW 1 — MASTER GROWTH CHART */}
-      <div className="premium-card bg-card border border-border/40 rounded-3xl p-8 shadow-sm">
+    <motion.div 
+      variants={staggerContainer}
+      initial="hidden"
+      animate="show"
+      className="space-y-6"
+    >
+      <motion.div variants={staggerItem} className="premium-card bg-card border border-border/40 rounded-3xl p-8 shadow-sm">
         <div className="flex items-center justify-between mb-8">
           <div>
             <h3 className="text-xl font-black tracking-tight uppercase">Master Growth Chart</h3>
@@ -67,102 +147,9 @@ export const Analytics = () => {
              </div>
           </div>
         </div>
-
         <div className="h-[320px] w-full">
-          <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={performanceData}>
-              <defs>
-                <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-                  <feGaussianBlur stdDeviation="3" result="blur" />
-                  <feComposite in="SourceGraphic" in2="blur" operator="over" />
-                </filter>
-                <linearGradient id="colorIg" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#ec4899" stopOpacity={0.5}/>
-                  <stop offset="50%" stopColor="#ec4899" stopOpacity={0.1}/>
-                  <stop offset="100%" stopColor="#ec4899" stopOpacity={0}/>
-                </linearGradient>
-                <linearGradient id="colorYt" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#ef4444" stopOpacity={0.5}/>
-                  <stop offset="50%" stopColor="#ef4444" stopOpacity={0.1}/>
-                  <stop offset="100%" stopColor="#ef4444" stopOpacity={0}/>
-                </linearGradient>
-                <linearGradient id="colorTt" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#a855f7" stopOpacity={0.5}/>
-                  <stop offset="50%" stopColor="#a855f7" stopOpacity={0.1}/>
-                  <stop offset="100%" stopColor="#a855f7" stopOpacity={0}/>
-                </linearGradient>
-              </defs>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.03)" />
-              <XAxis 
-                dataKey="name" 
-                axisLine={false} 
-                tickLine={false} 
-                tick={{ fontSize: 10, fill: '#64748b', fontWeight: 'bold' }} 
-                dy={10} 
-              />
-              <YAxis 
-                axisLine={false} 
-                tickLine={false} 
-                tick={{ fontSize: 10, fill: '#64748b', fontWeight: 'bold' }} 
-              />
-              <Tooltip 
-                contentStyle={{ 
-                  backgroundColor: 'rgba(15, 23, 42, 0.9)', 
-                  backdropFilter: 'blur(12px)',
-                  border: '1px solid rgba(255,255,255,0.1)', 
-                  borderRadius: '16px', 
-                  fontSize: '11px', 
-                  fontWeight: '900',
-                  boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.5)'
-                }}
-                itemStyle={{ padding: '2px 0' }}
-              />
-              <Area 
-                type="monotone" 
-                dataKey="ig" 
-                stroke="#ec4899" 
-                strokeWidth={4} 
-                fillOpacity={1} 
-                fill="url(#colorIg)" 
-                name="Instagram" 
-                isAnimationActive={true} 
-                animationDuration={1500}
-                filter="url(#glow)"
-                dot={{ r: 4, fill: '#ec4899', strokeWidth: 2, stroke: '#fff', fillOpacity: 1 }}
-                activeDot={{ r: 6, strokeWidth: 0, fill: '#fff' }}
-              />
-              <Area 
-                type="monotone" 
-                dataKey="yt" 
-                stroke="#ef4444" 
-                strokeWidth={4} 
-                fillOpacity={1} 
-                fill="url(#colorYt)" 
-                name="YouTube" 
-                isAnimationActive={true} 
-                animationDuration={1500}
-                filter="url(#glow)"
-                dot={{ r: 4, fill: '#ef4444', strokeWidth: 2, stroke: '#fff', fillOpacity: 1 }}
-                activeDot={{ r: 6, strokeWidth: 0, fill: '#fff' }}
-              />
-              <Area 
-                type="monotone" 
-                dataKey="tt" 
-                stroke="#a855f7" 
-                strokeWidth={4} 
-                fillOpacity={1} 
-                fill="url(#colorTt)" 
-                name="TikTok" 
-                isAnimationActive={true} 
-                animationDuration={1500}
-                filter="url(#glow)"
-                dot={{ r: 4, fill: '#a855f7', strokeWidth: 2, stroke: '#fff', fillOpacity: 1 }}
-                activeDot={{ r: 6, strokeWidth: 0, fill: '#fff' }}
-              />
-            </AreaChart>
-          </ResponsiveContainer>
+          <GrowthChart data={performanceData} />
         </div>
-
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8 pt-8 border-t border-border/20">
           {[
             { label: "Total Impressions", value: 2400000, suffix: "M", divisor: 1000000, decimals: 1, delta: "+18%" },
@@ -182,57 +169,21 @@ export const Analytics = () => {
             </div>
           ))}
         </div>
-      </div>
+      </motion.div>
 
       {/* ROW 2 — TWO CHARTS SIDE BY SIDE */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="premium-card bg-card border border-border/40 rounded-3xl p-8 shadow-sm">
+        <motion.div variants={staggerItem} className="premium-card bg-card border border-border/40 rounded-3xl p-8 shadow-sm">
           <h3 className="text-lg font-black tracking-tight mb-8 uppercase">Engagement Breakdown</h3>
           <div className="h-[260px] w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={engagementBreakdown}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.05)" />
-                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#64748b' }} dy={10} />
-                <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#64748b' }} />
-                <Tooltip 
-                  cursor={{ fill: 'rgba(255,255,255,0.05)' }}
-                  contentStyle={{ backgroundColor: '#0f172a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px' }} 
-                />
-                <Legend iconType="circle" wrapperStyle={{ paddingTop: '20px', fontSize: '10px', textTransform: 'uppercase', fontWeight: 'bold' }} />
-                <Bar dataKey="likes" fill="#a855f7" radius={[4, 4, 0, 0]} barSize={32} name="Likes" isAnimationActive={true} animationDuration={800} />
-                <Bar dataKey="comments" fill="#ec4899" radius={[4, 4, 0, 0]} barSize={32} name="Comments" isAnimationActive={true} animationDuration={800} />
-                <Bar dataKey="shares" fill="#06b6d4" radius={[4, 4, 0, 0]} barSize={32} name="Shares" isAnimationActive={true} animationDuration={800} />
-                <Bar dataKey="saves" fill="#f59e0b" radius={[4, 4, 0, 0]} barSize={32} name="Saves" isAnimationActive={true} animationDuration={800} />
-              </BarChart>
-            </ResponsiveContainer>
+            <EngagementChart data={engagementBreakdown} />
           </div>
-        </div>
+        </motion.div>
 
-        <div className="premium-card bg-card border border-border/40 rounded-3xl p-8 shadow-sm relative">
+        <motion.div variants={staggerItem} className="premium-card bg-card border border-border/40 rounded-3xl p-8 shadow-sm relative">
           <h3 className="text-lg font-black tracking-tight mb-8 uppercase">Content Format Performance</h3>
           <div className="h-[260px] w-full flex items-center justify-center">
-             <ResponsiveContainer width="100%" height="100%">
-               <PieChart>
-                 <Pie
-                   data={contentFormatData}
-                   cx="50%"
-                   cy="50%"
-                   innerRadius={60}
-                   outerRadius={90}
-                   paddingAngle={4}
-                   dataKey="value"
-                   stroke="none"
-                   isAnimationActive={true}
-                   animationDuration={800}
-                 >
-                   {contentFormatData.map((entry, index) => (
-                     <Cell key={`cell-${index}`} fill={entry.color} />
-                   ))}
-                 </Pie>
-                 <Tooltip contentStyle={{ backgroundColor: '#0f172a', border: 'none', borderRadius: '12px' }} />
-                 <Legend verticalAlign="middle" align="right" layout="vertical" iconType="circle" wrapperStyle={{ fontSize: '11px', textTransform: 'uppercase', fontWeight: 'bold' }} />
-               </PieChart>
-             </ResponsiveContainer>
+             <ContentFormatChart data={contentFormatData} />
              <div className="absolute flex flex-col items-center justify-center">
                 <span className="text-2xl font-black">
                   <CountUp value={55} suffix="%" />
@@ -240,11 +191,11 @@ export const Analytics = () => {
                 <span className="text-[9px] text-muted-foreground uppercase tracking-widest font-black">Reels</span>
              </div>
           </div>
-        </div>
+        </motion.div>
       </div>
 
       {/* ROW 3 — AI ANALYTICS INSIGHT */}
-      <div className="premium-card bg-primary/10 border border-primary/20 rounded-3xl p-8 shadow-xl relative overflow-hidden group">
+      <motion.div variants={staggerItem} className="premium-card bg-primary/10 border border-primary/20 rounded-3xl p-8 shadow-xl relative overflow-hidden group">
         <div className="absolute top-0 right-0 p-8 text-primary opacity-10 group-hover:opacity-20 transition-opacity">
           <Sparkles className="w-32 h-32 rotate-12" />
         </div>
@@ -267,10 +218,10 @@ export const Analytics = () => {
              </div>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* ROW 4 — BEST PERFORMING POSTS */}
-      <div className="premium-card bg-card border border-border/40 rounded-3xl p-8 shadow-sm">
+      <motion.div variants={staggerItem} className="premium-card bg-card border border-border/40 rounded-3xl p-8 shadow-sm">
         <div className="flex items-center justify-between mb-8">
            <h3 className="text-xl font-black tracking-tight uppercase">Best Performing Posts</h3>
            <div className="flex items-center gap-2">
@@ -307,14 +258,19 @@ export const Analytics = () => {
             </div>
           ))}
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 
   const renderAudience = () => (
-    <div className="space-y-6">
+    <motion.div 
+      variants={staggerContainer}
+      initial="hidden"
+      animate="show"
+      className="space-y-6"
+    >
        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="premium-card bg-card border border-border/40 rounded-3xl p-8">
+          <motion.div variants={staggerItem} className="premium-card bg-card border border-border/40 rounded-3xl p-8">
              <h3 className="text-lg font-black tracking-tight mb-8 uppercase">Age Range</h3>
              <div className="h-[260px] w-full">
                 <ResponsiveContainer width="100%" height="100%">
@@ -324,14 +280,14 @@ export const Analytics = () => {
                     <XAxis type="number" hide />
                     <YAxis dataKey="age" type="category" axisLine={false} tickLine={false} tick={{ fontSize: 11, fontWeight: 'bold' }} width={60} />
                     <Tooltip cursor={{ fill: 'transparent' }} contentStyle={{ backgroundColor: '#0f172a', border: 'none' }} />
-                    <Bar dataKey="value" fill="#primary" radius={[0, 4, 4, 0]} isAnimationActive={true} animationDuration={800}>
+                    <Bar dataKey="value" fill="hsl(var(--primary))" radius={[0, 4, 4, 0]} isAnimationActive={true} animationDuration={800}>
                        { [1,2,3,4,5].map((_, i) => <Cell key={i} fill={i === 1 ? "#a855f7" : "#334155"} />) }
                     </Bar>
                   </BarChart>
                 </ResponsiveContainer>
              </div>
-          </div>
-          <div className="premium-card bg-card border border-border/40 rounded-3xl p-8 relative">
+          </motion.div>
+          <motion.div variants={staggerItem} className="premium-card bg-card border border-border/40 rounded-3xl p-8 relative">
              <h3 className="text-lg font-black tracking-tight mb-8 uppercase">Gender Split</h3>
              <div className="h-[260px] w-full flex items-center justify-center">
                 <ResponsiveContainer width="100%" height="100%">
@@ -357,11 +313,11 @@ export const Analytics = () => {
                    </div>
                 </div>
              </div>
-          </div>
+          </motion.div>
        </div>
 
        {/* ACTIVE HOURS HEATMAP */}
-       <div className="premium-card bg-card border border-border/40 rounded-3xl p-8">
+       <motion.div variants={staggerItem} className="premium-card bg-card border border-border/40 rounded-3xl p-8">
           <h3 className="text-lg font-black tracking-tight mb-8 uppercase">Active Hours Heatmap</h3>
           <div className="h-[240px] w-full">
              <ResponsiveContainer width="100%" height="100%">
@@ -377,13 +333,18 @@ export const Analytics = () => {
                 </ScatterChart>
              </ResponsiveContainer>
           </div>
-       </div>
-    </div>
+       </motion.div>
+    </motion.div>
   );
 
   const renderCompetitor = () => (
-    <div className="space-y-6">
-       <div className="flex items-center gap-4">
+    <motion.div 
+      variants={staggerContainer}
+      initial="hidden"
+      animate="show"
+      className="space-y-6"
+    >
+       <motion.div variants={staggerItem} className="flex items-center gap-4">
           <div className="relative flex-1">
              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
              <input type="text" placeholder="Enter a competitor's handle..." className="w-full h-12 bg-muted/20 border border-border/40 rounded-2xl pl-12 pr-4 text-sm focus:outline-none focus:ring-1 focus:ring-primary" />
@@ -391,14 +352,14 @@ export const Analytics = () => {
           <button className="h-12 px-8 bg-primary text-primary-foreground rounded-2xl font-black uppercase tracking-widest flex items-center gap-2">
              <Plus className="w-4 h-4" /> Add
           </button>
-       </div>
+       </motion.div>
 
        <div className="grid grid-cols-1 gap-4">
           {[
             { handle: "@creator_x", er: 5.2, followers: "1.2M", posts: "42", format: "Reels" },
             { handle: "@daily_vlogs", er: 3.1, followers: "850K", posts: "124", format: "Videos" },
           ].map((comp, i) => (
-            <div key={i} className="premium-card bg-card border border-border/40 rounded-3xl p-6 flex flex-col md:flex-row items-center justify-between gap-8 group transition-colors">
+            <motion.div key={i} variants={staggerItem} className="premium-card bg-card border border-border/40 rounded-3xl p-6 flex flex-col md:flex-row items-center justify-between gap-8 group transition-colors">
                <div className="flex items-center gap-4">
                   <div className="w-14 h-14 rounded-full bg-gradient-to-tr from-muted to-muted-foreground shrink-0" />
                   <div>
@@ -425,10 +386,10 @@ export const Analytics = () => {
                <button className="px-6 py-3 rounded-xl bg-primary/10 text-primary text-xs font-black uppercase tracking-widest flex items-center gap-2 hover:bg-primary hover:text-primary-foreground transition-all">
                   <Sparkles className="w-4 h-4" /> AI Gap Analysis
                </button>
-            </div>
+            </motion.div>
           ))}
        </div>
-    </div>
+    </motion.div>
   );
 
   return (

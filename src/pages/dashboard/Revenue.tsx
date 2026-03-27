@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   IndianRupee, TrendingUp, Clock, Calendar, 
@@ -11,7 +11,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, 
   Tooltip, ResponsiveContainer, Legend, Cell 
 } from 'recharts';
-import { PageTransition, CountUp } from "../../components/shared/MotionComponents";
+import { PageTransition, CountUp, staggerContainer, staggerItem } from "../../components/shared/MotionComponents";
 
 const revenueData = [
   { month: 'Oct', brandDeals: 45000, affiliate: 12000, products: 5000, other: 3000 },
@@ -22,14 +22,54 @@ const revenueData = [
   { month: 'Mar', brandDeals: 95000, affiliate: 32000, products: 22000, other: 8000 },
 ];
 
+const RevenueChart = memo(({ data }: { data: any[] }) => (
+  <ResponsiveContainer width="100%" height="100%">
+    <BarChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+      <defs>
+        <filter id="barGlow" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="2" result="blur" />
+          <feComposite in="SourceGraphic" in2="blur" operator="over" />
+        </filter>
+        <linearGradient id="colorBrand" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity={0.8}/>
+          <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity={0.4}/>
+        </linearGradient>
+      </defs>
+      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border))" opacity={0.1} />
+      <XAxis dataKey="month" axisLine={false} tickLine={false} tick={{ fontSize: 10, fontWeight: 900, fill: 'hsl(var(--muted-foreground))' }} />
+      <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fontWeight: 900, fill: 'hsl(var(--muted-foreground))' }} />
+      <Tooltip 
+        cursor={{ fill: 'hsl(var(--muted))', opacity: 0.1 }}
+        contentStyle={{ 
+          borderRadius: '20px', 
+          border: '1px solid rgba(255,255,255,0.1)', 
+          backgroundColor: 'rgba(15, 23, 42, 0.9)',
+          backdropFilter: 'blur(10px)',
+          boxShadow: '0 20px 40px rgba(0,0,0,0.3)', 
+          fontWeight: 900 
+        }} 
+      />
+      <Legend iconType="circle" wrapperStyle={{ paddingTop: '20px', fontSize: '10px', fontWeight: 900, textTransform: 'uppercase' }} />
+      <Bar dataKey="brandDeals" stackId="a" fill="url(#colorBrand)" radius={[0, 0, 0, 0]} name="Brand Deals" isAnimationActive={true} animationDuration={1000} filter="url(#barGlow)" />
+      <Bar dataKey="affiliate" stackId="a" fill="#3b82f6" name="Affiliate" opacity={0.8} filter="url(#barGlow)" />
+      <Bar dataKey="products" stackId="a" fill="#10b981" name="Products" opacity={0.8} filter="url(#barGlow)" />
+      <Bar dataKey="other" stackId="a" fill="#f59e0b" radius={[10, 10, 0, 0]} name="Other" opacity={0.8} filter="url(#barGlow)" />
+    </BarChart>
+  </ResponsiveContainer>
+));
+
 export const Revenue = () => {
   const [view, setView] = useState<'monthly' | 'quarterly'>('monthly');
   const [showInvoiceDrawer, setShowInvoiceDrawer] = useState(false);
 
   return (
     <PageTransition>
-      <div className="max-w-7xl mx-auto space-y-10 pb-20">
-        {/* REVENUE SUMMARY STRIP */}
+      <motion.div 
+        variants={staggerContainer}
+        initial="hidden"
+        animate="show"
+        className="max-w-7xl mx-auto space-y-10 pb-20"
+      >
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
            {[
              { label: 'Revenue This Month', numericValue: 157000, change: '+24%', icon: IndianRupee, color: 'text-emerald-500' },
@@ -37,10 +77,12 @@ export const Revenue = () => {
              { label: 'Revenue This Year', numericValue: 842000, change: '+12%', icon: TrendingUp, color: 'text-indigo-500' },
              { label: 'Projected (30 Days)', numericValue: 185000, subtitle: 'AI Estimate', icon: Sparkles, color: 'text-primary' },
            ].map((stat, i) => (
-             <div 
-               key={stat.label} 
-               className={`premium-card bg-card border border-border/40 p-6 rounded-[2rem] shadow-sm transition-all group ${stat.clickable ? 'cursor-pointer hover:border-primary/40' : ''}`}
-             >
+             <motion.div 
+              key={stat.label} 
+              variants={staggerItem}
+              className={`premium-card bg-card border border-border/40 p-6 rounded-[2rem] shadow-sm transition-all group ${stat.clickable ? 'cursor-pointer hover:border-primary/40' : ''}`}
+              onClick={stat.clickable ? () => setShowInvoiceDrawer(true) : undefined}
+            >
                 <div className="flex justify-between items-start mb-4">
                    <div className={`p-3 rounded-2xl bg-muted/10 ${stat.color}`}>
                       <stat.icon className="w-5 h-5" />
@@ -64,14 +106,12 @@ export const Revenue = () => {
                      <motion.div initial={{ width: 0 }} animate={{ width: '75%' }} transition={{ duration: 1, ease: "easeOut" }} className="h-full bg-emerald-500" />
                   </div>
                 )}
-             </div>
+             </motion.div>
            ))}
         </div>
 
-        {/* TWO COLUMN ROW */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-           {/* LEFT — REVENUE BREAKDOWN CHART */}
-           <div className="premium-card lg:col-span-2 bg-card border border-border/40 rounded-[2.5rem] p-8 shadow-2xl relative overflow-hidden">
+           <motion.div variants={staggerItem} className="premium-card lg:col-span-2 bg-card border border-border/40 rounded-[2.5rem] p-8 shadow-2xl relative overflow-hidden">
               <div className="flex items-center justify-between mb-8 relative z-10">
                  <div>
                     <h3 className="text-xl font-black uppercase tracking-tight">Revenue Breakdown</h3>
@@ -82,51 +122,13 @@ export const Revenue = () => {
                     <button onClick={() => setView('quarterly')} className={`px-4 py-1.5 rounded-lg text-[10px] font-black uppercase transition-all ${view === 'quarterly' ? 'bg-background shadow-md' : 'text-muted-foreground hover:text-foreground'}`}>Quarterly</button>
                  </div>
               </div>
-
               <div className="h-[400px] w-full relative z-10">
-                 <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={revenueData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                       <defs>
-                          <filter id="barGlow" x="-20%" y="-20%" width="140%" height="140%">
-                             <feGaussianBlur stdDeviation="2" result="blur" />
-                             <feComposite in="SourceGraphic" in2="blur" operator="over" />
-                          </filter>
-                          <linearGradient id="colorBrand" x1="0" y1="0" x2="0" y2="1">
-                             <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity={0.8}/>
-                             <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity={0.4}/>
-                          </linearGradient>
-                       </defs>
-                       <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border))" opacity={0.1} />
-                       <XAxis 
-                        dataKey="month" 
-                        axisLine={false} 
-                        tickLine={false} 
-                        tick={{ fontSize: 10, fontWeight: 900, fill: 'hsl(var(--muted-foreground))' }} 
-                      />
-                       <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fontWeight: 900, fill: 'hsl(var(--muted-foreground))' }} />
-                       <Tooltip 
-                         cursor={{ fill: 'hsl(var(--muted))', opacity: 0.1 }}
-                         contentStyle={{ 
-                           borderRadius: '20px', 
-                           border: '1px solid rgba(255,255,255,0.1)', 
-                           backgroundColor: 'rgba(15, 23, 42, 0.9)',
-                           backdropFilter: 'blur(10px)',
-                           boxShadow: '0 20px 40px rgba(0,0,0,0.3)', 
-                           fontWeight: 900 
-                        }} 
-                       />
-                       <Legend iconType="circle" wrapperStyle={{ paddingTop: '20px', fontSize: '10px', fontWeight: 900, textTransform: 'uppercase' }} />
-                       <Bar dataKey="brandDeals" stackId="a" fill="url(#colorBrand)" radius={[0, 0, 0, 0]} name="Brand Deals" isAnimationActive={true} animationDuration={1000} filter="url(#barGlow)" />
-                       <Bar dataKey="affiliate" stackId="a" fill="#3b82f6" name="Affiliate" opacity={0.8} filter="url(#barGlow)" />
-                       <Bar dataKey="products" stackId="a" fill="#10b981" name="Products" opacity={0.8} filter="url(#barGlow)" />
-                       <Bar dataKey="other" stackId="a" fill="#f59e0b" radius={[10, 10, 0, 0]} name="Other" opacity={0.8} filter="url(#barGlow)" />
-                    </BarChart>
-                 </ResponsiveContainer>
+                 <RevenueChart data={revenueData} />
               </div>
-           </div>
+           </motion.div>
 
            {/* RIGHT — AI RATE CALCULATOR */}
-           <div className="premium-card bg-card border border-border/40 rounded-[2.5rem] p-8 shadow-2xl space-y-8 flex flex-col">
+           <motion.div variants={staggerItem} className="premium-card bg-card border border-border/40 rounded-[2.5rem] p-8 shadow-2xl space-y-8 flex flex-col">
               <div className="space-y-2">
                  <div className="inline-flex items-center gap-2 text-primary">
                     <Calculator className="w-5 h-5" />
@@ -163,11 +165,11 @@ export const Revenue = () => {
               <button className="w-full py-4 bg-primary text-primary-foreground rounded-2xl font-black uppercase tracking-widest shadow-lg hover:shadow-2xl transition-all flex items-center justify-center gap-3 active:scale-95">
                  <FileText className="w-4 h-4" /> Update Rate Card
               </button>
-           </div>
+           </motion.div>
         </div>
 
         {/* ROW 3 — INVOICE MANAGER */}
-        <div className="premium-card bg-card border border-border/40 rounded-[2.5rem] shadow-2xl overflow-hidden">
+        <motion.div variants={staggerItem} className="premium-card bg-card border border-border/40 rounded-[2.5rem] shadow-2xl overflow-hidden">
            <div className="p-8 border-b border-border/30 flex flex-col md:flex-row md:items-center justify-between gap-6 bg-muted/10">
               <div>
                  <h3 className="text-xl font-black uppercase tracking-tight">Invoice Manager</h3>
@@ -227,7 +229,7 @@ export const Revenue = () => {
                  </tbody>
               </table>
            </div>
-        </div>
+        </motion.div>
 
         {/* INVOICE DRAWER (MOCKED) */}
         <AnimatePresence>
@@ -298,7 +300,7 @@ export const Revenue = () => {
               </div>
            )}
         </AnimatePresence>
-      </div>
+      </motion.div>
     </PageTransition>
   );
 };

@@ -1,4 +1,4 @@
-import { motion, AnimatePresence, useSpring, useTransform } from "framer-motion";
+import { motion, AnimatePresence, useSpring, useTransform, Variants } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Sparkles } from "lucide-react";
 
@@ -92,4 +92,29 @@ export const Typewriter = ({ text, speed = 30 }: { text: string, speed?: number 
   }, [text, speed]);
 
   return <span>{displayedText}</span>;
+};
+
+// Section 14.15: Staggered entrance animations
+export const staggerContainer: Variants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.1
+    }
+  }
+};
+
+export const staggerItem: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      type: "spring",
+      stiffness: 100,
+      damping: 15
+    }
+  }
 };
