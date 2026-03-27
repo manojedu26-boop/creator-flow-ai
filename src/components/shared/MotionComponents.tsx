@@ -3,12 +3,13 @@ import { useEffect, useState } from "react";
 import { Sparkles } from "lucide-react";
 
 // Section 14.1: Page transitions
-export const PageTransition = ({ children }: { children: React.ReactNode }) => (
+export const PageTransition = ({ children, className = "" }: { children: React.ReactNode, className?: string }) => (
   <motion.div
     initial={{ opacity: 0, y: 15 }}
     animate={{ opacity: 1, y: 0 }}
     exit={{ opacity: 0, y: -15 }}
     transition={{ duration: 0.25, ease: "easeOut" }}
+    className={className}
   >
     {children}
   </motion.div>

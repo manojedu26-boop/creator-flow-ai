@@ -141,7 +141,7 @@ export const Home = () => {
               <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{stat.label}</p>
               <div className="flex items-end gap-2">
                 <h3 className="text-2xl font-black tracking-tight">
-                  <CountUp end={stat.value} prefix={stat.label === 'Est. Revenue' ? '₹ ' : ''} />
+                  <CountUp value={stat.value} prefix={stat.label === 'Est. Revenue' ? '₹ ' : ''} />
                 </h3>
               </div>
               <div className={`text-[10px] font-black ${stat.up ? 'text-emerald-500' : 'text-primary'} flex items-center gap-1 mt-1`}>
