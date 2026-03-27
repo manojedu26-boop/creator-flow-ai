@@ -13,6 +13,8 @@ import {
 } from 'recharts';
 import { PageTransition, CountUp, staggerContainer, staggerItem } from "../../components/shared/MotionComponents";
 import { useAuth } from "../../contexts/AuthContext";
+import { EmptyState } from "../../components/shared/EmptyState";
+import { Briefcase } from "lucide-react";
 
 const revenueData = [
   { month: 'Oct', brandDeals: 45000, affiliate: 12000, products: 5000, other: 3000 },
@@ -63,6 +65,12 @@ export const Revenue = () => {
   const { user } = useAuth();
   const [view, setView] = useState<'monthly' | 'quarterly'>('monthly');
   const [showInvoiceDrawer, setShowInvoiceDrawer] = useState(false);
+  const [invoices, setInvoices] = useState([
+    { brand: 'Nike', type: 'Sponsored Reel', amount: '₹ 45,000', due: '24 Mar 2026', status: 'Paid', color: 'bg-emerald-500/10 text-emerald-500' },
+    { brand: 'Adobe', type: 'UGC Content', amount: '₹ 15,000', due: '28 Mar 2026', status: 'Pending', color: 'bg-amber-500/10 text-amber-500' },
+    { brand: 'Samsung', type: 'Product Reveal', amount: '₹ 85,000', due: '15 Mar 2026', status: 'Overdue', color: 'bg-rose-500/10 text-rose-500' },
+    { brand: 'GoPro', type: 'App Integration', amount: '₹ 32,000', due: '05 Apr 2026', status: 'Pending', color: 'bg-amber-500/10 text-amber-500' },
+  ]);
 
   return (
     <PageTransition>

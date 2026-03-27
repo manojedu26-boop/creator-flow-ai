@@ -7,6 +7,8 @@ import {
   X, Image as ImageIcon, Video, Send, Settings,
   Zap, TrendingUp, AlertCircle
 } from "lucide-react";
+import { EmptyState } from "../../components/shared/EmptyState";
+import { useEffect } from "react";
 
 type ViewMode = 'month' | 'week' | 'day' | 'list';
 type ContentPillar = 'educational' | 'entertainment' | 'promotional' | 'personal' | 'bts';
@@ -42,6 +44,12 @@ export const Calendar = () => {
   const [selectedPost, setSelectedPost] = useState<ScheduledPost | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 1000);
+    return () => clearTimeout(timer);
+  }, []);
 
   const days = Array.from({ length: 35 }, (_, i) => i - 3); // Mocking a month starting mid-week
 
@@ -52,62 +60,76 @@ export const Calendar = () => {
           {d}
         </div>
       ))}
-      {days.map((day, i) => {
-        const isCurrentMonth = day > 0 && day <= 30;
-        const dayPosts = posts.filter(p => p.day === day);
-        const hasPrimeTime = day % 3 === 0; // Mocking AI logic
-        const hasOpportunity = day === 15 || day === 22;
+      {posts.length === 0 && !isLoading ? (
+        <div className="col-span-7 row-span-5 p-20 flex items-center justify-center">
+          <EmptyState 
+            icon={CalendarIcon} 
+            title="No scheduled posts" 
+            description="Start planning your content to see it here on the smart calendar." 
+          />
+        </div>
+      ) : (
+        days.map((day, i) => {
+          const isCurrentMonth = day > 0 && day <= 30;
+          const dayPosts = posts.filter(p => p.day === day);
+          const hasPrimeTime = day % 3 === 0; // Mocking AI logic
+          const hasOpportunity = day === 15 || day === 22;
 
-        return (
-          <div 
-            key={i} 
-            className={`min-h-[120px] p-2 border-r border-b border-border/20 last:border-r-0 relative group transition-colors ${
-              isCurrentMonth ? 'bg-card' : 'bg-muted/5 opacity-40'
-            } hover:bg-muted/10`}
-          >
-            <div className="flex justify-between items-start mb-2 px-1">
-              <span className={`text-xs font-black ${day === 22 ? 'text-primary' : ''}`}>
-                {isCurrentMonth ? day : ''}
-              </span>
-              {isCurrentMonth && hasPrimeTime && (
-                <div title="Prime Time" className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_#10b981]" />
+          return (
+            <div 
+              key={i} 
+              className={`min-h-[120px] p-2 border-r border-b border-border/20 last:border-r-0 relative group transition-colors ${
+                isCurrentMonth ? 'bg-card' : 'bg-muted/5 opacity-40'
+              } hover:bg-muted/10`}
+            >
+              <div className="flex justify-between items-start mb-2 px-1">
+                <span className={`text-xs font-black ${day === 22 ? 'text-primary' : ''}`}>
+                  {isCurrentMonth ? day : ''}
+                </span>
+                {isCurrentMonth && hasPrimeTime && (
+                  <div title="Prime Time" className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_#10b981]" />
+                )}
+              </div>
+
+              <div className="space-y-1.5 overflow-y-auto max-h-[80px] no-scrollbar">
+                {isLoading ? (
+                  Array(Math.floor(Math.random() * 2)).fill(0).map((_, idx) => <div key={idx} className="h-4 w-full rounded bg-muted/10 animate-pulse" />)
+                ) : (
+                  dayPosts.map(post => (
+                    <div 
+                      key={post.id} 
+                      onClick={() => setSelectedPost(post)}
+                      className="p-1.5 rounded-lg border border-border/30 bg-muted/20 flex items-center gap-2 cursor-pointer hover:border-primary/50 transition-all overflow-hidden"
+                    >
+                      <div className={`w-1 h-4 rounded-full ${pillarColors[post.pillar]} shrink-0`} />
+                      {post.platform === 'ig' ? <Instagram className="w-3 h-3" /> : post.platform === 'yt' ? <Youtube className="w-3 h-3" /> : <Play className="w-3 h-3" />}
+                      <span className="text-[9px] font-black truncate leading-none uppercase">{post.caption}</span>
+                    </div>
+                  ))
+                )}
+              </div>
+
+              {isCurrentMonth && hasOpportunity && (
+                 <motion.div 
+                   animate={{ opacity: [0.5, 1, 0.5] }} 
+                   transition={{ repeat: Infinity, duration: 2 }}
+                   className="absolute bottom-2 left-2 right-2 flex items-center justify-center gap-1.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-[8px] font-black text-emerald-500 uppercase tracking-tighter cursor-pointer hover:bg-emerald-500 hover:text-white transition-all"
+                 >
+                   <Zap className="w-2.5 h-2.5" /> Post Today
+                 </motion.div>
+              )}
+
+              {isCurrentMonth && (
+                 <button className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-background/40 backdrop-blur-[2px] pointer-events-none group-active:pointer-events-auto">
+                    <div onClick={() => setIsDrawerOpen(true)} className="p-2 rounded-full bg-primary text-primary-foreground shadow-xl pointer-events-auto">
+                      <Plus className="w-4 h-4" />
+                    </div>
+                 </button>
               )}
             </div>
-
-            <div className="space-y-1.5 overflow-y-auto max-h-[80px] no-scrollbar">
-              {dayPosts.map(post => (
-                <div 
-                  key={post.id} 
-                  onClick={() => setSelectedPost(post)}
-                  className="p-1.5 rounded-lg border border-border/30 bg-muted/20 flex items-center gap-2 cursor-pointer hover:border-primary/50 transition-all overflow-hidden"
-                >
-                  <div className={`w-1 h-4 rounded-full ${pillarColors[post.pillar]} shrink-0`} />
-                  {post.platform === 'ig' ? <Instagram className="w-3 h-3" /> : post.platform === 'yt' ? <Youtube className="w-3 h-3" /> : <Play className="w-3 h-3" />}
-                  <span className="text-[9px] font-black truncate leading-none uppercase">{post.caption}</span>
-                </div>
-              ))}
-            </div>
-
-            {isCurrentMonth && hasOpportunity && (
-               <motion.div 
-                 animate={{ opacity: [0.5, 1, 0.5] }} 
-                 transition={{ repeat: Infinity, duration: 2 }}
-                 className="absolute bottom-2 left-2 right-2 flex items-center justify-center gap-1.5 py-1 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-[8px] font-black text-emerald-500 uppercase tracking-tighter cursor-pointer hover:bg-emerald-500 hover:text-white transition-all"
-               >
-                 <Zap className="w-2.5 h-2.5" /> Post Today
-               </motion.div>
-            )}
-
-            {isCurrentMonth && (
-               <button className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-background/40 backdrop-blur-[2px] pointer-events-none group-active:pointer-events-auto">
-                  <div onClick={() => setIsDrawerOpen(true)} className="p-2 rounded-full bg-primary text-primary-foreground shadow-xl pointer-events-auto">
-                    <Plus className="w-4 h-4" />
-                  </div>
-               </button>
-            )}
-          </div>
-        );
-      })}
+          );
+        })
+      )}
     </div>
   );
 

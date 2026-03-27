@@ -5,6 +5,7 @@ import { Header } from "./Header";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageSquare, X, Sparkles, Menu, Briefcase, Settings, LogOut } from "lucide-react";
 import { FloatingAiChat } from "./FloatingAiChat";
+import { MobileBottomNav } from "./MobileBottomNav";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useAuth } from "../../contexts/AuthContext";
 import { useEffect } from "react";
@@ -161,6 +162,9 @@ export const DashboardLayout = () => {
 
       {/* Floating AI Chat Assistant */}
       <FloatingAiChat />
+
+      {/* Mobile Bottom Navigation */}
+      <MobileBottomNav />
     </div>
   );
 };

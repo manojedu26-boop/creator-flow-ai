@@ -5,8 +5,10 @@ import {
   FileText, Upload, Download, Search, 
   HelpCircle, ChevronRight, FileSearch, 
   ExternalLink, MessageSquare, RefreshCcw, 
-  Gavel, Info, ShieldAlert, Check, Share2
+  Gavel, Info, ShieldAlert, Check, Share2, Printer
 } from "lucide-react";
+import { EmptyState } from "../../components/shared/EmptyState";
+import { useEffect } from "react";
 
 type RiskLevel = 'low' | 'medium' | 'high';
 
@@ -28,6 +30,12 @@ const mockContracts: Contract[] = [
 export const Contracts = () => {
   const [selectedId, setSelectedId] = useState<string>('1');
   const [isAnalysing, setIsAnalysing] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 1000);
+    return () => clearTimeout(timer);
+  }, []);
 
   const selectedContract = mockContracts.find(c => c.id === selectedId) || mockContracts[0];
 
@@ -58,32 +66,42 @@ export const Contracts = () => {
 
          <div className="space-y-4">
             <h4 className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Recent Documents</h4>
-            <div className="space-y-3">
-               {mockContracts.map((c) => (
-                 <motion.div 
-                   key={c.id} 
-                   onClick={() => setSelectedId(c.id)}
-                   className={`p-5 rounded-[2rem] border transition-all cursor-pointer group ${
-                     selectedId === c.id ? 'bg-card border-primary/40 shadow-xl' : 'bg-muted/5 border-border/40 hover:border-primary/20'
-                   }`}
-                 >
-                    <div className="flex justify-between items-start mb-3">
-                       <span className="text-sm font-black text-foreground">{c.brand}</span>
-                       <span className={`px-2 py-0.5 rounded-lg text-[9px] font-black uppercase tracking-widest border border-current/20 ${
-                         c.risk === 'low' ? 'bg-emerald-500/5 text-emerald-500' : 
-                         c.risk === 'medium' ? 'bg-amber-500/5 text-amber-500' : 
-                         'bg-rose-500/5 text-rose-500'
-                       }`}>
-                          {c.risk} Risk
-                       </span>
-                    </div>
-                    <div className="flex justify-between items-center text-[10px] font-bold text-muted-foreground uppercase opacity-60">
-                       <span>{c.date}</span>
-                       <span>{c.value}</span>
-                    </div>
-                 </motion.div>
-               ))}
-            </div>
+             <div className="space-y-3">
+                {isLoading ? (
+                  Array(3).fill(0).map((_, i) => <div key={i} className="h-24 w-full rounded-[2rem] bg-muted/10 animate-pulse" />)
+                ) : mockContracts.length > 0 ? (
+                  mockContracts.map((c) => (
+                    <motion.div 
+                      key={c.id} 
+                      onClick={() => setSelectedId(c.id)}
+                      className={`p-5 rounded-[2rem] border transition-all cursor-pointer group ${
+                        selectedId === c.id ? 'bg-card border-primary/40 shadow-xl' : 'bg-muted/5 border-border/40 hover:border-primary/20'
+                      }`}
+                    >
+                       <div className="flex justify-between items-start mb-3">
+                          <span className="text-sm font-black text-foreground">{c.brand}</span>
+                          <span className={`px-2 py-0.5 rounded-lg text-[9px] font-black uppercase tracking-widest border border-current/20 ${
+                            c.risk === 'low' ? 'bg-emerald-500/5 text-emerald-500' : 
+                            c.risk === 'medium' ? 'bg-amber-500/5 text-amber-500' : 
+                            'bg-rose-500/5 text-rose-500'
+                          }`}>
+                             {c.risk} Risk
+                          </span>
+                       </div>
+                       <div className="flex justify-between items-center text-[10px] font-bold text-muted-foreground uppercase opacity-60">
+                          <span>{c.date}</span>
+                          <span>{c.value}</span>
+                       </div>
+                    </motion.div>
+                  ))
+                ) : (
+                  <EmptyState 
+                    icon={FileText} 
+                    title="No contracts" 
+                    description="Upload your first contract to start the AI analysis." 
+                  />
+                )}
+             </div>
          </div>
 
          <div className="space-y-4">
@@ -215,6 +233,4 @@ export const Contracts = () => {
   );
 };
 
-const Printer = ({ className }: { className?: string }) => (
-  <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
-);
+

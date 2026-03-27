@@ -10,6 +10,8 @@ import {
   Smile, Paperclip, ChevronLeft, Target
 } from "lucide-react";
 import { PageTransition, staggerContainer, staggerItem } from "../../components/shared/MotionComponents";
+import { EmptyState } from "../../components/shared/EmptyState";
+import { useEffect } from "react";
 
 type Tab = 'dms' | 'brands' | 'comments' | 'templates';
 
@@ -18,6 +20,12 @@ export const Messages = () => {
   const [selectedId, setSelectedId] = useState<string>('1');
   const [showAiSuggest, setShowAiSuggest] = useState(false);
   const [isMobileChatOpen, setIsMobileChatOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 1000);
+    return () => clearTimeout(timer);
+  }, []);
 
   const chats = [
     { id: '1', name: 'Nike PR Team', last: 'Looking forward to the Reel drafting!', time: '10:42 AM', unread: 2, brand: true, type: 'brands', avatar: 'N', color: 'bg-zinc-900' },
@@ -88,36 +96,47 @@ export const Messages = () => {
            >
               {activeTab === 'comments' ? (
                 <div className="space-y-4 px-2">
-                   {comments.map(c => (
-                      <motion.div 
-                        key={c.id} 
-                        variants={staggerItem}
-                        className="p-5 rounded-[2.5rem] border border-border/10 bg-card/30 backdrop-blur-md hover:border-primary/40 transition-all cursor-pointer space-y-4 shadow-sm hover:shadow-2xl group relative overflow-hidden"
-                      >
-                         <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
-                            <MessageSquare className="w-12 h-12" />
-                         </div>
-                         <div className="flex justify-between items-start">
-                            <div className="flex items-center gap-2">
-                               <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center font-black text-[10px] text-primary">{c.user[0].toUpperCase()}</div>
-                               <div>
-                                  <span className="text-xs font-black block">{c.user}</span>
-                                  <span className="text-[8px] font-bold text-muted-foreground uppercase">{c.post}</span>
-                               </div>
-                            </div>
-                            <span className="text-[9px] font-bold text-muted-foreground bg-muted/20 px-2 py-0.5 rounded-md">{c.time} ago</span>
-                         </div>
-                         <p className="text-[12px] font-medium leading-relaxed opacity-80 group-hover:opacity-100 transition-opacity text-muted-foreground group-hover:text-foreground">"{c.text}"</p>
-                         <div className="flex items-center justify-between pt-2">
-                            <span className={`text-[8px] font-black uppercase px-3 py-1 rounded-full border ${
-                              c.type === 'Spam' ? 'bg-rose-500/10 text-rose-500 border-rose-500/20' : 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20'
-                            }`}>{c.type}</span>
-                            <button className="h-8 px-4 rounded-xl bg-primary/10 text-primary text-[9px] font-black uppercase tracking-widest hover:bg-primary hover:text-white transition-all flex items-center gap-2">
-                               <Sparkles className="w-3 h-3" /> AI Reply
-                            </button>
-                         </div>
-                      </motion.div>
-                   ))}
+                   {isLoading ? (
+                     Array(3).fill(0).map((_, i) => <div key={i} className="h-24 w-full rounded-[2.5rem] bg-muted/10 animate-pulse" />)
+                   ) : comments.length > 0 ? (
+                     comments.map(c => (
+                        <motion.div 
+                          key={c.id} 
+                          variants={staggerItem}
+                          className="p-5 rounded-[2.5rem] border border-border/10 bg-card/30 backdrop-blur-md hover:border-primary/40 transition-all cursor-pointer space-y-4 shadow-sm hover:shadow-2xl group relative overflow-hidden"
+                        >
+                           {/* ... comment card content ... */}
+                           <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                              <MessageSquare className="w-12 h-12" />
+                           </div>
+                           <div className="flex justify-between items-start">
+                              <div className="flex items-center gap-2">
+                                 <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center font-black text-[10px] text-primary">{c.user[0].toUpperCase()}</div>
+                                 <div>
+                                    <span className="text-xs font-black block">{c.user}</span>
+                                    <span className="text-[8px] font-bold text-muted-foreground uppercase">{c.post}</span>
+                                 </div>
+                              </div>
+                              <span className="text-[9px] font-bold text-muted-foreground bg-muted/20 px-2 py-0.5 rounded-md">{c.time} ago</span>
+                           </div>
+                           <p className="text-[12px] font-medium leading-relaxed opacity-80 group-hover:opacity-100 transition-opacity text-muted-foreground group-hover:text-foreground">"{c.text}"</p>
+                           <div className="flex items-center justify-between pt-2">
+                              <span className={`text-[8px] font-black uppercase px-3 py-1 rounded-full border ${
+                                c.type === 'Spam' ? 'bg-rose-500/10 text-rose-500 border-rose-500/20' : 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20'
+                              }`}>{c.type}</span>
+                              <button className="h-8 px-4 rounded-xl bg-primary/10 text-primary text-[9px] font-black uppercase tracking-widest hover:bg-primary hover:text-white transition-all flex items-center gap-2">
+                                 <Sparkles className="w-3 h-3" /> AI Reply
+                              </button>
+                           </div>
+                        </motion.div>
+                     ))
+                   ) : (
+                     <EmptyState 
+                       icon={MessageSquare} 
+                       title="No comments yet" 
+                       description="When your audience starts talking, they'll show up here." 
+                     />
+                   )}
                 </div>
               ) : (
                 <div className="space-y-2 px-2">

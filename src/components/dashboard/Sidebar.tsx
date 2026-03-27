@@ -69,15 +69,15 @@ export const Sidebar = () => {
             <Link 
               key={item.label} 
               to={item.href}
-              className={`flex items-center gap-4 px-3 py-2.5 rounded-lg relative transition-colors group ${
-                isActive ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+              className={`flex items-center gap-4 px-3 py-2.5 rounded-lg relative transition-all group ${
+                isActive ? "bg-primary/10 text-white" : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
               }`}
               title={!isExpanded ? item.label : undefined}
             >
               {isActive && (
                 <motion.div 
                   layoutId="activeNav"
-                  className="absolute left-0 top-1 bottom-1 w-1 bg-primary rounded-r-md shadow-[0_0_10px_hsl(var(--primary))]"
+                  className="absolute left-0 top-0 bottom-0 w-[3px] bg-primary shadow-[4px_0_15px_rgba(255,60,172,0.4)]"
                 />
               )}
               <item.icon className="w-4.5 h-4.5 shrink-0 transition-transform group-hover:-translate-y-0.5" />

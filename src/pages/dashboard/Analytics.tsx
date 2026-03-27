@@ -1,9 +1,9 @@
-import { useState, memo } from "react";
+import { useState, useEffect, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   BarChart3, TrendingUp, Users, Eye, ArrowUp, ArrowDown, 
   Sparkles, Calendar, Maximize2, Share2, Info, ChevronRight,
-  TrendingDown, Search, Plus, Filter, Globe
+  TrendingDown, Search, Plus, Filter, Globe, MessageSquare
 } from "lucide-react";
 import { 
   ResponsiveContainer, LineChart, Line, AreaChart, Area, 
@@ -12,6 +12,11 @@ import {
 } from "recharts";
 import { PageTransition, CountUp, staggerContainer, staggerItem } from "../../components/shared/MotionComponents";
 import { useAuth } from "../../contexts/AuthContext";
+import { EmptyState } from "../../components/shared/EmptyState";
+import { Instagram, Youtube, BarChart3 as BarChartIcon } from "lucide-react";
+import { 
+  KpiSkeleton, ChartSkeleton, TextSkeleton 
+} from "../../components/shared/Skeleton";
 
 const performanceData = [
   { name: "Mon", ig: 4000, yt: 2400, tt: 2400 },
@@ -126,6 +131,12 @@ const ContentFormatChart = memo(({ data }: { data: any[] }) => (
 export const Analytics = () => {
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState("Overview");
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 1200);
+    return () => clearTimeout(timer);
+  }, []);
 
   const renderOverview = () => (
     <motion.div 
@@ -149,28 +160,36 @@ export const Analytics = () => {
              </div>
           </div>
         </div>
-        <div className="h-[320px] w-full">
-          <GrowthChart data={performanceData} />
-        </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8 pt-8 border-t border-border/20">
-          {[
-            { label: "Total Impressions", value: 2400000, suffix: "M", divisor: 1000000, decimals: 1, delta: "+18%" },
-            { label: "Total Reach", value: 1100000, suffix: "M", divisor: 1000000, decimals: 1, delta: "+24.2%" },
-            { label: "Avg Engagement", value: 4.8, suffix: "%", decimals: 1, delta: "-0.5%" },
-            { label: "Best Day", value: "Friday", info: "8:00 PM", isStatic: true }
-          ].map((stat, i) => (
-            <div key={i} className="flex flex-col gap-1">
-              <span className="text-[10px] text-muted-foreground font-black uppercase tracking-widest leading-none">{stat.label}</span>
-              <div className="flex items-baseline gap-2">
-                <span className="text-2xl font-black">
-                  {stat.isStatic ? (stat.value as string) : <CountUp value={stat.divisor ? (stat.value as number) / stat.divisor : (stat.value as number)} decimals={stat.decimals} suffix={stat.suffix} />}
-                </span>
-                {stat.delta && <span className={`text-[10px] font-bold ${stat.delta.startsWith('+') ? 'text-emerald-500' : 'text-rose-500'}`}>{stat.delta}</span>}
-                {stat.info && <span className="text-[10px] text-muted-foreground font-medium">{stat.info}</span>}
-              </div>
-            </div>
-          ))}
-        </div>
+         <div className="h-[320px] w-full">
+           {isLoading ? (
+             <ChartSkeleton />
+           ) : (
+             <GrowthChart data={performanceData} />
+           )}
+         </div>
+         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8 pt-8 border-t border-border/20">
+           {isLoading ? (
+             Array(4).fill(0).map((_, i) => <div key={i} className="h-10 w-full bg-muted/10 animate-pulse rounded" />)
+           ) : (
+             [
+               { label: "Total Impressions", value: 2400000, suffix: "M", divisor: 1000000, decimals: 1, delta: "+18%" },
+               { label: "Total Reach", value: 1100000, suffix: "M", divisor: 1000000, decimals: 1, delta: "+24.2%" },
+               { label: "Avg Engagement", value: 4.8, suffix: "%", decimals: 1, delta: "-0.5%" },
+               { label: "Best Day", value: "Friday", info: "8:00 PM", isStatic: true }
+             ].map((stat, i) => (
+               <div key={i} className="flex flex-col gap-1">
+                 <span className="text-[10px] text-muted-foreground font-black uppercase tracking-widest leading-none">{stat.label}</span>
+                 <div className="flex items-baseline gap-2">
+                   <span className="text-2xl font-black">
+                     {stat.isStatic ? (stat.value as string) : <CountUp value={stat.divisor ? (stat.value as number) / stat.divisor : (stat.value as number)} decimals={stat.decimals} suffix={stat.suffix} />}
+                   </span>
+                   {stat.delta && <span className={`text-[10px] font-bold ${stat.delta.startsWith('+') ? 'text-emerald-500' : 'text-rose-500'}`}>{stat.delta}</span>}
+                   {stat.info && <span className="text-[10px] text-muted-foreground font-medium">{stat.info}</span>}
+                 </div>
+               </div>
+             ))
+           )}
+         </div>
       </motion.div>
 
       {/* ROW 2 — TWO CHARTS SIDE BY SIDE */}
@@ -178,20 +197,30 @@ export const Analytics = () => {
         <motion.div variants={staggerItem} className="premium-card bg-card border border-border/40 rounded-3xl p-8 shadow-sm">
           <h3 className="text-lg font-black tracking-tight mb-8 uppercase">Engagement Breakdown</h3>
           <div className="h-[260px] w-full">
-            <EngagementChart data={engagementBreakdown} />
+            {isLoading ? (
+              <ChartSkeleton />
+            ) : (
+              <EngagementChart data={engagementBreakdown} />
+            )}
           </div>
         </motion.div>
 
         <motion.div variants={staggerItem} className="premium-card bg-card border border-border/40 rounded-3xl p-8 shadow-sm relative">
           <h3 className="text-lg font-black tracking-tight mb-8 uppercase">Content Format Performance</h3>
           <div className="h-[260px] w-full flex items-center justify-center">
-             <ContentFormatChart data={contentFormatData} />
-             <div className="absolute flex flex-col items-center justify-center">
-                <span className="text-2xl font-black">
-                  <CountUp value={55} suffix="%" />
-                </span>
-                <span className="text-[9px] text-muted-foreground uppercase tracking-widest font-black">Reels</span>
-             </div>
+             {isLoading ? (
+               <div className="w-32 h-32 rounded-full border-4 border-muted/10 border-t-primary animate-spin" />
+             ) : (
+               <>
+                 <ContentFormatChart data={contentFormatData} />
+                 <div className="absolute flex flex-col items-center justify-center">
+                    <span className="text-2xl font-black">
+                      <CountUp value={55} suffix="%" />
+                    </span>
+                    <span className="text-[9px] text-muted-foreground uppercase tracking-widest font-black">Reels</span>
+                 </div>
+               </>
+             )}
           </div>
         </motion.div>
       </div>
@@ -405,14 +434,14 @@ export const Analytics = () => {
                 key={tab}
                 onClick={() => setActiveTab(tab)}
                 className={`px-4 py-3 text-[10px] md:text-xs font-black uppercase tracking-widest relative transition-all whitespace-nowrap ${
-                  activeTab === tab ? "text-primary" : "text-muted-foreground hover:text-foreground"
+                  activeTab === tab ? "text-white" : "text-muted-foreground hover:text-foreground"
                 }`}
               >
                 {tab}
                 {activeTab === tab && (
                   <motion.div 
                     layoutId="activeAnalyticsTab"
-                    className="absolute bottom-0 left-2 right-2 h-0.5 bg-primary shadow-[0_0_8px_hsl(var(--primary))]"
+                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary shadow-[0_-4px_12px_rgba(255,60,172,0.4)]"
                   />
                 )}
               </button>
@@ -432,13 +461,14 @@ export const Analytics = () => {
             {activeTab === "Audience" && renderAudience()}
             {activeTab === "Competitor Intel" && renderCompetitor()}
             {(activeTab !== "Overview" && activeTab !== "Audience" && activeTab !== "Competitor Intel") && (
-              <div className="flex flex-col items-center justify-center h-[60vh] text-center gap-4">
-                <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-2">
-                  <BarChart3 className="w-8 h-8 text-primary animate-pulse" />
-                </div>
-                <h3 className="text-xl font-bold">{activeTab} Details</h3>
-                <p className="text-muted-foreground max-w-sm">Deep diving into {activeTab} analytics patterns... This will include specific {activeTab} metrics and growth forecasts.</p>
-              </div>
+              <EmptyState 
+                icon={activeTab === "Instagram" ? Instagram : activeTab === "YouTube" ? Youtube : BarChart3}
+                title={activeTab === "Instagram" ? "No Instagram Data" : activeTab === "YouTube" ? "No YouTube Data" : `No ${activeTab} Data`}
+                description={`Connect your ${activeTab} account to see your real-time analytics and growth insights.`}
+                ctaText={`Connect ${activeTab}`}
+                onCtaClick={() => console.log(`Connect ${activeTab}`)}
+                className="h-[60vh]"
+              />
             )}
           </motion.div>
         </AnimatePresence>
