@@ -5,6 +5,8 @@ import {
   Sparkles, DollarSign, Users, Info, 
   TrendingUp, AlertTriangle, FileText, Target
 } from "lucide-react";
+import { useAuth } from "../../contexts/AuthContext";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 const notifications = [
   {
@@ -73,6 +75,7 @@ const notifications = [
 ];
 
 export const Header = ({ title = "Dashboard" }: { title?: string }) => {
+  const { user } = useAuth();
   const [showNotifications, setShowNotifications] = useState(false);
   const [activeTab, setActiveTab] = useState("All");
 
@@ -218,10 +221,25 @@ export const Header = ({ title = "Dashboard" }: { title?: string }) => {
           </AnimatePresence>
         </div>
 
-        <div className="flex items-center gap-2 cursor-pointer">
-          <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-primary to-secondary" />
-          <ChevronDown className="w-4 h-4 text-muted-foreground" />
-        </div>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="flex items-center gap-2 cursor-pointer group">
+                {user?.photo ? (
+                  <img src={user.photo} alt={user.name} className="w-8 h-8 rounded-full object-cover border border-border/50 group-hover:border-primary/50 transition-colors" />
+                ) : (
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-primary to-secondary flex items-center justify-center text-[10px] font-black uppercase text-white">
+                    {user?.firstName?.[0] || user?.name?.[0] || 'U'}
+                  </div>
+                )}
+                <ChevronDown className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors" />
+              </div>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p className="text-xs font-bold">{user?.name || "User Profile"}</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </div>
     </header>
   );

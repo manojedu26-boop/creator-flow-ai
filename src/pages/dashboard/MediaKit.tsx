@@ -7,10 +7,12 @@ import {
   Image as ImageIcon, MoreHorizontal,
   Instagram, Youtube, ToggleLeft
 } from "lucide-react";
+import { useAuth } from "../../contexts/AuthContext";
 
 type Template = 'bold-dark' | 'clean-light' | 'pastel' | 'neon' | 'luxury';
 
 export const MediaKit = () => {
+  const { user } = useAuth();
   const [activeTemplate, setActiveTemplate] = useState<Template>('bold-dark');
   const [sections, setSections] = useState({
     about: true,
@@ -173,9 +175,13 @@ export const MediaKit = () => {
                   {/* PREVIEW HEADER */}
                   <div className="flex justify-between items-start">
                      <div className="space-y-4">
-                        <div className="w-20 h-20 bg-primary rounded-3xl" />
-                        <h1 className="text-4xl font-black tracking-tighter uppercase leading-none">Jack Dorsey</h1>
-                        <p className={`text-xs font-black uppercase tracking-[0.3em] opacity-60 ${activeTemplate.includes('neon') ? 'text-indigo-400' : 'text-primary'}`}>Tech & Wellness Creator</p>
+                        {user?.photo ? (
+                          <img src={user.photo} alt={user.name} className="w-20 h-20 rounded-3xl object-cover" />
+                        ) : (
+                          <div className="w-20 h-20 bg-primary rounded-3xl" />
+                        )}
+                        <h1 className="text-4xl font-black tracking-tighter uppercase leading-none">{user?.name || "Jack Dorsey"}</h1>
+                        <p className={`text-xs font-black uppercase tracking-[0.3em] opacity-60 ${activeTemplate.includes('neon') ? 'text-indigo-400' : 'text-primary'}`}>{user?.niche || "Tech & Wellness"} Creator</p>
                      </div>
                      <div className="flex gap-4">
                         <Instagram className="w-5 h-5 opacity-40" />
@@ -198,9 +204,9 @@ export const MediaKit = () => {
                   {sections.stats && (
                     <div className="grid grid-cols-3 gap-8">
                        {[
-                         { label: 'Followers', val: '124K+', pf: 'Combined' },
-                         { label: 'Engagement', val: '4.8%', pf: 'Instagram' },
-                         { label: 'Avg Views', val: '85K+', pf: 'Reels' },
+                         { label: 'Followers', val: user?.followerCounts["Instagram"] || '124K+', pf: 'Instagram' },
+                         { label: 'Subscribers', val: user?.followerCounts["YouTube"] || '85K+', pf: 'YouTube' },
+                         { label: 'Engagement', val: '4.8%', pf: 'Combined' },
                        ].map(s => (
                          <div key={s.label} className="space-y-1">
                             <p className="text-[10px] font-black uppercase tracking-widest opacity-40">{s.label}</p>

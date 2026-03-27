@@ -6,6 +6,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Intro } from "./components/shared/Intro.tsx";
+import { AuthProvider } from "./contexts/AuthContext.tsx";
 
 // Lazy-loaded components
 const Index = lazy(() => import("./pages/Index.tsx"));
@@ -27,6 +28,7 @@ const Revenue = lazy(() => import("./pages/dashboard/Revenue.tsx").then(m => ({ 
 const Contracts = lazy(() => import("./pages/dashboard/Contracts.tsx").then(m => ({ default: m.Contracts })));
 const MediaKit = lazy(() => import("./pages/dashboard/MediaKit.tsx").then(m => ({ default: m.MediaKit })));
 const Messages = lazy(() => import("./pages/dashboard/Messages.tsx").then(m => ({ default: m.Messages })));
+const Settings = lazy(() => import("./pages/dashboard/Settings.tsx").then(m => ({ default: m.Settings })));
 
 const BrandLayout = lazy(() => import("./components/brand/BrandLayout").then(m => ({ default: m.BrandLayout })));
 const BrandHome = lazy(() => import("./pages/brand/BrandHome.tsx").then(m => ({ default: m.BrandHome })));
@@ -62,7 +64,8 @@ const App = () => {
           {showIntro ? (
             <Intro key="intro" onComplete={() => setShowIntro(false)} />
           ) : (
-             <BrowserRouter key="app">
+            <AuthProvider>
+              <BrowserRouter key="app">
                 <Suspense fallback={<PageLoader />}>
                   <Routes>
                     <Route path="/" element={<Index />} />
@@ -84,6 +87,7 @@ const App = () => {
                       <Route path="/contracts" element={<Contracts />} />
                       <Route path="/mediakit" element={< MediaKit />} />
                       <Route path="/messages" element={<Messages />} />
+                      <Route path="/settings" element={<Settings />} />
                     </Route>
 
                     {/* Brand Mode Routes (Section 13) */}
@@ -101,6 +105,7 @@ const App = () => {
                   </Routes>
                 </Suspense>
               </BrowserRouter>
+            </AuthProvider>
           )}
         </AnimatePresence>
       </TooltipProvider>

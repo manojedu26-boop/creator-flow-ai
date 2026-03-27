@@ -5,8 +5,9 @@ import {
   Home, BarChart3, Handshake, BrainCircuit, Calendar, 
   TrendingUp, Globe, DollarSign, ShieldCheck, Palette, 
   MessageSquare, Bell, Settings, Menu, Sparkles, Briefcase,
-  LogOut
+  LogOut, Instagram, Youtube
 } from "lucide-react";
+import { useAuth } from "../../contexts/AuthContext";
 
 export const navItems = [
   { icon: Home, label: "Home", href: "/dashboard" },
@@ -32,24 +33,23 @@ const springTransition: any = {
 
 export const Sidebar = () => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const { user, logout } = useAuth();
   const location = useLocation();
 
   return (
     <motion.div 
-      className="fixed left-0 top-0 bottom-0 z-50 glass-sidebar hidden lg:flex flex-col shadow-2xl overflow-hidden"
+      className="fixed left-0 top-0 bottom-0 z-50 bg-card border-r border-border/40 hidden lg:flex flex-col shadow-2xl overflow-hidden"
       animate={{ width: isExpanded ? 260 : 72 }}
       transition={springTransition}
       onMouseEnter={() => setIsExpanded(true)}
       onMouseLeave={() => setIsExpanded(false)}
     >
-      <div className="flex items-center h-16 px-5 mb-4 gap-3 cursor-pointer border-b border-white/5 relative shrink-0">
-        <div className="p-2 bg-primary/10 rounded-lg group-hover:bg-primary/20 transition-colors">
-          <Sparkles className="w-6 h-6 text-primary shrink-0" />
-        </div>
+      <div className="flex items-center h-16 px-5 mb-4 gap-3 cursor-pointer border-b border-border/30 relative shrink-0">
+        <Sparkles className="w-8 h-8 text-primary shrink-0" />
         <AnimatePresence>
           {isExpanded && (
             <motion.span 
-              className="font-bebas text-2xl whitespace-nowrap tracking-[3px] text-white"
+              className="font-black tracking-tighter text-xl whitespace-nowrap"
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -10 }}
@@ -59,37 +59,36 @@ export const Sidebar = () => {
             </motion.span>
           )}
         </AnimatePresence>
-        <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-primary/50 to-transparent opacity-30 shadow-[0_0_10px_hsla(325,100%,62%,0.2)]" />
+        <div className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-primary to-transparent opacity-50 shadow-[0_0_10px_hsl(var(--primary))]" />
       </div>
 
-      <nav className="flex-1 py-4 px-3 space-y-2 flex flex-col justify-start">
+      <nav className="flex-1 overflow-y-auto no-scrollbar py-2 px-3 space-y-0.5">
         {navItems.map((item) => {
           const isActive = location.pathname.startsWith(item.href);
           return (
             <Link 
               key={item.label} 
               to={item.href}
-              className={`flex items-center gap-4 px-3 py-2 rounded-xl relative transition-all group ${
-                isActive ? "bg-primary/20 text-white" : "text-muted-foreground hover:bg-white/5 hover:text-white"
+              className={`flex items-center gap-4 px-3 py-2.5 rounded-lg relative transition-colors group ${
+                isActive ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
               }`}
               title={!isExpanded ? item.label : undefined}
             >
               {isActive && (
                 <motion.div 
                   layoutId="activeNav"
-                  className="absolute -left-1.5 top-2 bottom-2 w-1.5 bg-primary rounded-r-full shadow-[0_0_20px_rgba(var(--primary),0.6)]"
-                  transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  className="absolute left-0 top-1 bottom-1 w-1 bg-primary rounded-r-md shadow-[0_0_10px_hsl(var(--primary))]"
                 />
               )}
-              <item.icon className={`w-4.5 h-4.5 shrink-0 transition-transform ${isActive ? 'scale-110 shadow-glow' : 'group-hover:-translate-y-0.5'}`} />
+              <item.icon className="w-4.5 h-4.5 shrink-0 transition-transform group-hover:-translate-y-0.5" />
               <AnimatePresence>
                 {isExpanded && (
                   <motion.span 
-                    className="font-syne text-[10px] uppercase font-bold tracking-[2px] whitespace-nowrap pt-0.5"
-                    initial={{ opacity: 0, x: -8 }}
+                    className="font-medium text-[13px] whitespace-nowrap"
+                    initial={{ opacity: 0, x: -5 }}
                     animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -8 }}
-                    transition={{ duration: 0.2, ease: "easeOut" }}
+                    exit={{ opacity: 0, x: -5 }}
+                    transition={{ duration: 0.15 }}
                   >
                     {item.label}
                   </motion.span>
@@ -100,68 +99,87 @@ export const Sidebar = () => {
         })}
       </nav>
 
-      {/* FOOTER SECTION — PROFILE & SYSTEM */}
-      <div className="mt-auto p-4 border-t border-white/5 flex flex-col gap-4 bg-[#07071A]/60 backdrop-blur-2xl shrink-0">
-        <div className="flex items-center h-16 p-2 rounded-[1.25rem] border border-white/10 bg-white/[0.03] group relative overflow-hidden">
-           {/* GLOW BACKGROUND ON HOVER */}
-           <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-           
-           <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-primary to-secondary shrink-0 flex items-center justify-center text-white text-[11px] font-black uppercase shadow-xl relative z-10">AC</div>
-           
-           <AnimatePresence>
-             {isExpanded && (
-               <motion.div 
-                className="ml-4 flex flex-col min-w-0 flex-1 relative z-10"
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -10 }}
-               >
-                  <span className="text-[11px] font-syne font-black text-white uppercase tracking-tight truncate">ALEX_CREATOR</span>
-                  <span className="text-[9px] text-muted-foreground font-mono uppercase tracking-wider truncate">VERIFIED // L1</span>
-               </motion.div>
-             )}
-           </AnimatePresence>
-
-           <div className="flex items-center gap-1 relative z-10">
-              {/* SETTINGS MOVED HERE AS A MINI BUTTON */}
-              <Link 
-                to="/settings"
-                className="p-2 text-muted-foreground hover:text-white transition-all rounded-lg hover:bg-white/10"
-                title="Settings"
-              >
-                <Settings className="w-4 h-4" />
-              </Link>
-              
-              {isExpanded && (
-                <button 
-                  onClick={() => {/* logout logic */}}
-                  className="p-2 text-muted-foreground hover:text-rose-500 transition-all rounded-lg hover:bg-rose-500/10"
-                  title="Logout"
-                >
-                  <LogOut className="w-4 h-4" />
-                </button>
-              )}
-           </div>
-        </div>
-
+      {/* FOOTER SECTION — SETTINGS & PROFILE */}
+      <div className="mt-auto p-3 border-t border-border/30 flex flex-col gap-2 bg-muted/5 backdrop-blur-md shrink-0">
         <Link 
-          to="/brand"
-          className="w-full h-12 rounded-[1.25rem] bg-secondary/10 border border-secondary/20 text-secondary font-bold overflow-hidden flex items-center justify-center gap-3 hover:bg-secondary/20 transition-all active:scale-95 shadow-2xl group"
+          to="/settings"
+          className={`flex items-center gap-4 px-3 py-2.5 rounded-lg transition-colors group ${
+            location.pathname === "/settings" ? "bg-primary/10 text-primary" : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+          }`}
+          title={!isExpanded ? "Settings" : undefined}
         >
-          <Briefcase className="w-4.5 h-4.5 transition-transform group-hover:scale-110" />
+          <Settings className="w-4.5 h-4.5 shrink-0 transition-transform group-hover:rotate-45" />
           <AnimatePresence>
             {isExpanded && (
               <motion.span 
-                className="font-mono text-[9px] uppercase font-bold tracking-[2.5px] pt-0.5"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
+                className="font-medium text-[13px] whitespace-nowrap"
+                initial={{ opacity: 0, x: -5 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -5 }}
+                transition={{ duration: 0.15 }}
               >
-                DEPLOY BRAND
+                Settings
               </motion.span>
             )}
           </AnimatePresence>
         </Link>
+
+        <div className="flex items-center h-14 p-1.5 rounded-xl border border-border/20 bg-background/50 group relative">
+           {user?.photo ? (
+             <img src={user.photo} alt={user.name} className="w-9 h-9 rounded-lg object-cover shrink-0" />
+           ) : (
+             <div className="w-9 h-9 rounded-lg bg-gradient-to-tr from-primary to-indigo-500 shrink-0 flex items-center justify-center text-white text-[10px] font-black uppercase">
+               {user?.name?.split(' ').map(n => n[0]).join('')}
+             </div>
+           )}
+           <AnimatePresence>
+             {isExpanded && (
+               <motion.div 
+                className="ml-3 flex flex-col min-w-0 flex-1"
+                initial={{ opacity: 0, x: -5 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -5 }}
+                transition={{ duration: 0.15 }}
+               >
+                  <span className="text-xs font-black truncate">{user?.name || "Anonymous"}</span>
+                  <span className="text-[9px] text-muted-foreground font-bold truncate">{user?.handle || "@creator"}</span>
+                  <div className="flex gap-1 mt-0.5 opacity-60">
+                    {user?.platforms.includes("Instagram") && <Instagram className="w-2.5 h-2.5" />}
+                    {user?.platforms.includes("YouTube") && <Youtube className="w-2.5 h-2.5" />}
+                  </div>
+               </motion.div>
+             )}
+           </AnimatePresence>
+           {isExpanded && (
+             <button 
+              onClick={logout}
+              className="p-2 opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-rose-500 transition-all"
+             >
+                <LogOut className="w-3.5 h-3.5" />
+             </button>
+           )}
+        </div>
+
+        <div className="flex flex-col gap-1 mt-1">
+          <Link 
+            to="/brand"
+            className="w-full h-10 rounded-lg bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 font-bold overflow-hidden flex items-center justify-center gap-2 hover:bg-indigo-500/20 transition-all active:scale-95"
+          >
+            <Briefcase className="w-3.5 h-3.5" />
+            <AnimatePresence>
+              {isExpanded && (
+                <motion.span 
+                  className="text-[10px] uppercase font-black tracking-widest"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                >
+                  Brand Mode
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </Link>
+        </div>
       </div>
     </motion.div>
   );

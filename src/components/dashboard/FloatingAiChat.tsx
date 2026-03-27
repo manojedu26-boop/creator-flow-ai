@@ -6,12 +6,17 @@ import {
   TrendingUp, Users, Target, ChevronDown
 } from "lucide-react";
 import { Typewriter } from "../shared/MotionComponents";
+import { useAuth } from "../../contexts/AuthContext";
 
 export const FloatingAiChat = () => {
+  const { user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [history, setHistory] = useState([
-    { role: 'assistant', content: 'Good afternoon! I see your engagement is peaking on Reels today. How can I help you scale?' }
+    { 
+      role: 'assistant', 
+      content: `Good afternoon, ${user?.firstName || 'Creator'}! I see your ${user?.niche || ''} content is trending. How can I help you scale?` 
+    }
   ]);
   const chatEndRef = useRef<HTMLDivElement>(null);
 
@@ -32,9 +37,10 @@ export const FloatingAiChat = () => {
 
     // Mock AI Response
     setTimeout(() => {
+      const stats = Object.entries(user?.followerCounts || {}).map(([p, c]) => `${c} on ${p}`).join(', ');
       setHistory(prev => [...prev, { 
         role: 'assistant', 
-        content: `Based on your live data (₹ 45k avg deal size and 4.8% engagement), you should focus on 'Tech Lifestyle' content today at 6:30 PM for maximum ROI.` 
+        content: `Based on your ${user?.niche || 'creator'} data (${stats || 'growing reach'}), you should focus on ${user?.niche || 'engaging'} content today at 6:30 PM for maximum ROI.` 
       }]);
     }, 1000);
   };

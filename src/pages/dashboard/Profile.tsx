@@ -6,22 +6,25 @@ import {
   Share2, ArrowLeft, Trophy, Zap, 
   Briefcase, Mail, UserPlus, ExternalLink
 } from "lucide-react";
+import { useAuth } from "../../contexts/AuthContext";
 
 export const Profile = () => {
+  const { user } = useAuth();
   const { id } = useParams();
   const isMe = id === 'me';
 
   const creator = {
-    name: isMe ? "Jack Dorsey" : "Maya Hills",
-    handle: "@mayahills_vlog",
-    location: "Mumbai, India",
-    niche: ["Travel", "Wellness", "Tech"],
-    followers: { ig: "24K", yt: "12K", tt: "45K" },
+    name: isMe ? (user?.name || "Jack Dorsey") : "Maya Hills",
+    handle: isMe ? (user?.handle || "@jack") : "@mayahills_vlog",
+    location: isMe ? "Mumbai, India" : "Mumbai, India", // Simplified for now
+    niche: isMe ? [user?.niche || "Digital"] : ["Travel", "Wellness", "Tech"],
+    followers: isMe ? (user?.followerCounts || { ig: "24K", yt: "12K", tt: "45K" }) : { ig: "24K", yt: "12K", tt: "45K" },
+    photo: isMe ? user?.photo : null,
     score: 92,
     engagement: "4.8%",
     frequency: "5 posts/week",
     primary: "Instagram",
-    about: "Creating cinematic travel stories and wellness routines for the modern adventurer. Partnered with 20+ global brands to bring authentic storytelling to life.",
+    about: isMe ? `Authentic storytelling for brands in the ${user?.niche} space. Building communities across ${Object.keys(user?.followerCounts || {}).join(', ')}.` : "Creating cinematic travel stories and wellness routines for the modern adventurer. Partnered with 20+ global brands to bring authentic storytelling to life.",
     openTo: ["Paid Collabs", "UGC", "Ambassador", "Affiliate"],
     stats: [
       { label: 'Avg Engagement', val: '4.8%', icon: Heart },
@@ -56,8 +59,12 @@ export const Profile = () => {
          <div className="px-12 pb-12 relative">
             <div className="flex flex-col lg:flex-row gap-10 items-end -mt-20">
                <div className="relative">
-                  <div className="w-40 h-40 rounded-[2.5rem] bg-background border-[6px] border-card shadow-2xl flex items-center justify-center font-black text-5xl text-foreground mb-2">
-                     {creator.name[0]}{creator.name.split(' ')[1]?.[0]}
+                  <div className="w-40 h-40 rounded-[2.5rem] bg-background border-[6px] border-card shadow-2xl flex items-center justify-center font-black text-5xl text-foreground mb-2 overflow-hidden">
+                     {(isMe && user?.photo) ? (
+                       <img src={user.photo} alt={user.name} className="w-full h-full object-cover" />
+                     ) : (
+                       <>{creator.name[0]}{creator.name.split(' ')[1]?.[0] || ''}</>
+                     )}
                   </div>
                   <div className="absolute -bottom-2 -right-2 p-2 bg-blue-500 rounded-full border-4 border-card">
                      <CheckCircle className="w-6 h-6 text-white" />

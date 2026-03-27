@@ -3,16 +3,20 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, ArrowRight, ArrowLeft, Check, Instagram, Youtube } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { useAuth } from "../contexts/AuthContext";
 
 const niches = ["Fitness", "Lifestyle", "Beauty", "Tech", "Food", "Travel", "Finance", "Gaming", "Fashion", "Other"];
 const goals = ["Grow followers", "Land brand deals", "Make more money", "Post consistently", "Understand my analytics"];
 
 const Onboarding = () => {
   const navigate = useNavigate();
+  const { user, updateUser } = useAuth();
   const [step, setStep] = useState(1);
-  const [creatorName, setCreatorName] = useState("");
-  const [platforms, setPlatforms] = useState<string[]>([]);
-  const [niche, setNiche] = useState("");
+  const [creatorName, setCreatorName] = useState(user?.name || "");
+  const [handle, setHandle] = useState(user?.handle || "");
+  const [platforms, setPlatforms] = useState<string[]>(user?.platforms || []);
+  const [followerCounts, setFollowerCounts] = useState<Record<string, string>>(user?.followerCounts || {});
+  const [niche, setNiche] = useState(user?.niche || "");
   const [selectedGoals, setSelectedGoals] = useState<string[]>([]);
 
   const togglePlatform = (p: string) =>
@@ -22,12 +26,19 @@ const Onboarding = () => {
     setSelectedGoals((prev) => (prev.includes(g) ? prev.filter((x) => x !== g) : [...prev, g]));
 
   const next = () => {
-    if (step === 1 && !creatorName) { toast.error("Enter your creator name"); return; }
+    if (step === 1 && (!creatorName || !handle)) { toast.error("Enter your name and handle"); return; }
     if (step === 2 && platforms.length === 0) { toast.error("Select at least one platform"); return; }
     if (step === 3 && !niche) { toast.error("Pick your niche"); return; }
     if (step === 4 && selectedGoals.length === 0) { toast.error("Select at least one goal"); return; }
+    
+    // Sync state to global context at each step
+    if (step === 1) updateUser({ name: creatorName, handle });
+    if (step === 2) updateUser({ platforms, followerCounts });
+    if (step === 3) updateUser({ niche });
+
     if (step < 5) setStep(step + 1);
     else {
+      updateUser({ onboarded: true });
       toast.success("You're all set! 🚀");
       setTimeout(() => navigate("/dashboard"), 1000);
     }
@@ -59,42 +70,66 @@ const Onboarding = () => {
             transition={{ duration: 0.3 }}
           >
             {step === 1 && (
-              <div>
-                <h2 className="text-2xl font-bold mb-2">Welcome! What's your creator name?</h2>
-                <p className="text-muted-foreground mb-6">This is how you'll be known on the platform.</p>
-                <input
-                  type="text"
-                  value={creatorName}
-                  onChange={(e) => setCreatorName(e.target.value)}
-                  placeholder="e.g. @CreativeKate"
-                  className="w-full rounded-lg bg-muted/50 border border-border/50 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
-                />
+              <div className="space-y-4">
+                <div>
+                  <h2 className="text-2xl font-bold mb-2">What's your full name?</h2>
+                  <p className="text-muted-foreground mb-4">This helps us personalize your experience.</p>
+                  <input
+                    type="text"
+                    value={creatorName}
+                    onChange={(e) => setCreatorName(e.target.value)}
+                    placeholder="e.g. Naveen Kumar"
+                    className="w-full rounded-lg bg-muted/50 border border-border/50 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  />
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold mb-2">And your handle?</h2>
+                  <input
+                    type="text"
+                    value={handle}
+                    onChange={(e) => setHandle(e.target.value)}
+                    placeholder="e.g. @naveencreates"
+                    className="w-full rounded-lg bg-muted/50 border border-border/50 px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+                  />
+                </div>
               </div>
             )}
 
             {step === 2 && (
               <div>
                 <h2 className="text-2xl font-bold mb-2">Connect your platforms</h2>
-                <p className="text-muted-foreground mb-6">Which platforms do you create on?</p>
-                <div className="grid grid-cols-1 gap-3">
+                <p className="text-muted-foreground mb-6">Which platforms do you create on? Enter follower counts.</p>
+                <div className="grid grid-cols-1 gap-4">
                   {[
                     { name: "Instagram", icon: <Instagram className="w-5 h-5" /> },
                     { name: "YouTube", icon: <Youtube className="w-5 h-5" /> },
                     { name: "TikTok", icon: <Sparkles className="w-5 h-5" /> },
                   ].map((p) => (
-                    <button
-                      key={p.name}
-                      onClick={() => togglePlatform(p.name)}
-                      className={`flex items-center gap-3 rounded-lg border px-4 py-3 transition-all active:scale-[0.97] ${
-                        platforms.includes(p.name)
-                          ? "border-primary bg-primary/10 text-primary"
-                          : "border-border/50 bg-muted/30 text-muted-foreground hover:bg-muted/50"
-                      }`}
-                    >
-                      {p.icon}
-                      <span className="font-medium">{p.name}</span>
-                      {platforms.includes(p.name) && <Check className="w-4 h-4 ml-auto" />}
-                    </button>
+                    <div key={p.name} className="space-y-2">
+                       <button
+                        onClick={() => togglePlatform(p.name)}
+                        className={`w-full flex items-center gap-3 rounded-lg border px-4 py-3 transition-all active:scale-[0.97] ${
+                          platforms.includes(p.name)
+                            ? "border-primary bg-primary/10 text-primary"
+                            : "border-border/50 bg-muted/30 text-muted-foreground hover:bg-muted/50"
+                        }`}
+                      >
+                        {p.icon}
+                        <span className="font-medium">{p.name}</span>
+                        {platforms.includes(p.name) && <Check className="w-4 h-4 ml-auto" />}
+                      </button>
+                      {platforms.includes(p.name) && (
+                        <motion.input
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          type="text"
+                          placeholder={`${p.name} followers (e.g. 120K)`}
+                          value={followerCounts[p.name] || ""}
+                          onChange={(e) => setFollowerCounts(prev => ({ ...prev, [p.name]: e.target.value }))}
+                          className="w-full rounded-lg bg-muted/20 border border-border/40 px-4 py-2 text-xs focus:outline-none"
+                        />
+                      )}
+                    </div>
                   ))}
                 </div>
               </div>

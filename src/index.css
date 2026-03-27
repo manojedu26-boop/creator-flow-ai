@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,139 +6,122 @@
 
 @layer base {
   :root {
-    --background: 240 45% 6%; /* #07071A approximately */
-    --surface: 240 42% 10%; /* #0E0E22 */
-    --foreground: 240 20% 92%; /* #E4E4F0 */
-    
-    --card: 0 0% 100% / 0.04;
-    --card-elevated: 0 0% 100% / 0.07;
-    --card-border: 0 0% 100% / 0.08;
-    --card-border-elevated: 0 0% 100% / 0.12;
+    --background: 240 20% 3.5%;
+    --foreground: 220 20% 92%;
 
-    --primary: 325 100% 62%; /* #FF3CAC */
-    --secondary: 204 64% 47%; /* #2B86C5 */
-    --success: 160 100% 45%; /* #00E5A0 */
-    --warning: 42 90% 61%; /* #F5C842 (Gold-ish) */
-    --muted: 240 23% 46%; /* #5A5A90 */
-    --border: 240 32% 16%; /* #1C1C36 */
-    
-    --radius: 16px;
+    --card: 240 15% 7%;
+    --card-foreground: 220 20% 92%;
+
+    --popover: 240 15% 7%;
+    --popover-foreground: 220 20% 92%;
+
+    --primary: 318 100% 62%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 204 64% 47%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 240 12% 14%;
+    --muted-foreground: 220 10% 55%;
+
+    --accent: 160 100% 45%;
+    --accent-foreground: 0 0% 0%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 240 10% 16%;
+    --input: 240 10% 16%;
     --ring: 318 100% 62%;
+
+    --radius: 0.75rem;
+
+    --gold: 42 90% 61%;
+    --gold-foreground: 0 0% 0%;
+
+    --glass: 240 15% 10%;
+    --glass-border: 240 10% 20%;
+
+    --sidebar-background: 240 15% 5%;
+    --sidebar-foreground: 220 20% 92%;
+    --sidebar-primary: 318 100% 62%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 12% 14%;
+    --sidebar-accent-foreground: 220 20% 92%;
+    --sidebar-border: 240 10% 16%;
+    --sidebar-ring: 318 100% 62%;
   }
 }
 
 @layer base {
   * {
-    @apply border-border/40;
+    @apply border-border;
   }
 
   body {
-    background-color: #07071A;
-    @apply text-foreground antialiased selection:bg-primary/30 selection:text-white;
-    font-family: 'Syne', system-ui, sans-serif;
-  }
-
-  h1, .font-bebas {
-    font-family: 'Bebas Neue', cursive;
-    @apply tracking-[4px] uppercase;
-  }
-
-  .font-syne {
-    font-family: 'Syne', sans-serif;
-  }
-
-  .font-mono, .badge, .label-meta, .kpi-number {
-    font-family: 'DM Mono', monospace;
-  }
-
-  h2, h3 {
-    @apply font-syne font-extrabold;
-  }
-}
-
-@layer components {
-  .glass-card {
-    background: rgba(255, 255, 255, 0.04);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 16px;
-    @apply transition-all duration-300;
-  }
-
-  .glass-card:hover {
-    @apply -translate-y-[3px];
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 0 10px hsla(325, 100%, 62%, 0.1);
-    border-color: rgba(255, 255, 255, 0.15);
-  }
-
-  .glass-elevated {
-    background: rgba(255, 255, 255, 0.07);
-    backdrop-filter: blur(32px);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.06);
-    border-radius: 16px;
-  }
-
-  .glass-sidebar {
-    background: rgba(7, 7, 26, 0.85);
-    backdrop-filter: blur(24px);
-    border-right: 1px solid rgba(255, 255, 255, 0.06);
-  }
-
-  .bento-grid {
-    display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    gap: 16px;
-  }
-
-  /* Bento Spans */
-  .bento-span-12 { grid-column: span 12; }
-  .bento-span-8 { grid-column: span 8; }
-  .bento-span-6 { grid-column: span 6; }
-  .bento-span-4 { grid-column: span 4; }
-  .bento-span-3 { grid-column: span 3; }
-  .bento-row-span-2 { grid-row: span 2; }
-
-  @media (max-width: 768px) {
-    .bento-grid > * {
-      grid-column: span 12 !important;
-      grid-row: span 1 !important;
-    }
-  }
-
-  .btn-primary {
-    @apply bg-gradient-to-r from-[#FF3CAC] to-[#2B86C5] text-white font-bold rounded-[10px] transition-all active:scale-[0.97] shadow-lg shadow-primary/20;
-  }
-
-  .btn-secondary {
-    @apply glass-card bg-transparent border-white/10 hover:border-white/20 text-white active:scale-[0.97];
-  }
-
-  .input-glass {
-    @apply bg-white/5 border border-white/10 rounded-xl px-4 py-2 focus:outline-none focus:ring-1 focus:ring-primary/50 focus:border-primary/50 transition-all;
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
   }
 }
 
 @layer utilities {
   .text-gradient-primary {
     @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, #FF3CAC, #2B86C5);
+    background-image: linear-gradient(135deg, hsl(318 100% 62%), hsl(204 64% 47%));
   }
 
-  .divider-gradient {
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+  .text-gradient-gold {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, hsl(42 90% 61%), hsl(35 95% 55%));
   }
 
-  /* Page Transitions */
-  .page-enter {
-    opacity: 0;
-    transform: translateY(16px);
+  .bg-glass {
+    background: hsla(240, 15%, 10%, 0.6);
+    backdrop-filter: blur(20px);
+    border: 1px solid hsla(240, 10%, 20%, 0.5);
   }
-  .page-enter-active {
-    opacity: 1;
-    transform: translateY(0);
-    transition: opacity 250ms, transform 250ms;
+
+  .bg-gradient-hero {
+    background: radial-gradient(ellipse 80% 60% at 50% -10%, hsla(318, 100%, 62%, 0.12), transparent),
+                radial-gradient(ellipse 60% 40% at 80% 50%, hsla(204, 64%, 47%, 0.08), transparent);
+  }
+
+  .glow-pink {
+    box-shadow: 0 0 40px -10px hsla(318, 100%, 62%, 0.3);
+  }
+
+  .glow-blue {
+    box-shadow: 0 0 40px -10px hsla(204, 64%, 47%, 0.3);
+  }
+
+  /* Section 14: Premium Interaction Rules */
+  .premium-card {
+    @apply transition-all duration-300;
+  }
+
+  .premium-card:hover {
+    @apply -translate-y-[2px];
+    box-shadow: 0 0 20px -5px hsla(var(--primary), 0.2);
+    border-color: hsla(var(--primary), 0.4);
+  }
+
+  @keyframes shimmer {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(200%); }
+  }
+
+  .animate-shimmer {
+    animation: shimmer 2s linear infinite;
+  }
+
+  .skeleton-shimmer {
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      hsla(var(--primary), 0.05) 50%,
+      transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite linear;
   }
 }

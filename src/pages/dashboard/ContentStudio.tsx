@@ -8,6 +8,7 @@ import {
   ChevronDown, Eye, FileText, Share2
 } from "lucide-react";
 import { PageTransition, SkeletonCard } from "../../components/shared/MotionComponents";
+import { useAuth } from "../../contexts/AuthContext";
 
 type ToolType = 'caption' | 'script' | 'reel' | 'carousel' | 'hashtag' | 'audio' | 'hook' | 'pitch' | 'thumbnail' | 'bio';
 
@@ -25,6 +26,7 @@ const tools = [
 ];
 
 export const ContentStudio = () => {
+  const { user } = useAuth();
   const [activeTool, setActiveTool] = useState<ToolType>('caption');
   const [isGenerating, setIsGenerating] = useState(false);
   const [showOutput, setShowOutput] = useState(false);
@@ -71,7 +73,7 @@ export const ContentStudio = () => {
         <div className="space-y-4">
            <label className="text-xs font-black uppercase tracking-widest text-muted-foreground ml-1">What is this post about?</label>
            <textarea 
-             placeholder="e.g. My morning workout routine with a focus on stretching and dynamic movements..."
+             placeholder={`e.g. My morning ${user?.niche || 'Daily'} routine with a focus on stretching...`}
              className="w-full h-32 bg-muted/10 border border-border/40 rounded-3xl p-6 text-sm focus:outline-none focus:ring-1 focus:ring-primary transition-all resize-none"
            />
         </div>
@@ -158,11 +160,11 @@ export const ContentStudio = () => {
             className="space-y-8 pt-8 border-t border-border/30"
           >
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-               {[
-                 { label: 'Punchy & Short', text: 'My morning routine: Sweat, Stretch, Slay. 🚀' },
-                 { label: 'Engaging & Medium', text: 'Struggling to wake up? Here is my 10-minute movement ritual that changes everything. Try it tomorrow! ⬇️' },
-                 { label: 'Story-Led & Long', text: 'I used to skip mobility. I paid the price with back pain for years. Then I discovered this flow. It is not just about physical health, it is a mental reset.' },
-               ].map((c, i) => (
+                {[
+                  { label: 'Punchy & Short', text: `My ${user?.niche || 'Daily'} routine: Sweat, Stretch, Slay. 🚀` },
+                  { label: 'Engaging & Medium', text: `Struggling with ${user?.niche || 'motivation'}? Here is my 10-minute ritual that changes everything. Try it tomorrow! ⬇️` },
+                  { label: 'Story-Led & Long', text: `I used to skip ${user?.niche || 'basics'}. I paid the price for years. Then I discovered this flow for ${user?.name}. It is a mental reset.` },
+                ].map((c, i) => (
                  <div key={i} className="premium-card bg-card border border-border/40 rounded-3xl p-6 flex flex-col justify-between group transition-all shadow-sm relative overflow-hidden">
                     <div>
                       <div className="flex justify-between items-start mb-4">
@@ -238,10 +240,14 @@ export const ContentStudio = () => {
                    <div className="w-16 h-4 bg-muted/30 rounded-full" />
                 </div>
                 <div className="flex-1 overflow-y-auto no-scrollbar">
-                   <div className="p-4 flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-muted shadow-inner" />
-                      <span className="text-xs font-black uppercase">Your.Brand</span>
-                   </div>
+                    <div className="p-4 flex items-center gap-3">
+                       {user?.photo ? (
+                         <img src={user.photo} alt={user.name} className="w-8 h-8 rounded-full object-cover" />
+                       ) : (
+                         <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white font-black text-[8px]">{user?.firstName?.[0]}</div>
+                       )}
+                       <span className="text-xs font-black uppercase">{user?.handle}</span>
+                    </div>
                    <div className="aspect-square bg-muted/30 border-y border-border/20" />
                    <div className="p-5 space-y-4">
                       <div className="flex items-center gap-4 text-muted-foreground">
@@ -249,10 +255,10 @@ export const ContentStudio = () => {
                          <RefreshCcw className="w-5 h-5" />
                          <Share2 className="w-5 h-5" />
                       </div>
-                      <p className="text-[11px] leading-relaxed text-foreground font-medium">
-                         <span className="font-black mr-2">your.brand</span>
-                         {previewSocial}
-                      </p>
+                       <p className="text-[11px] leading-relaxed text-foreground font-medium">
+                          <span className="font-black mr-2">{user?.handle}</span>
+                          {previewSocial}
+                       </p>
                    </div>
                 </div>
                 <button onClick={() => setPreviewSocial(null)} className="absolute top-4 right-4 p-2 bg-background/50 backdrop-blur-md rounded-full"><X className="w-4 h-4" /></button>

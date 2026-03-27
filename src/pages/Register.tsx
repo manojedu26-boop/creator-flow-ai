@@ -3,9 +3,11 @@ import { motion } from "framer-motion";
 import { Sparkles, ArrowLeft, Mail, Lock, User, Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { useAuth } from "../contexts/AuthContext";
 
 const Register = () => {
   const navigate = useNavigate();
+  const { register } = useAuth();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -17,6 +19,9 @@ const Register = () => {
       toast.error("Please fill in all fields.");
       return;
     }
+    
+    register(name, email);
+    
     toast.success("Account created! 🎉", {
       description: "Let's set up your creator profile...",
     });
