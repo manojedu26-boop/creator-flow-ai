@@ -3,8 +3,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   Bell, Search, ChevronDown, X, CheckCheck,
   Sparkles, DollarSign, TrendingUp, AlertTriangle,
-  MessageSquare, Users, Clock, Zap, Globe
+  MessageSquare, Users, Clock, Zap, Globe, Sun, Moon
 } from "lucide-react";
+import { useTheme } from "next-themes";
 import { useAuth } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { SearchOverlay } from "./SearchOverlay";
@@ -67,8 +68,12 @@ export const Header = ({ title = "Dashboard" }: { title?: string }) => {
     setNotifications([...all].reverse());
   }, []);
 
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
   // Initial load + poll every 60s
   useEffect(() => {
+    setMounted(true);
     loadNotifications();
     const id = setInterval(loadNotifications, 60000);
     return () => clearInterval(id);
@@ -120,7 +125,7 @@ export const Header = ({ title = "Dashboard" }: { title?: string }) => {
 
   return (
     <>
-      <header className="sticky-header lg:fixed top-0 left-0 lg:left-[80px] right-0 h-[var(--header-h)] bg-black/70 backdrop-blur-3xl border-b border-white/5 z-[100] flex items-center justify-between px-4 md:px-10 transition-all duration-300">
+      <header className="sticky-header lg:fixed top-0 left-0 lg:left-[80px] right-0 h-[var(--header-h)] bg-black/70 dark:bg-black/70 light:bg-white/80 backdrop-blur-3xl border-b border-white/5 z-[100] flex items-center justify-between px-4 md:px-10 transition-all duration-300">
         <div className="flex items-center gap-8">
           <h1 className="text-base md:text-xl font-black tracking-tight uppercase truncate max-w-[160px] md:max-w-none">{title}</h1>
 
@@ -151,6 +156,17 @@ export const Header = ({ title = "Dashboard" }: { title?: string }) => {
           <button onClick={() => setIsSearchOpen(true)} className="md:hidden p-2 text-zinc-500 hover:text-white transition-colors">
             <Search className="w-5 h-5" />
           </button>
+
+          {/* Theme Toggle */}
+          {mounted && (
+            <button
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              className="p-2 text-zinc-500 hover:text-white transition-colors rounded-xl hover:bg-white/5"
+              aria-label="Toggle Theme"
+            >
+              {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+            </button>
+          )}
 
           {/* Notification Bell */}
           <div className="relative" ref={panelRef}>

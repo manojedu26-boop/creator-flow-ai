@@ -102,7 +102,7 @@ export const Notifications = () => {
 
   return (
     <PageTransition>
-      <motion.div variants={staggerContainer} initial="hidden" animate="visible" className="space-y-6 max-w-3xl mx-auto">
+      <motion.div variants={staggerContainer} initial="hidden" animate="show" className="space-y-6 max-w-3xl mx-auto p-4 md:p-8 pb-24 lg:pb-8">
         {/* Page Header */}
         <motion.div variants={staggerItem} className="flex items-center justify-between">
           <div>

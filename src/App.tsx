@@ -8,6 +8,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { Intro } from "./components/shared/Intro.tsx";
 import { AuthProvider } from "./contexts/AuthContext.tsx";
 import { ProtectedRoute } from "./components/shared/ProtectedRoute.tsx";
+import { ThemeProvider } from "next-themes";
 
 // Lazy-loaded components
 const Index = lazy(() => import("./pages/Index.tsx"));
@@ -63,54 +64,58 @@ const App = () => {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Sonner />
+        <Toaster />
         <AnimatePresence mode="wait">
           {showIntro ? (
             <Intro key="intro" onComplete={() => setShowIntro(false)} />
           ) : (
             <AuthProvider>
-              <BrowserRouter key="app">
-                <Suspense fallback={<PageLoader />}>
-                  <Routes>
-                    <Route path="/" element={<Index />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/register" element={<Register />} />
-                    <Route path="/forgot-password" element={<ForgotPassword />} />
-                    <Route path="/reset-password" element={<ResetPassword />} />
-                    <Route path="/onboarding" element={<Onboarding />} />
-                    
-                    {/* Post-Login CreatorForge Architecture */}
-                    <Route element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
-                      <Route path="/dashboard" element={<DashboardHome />} />
-                      <Route path="/analytics" element={<Analytics />} />
-                      <Route path="/deals" element={<BrandDeals />} />
-                      <Route path="/studio" element={<ContentStudio />} />
-                      <Route path="/calendar" element={<Calendar />} />
-                      <Route path="/growth" element={<Growth />} />
-                      <Route path="/network" element={<Network />} />
-                      <Route path="/network/profile/:id" element={<Profile />} />
-                      <Route path="/revenue" element={<Revenue />} />
-                      <Route path="/contracts" element={<Contracts />} />
-                      <Route path="/mediakit" element={< MediaKit />} />
-                      <Route path="/messages" element={<Messages />} />
-                      <Route path="/notifications" element={<NotificationsPage />} />
-                      <Route path="/settings" element={<Settings />} />
-                    </Route>
+              <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
+                <BrowserRouter key="app">
+                  <Suspense fallback={<PageLoader />}>
+                    <Routes>
+                      {/* Public Routes */}
+                      <Route path="/" element={<Index />} />
+                      <Route path="/login" element={<Login />} />
+                      <Route path="/register" element={<Register />} />
+                      <Route path="/forgot-password" element={<ForgotPassword />} />
+                      <Route path="/reset-password" element={<ResetPassword />} />
+                      <Route path="/onboarding" element={<Onboarding />} />
 
-                    {/* Brand Mode Routes (Section 13) */}
-                    <Route path="/brand" element={<BrandLayout />}>
-                      <Route index element={<BrandHome />} />
-                      <Route path="discover" element={<DiscoverCreators />} />
-                      <Route path="post-brief" element={<PostBrief />} />
-                      <Route path="analytics" element={<ComingSoon title="Campaign Analytics" />} />
-                      <Route path="messages" element={<ComingSoon title="Brand Messages" />} />
-                      <Route path="deals" element={<ComingSoon title="Active Deals" />} />
-                      <Route path="contracts" element={<ComingSoon title="Brand Contracts" />} />
-                    </Route>
+                      {/* Post-Login CreatorForge Architecture */}
+                      <Route element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
+                        <Route path="/dashboard" element={<DashboardHome />} />
+                        <Route path="/analytics" element={<Analytics />} />
+                        <Route path="/deals" element={<BrandDeals />} />
+                        <Route path="/studio" element={<ContentStudio />} />
+                        <Route path="/calendar" element={<Calendar />} />
+                        <Route path="/growth" element={<Growth />} />
+                        <Route path="/network" element={<Network />} />
+                        <Route path="/network/profile/:id" element={<Profile />} />
+                        <Route path="/revenue" element={<Revenue />} />
+                        <Route path="/contracts" element={<Contracts />} />
+                        <Route path="/mediakit" element={<MediaKit />} />
+                        <Route path="/messages" element={<Messages />} />
+                        <Route path="/notifications" element={<NotificationsPage />} />
+                        <Route path="/settings" element={<Settings />} />
+                      </Route>
 
-                    <Route path="*" element={<NotFound />} />
-                  </Routes>
-                </Suspense>
-              </BrowserRouter>
+                      {/* Brand Mode Routes */}
+                      <Route path="/brand" element={<BrandLayout />}>
+                        <Route index element={<BrandHome />} />
+                        <Route path="discover" element={<DiscoverCreators />} />
+                        <Route path="post-brief" element={<PostBrief />} />
+                        <Route path="analytics" element={<ComingSoon title="Campaign Analytics" />} />
+                        <Route path="messages" element={<ComingSoon title="Brand Messages" />} />
+                        <Route path="deals" element={<ComingSoon title="Active Deals" />} />
+                        <Route path="contracts" element={<ComingSoon title="Brand Contracts" />} />
+                      </Route>
+
+                      <Route path="*" element={<NotFound />} />
+                    </Routes>
+                  </Suspense>
+                </BrowserRouter>
+              </ThemeProvider>
             </AuthProvider>
           )}
         </AnimatePresence>
@@ -118,6 +123,5 @@ const App = () => {
     </QueryClientProvider>
   );
 };
-
 
 export default App;
