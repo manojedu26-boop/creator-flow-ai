@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { PageTransition } from "../../components/shared/MotionComponents";
 import { useLongPress } from "../../components/shared/MobileInteractions";
+import { BottomSheet } from "../../components/ui/BottomSheet";
 
 type ViewMode = 'month' | 'week' | 'day' | 'list';
 
@@ -132,48 +133,41 @@ export const Calendar = () => {
          {renderMonthView()}
       </div>
 
-      <AnimatePresence>
+      <BottomSheet isOpen={!!selectedPost} onClose={() => setSelectedPost(null)} height="90vh">
         {selectedPost && (
-          <div className="fixed inset-0 z-[110] flex items-center justify-center p-6">
-             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setSelectedPost(null)} className="absolute inset-0 bg-black/80 backdrop-blur-md" />
-             <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} className="relative w-full max-w-lg bg-zinc-900 border border-white/10 rounded-[2.5rem] shadow-2xl p-8 overflow-hidden">
-                <div className="flex justify-between items-start mb-8">
-                   <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10">
-                         {selectedPost.platform === 'ig' ? <Instagram className="w-6 h-6 text-primary" /> : <Youtube className="w-6 h-6 text-red-500" />}
-                      </div>
-                      <div>
-                         <h4 className="font-black text-xl uppercase tracking-tight">{selectedPost.caption}</h4>
-                         <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">{selectedPost.type} • {selectedPost.time}</span>
-                      </div>
-                   </div>
-                   <button onClick={() => setSelectedPost(null)} className="p-2 bg-white/5 hover:bg-primary/20 rounded-xl transition-all"><X className="w-5 h-5" /></button>
-                </div>
-                
-                <div className="aspect-video bg-black/40 rounded-3xl border border-white/5 mb-6 flex items-center justify-center relative overflow-hidden group">
-                   <Video className="w-12 h-12 text-white/10 group-hover:text-primary transition-colors duration-500" />
-                   <div className="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
-                      <p className="text-[10px] font-black uppercase tracking-widest text-white/60 text-center">Preview not yet uploaded</p>
-                   </div>
-                </div>
+          <div className="flex flex-col h-full pt-4">
+             <div className="flex justify-between items-start mb-8">
+               <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10">
+                     {selectedPost.platform === 'ig' ? <Instagram className="w-6 h-6 text-primary" /> : <Youtube className="w-6 h-6 text-red-500" />}
+                  </div>
+                  <div>
+                     <h4 className="font-black text-xl uppercase tracking-tight pr-8">{selectedPost.caption}</h4>
+                     <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">{selectedPost.type} • {selectedPost.time}</span>
+                  </div>
+               </div>
+             </div>
+             
+             <div className="aspect-video bg-black/40 rounded-3xl border border-white/5 mb-6 flex items-center justify-center relative overflow-hidden group shrink-0">
+                <Video className="w-12 h-12 text-white/10 group-hover:text-primary transition-colors duration-500" />
+             </div>
 
-                <div className="p-5 rounded-2xl bg-primary/10 border border-primary/20 space-y-3">
-                   <p className="text-[10px] font-black text-primary uppercase tracking-[0.2em] flex items-center gap-2">
-                     <Sparkles className="w-3 h-3" /> AI Caption Optimization
-                   </p>
-                   <p className="text-sm font-bold text-white/90 leading-relaxed italic">
-                     "Try starting with 'I used to hate HIIT until I found these 3 moves...' – it matches your top-performing reel hook."
-                   </p>
-                </div>
+             <div className="p-5 rounded-2xl bg-primary/10 border border-primary/20 space-y-3 shrink-0">
+                <p className="text-[10px] font-black text-primary uppercase tracking-[0.2em] flex items-center gap-2">
+                  <Sparkles className="w-3 h-3" /> AI Caption Optimization
+                </p>
+                <p className="text-sm font-bold text-white/90 leading-relaxed italic">
+                  "Try starting with 'I used to hate HIIT until I found these 3 moves...' – it matches your top-performing reel hook."
+                </p>
+             </div>
 
-                <div className="mt-8 grid grid-cols-2 gap-4">
-                   <button className="h-12 rounded-xl bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-widest">Edit Layout</button>
-                   <button className="h-12 rounded-xl bg-primary text-white text-[10px] font-black uppercase tracking-widest shadow-xl shadow-primary/20">Go to Studio</button>
-                </div>
-             </motion.div>
+             <div className="mt-8 grid grid-cols-2 gap-4 pb-safe-offset mt-auto shrink-0 pt-4">
+                <button className="h-12 rounded-xl bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-widest hover:bg-white/10 transition-all">Edit Layout</button>
+                <button className="h-12 rounded-xl bg-primary text-white text-[10px] font-black uppercase tracking-widest shadow-xl shadow-primary/20 hover:scale-[1.02] transition-all">Go to Studio</button>
+             </div>
           </div>
         )}
-      </AnimatePresence>
+      </BottomSheet>
     </PageTransition>
   );
 };

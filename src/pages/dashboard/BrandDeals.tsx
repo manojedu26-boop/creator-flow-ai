@@ -3,12 +3,15 @@ import { motion, AnimatePresence } from "framer-motion";
 import { 
   Search, Filter, Plus, MoreVertical, Calendar, 
   DollarSign, Briefcase, MessageSquare, FileText, 
-  Phone, AlertCircle, ChevronRight, X, Sparkles,
+  Phone, AlertCircle, ChevronRight, ChevronDown, X, Sparkles,
   Instagram, Youtube, Twitter, CheckCircle2,
   Zap
 } from "lucide-react";
 import { PageTransition } from "../../components/shared/MotionComponents";
 import { SwipeUpAction } from "../../components/shared/MobileInteractions";
+import { BottomSheet } from "../../components/ui/BottomSheet";
+import { MobilePicker } from "../../components/ui/MobilePicker";
+import { useEffect } from "react";
 
 type DealStatus = 'prospecting' | 'outreach' | 'negotiating' | 'signed' | 'live' | 'paid';
 
@@ -99,8 +102,23 @@ export const BrandDeals = () => {
   const [deals, setDeals] = useState<Deal[]>(initialDeals);
   const [selectedDeal, setSelectedDeal] = useState<Deal | null>(null);
   const [activeTab, setActiveTab] = useState<'pipeline' | 'discovery'>('pipeline');
+  const [isAddDealOpen, setIsAddDealOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [expandedColumns, setExpandedColumns] = useState<string[]>(['prospecting']);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 1024);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const pipelineValue = "₹ 2,40,000";
+
+  const toggleColumn = (id: string) => {
+    if (!isMobile) return;
+    setExpandedColumns(prev => prev.includes(id) ? prev.filter(c => c !== id) : [...prev, id]);
+  };
 
   const renderPipeline = () => (
     <div className="space-y-6">
@@ -109,26 +127,43 @@ export const BrandDeals = () => {
           <h2 className="text-3xl font-black tracking-tighter uppercase leading-none">Deal <span className="text-primary italic">Pipeline</span></h2>
           <p className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] mt-2">Active Pipeline Value: <span className="text-white">{pipelineValue}</span></p>
         </div>
-        <button className="h-12 px-6 bg-primary text-white rounded-2xl font-black text-[11px] uppercase tracking-widest flex items-center gap-2 hover:scale-105 transition-all shadow-xl shadow-primary/20">
+        <button onClick={() => setIsAddDealOpen(true)} className="h-12 px-6 bg-primary text-white rounded-2xl font-black text-[11px] uppercase tracking-widest flex items-center gap-2 hover:scale-105 transition-all shadow-xl shadow-primary/20">
           <Plus className="w-4 h-4" /> New Deal
         </button>
       </div>
 
-      <div className="flex gap-6 overflow-x-auto pb-8 no-scrollbar -mx-4 px-4 md:-mx-8 md:px-8">
-        {columns.map((col) => (
-          <div key={col.id} className="min-w-[300px] flex flex-col gap-4">
-            <div className="flex items-center justify-between p-4 bg-white/5 border border-white/5 rounded-2xl backdrop-blur-xl">
-              <div className="flex items-center gap-2">
+      <div className="flex flex-col md:flex-row md:overflow-x-auto gap-4 md:gap-6 pb-8 no-scrollbar -mx-4 px-4 md:-mx-8 md:px-8">
+        {columns.map((col) => {
+          const colDeals = deals.filter(d => d.status === col.id);
+          const isExpanded = !isMobile || expandedColumns.includes(col.id);
+          
+          return (
+          <div key={col.id} className="min-w-0 md:min-w-[300px] flex flex-col gap-4">
+            <div 
+               onClick={() => toggleColumn(col.id)}
+               className={`flex items-center justify-between p-4 bg-white/5 border border-white/5 rounded-2xl backdrop-blur-xl ${isMobile ? 'cursor-pointer active:scale-[0.98] transition-all' : ''}`}
+            >
+              <div className="flex items-center gap-3">
                 <span className="text-lg">{col.icon}</span>
-                <span className="text-[10px] font-black uppercase tracking-widest">{col.label}</span>
+                <span className="text-[11px] font-black uppercase tracking-widest">{col.label}</span>
               </div>
-              <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-primary/20 text-primary border border-primary/20">
-                {deals.filter(d => d.status === col.id).length}
-              </span>
+              <div className="flex items-center gap-3">
+                 <span className="text-[10px] font-black px-2 py-0.5 rounded-full bg-primary/20 text-primary border border-primary/20">
+                   {colDeals.length}
+                 </span>
+                 {isMobile && <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform ${isExpanded ? 'rotate-180' : ''}`} />}
+              </div>
             </div>
 
-            <div className="space-y-4">
-              {deals.filter(d => d.status === col.id).map((deal) => (
+            <AnimatePresence>
+              {isExpanded && (
+                <motion.div 
+                  initial={{ height: 0, opacity: 0 }} 
+                  animate={{ height: "auto", opacity: 1 }} 
+                  exit={{ height: 0, opacity: 0 }}
+                  className="space-y-4 overflow-hidden"
+                >
+                  {colDeals.map((deal) => (
                 <SwipeUpAction
                   key={deal.id}
                   actions={
@@ -193,12 +228,14 @@ export const BrandDeals = () => {
                 </SwipeUpAction>
               ))}
               
-              <button className="w-full flex items-center justify-center gap-2 py-6 rounded-[2rem] border-2 border-dashed border-white/5 text-muted-foreground/30 hover:text-primary hover:border-primary/30 hover:bg-primary/5 transition-all text-xs font-black uppercase tracking-widest">
+              <button onClick={() => setIsAddDealOpen(true)} className="w-full flex items-center justify-center gap-2 py-6 rounded-[2rem] border-2 border-dashed border-white/5 text-muted-foreground/30 hover:text-primary hover:border-primary/30 hover:bg-primary/5 transition-all text-xs font-black uppercase tracking-widest">
                 <Plus className="w-4 h-4" /> Add Deal
               </button>
-            </div>
+            </motion.div>
+            )}
+            </AnimatePresence>
           </div>
-        ))}
+        )})}
       </div>
 
       <AnimatePresence>
@@ -338,6 +375,46 @@ export const BrandDeals = () => {
           {activeTab === 'pipeline' ? renderPipeline() : renderDiscovery()}
         </motion.div>
       </AnimatePresence>
+
+      <BottomSheet isOpen={isAddDealOpen} onClose={() => setIsAddDealOpen(false)} title="Add New Deal" height="90vh">
+        <form className="space-y-6 pt-4">
+          <div className="space-y-2">
+            <label className="text-xs font-black uppercase tracking-widest text-muted-foreground">Brand Name</label>
+            <input type="text" placeholder="e.g. Nike" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-primary h-12" />
+          </div>
+          <div className="space-y-2">
+            <label className="text-xs font-black uppercase tracking-widest text-muted-foreground">Deal Type</label>
+            <MobilePicker 
+              options={[
+                { label: 'Sponsored Reel', value: 'reel' },
+                { label: 'YouTube Integration', value: 'yt' },
+                { label: 'Ambassador Program', value: 'ambassador' }
+              ]}
+              value=""
+              onChange={() => {}}
+              placeholder="Select Type"
+              title="Deal Type"
+            />
+          </div>
+          <div className="space-y-2">
+            <label className="text-xs font-black uppercase tracking-widest text-muted-foreground">Value (₹)</label>
+            <input type="text" inputMode="numeric" placeholder="e.g. 50000" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-primary h-12" />
+          </div>
+          <div className="space-y-2">
+            <label className="text-xs font-black uppercase tracking-widest text-muted-foreground">Stage</label>
+            <MobilePicker 
+              options={columns.map(c => ({ label: c.label, value: c.id }))}
+              value="prospecting"
+              onChange={() => {}}
+              placeholder="Select Stage"
+              title="Pipeline Stage"
+            />
+          </div>
+          <button type="button" onClick={() => setIsAddDealOpen(false)} className="w-full h-14 bg-primary text-white rounded-2xl font-black text-[11px] uppercase tracking-widest hover:scale-[1.02] transition-all shadow-xl shadow-primary/20 mt-8 mb-safe-offset">
+            Save Contract
+          </button>
+        </form>
+      </BottomSheet>
     </PageTransition>
   );
 };

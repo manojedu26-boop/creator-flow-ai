@@ -13,6 +13,7 @@ import {
 } from "recharts";
 import { PageTransition, CountUp, staggerContainer, staggerItem } from "../../components/shared/MotionComponents";
 import { useAuth } from "../../contexts/AuthContext";
+import { BottomSheet } from "../../components/ui/BottomSheet";
 import { EmptyState } from "../../components/shared/EmptyState";
 import { 
   KpiSkeleton, ChartSkeleton, TextSkeleton 
@@ -123,6 +124,16 @@ export const Analytics = () => {
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState("Overview");
   const [isLoading, setIsLoading] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isDateSheetOpen, setIsDateSheetOpen] = useState(false);
+  const [dateRange, setDateRange] = useState("30D");
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 1024);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 800);
@@ -330,19 +341,63 @@ export const Analytics = () => {
                Impact <span className="text-primary italic">Intelligence</span>
             </h1>
           </div>
-          <div className="flex items-center gap-2 bg-white/5 p-1 rounded-2xl border border-white/10 w-fit">
-            {['7D', '30D', '90D', 'ALL'].map((range) => (
-              <button 
-                key={range}
-                className={cn(
-                  "px-4 py-2 rounded-xl text-[10px] font-black transition-all",
-                  range === '30D' ? "bg-primary text-white shadow-lg" : "text-zinc-500 hover:text-white"
-                )}
-              >
-                {range}
-              </button>
-            ))}
-          </div>
+            {!isMobile ? (
+              <div className="flex items-center gap-2 bg-white/5 p-1 rounded-2xl border border-white/10 w-fit">
+                {['7D', '30D', '90D', 'ALL'].map((range) => (
+                  <button 
+                    key={range}
+                    onClick={() => setDateRange(range)}
+                    className={cn(
+                      "px-4 py-2 rounded-xl text-[10px] font-black transition-all",
+                      dateRange === range ? "bg-primary text-white shadow-lg" : "text-zinc-500 hover:text-white"
+                    )}
+                  >
+                    {range}
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <>
+                <button 
+                   onClick={() => setIsDateSheetOpen(true)}
+                   className="px-5 py-3 h-12 bg-white/5 border border-white/10 rounded-2xl text-[11px] font-black uppercase tracking-widest flex items-center gap-2 active:scale-95 transition-all text-white w-fit"
+                >
+                   <Calendar className="w-4 h-4 text-primary" /> {dateRange === 'ALL' ? 'All Time' : `Last ${dateRange}`}
+                </button>
+                
+                <BottomSheet isOpen={isDateSheetOpen} onClose={() => setIsDateSheetOpen(false)} height="auto" title="Select Date Range">
+                   <div className="space-y-4 pt-4 pb-safe-offset">
+                      {[
+                        { label: 'Last 7 Days', val: '7D' }, 
+                        { label: 'Last 30 Days', val: '30D' }, 
+                        { label: 'Last 90 Days', val: '90D' }, 
+                        { label: 'All Time', val: 'ALL' }
+                      ].map((range, i) => (
+                         <button 
+                           key={i} 
+                           onClick={() => {
+                             setDateRange(range.val);
+                             setIsDateSheetOpen(false);
+                           }}
+                           className={`w-full p-5 rounded-[2rem] text-left font-black text-xs transition-all uppercase tracking-widest border ${dateRange === range.val ? 'bg-primary/10 border-primary shadow-xl shadow-primary/20 text-primary' : 'bg-white/5 hover:bg-white/10 border-white/5 text-white'}`}
+                         >
+                            {range.label}
+                         </button>
+                      ))}
+                      
+                      <div className="flex items-center py-4">
+                         <div className="flex-1 h-px bg-white/10" />
+                         <span className="px-4 text-[10px] font-black uppercase text-muted-foreground tracking-widest">Custom Range</span>
+                         <div className="flex-1 h-px bg-white/10" />
+                      </div>
+                      
+                      <button className="w-full p-5 rounded-[2rem] border-2 border-dashed border-white/10 text-muted-foreground flex items-center justify-center gap-2 font-black text-xs uppercase tracking-widest hover:border-primary/40 hover:text-primary transition-all">
+                         <Calendar className="w-4 h-4" /> Pick Dates
+                      </button>
+                   </div>
+                </BottomSheet>
+              </>
+            )}
         </div>
       </header>
 

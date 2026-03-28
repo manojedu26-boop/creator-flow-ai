@@ -1,11 +1,14 @@
+```javascript
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { 
-  Megaphone, Target, IndianRupee, 
-  Calendar, CheckCircle2, Plus, 
+  ArrowLeft, CheckCircle2, ChevronRight,
   Sparkles, Globe, Share2, Eye,
-  Layout, Send, Trash2
+  Layout, Send, Trash2, Megaphone, Target, IndianRupee, Calendar, Plus
 } from "lucide-react";
+import { PageTransition } from "../../components/shared/MotionComponents";
+import { useAuth } from "../../contexts/AuthContext";
+import { AutoResizeTextarea } from "../../components/shared/AutoResizeTextarea";
 
 export const PostBrief = () => {
   const [activeStep, setActiveStep] = useState(1);
@@ -69,7 +72,7 @@ export const PostBrief = () => {
                            <label className="text-[10px] font-black uppercase tracking-widest text-zinc-400">Product/Service Description</label>
                            <button className="text-[9px] font-black text-primary uppercase flex items-center gap-2"><Sparkles className="w-3 h-3" /> AI Help</button>
                         </div>
-                        <textarea rows={4} className="w-full bg-black border border-white/10 rounded-[1.5rem] p-8 text-white focus:outline-none focus:ring-1 focus:ring-primary font-medium resize-none leading-relaxed" />
+                        <AutoResizeTextarea rows={4} className="w-full bg-black border border-white/10 rounded-[1.5rem] p-8 text-white focus:outline-none focus:ring-1 focus:ring-primary font-medium resize-none leading-relaxed" />
                      </div>
                   </div>
                )}

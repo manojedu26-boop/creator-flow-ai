@@ -54,23 +54,31 @@ const RevenueChart = memo(({ data }: { data: any[] }) => (
 export const Revenue = () => {
   const { user } = useAuth();
   const [invoices, setInvoices] = useState([
-    { id: 1, brand: 'MuscleBlaze', type: 'Sponsored Reel', amount: '₹ 35,000', due: '28 Mar 2025', status: 'Pending' },
-    { id: 2, brand: 'Decathlon India', type: 'Ambassador (Advance)', amount: '₹ 25,000', due: '01 Apr 2025', status: 'Pending' },
-    { id: 3, brand: 'Fittr App', type: 'YT Integration', amount: '₹ 42,000', due: '10 Mar 2025', status: 'Paid' },
+    { id: '1', brand: 'MuscleBlaze', type: 'Sponsored Reel', amount: '₹ 35,000', due: '28 Mar 2025', status: 'Pending' },
+    { id: '2', brand: 'Nike India', amount: '₹ 85,000', due: 'In 5 days', status: 'Pending', type: 'IG Reel + Story' },
+    { id: '3', brand: 'MyProtein', amount: '₹ 45,000', due: 'Overdue', status: 'Pending', type: 'YouTube Integration' }
   ]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 1024);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 800);
     return () => clearTimeout(timer);
   }, []);
 
-  const handleMarkPaid = (id: number) => {
+  const handleMarkPaid = (id: string) => {
     setInvoices(prev => prev.map(inv => inv.id === id ? { ...inv, status: 'Paid' } : inv));
     toast.success("Payment Received! Gold flash effect triggered.");
   };
 
-  const handleDelete = (id: number) => {
+  const handleDelete = (id: string) => {
     setInvoices(prev => prev.filter(inv => inv.id !== id));
     toast.info("Invoice deleted with undo action.");
   };
@@ -165,39 +173,68 @@ export const Revenue = () => {
             </button>
          </div>
 
-         <div className="overflow-x-auto">
-            <table className="w-full text-left">
-               <thead>
-                  <tr className="bg-white/[0.02]">
-                     <th className="px-8 py-4 text-[10px] font-black uppercase text-muted-foreground tracking-widest">Brand</th>
-                     <th className="px-8 py-4 text-[10px] font-black uppercase text-muted-foreground tracking-widest">Type</th>
-                     <th className="px-8 py-4 text-[10px] font-black uppercase text-muted-foreground tracking-widest text-right">Value</th>
-                     <th className="px-8 py-4 text-[10px] font-black uppercase text-muted-foreground tracking-widest">Due Date</th>
-                     <th className="px-8 py-4 text-[10px] font-black uppercase text-muted-foreground tracking-widest text-center">Actions</th>
-                  </tr>
-               </thead>
-               <tbody className="divide-y divide-white/5">
-                  {invoices.map((inv) => (
-                    <tr key={inv.id} className="group hover:bg-white/[0.02] transition-colors">
-                       <td className="px-8 py-6">
-                          <div className="flex items-center gap-3">
-                             <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center font-black text-xs text-primary">{inv.brand[0]}</div>
-                             <span className="font-black text-sm">{inv.brand}</span>
-                          </div>
-                       </td>
-                       <td className="px-8 py-6 text-[10px] font-black text-muted-foreground uppercase">{inv.type}</td>
-                       <td className="px-8 py-6 text-sm font-black text-right">{inv.amount}</td>
-                       <td className="px-8 py-6 text-[10px] font-black uppercase tracking-tighter">{inv.due}</td>
-                       <td className="px-8 py-6 text-center">
-                          <button onClick={() => handleMarkPaid(inv.id)} className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest border transition-all ${inv.status === 'Paid' ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-500' : 'bg-white/5 border-white/10 hover:border-primary'}`}>
-                             {inv.status}
-                          </button>
-                       </td>
-                    </tr>
-                  ))}
-               </tbody>
-            </table>
-         </div>
+         {!isMobile ? (
+             <div className="overflow-x-auto">
+                <table className="w-full text-left">
+                   <thead>
+                      <tr className="bg-white/[0.02]">
+                         <th className="px-8 py-4 text-[10px] font-black uppercase text-muted-foreground tracking-widest">Brand</th>
+                         <th className="px-8 py-4 text-[10px] font-black uppercase text-muted-foreground tracking-widest">Type</th>
+                         <th className="px-8 py-4 text-[10px] font-black uppercase text-muted-foreground tracking-widest text-right">Value</th>
+                         <th className="px-8 py-4 text-[10px] font-black uppercase text-muted-foreground tracking-widest">Due Date</th>
+                         <th className="px-8 py-4 text-[10px] font-black uppercase text-muted-foreground tracking-widest text-center">Actions</th>
+                      </tr>
+                   </thead>
+                   <tbody className="divide-y divide-white/5">
+                      {invoices.map((inv) => (
+                        <tr key={inv.id} className="group hover:bg-white/[0.02] transition-colors">
+                           <td className="px-8 py-6">
+                              <div className="flex items-center gap-3">
+                                 <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center font-black text-xs text-primary">{inv.brand[0]}</div>
+                                 <span className="font-black text-sm">{inv.brand}</span>
+                              </div>
+                           </td>
+                           <td className="px-8 py-6 text-[10px] font-black text-muted-foreground uppercase">{inv.type}</td>
+                           <td className="px-8 py-6 text-sm font-black text-right">{inv.amount}</td>
+                           <td className="px-8 py-6 text-[10px] font-black uppercase tracking-tighter">{inv.due}</td>
+                           <td className="px-8 py-6 text-center">
+                              <button onClick={() => handleMarkPaid(inv.id)} className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest border transition-all ${inv.status === 'Paid' ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-500' : 'bg-white/5 border-white/10 hover:border-primary'}`}>
+                                 {inv.status}
+                              </button>
+                           </td>
+                        </tr>
+                      ))}
+                   </tbody>
+                </table>
+             </div>
+          ) : (
+             <div className="grid grid-cols-1 gap-4 p-4 md:p-6 bg-black/20">
+                {invoices.map((inv) => (
+                   <div key={inv.id} className="bg-white/5 border border-white/5 rounded-[1.5rem] p-5 shadow-lg relative overflow-hidden">
+                      <div className="flex justify-between items-start mb-5">
+                         <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center font-black text-sm text-primary border border-primary/20">{inv.brand[0]}</div>
+                            <div>
+                               <span className="font-black text-sm block">{inv.brand}</span>
+                               <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest truncate">{inv.type}</span>
+                            </div>
+                         </div>
+                         <div className="text-right">
+                            <span className="font-black text-sm text-primary">{inv.amount}</span>
+                         </div>
+                      </div>
+                      <div className="flex items-center justify-between pt-4 border-t border-white/5">
+                         <div className="text-[10px] font-black uppercase text-muted-foreground tracking-tighter flex items-center gap-1.5">
+                            <Calendar className="w-3 h-3 text-white/40" /> {inv.due}
+                         </div>
+                         <button onClick={() => handleMarkPaid(inv.id)} className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest border transition-all ${inv.status === 'Paid' ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-500' : 'bg-primary/10 border-primary/30 text-primary'}`}>
+                            {inv.status}
+                         </button>
+                      </div>
+                   </div>
+                ))}
+             </div>
+          )}
       </div>
     </PageTransition>
   );

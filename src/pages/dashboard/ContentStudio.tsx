@@ -9,6 +9,9 @@ import {
 } from "lucide-react";
 import { PageTransition, SkeletonCard } from "../../components/shared/MotionComponents";
 import { useAuth } from "../../contexts/AuthContext";
+import { BottomSheet } from "../../components/ui/BottomSheet";
+import { AutoResizeTextarea } from "../../components/shared/AutoResizeTextarea";
+import { useEffect } from "react";
 
 type ToolType = 'caption' | 'script' | 'reel' | 'carousel' | 'hashtag' | 'audio' | 'hook' | 'pitch' | 'thumbnail' | 'bio';
 
@@ -31,6 +34,15 @@ export const ContentStudio = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [showOutput, setShowOutput] = useState(false);
   const [previewSocial, setPreviewSocial] = useState<string | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 1024);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const handleGenerate = () => {
     setIsGenerating(true);
@@ -72,9 +84,10 @@ export const ContentStudio = () => {
       <div className="grid grid-cols-1 gap-6">
         <div className="space-y-4">
            <label className="text-xs font-black uppercase tracking-widest text-muted-foreground ml-1">What is this post about?</label>
-           <textarea 
+           <AutoResizeTextarea 
              placeholder={`e.g. My morning ${user?.niche || 'Daily'} routine with a focus on stretching...`}
-             className="w-full h-32 bg-muted/10 border border-border/40 rounded-3xl p-6 text-sm focus:outline-none focus:ring-1 focus:ring-primary transition-all resize-none"
+             className="w-full min-h-[128px] bg-muted/10 border border-border/40 rounded-[2rem] p-6 text-sm focus:outline-none focus:ring-1 focus:ring-primary transition-all resize-none"
+             maxLength={500}
            />
         </div>
 
@@ -282,8 +295,11 @@ export const ContentStudio = () => {
          <div className="md:col-span-2 space-y-6 bg-card border border-border/40 p-8 rounded-3xl h-fit">
             <div className="space-y-2">
                <label className="text-[10px] font-black uppercase tracking-widest">Topic or Description</label>
-               <textarea placeholder="e.g. 5 steps to building a high-income skill in 2024..." className="w-full h-24 bg-muted/20 border border-border/40 rounded-2xl p-4 text-sm focus:outline-none focus:ring-1 focus:ring-primary resize-none" />
-            </div>
+               <AutoResizeTextarea 
+                 placeholder="e.g. 5 steps to building a high-income skill in 2024..." 
+                 className="w-full min-h-[96px] bg-muted/20 border border-border/40 rounded-2xl p-4 text-sm focus:outline-none focus:ring-1 focus:ring-primary resize-none" 
+                 maxLength={250}
+               /></div>
             <div className="grid grid-cols-1 gap-4">
                <div className="space-y-2">
                   <label className="text-[10px] font-black uppercase tracking-widest">Format</label>
@@ -440,8 +456,9 @@ export const ContentStudio = () => {
                 onClick={() => {
                   setActiveTool(tool.id as ToolType);
                   setShowOutput(false);
+                  if (isMobile) setIsSheetOpen(true);
                 }}
-                className={`w-full flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all relative group ${
+                className={`w-full flex items-center gap-4 px-4 py-4 rounded-2xl transition-all relative group ${
                   activeTool === tool.id ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:bg-muted/10 hover:text-foreground'
                 }`}
               >
@@ -459,23 +476,34 @@ export const ContentStudio = () => {
           <div className="absolute top-0 right-0 bottom-0 w-[1px] bg-gradient-to-b from-transparent via-border/40 to-transparent" />
         </div>
 
-        {/* RIGHT WORKSPACE */}
-        <div className="flex-1 overflow-y-auto p-12 relative bg-background scroll-smooth no-scrollbar">
-          <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] pointer-events-none" />
-          <div className="max-w-4xl mx-auto relative z-10">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeTool}
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                transition={{ duration: 0.3 }}
-              >
-                {renderToolContent()}
-              </motion.div>
-            </AnimatePresence>
+        {/* RIGHT WORKSPACE (DESKTOP) */}
+        {!isMobile && (
+          <div className="flex-1 overflow-y-auto p-12 relative bg-background scroll-smooth no-scrollbar">
+            <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] pointer-events-none" />
+            <div className="max-w-4xl mx-auto relative z-10">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeTool}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  {renderToolContent()}
+                </motion.div>
+              </AnimatePresence>
+            </div>
           </div>
-        </div>
+        )}
+
+        {/* BOTTOM SHEET WORKSPACE (MOBILE) */}
+        {isMobile && (
+          <BottomSheet isOpen={isSheetOpen} onClose={() => setIsSheetOpen(false)} height="90vh" title={tools.find(t => t.id === activeTool)?.label}>
+            <div className="pt-4 pb-safe-offset">
+               {renderToolContent()}
+            </div>
+          </BottomSheet>
+        )}
       </div>
     </PageTransition>
   );
