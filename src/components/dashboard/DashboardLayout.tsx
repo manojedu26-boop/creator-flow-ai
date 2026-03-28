@@ -8,8 +8,9 @@ import { FloatingAiChat } from "./FloatingAiChat";
 import { MobileBottomNav } from "./MobileBottomNav";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useAuth } from "../../contexts/AuthContext";
-import { Toaster } from "@/components/ui/sonner";
+import { Toaster, toast } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { db } from "../../lib/db";
 
 const getPageTitle = (pathname: string) => {
   switch (pathname) {
@@ -59,6 +60,36 @@ export const DashboardLayout = () => {
     // Simulate data fetch
     await new Promise(resolve => setTimeout(resolve, 1500));
   };
+
+  // Rule #9: Real-time polling (every 30s)
+  useEffect(() => {
+    const pollInterval = setInterval(() => {
+      // Simulate real-time event: Add a random notification
+      const randomMsg = [
+        "New brand inquiry from PUMA!",
+        "Your MuscleBlaze Reel hit 50k views!",
+        "Contract signed by Nike India.",
+        "Weekly performance report ready.",
+      ][Math.floor(Math.random() * 4)];
+
+      const newNotif = {
+        id: `not_poll_${Date.now()}`,
+        title: "Real-time Update",
+        body: randomMsg,
+        type: 'deal',
+        time: 'Just now',
+        read: false
+      };
+
+      db.insert('notifications', newNotif);
+      
+      toast.info("New Activity", {
+        description: randomMsg
+      });
+    }, 30000);
+
+    return () => clearInterval(pollInterval);
+  }, []);
 
   useEffect(() => {
     if (user) {

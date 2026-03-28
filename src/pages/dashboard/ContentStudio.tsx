@@ -8,10 +8,12 @@ import {
   ChevronDown, Eye, FileText, Share2
 } from "lucide-react";
 import { PageTransition, SkeletonCard } from "../../components/shared/MotionComponents";
+import { useEffect } from "react";
+import { db } from "../../lib/db";
+import { toast } from "../../components/ui/sonner";
 import { useAuth } from "../../contexts/AuthContext";
 import { BottomSheet } from "../../components/ui/BottomSheet";
 import { AutoResizeTextarea } from "../../components/shared/AutoResizeTextarea";
-import { useEffect } from "react";
 
 type ToolType = 'caption' | 'script' | 'reel' | 'carousel' | 'hashtag' | 'audio' | 'hook' | 'pitch' | 'thumbnail' | 'bio';
 
@@ -36,6 +38,25 @@ export const ContentStudio = () => {
   const [previewSocial, setPreviewSocial] = useState<string | null>(null);
   const [isMobile, setIsMobile] = useState(false);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const [savedContent, setSavedContent] = useState<any[]>([]);
+  const [thinkingMessage, setThinkingMessage] = useState("");
+
+  const thinkingMessages = [
+    "Analyzing your niche trends...",
+    "Optimizing for high engagement...",
+    "Generating viral hooks...",
+    "Perfecting your brand voice...",
+    "Almost there! Polishing the output..."
+  ];
+
+  const fetchData = () => {
+    const data = db.getAll('content');
+    setSavedContent(data);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 1024);
@@ -47,10 +68,36 @@ export const ContentStudio = () => {
   const handleGenerate = () => {
     setIsGenerating(true);
     setShowOutput(false);
+    
+    let msgIndex = 0;
+    const interval = setInterval(() => {
+      setThinkingMessage(thinkingMessages[msgIndex % thinkingMessages.length]);
+      msgIndex++;
+    }, 600);
+
     setTimeout(() => {
+      clearInterval(interval);
       setIsGenerating(false);
       setShowOutput(true);
+      toast.success("AI Content Generated!", {
+        description: "3 options ready for your review."
+      });
     }, 2500);
+  };
+
+  const saveToLibrary = (text: string, type: string) => {
+    const newItem = {
+      id: `c_${Math.random().toString(36).substr(2, 5)}`,
+      type,
+      text,
+      platform: 'Instagram',
+      date: new Date().toISOString().split('T')[0]
+    };
+    db.insert('content', newItem);
+    setSavedContent(prev => [newItem, ...prev]);
+    toast.success("Content Saved", {
+      description: "Added to your personal content library."
+    });
   };
 
   const renderToolContent = () => {
@@ -137,7 +184,10 @@ export const ContentStudio = () => {
           className="w-full py-5 bg-primary text-primary-foreground rounded-2xl font-black uppercase tracking-[0.2em] shadow-[0_0_20px_-5px_hsl(var(--primary))] hover:shadow-[0_0_30px_-5px_hsl(var(--primary))] transition-all active:scale-95 disabled:opacity-50 flex items-center justify-center gap-3 overflow-hidden relative"
         >
           {isGenerating ? (
-            <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1 }} className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full" />
+            <div className="flex items-center gap-3">
+               <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1 }} className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full" />
+               <span className="text-[10px]">{thinkingMessage}</span>
+            </div>
           ) : (
             <>
               <Sparkles className="w-5 h-5" />
@@ -198,8 +248,12 @@ export const ContentStudio = () => {
                       </div>
                       <div className="flex justify-between items-center bg-muted/20 p-2 rounded-xl">
                          <div className="flex gap-1">
-                            <button title="Copy" className="p-2 hover:bg-primary/20 hover:text-primary rounded-lg transition-colors"><Copy className="w-4 h-4" /></button>
-                            <button title="Regenerate" className="p-2 hover:bg-primary/20 hover:text-primary rounded-lg transition-colors"><RefreshCcw className="w-4 h-4" /></button>
+                            <button  title="Copy" onClick={() => {
+                               navigator.clipboard.writeText(c.text);
+                               toast.success("Copied to clipboard");
+                            }} className="p-2 hover:bg-primary/20 hover:text-primary rounded-lg transition-colors"><Copy className="w-4 h-4" /></button>
+                            <button title="Save" onClick={() => saveToLibrary(c.text, activeTool)} className="p-2 hover:bg-emerald-500/20 hover:text-emerald-500 rounded-lg transition-colors"><Check className="w-4 h-4" /></button>
+                            <button title="Regenerate" onClick={handleGenerate} className="p-2 hover:bg-primary/20 hover:text-primary rounded-lg transition-colors"><RefreshCcw className="w-4 h-4" /></button>
                          </div>
                          <div className="h-6 w-px bg-border/40" />
                          <button 
@@ -279,6 +333,42 @@ export const ContentStudio = () => {
           </div>
         )}
       </AnimatePresence>
+
+      {/* Saved Library Section - Rule #5 */}
+      <section className="pt-20 space-y-8">
+         <div className="flex items-center justify-between">
+            <h3 className="text-xl font-black uppercase tracking-tight flex items-center gap-3">
+               <Grid className="w-5 h-5 text-primary" />
+               Saved Library
+            </h3>
+            <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{savedContent.length} Items Saved</span>
+         </div>
+
+         {savedContent.length > 0 ? (
+           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {savedContent.map(item => (
+                <div key={item.id} className="premium-card bg-black/40 border border-white/5 rounded-[2rem] p-6 hover:border-primary/20 transition-all">
+                   <div className="flex justify-between items-center mb-4">
+                      <span className="px-3 py-1 bg-primary/10 text-primary text-[8px] font-black uppercase tracking-widest rounded-lg border border-primary/20">{item.type}</span>
+                      <span className="text-[9px] font-black text-white/20 uppercase">{item.date}</span>
+                   </div>
+                   <p className="text-xs font-medium leading-relaxed mb-6 line-clamp-3 text-white/80">{item.text}</p>
+                   <div className="flex justify-between items-center pt-4 border-t border-white/5">
+                      <span className="text-[8px] font-black uppercase tracking-widest text-white/40">{item.platform}</span>
+                      <div className="flex gap-1">
+                         <button onClick={() => { navigator.clipboard.writeText(item.text); toast.success("Copied!"); }} className="p-2 hover:text-primary transition-colors"><Copy className="w-3.5 h-3.5" /></button>
+                         <button onClick={() => { db.delete('content', item.id); fetchData(); toast.info("Removed from library"); }} className="p-2 hover:text-red-500 transition-colors"><X className="w-3.5 h-3.5" /></button>
+                      </div>
+                   </div>
+                </div>
+              ))}
+           </div>
+         ) : (
+           <div className="h-40 border-2 border-dashed border-white/5 rounded-[2.5rem] flex flex-col items-center justify-center text-center p-8">
+              <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/40">Your saved AI magic will appear here</p>
+           </div>
+         )}
+      </section>
     </div>
   );
 

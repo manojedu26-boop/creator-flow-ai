@@ -17,6 +17,8 @@ import { EmptyState } from "../../components/shared/EmptyState";
 import { Plus } from "lucide-react";
 import { toast } from "../../components/ui/sonner";
 import { useAuth } from "../../contexts/AuthContext";
+import { db } from "../../lib/db";
+import { RefreshCcw as RefreshIcon } from "lucide-react";
 
 const sparklineData = [
   { value: 400 }, { value: 600 }, { value: 550 }, { value: 700 }, 
@@ -26,29 +28,37 @@ const sparklineData = [
 export const Home = () => {
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
-  const [tasks, setTasks] = useState([
-    { id: 1, text: 'Post your Tuesday Reel by 7:00 PM — "3 exercises for desk workers"', time: '10 min', completed: false, category: 'Content' },
-    { id: 2, text: 'Reply to 12 unanswered comments on last post', time: '5 min', completed: true, category: 'Community' },
-    { id: 3, text: 'Follow up with Nike Brand Partnership — no reply in 5 days', time: '3 min', completed: false, category: 'Deals' },
-    { id: 4, text: 'Generate captions for Thursday\'s carousel post', time: '2 min', completed: false, category: 'Content' },
-    { id: 5, text: 'Check Trend Radar — "no-equipment workout" is trending in your niche', time: '1 min', completed: false, category: 'Strategy' },
-  ]);
+  const [tasks, setTasks] = useState<any[]>([]);
+  const [stats, setStats] = useState<any[]>([]);
+  const [recentPosts, setRecentPosts] = useState<any[]>([]);
 
-  const stats = [
-    { label: 'Total Reach', value: 384200, delta: '+14.3%', up: true, icon: Users, color: 'text-blue-500' },
-    { label: 'Follower Growth', value: 892, delta: '+6.1%', up: true, icon: MousePointer2, color: 'text-indigo-500' },
-    { label: 'Engagement Rate', value: 4.8, delta: '+0.4%', up: true, icon: MessageSquare, color: 'text-primary' },
-    { label: 'Est. Revenue', value: 68000, delta: '₹', up: true, icon: Wallet, color: 'text-emerald-500' },
-    { label: 'Active Brand Deals', value: 3, delta: 'View Hub', up: true, icon: Briefcase, color: 'text-amber-500' },
-  ];
+  const fetchData = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      const dbTasks = db.getAll('tasks');
+      const dbContent = db.getAll('content');
+      const dbDeals = db.getAll('deals');
+      const dbInvoices = db.getAll('invoices');
 
-  const recentPosts = [
-    { id: 1, type: 'Reel', title: '5 min morning stretch', platform: 'IG', reach: '42,800', eng: '6.2%', saves: '1,840' },
-    { id: 2, type: 'Carousel', title: 'What I eat in a day', platform: 'IG', reach: '28,300', eng: '4.1%', saves: '920' },
-    { id: 3, type: 'Video', title: 'My gym bag essentials', platform: 'YT', reach: '8,200 views', eng: '3.2%', saves: '67 comments' },
-    { id: 4, type: 'Reel', title: '3 mistakes beginners make', platform: 'TikTok', reach: '61,400', eng: '7.8%', saves: '4.2k likes' },
-    { id: 5, type: 'Story', title: 'Protein shake recipe', platform: 'IG', reach: '9,800', eng: '3.4%', saves: '340 taps' },
-  ];
+      setTasks(dbTasks);
+      setRecentPosts(dbContent.slice(0, 5));
+
+      const totalRevenue = dbInvoices.reduce((sum: number, inv: any) => {
+        const amountStr = String(inv.amount || '0');
+        return sum + parseInt(amountStr.replace(/\D/g, '') || '0');
+      }, 0);
+
+      setStats([
+        { label: 'Total Reach', value: 384200, delta: '+14.3%', up: true, icon: Users, color: 'text-blue-500' },
+        { label: 'Follower Growth', value: 892, delta: '+6.1%', up: true, icon: MousePointer2, color: 'text-indigo-500' },
+        { label: 'Engagement Rate', value: 4.8, delta: '+0.4%', up: true, icon: MessageSquare, color: 'text-primary' },
+        { label: 'Est. Revenue', value: totalRevenue, delta: '₹', up: true, icon: Wallet, color: 'text-emerald-500' },
+        { label: 'Active Brand Deals', value: dbDeals.length, delta: 'View Hub', up: true, icon: Briefcase, color: 'text-amber-500' },
+      ]);
+
+      setIsLoading(false);
+    }, 800);
+  };
 
   const platformHealth = [
     { platform: 'Instagram', followers: '48,200', growth: '+312 this week', engagement: '4.8%', status: 'Healthy', color: 'bg-primary' },
@@ -57,12 +67,19 @@ export const Home = () => {
   ];
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 800);
-    return () => clearTimeout(timer);
+    fetchData();
   }, []);
 
-  const toggleTask = (id: number) => {
-    setTasks(tasks.map(t => t.id === id ? { ...t, completed: !t.completed } : t));
+  const toggleTask = (id: string | number) => {
+    const updatedTasks = tasks.map(t => {
+      if (t.id === id) {
+        const newStatus = !t.completed;
+        db.update('tasks', id.toString(), { completed: newStatus } as any);
+        return { ...t, completed: newStatus };
+      }
+      return t;
+    });
+    setTasks(updatedTasks);
     const task = tasks.find(t => t.id === id);
     if (!task?.completed) {
       toast.success("Task completed! Keep it up. 🚀");
@@ -114,6 +131,13 @@ export const Home = () => {
           </p>
         </div>
         <div className="flex gap-3">
+          <button 
+            onClick={fetchData}
+            disabled={isLoading}
+            className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all flex items-center justify-center text-zinc-400 hover:text-white disabled:opacity-50"
+          >
+            <RefreshIcon className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
+          </button>
           <button className="flex-1 md:flex-none h-12 px-6 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all flex items-center justify-center gap-2 font-black text-[10px] uppercase tracking-widest">
             <Plus className="w-4 h-4" /> New Campaign
           </button>
@@ -216,37 +240,33 @@ export const Home = () => {
             </div>
             <div className="p-4 md:p-8">
               <div className="space-y-4">
-                {recentPosts.map((post) => (
+                {recentPosts.length > 0 ? recentPosts.map((post) => (
                   <div key={post.id} className="flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-white/5 group hover:border-white/10 transition-all">
                     <div className="flex items-center gap-4">
                       <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-white/10 to-white/5 flex items-center justify-center relative overflow-hidden group-hover:scale-105 transition-all">
                         <span className="text-[10px] font-black uppercase tracking-widest opacity-50 z-10">{post.platform}</span>
                         <div className="absolute inset-0 bg-primary opacity-0 group-hover:opacity-10 transition-opacity" />
                       </div>
-                      <div>
-                        <h4 className="text-sm font-black truncate max-w-[150px] md:max-w-none">{post.title}</h4>
+                      <div className="flex-1 min-w-0">
+                        <h4 className="text-sm font-black truncate max-w-[150px] md:max-w-none">{post.text}</h4>
                         <div className="flex gap-3 text-[10px] font-bold text-muted-foreground uppercase tracking-widest mt-1">
                            <span>{post.type}</span>
                            <span className="text-primary/60">•</span>
-                           <span>{post.reach} Reach</span>
+                           <span>{post.date}</span>
                         </div>
                       </div>
                     </div>
                     <div className="flex items-center gap-6">
-                      <div className="hidden md:block text-right">
-                         <p className="text-xs font-black text-white">{post.eng}</p>
-                         <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground opacity-50">Engagement</p>
-                      </div>
-                      <div className="hidden md:block text-right">
-                         <p className="text-xs font-black text-white">{post.saves}</p>
-                         <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground opacity-50 text-right">Saves/Clicks</p>
-                      </div>
                       <button className="p-2.5 rounded-xl bg-white/5 hover:bg-primary hover:text-white transition-all">
                         <ArrowRight className="w-4 h-4" />
                       </button>
                     </div>
                   </div>
-                ))}
+                )) : (
+                  <div className="p-12 text-center text-muted-foreground/30 font-black uppercase text-[10px] tracking-widest border-2 border-dashed border-white/5 rounded-3xl">
+                    No recent content saved
+                  </div>
+                )}
               </div>
             </div>
           </div>

@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { toast } from "@/components/ui/sonner";
+import { db } from "../lib/db";
 
 export interface User {
   id: string;
@@ -46,13 +47,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("cf_user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+    const users = db.getAll<User>('users');
+    if (users.length > 0) {
+      setUser(users[0]);
     } else {
-      // Seed with Naveen for demo purposes
+      db.seed('users', [mockUser]);
       setUser(mockUser);
-      localStorage.setItem("cf_user", JSON.stringify(mockUser));
     }
     setIsLoading(false);
   }, []);
@@ -60,7 +60,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const login = (email: string, password: string) => {
     const newUser = { ...mockUser, email };
     setUser(newUser);
-    localStorage.setItem("cf_user", JSON.stringify(newUser));
+    db.update<User>('users', mockUser.id, { email });
   };
 
   const register = (name: string, email: string) => {
@@ -79,7 +79,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       onboarded: true
     };
     setUser(newUser);
-    localStorage.setItem("cf_user", JSON.stringify(newUser));
+    db.insert('users', newUser);
   };
 
   const updateUser = (data: Partial<User>) => {
@@ -89,12 +89,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       updatedUser.firstName = data.name.split(' ')[0];
     }
     setUser(updatedUser);
-    localStorage.setItem("cf_user", JSON.stringify(updatedUser));
+    db.update('users', user.id, data);
   };
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem("cf_user");
+    db.reset(); // Clear DB on logout for demo purposes, or just remove session
   };
 
   const triggerSessionExpiry = () => {

@@ -5,7 +5,7 @@ import {
   BarChart3, PieChart, Calculator, FileText, 
   Download, Send, CheckCircle2, AlertCircle,
   MoreHorizontal, ChevronDown, Sparkles, Plus,
-  ArrowUpRight, ArrowDownRight, Printer, Share2, Trash2, Undo
+  ArrowUpRight, ArrowDownRight, Printer, Share2, Trash2, Undo, RefreshCcw
 } from "lucide-react";
 import { toast } from "../../components/ui/sonner";
 import { 
@@ -14,6 +14,8 @@ import {
 } from 'recharts';
 import { PageTransition, CountUp, staggerContainer, staggerItem } from "../../components/shared/MotionComponents";
 import { useAuth } from "../../contexts/AuthContext";
+import { db } from "../../lib/db";
+import { ConfirmationModal } from "../../components/shared/ConfirmationModal";
 import { EmptyState } from "../../components/shared/EmptyState";
 import { Briefcase } from "lucide-react";
 
@@ -53,12 +55,9 @@ const RevenueChart = memo(({ data }: { data: any[] }) => (
 
 export const Revenue = () => {
   const { user } = useAuth();
-  const [invoices, setInvoices] = useState([
-    { id: '1', brand: 'MuscleBlaze', type: 'Sponsored Reel', amount: '₹ 35,000', due: '28 Mar 2025', status: 'Pending' },
-    { id: '2', brand: 'Nike India', amount: '₹ 85,000', due: 'In 5 days', status: 'Pending', type: 'IG Reel + Story' },
-    { id: '3', brand: 'MyProtein', amount: '₹ 45,000', due: 'Overdue', status: 'Pending', type: 'YouTube Integration' }
-  ]);
+  const [invoices, setInvoices] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isDeleting, setIsDeleting] = useState<string | null>(null);
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -68,31 +67,59 @@ export const Revenue = () => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
+  const fetchData = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      const data = db.getAll('invoices');
+      setInvoices(data);
+      setIsLoading(false);
+    }, 800);
+  };
+
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 800);
-    return () => clearTimeout(timer);
+    fetchData();
   }, []);
 
   const handleMarkPaid = (id: string) => {
+    const inv = invoices.find(i => i.id === id);
+    if (inv?.status === 'Paid') return;
+
+    db.update<any>('invoices', id, { status: 'Paid' });
     setInvoices(prev => prev.map(inv => inv.id === id ? { ...inv, status: 'Paid' } : inv));
-    toast.success("Payment Received! Gold flash effect triggered.");
+    toast.success("Payment Received!", {
+      description: `Invoice for ${inv?.brand} marked as paid successfully.`
+    });
   };
 
-  const handleDelete = (id: string) => {
-    setInvoices(prev => prev.filter(inv => inv.id !== id));
-    toast.info("Invoice deleted with undo action.");
+  const confirmDelete = () => {
+    if (!isDeleting) return;
+    db.delete('invoices', isDeleting);
+    setInvoices(prev => prev.filter(inv => inv.id !== isDeleting));
+    setIsDeleting(null);
+    toast.success("Invoice Deleted", {
+      description: "The invoice has been removed from your records."
+    });
   };
 
   return (
     <PageTransition className="p-4 md:p-8 space-y-8 max-w-7xl mx-auto pb-24 lg:pb-8">
-      <header className="space-y-2">
-        <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-primary">
-          <IndianRupee className="w-3 h-3" />
-          Monetisation Hub
+      <header className="space-y-2 flex justify-between items-end">
+        <div className="space-y-2">
+          <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-primary">
+            <IndianRupee className="w-3 h-3" />
+            Monetisation Hub
+          </div>
+          <h1 className="text-4xl md:text-5xl font-black tracking-tighter uppercase leading-[0.9]">
+             Revenue <span className="text-primary italic">Command</span>
+          </h1>
         </div>
-        <h1 className="text-4xl md:text-5xl font-black tracking-tighter uppercase leading-[0.9]">
-           Revenue <span className="text-primary italic">Command</span>
-        </h1>
+        <button 
+          onClick={fetchData}
+          disabled={isLoading}
+          className="p-3 bg-white/5 border border-white/10 rounded-xl text-zinc-400 hover:text-white transition-all disabled:opacity-50"
+        >
+          <RefreshCcw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
+        </button>
       </header>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -197,11 +224,16 @@ export const Revenue = () => {
                            <td className="px-8 py-6 text-[10px] font-black text-muted-foreground uppercase">{inv.type}</td>
                            <td className="px-8 py-6 text-sm font-black text-right">{inv.amount}</td>
                            <td className="px-8 py-6 text-[10px] font-black uppercase tracking-tighter">{inv.due}</td>
-                           <td className="px-8 py-6 text-center">
-                              <button onClick={() => handleMarkPaid(inv.id)} className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest border transition-all ${inv.status === 'Paid' ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-500' : 'bg-white/5 border-white/10 hover:border-primary'}`}>
-                                 {inv.status}
-                              </button>
-                           </td>
+                            <td className="px-8 py-6 text-center">
+                               <div className="flex items-center justify-center gap-3">
+                                  <button onClick={() => handleMarkPaid(inv.id)} className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest border transition-all ${inv.status === 'Paid' ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-500 cursor-default' : 'bg-white/5 border-white/10 hover:border-primary'}`}>
+                                     {inv.status}
+                                  </button>
+                                  <button onClick={() => setIsDeleting(inv.id)} className="p-2 text-zinc-500 hover:text-red-500 transition-colors">
+                                     <Trash2 className="w-4 h-4" />
+                                  </button>
+                               </div>
+                            </td>
                         </tr>
                       ))}
                    </tbody>
@@ -227,15 +259,28 @@ export const Revenue = () => {
                          <div className="text-[10px] font-black uppercase text-muted-foreground tracking-tighter flex items-center gap-1.5">
                             <Calendar className="w-3 h-3 text-white/40" /> {inv.due}
                          </div>
-                         <button onClick={() => handleMarkPaid(inv.id)} className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest border transition-all ${inv.status === 'Paid' ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-500' : 'bg-primary/10 border-primary/30 text-primary'}`}>
-                            {inv.status}
-                         </button>
+                          <div className="flex items-center gap-2">
+                             <button onClick={() => handleMarkPaid(inv.id)} className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest border transition-all ${inv.status === 'Paid' ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-500' : 'bg-primary/10 border-primary/30 text-primary'}`}>
+                                {inv.status}
+                             </button>
+                             <button onClick={() => setIsDeleting(inv.id)} className="p-2 text-zinc-500">
+                                <Trash2 className="w-4 h-4" />
+                             </button>
+                          </div>
                       </div>
                    </div>
                 ))}
              </div>
           )}
       </div>
+     {/* Confirmation for Rule #7 */}
+      <ConfirmationModal 
+        isOpen={!!isDeleting}
+        title="Delete Invoice?"
+        description="This action cannot be undone. This invoice will be permanently removed from your monetization hub."
+        onConfirm={confirmDelete}
+        onCancel={() => setIsDeleting(null)}
+      />
     </PageTransition>
   );
 };

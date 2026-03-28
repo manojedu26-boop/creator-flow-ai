@@ -5,13 +5,17 @@ import {
   DollarSign, Briefcase, MessageSquare, FileText, 
   Phone, AlertCircle, ChevronRight, ChevronDown, X, Sparkles,
   Instagram, Youtube, Twitter, CheckCircle2,
-  Zap
+  Zap, Trash2
 } from "lucide-react";
 import { PageTransition } from "../../components/shared/MotionComponents";
 import { SwipeUpAction } from "../../components/shared/MobileInteractions";
+import { useEffect } from "react";
+import { db } from "../../lib/db";
+import { toast } from "../../components/ui/sonner";
+import { RefreshCcw } from "lucide-react";
+import { ConfirmationModal } from "../../components/shared/ConfirmationModal";
 import { BottomSheet } from "../../components/ui/BottomSheet";
 import { MobilePicker } from "../../components/ui/MobilePicker";
-import { useEffect } from "react";
 
 type DealStatus = 'prospecting' | 'outreach' | 'negotiating' | 'signed' | 'live' | 'paid';
 
@@ -99,12 +103,35 @@ const columns: { id: DealStatus; label: string; icon: string }[] = [
 ];
 
 export const BrandDeals = () => {
-  const [deals, setDeals] = useState<Deal[]>(initialDeals);
+  const [deals, setDeals] = useState<Deal[]>([]);
   const [selectedDeal, setSelectedDeal] = useState<Deal | null>(null);
   const [activeTab, setActiveTab] = useState<'pipeline' | 'discovery'>('pipeline');
   const [isAddDealOpen, setIsAddDealOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const [expandedColumns, setExpandedColumns] = useState<string[]>(['prospecting']);
+  const [expandedColumns, setExpandedColumns] = useState<string[]>(['prospecting', 'outreach']);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isDeleting, setIsDeleting] = useState<string | null>(null);
+
+  // Form State
+  const [newDeal, setNewDeal] = useState({
+    brand: '',
+    type: 'Sponsored Reel',
+    value: '',
+    status: 'prospecting' as DealStatus
+  });
+
+  const fetchData = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      const data = db.getAll<Deal>('deals');
+      setDeals(data);
+      setIsLoading(false);
+    }, 800);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 1024);
@@ -125,11 +152,20 @@ export const BrandDeals = () => {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h2 className="text-3xl font-black tracking-tighter uppercase leading-none">Deal <span className="text-primary italic">Pipeline</span></h2>
-          <p className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] mt-2">Active Pipeline Value: <span className="text-white">{pipelineValue}</span></p>
+          <p className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] mt-2">Active Pipeline Value: <span className="text-white">₹ 2,40,000</span></p>
         </div>
-        <button onClick={() => setIsAddDealOpen(true)} className="h-12 px-6 bg-primary text-white rounded-2xl font-black text-[11px] uppercase tracking-widest flex items-center gap-2 hover:scale-105 transition-all shadow-xl shadow-primary/20">
-          <Plus className="w-4 h-4" /> New Deal
-        </button>
+        <div className="flex items-center gap-3">
+          <button 
+            onClick={fetchData} 
+            disabled={isLoading}
+            className="p-3 bg-white/5 border border-white/10 rounded-xl text-zinc-400 hover:text-white transition-all disabled:opacity-50"
+          >
+            <RefreshCcw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
+          </button>
+          <button onClick={() => setIsAddDealOpen(true)} className="h-12 px-6 bg-primary text-white rounded-2xl font-black text-[11px] uppercase tracking-widest flex items-center gap-2 hover:scale-105 transition-all shadow-xl shadow-primary/20">
+            <Plus className="w-4 h-4" /> New Deal
+          </button>
+        </div>
       </div>
 
       <div className="flex flex-col md:flex-row md:overflow-x-auto gap-4 md:gap-6 pb-8 no-scrollbar -mx-4 px-4 md:-mx-8 md:px-8">
@@ -196,9 +232,17 @@ export const BrandDeals = () => {
                           ))}
                         </div>
                       </div>
-                      <button className="opacity-0 group-hover:opacity-100 p-2 hover:bg-white/5 rounded-xl transition-all">
-                        <MoreVertical className="w-4 h-4" />
-                      </button>
+                      <div className="flex items-center gap-2">
+                         <button 
+                           onClick={(e) => { e.stopPropagation(); setIsDeleting(deal.id); }}
+                           className="opacity-0 group-hover:opacity-100 p-2 hover:bg-red-500/10 text-zinc-500 hover:text-red-500 rounded-xl transition-all"
+                         >
+                           <Trash2 className="w-4 h-4" />
+                         </button>
+                         <button className="opacity-0 group-hover:opacity-100 p-2 hover:bg-white/5 rounded-xl transition-all">
+                           <MoreVertical className="w-4 h-4" />
+                         </button>
+                      </div>
                     </div>
 
                     <div className="flex items-end justify-between">
@@ -377,44 +421,100 @@ export const BrandDeals = () => {
       </AnimatePresence>
 
       <BottomSheet isOpen={isAddDealOpen} onClose={() => setIsAddDealOpen(false)} title="Add New Deal" height="90vh">
-        <form className="space-y-6 pt-4">
+        <form className="space-y-6 pt-4" onSubmit={(e) => {
+          e.preventDefault();
+          if (!newDeal.brand) {
+            toast.error("Brand name is required");
+            return;
+          }
+          const dealId = `deal_${Math.random().toString(36).substr(2, 5)}`;
+          const brandHandle = newDeal.brand.toLowerCase().replace(/\s+/g, '');
+          const dealEntry: Deal = {
+            id: dealId,
+            brand: newDeal.brand,
+            logo: `https://logo.clearbit.com/${brandHandle}.com`,
+            type: newDeal.type,
+            platforms: ['IG'],
+            value: `₹${newDeal.value}`,
+            deadline: 'Apr 30',
+            status: newDeal.status,
+            deadlineColor: 'green'
+          };
+          db.insert('deals', dealEntry);
+          setDeals(prev => [...prev, dealEntry]);
+          setIsAddDealOpen(false);
+          toast.success("Deal Added Successfully", {
+            description: `${newDeal.brand} has been added to your ${newDeal.status} stage.`
+          });
+          setNewDeal({ brand: '', type: 'Sponsored Reel', value: '', status: 'prospecting' });
+        }}>
           <div className="space-y-2">
             <label className="text-xs font-black uppercase tracking-widest text-muted-foreground">Brand Name</label>
-            <input type="text" placeholder="e.g. Nike" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-primary h-12" />
+            <input 
+              type="text" 
+              required
+              value={newDeal.brand}
+              onChange={(e) => setNewDeal(prev => ({ ...prev, brand: e.target.value }))}
+              placeholder="e.g. Nike" 
+              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-primary h-12" 
+            />
           </div>
           <div className="space-y-2">
             <label className="text-xs font-black uppercase tracking-widest text-muted-foreground">Deal Type</label>
             <MobilePicker 
               options={[
-                { label: 'Sponsored Reel', value: 'reel' },
-                { label: 'YouTube Integration', value: 'yt' },
-                { label: 'Ambassador Program', value: 'ambassador' }
+                { label: 'Sponsored Reel', value: 'Sponsored Reel' },
+                { label: 'YouTube Integration', value: 'YouTube Integration' },
+                { label: 'Ambassador Program', value: 'Ambassador Program' }
               ]}
-              value=""
-              onChange={() => {}}
+              value={newDeal.type}
+              onChange={(val) => setNewDeal(prev => ({ ...prev, type: val }))}
               placeholder="Select Type"
               title="Deal Type"
             />
           </div>
           <div className="space-y-2">
             <label className="text-xs font-black uppercase tracking-widest text-muted-foreground">Value (₹)</label>
-            <input type="text" inputMode="numeric" placeholder="e.g. 50000" className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-primary h-12" />
+            <input 
+              type="text" 
+              inputMode="numeric" 
+              required
+              value={newDeal.value}
+              onChange={(e) => setNewDeal(prev => ({ ...prev, value: e.target.value.replace(/\D/g, '') }))}
+              placeholder="e.g. 50000" 
+              className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-primary h-12" 
+            />
           </div>
           <div className="space-y-2">
             <label className="text-xs font-black uppercase tracking-widest text-muted-foreground">Stage</label>
             <MobilePicker 
               options={columns.map(c => ({ label: c.label, value: c.id }))}
-              value="prospecting"
-              onChange={() => {}}
+              value={newDeal.status}
+              onChange={(val) => setNewDeal(prev => ({ ...prev, status: val as DealStatus }))}
               placeholder="Select Stage"
               title="Pipeline Stage"
             />
           </div>
-          <button type="button" onClick={() => setIsAddDealOpen(false)} className="w-full h-14 bg-primary text-white rounded-2xl font-black text-[11px] uppercase tracking-widest hover:scale-[1.02] transition-all shadow-xl shadow-primary/20 mt-8 mb-safe-offset">
+          <button type="submit" className="w-full h-14 bg-primary text-white rounded-2xl font-black text-[11px] uppercase tracking-widest hover:scale-[1.02] transition-all shadow-xl shadow-primary/20 mt-8 mb-safe-offset">
             Save Contract
           </button>
         </form>
       </BottomSheet>
+
+      <ConfirmationModal 
+        isOpen={!!isDeleting}
+        title="Delete Deal?"
+        description="Are you sure you want to remove this deal from your pipeline? This action will permanently delete all associated data."
+        onConfirm={() => {
+          if (isDeleting) {
+            db.delete('deals', isDeleting);
+            setDeals(prev => prev.filter(d => d.id !== isDeleting));
+            setIsDeleting(null);
+            toast.success("Deal Removed");
+          }
+        }}
+        onCancel={() => setIsDeleting(null)}
+      />
     </PageTransition>
   );
 };

@@ -8,6 +8,8 @@ import {
   Gavel, Info, ShieldAlert, Check, Share2, Printer
 } from "lucide-react";
 import { PageTransition } from "../../components/shared/MotionComponents";
+import { db } from "../../lib/db";
+import { toast } from "../../components/ui/sonner";
 
 type RiskLevel = 'low' | 'medium' | 'high';
 
@@ -61,40 +63,91 @@ const mockContracts: Contract[] = [
 ];
 
 export const Contracts = () => {
-  const [selectedId, setSelectedId] = useState<string>('1');
+  const [contracts, setContracts] = useState<Contract[]>([]);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  const fetchData = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      const data = db.getAll<Contract>('contracts');
+      setContracts(data);
+      if (data.length > 0 && !selectedId) {
+        setSelectedId(data[0].id);
+      }
+      setIsLoading(false);
+    }, 800);
+  };
+
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 800);
-    return () => clearTimeout(timer);
+    fetchData();
   }, []);
 
-  const selectedContract = mockContracts.find(c => c.id === selectedId) || mockContracts[0];
+  const handleUpload = () => {
+    toast.info("Opening File Picker...", {
+      description: "Select your contract PDF for AI analysis."
+    });
+    // Simulate upload success after 2s
+    setTimeout(() => {
+      const newContract: Contract = {
+        id: `con_${Math.random().toString(36).substr(2, 5)}`,
+        brand: 'New Brand Deal',
+        date: new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }),
+        value: '₹ 0',
+        risk: 'low',
+        content: 'Analysis pending...',
+        flags: []
+      };
+      db.insert('contracts', newContract);
+      setContracts(prev => [newContract, ...prev]);
+      setSelectedId(newContract.id);
+      toast.success("Contract Uploaded!", {
+        description: "AI Audit is now running on your new document."
+      });
+    }, 2000);
+  };
+
+  const selectedContract = contracts.find((c: Contract) => c.id === selectedId) || contracts[0];
+
+  if (isLoading && contracts.length === 0) {
+    return <div className="h-full flex items-center justify-center"><RefreshCcw className="w-8 h-8 animate-spin text-primary" /></div>;
+  }
+
+  if (!selectedContract) return null;
 
   return (
     <PageTransition className="space-y-[var(--grid-gap)] pb-20 lg:pb-0">
-      <header className="mb-[var(--section-mb)]">
-        <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-2">
-          <ShieldCheck className="w-3 h-3" />
-          Legal Protection
+      <header className="mb-[var(--section-mb)] flex justify-between items-end">
+        <div className="space-y-2">
+          <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-2">
+            <ShieldCheck className="w-3 h-3" />
+            Legal Protection
+          </div>
+          <h1 className="text-4xl md:text-5xl font-black tracking-tighter uppercase leading-none">
+             Contract<br/>
+             <span className="text-primary italic">Shield</span>
+          </h1>
         </div>
-        <h1 className="text-4xl md:text-5xl font-black tracking-tighter uppercase leading-none">
-           Contract<br/>
-           <span className="text-primary italic">Shield</span>
-        </h1>
+        <button 
+          onClick={fetchData}
+          disabled={isLoading}
+          className="p-3 bg-white/5 border border-white/10 rounded-xl text-zinc-400 hover:text-white transition-all disabled:opacity-50"
+        >
+          <RefreshCcw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
+        </button>
       </header>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
         {/* Sidebar / Top Section */}
         <div className="space-y-6">
-           <button className="w-full py-4 bg-primary/10 text-primary border border-primary/20 rounded-2xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-primary hover:text-white transition-all">
+           <button onClick={handleUpload} className="w-full py-4 bg-primary/10 text-primary border border-primary/20 rounded-2xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-primary hover:text-white transition-all transition-colors duration-300">
               <Upload className="w-4 h-4" /> Upload New Doc
            </button>
 
            <div className="space-y-4">
               <h4 className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Recent Documents</h4>
                <div className="flex lg:flex-col overflow-x-auto lg:overflow-x-hidden no-scrollbar gap-3 pb-2 lg:pb-0 -mx-[var(--page-px)] px-[var(--page-px)] lg:mx-0 lg:px-0">
-                  {mockContracts.map((c) => (
+                   {contracts.map((c) => (
                     <motion.div 
                       key={c.id} 
                       onClick={() => setSelectedId(c.id)} 
@@ -131,12 +184,17 @@ export const Contracts = () => {
                     </p>
                     <p>...Clause 15.1: This Agreement shall be governed by and construed in accordance with the laws of the Republic of India...</p>
                  </div>
-                 
-                 <div className="flex flex-col sm:flex-row gap-4 pt-10 border-t border-white/5 mt-10">
-                    <button className="flex-1 py-4 bg-white/5 border border-white/10 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-white/10 transition-all flex items-center justify-center gap-2">
+                                  <div className="flex flex-col sm:flex-row gap-4 pt-10 border-t border-white/5 mt-10">
+                    <button 
+                      onClick={() => toast.success("PDF Downloaded", { description: "Your safe copy is saved." })}
+                      className="flex-1 py-4 bg-white/5 border border-white/10 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-white/10 transition-all flex items-center justify-center gap-2"
+                    >
                        <Download className="w-4 h-4" /> Download PDF
                     </button>
-                    <button className="flex-1 py-4 bg-primary text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:scale-105 transition-all flex items-center justify-center gap-2 shadow-xl shadow-primary/20">
+                    <button 
+                      onClick={() => toast.info("Deep Audit Running", { description: "Refining AI context for specific risky clauses..." })}
+                      className="flex-1 py-4 bg-primary text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:scale-105 transition-all flex items-center justify-center gap-2 shadow-xl shadow-primary/20"
+                    >
                        <FileSearch className="w-4 h-4" /> Deep Audit
                     </button>
                  </div>
@@ -157,7 +215,14 @@ export const Contracts = () => {
                             <span className="text-[8px] font-black text-white/20 uppercase">Clause {f.clause}</span>
                          </div>
                          <p className="text-[11px] font-bold text-white/70 leading-relaxed mb-4">{f.desc}</p>
-                         <button className="w-full py-3 bg-black/40 border border-white/10 rounded-xl text-[9px] font-black uppercase tracking-widest hover:bg-primary hover:text-white transition-all">
+                         <button 
+                            onClick={() => toast.promise(new Promise(res => setTimeout(res, 2000)), {
+                              loading: 'AI rewriting clause...',
+                              success: 'Modified clause copied to clipboard!',
+                              error: 'Failure generating rewrite.'
+                            })}
+                            className="w-full py-3 bg-black/40 border border-white/10 rounded-xl text-[9px] font-black uppercase tracking-widest hover:bg-primary hover:text-white transition-all"
+                         >
                             {f.level === 'red' ? 'Generate Counter-Clause' : 'More Context'}
                          </button>
                       </div>
@@ -171,7 +236,12 @@ export const Contracts = () => {
                  <p className="text-[11px] font-bold text-white/60 leading-relaxed">
                     Get this document reviewed by an actual human lawyer specializing in influencer law for ₹8,999.
                  </p>
-                 <button className="w-full py-4 bg-indigo-500 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:scale-105 transition-all shadow-xl shadow-indigo-500/20 uppercase">Talk to a Lawyer</button>
+                  <button 
+                    onClick={() => toast.info("Legal Inquiry Sent", { description: "A lawyer will contact you in the next 4 hours." })}
+                    className="w-full py-4 bg-indigo-500 text-white rounded-xl text-[10px] font-black uppercase tracking-widest hover:scale-105 transition-all shadow-xl shadow-indigo-500/20 uppercase"
+                  >
+                    Talk to a Lawyer
+                  </button>
               </div>
            </div>
         </div>
