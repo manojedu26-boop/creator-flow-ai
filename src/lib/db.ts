@@ -144,9 +144,14 @@ export const initializeDB = () => {
 
   // 4. Notifications
   db.seed('notifications', [
-    { id: 'not_1', title: 'New Deal Interest', body: 'Nike India wants to collaborate on your latest Reel.', type: 'deal', time: '2 mins ago', read: false },
-    { id: 'not_2', title: 'Payment Received', body: 'Fittr App cleared invoice #8200.', type: 'revenue', time: '1 hour ago', read: true },
-    { id: 'not_3', title: 'Contract Expiring', body: 'Your MuscleBlaze deal ends in 3 days.', type: 'warning', time: '5 hours ago', read: false }
+    { id: 'not_1', title: 'New Deal Interest', body: 'Nike India wants to collaborate on your latest Reel. Respond now before the window closes.', type: 'deal', time: '2 mins ago', read: false, link: '/deals' },
+    { id: 'not_2', title: 'Payment Received', body: 'Fittr App cleared invoice #INV-8200 — ₹8,200 is on its way to your account.', type: 'revenue', time: '1 hour ago', read: true, link: '/revenue' },
+    { id: 'not_3', title: 'Contract Expiring Soon', body: 'Your MuscleBlaze deal expires in 3 days. Review the renewal terms in Contract Shield.', type: 'warning', time: '5 hours ago', read: false, link: '/contracts' },
+    { id: 'not_4', title: 'Trending Post 🔥', body: 'Your "Desk Setup Minimal" Reel is 3.2x above your average reach. Boost it now?', type: 'trending', time: '20 mins ago', read: false, link: '/analytics' },
+    { id: 'not_5', title: 'New Message from Nike PR', body: 'Nike PR Team replied to your brief submission. Open your inbox to respond.', type: 'message', time: '45 mins ago', read: false, link: '/messages' },
+    { id: 'not_6', title: 'New Connection Request', body: 'Sarah Chen (@sarahdesigns) wants to connect. She collabed with 3 fitness creators this month.', type: 'connection', time: '2 hours ago', read: true, link: '/network' },
+    { id: 'not_7', title: 'Posting Gap Detected', body: 'You have no content scheduled for Thursday. Your audience peaks on Thursdays at 7–9 PM.', type: 'reminder', time: '3 hours ago', read: false, link: '/calendar' },
+    { id: 'not_8', title: 'AI Weekly Insight', body: 'No-equipment workout content is peaking in your niche this week. Best time to post: Friday 8 PM.', type: 'ai', time: '6 hours ago', read: true, link: '/growth' },
   ]);
 
   // 5. Saved Content (Content Studio)

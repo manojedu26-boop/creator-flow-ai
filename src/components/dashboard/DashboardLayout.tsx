@@ -14,19 +14,20 @@ import { db } from "../../lib/db";
 
 const getPageTitle = (pathname: string) => {
   switch (pathname) {
-    case "/dashboard": return "Command Centre";
-    case "/analytics": return "Analytics Intelli-Room";
-    case "/deals": return "Brand Deals Pipeline";
-    case "/studio": return "AI Content Studio";
-    case "/calendar": return "Smart Content Calendar";
-    case "/growth": return "Growth Strategy Engine";
-    case "/network": return "Creator Network";
-    case "/revenue": return "Monetisation Hub";
-    case "/contracts": return "Contract Shield";
-    case "/mediakit": return "Media Kit Builder";
-    case "/messages": return "Inbox & DMs";
+    case "/dashboard":     return "Command Centre";
+    case "/analytics":     return "Analytics Intelli-Room";
+    case "/deals":         return "Brand Deals Pipeline";
+    case "/studio":        return "AI Content Studio";
+    case "/calendar":      return "Smart Content Calendar";
+    case "/growth":        return "Growth Strategy Engine";
+    case "/network":       return "Creator Network";
+    case "/revenue":       return "Monetisation Hub";
+    case "/contracts":     return "Contract Shield";
+    case "/mediakit":      return "Media Kit Builder";
+    case "/messages":      return "Inbox & DMs";
     case "/notifications": return "Notifications";
-    default: return "Dashboard";
+    case "/settings":      return "Settings";
+    default:               return "Dashboard";
   }
 };
 
@@ -61,33 +62,43 @@ export const DashboardLayout = () => {
     await new Promise(resolve => setTimeout(resolve, 1500));
   };
 
-  // Rule #9: Real-time polling (every 30s)
+  // Rule #9: Smart notification job — runs every 30s in dev (simulates 30-min real job)
   useEffect(() => {
-    const pollInterval = setInterval(() => {
-      // Simulate real-time event: Add a random notification
-      const randomMsg = [
-        "New brand inquiry from PUMA!",
-        "Your MuscleBlaze Reel hit 50k views!",
-        "Contract signed by Nike India.",
-        "Weekly performance report ready.",
-      ][Math.floor(Math.random() * 4)];
+    const smartNotifJob = () => {
+      const jobs = [
+        {
+          check: () => Math.random() < 0.3, // Simulate deal deadline within 48h
+          notif: () => ({ id: `not_poll_deal_${Date.now()}`, title: 'Deal Deadline Alert', body: 'MuscleBlaze campaign deadline is in 24 hours. Submit your content now.', type: 'warning', time: 'Just now', read: false, link: '/deals' })
+        },
+        {
+          check: () => Math.random() < 0.25, // Trending post
+          notif: () => ({ id: `not_poll_trend_${Date.now()}`, title: 'Post Going Viral 🔥', body: 'Your latest Reel hit 2x your average reach in the first hour.', type: 'trending', time: 'Just now', read: false, link: '/analytics' })
+        },
+        {
+          check: () => Math.random() < 0.2,  // New message
+          notif: () => ({ id: `not_poll_msg_${Date.now()}`, title: 'New Message', body: 'A brand manager sent you a new collaboration inquiry.', type: 'message', time: 'Just now', read: false, link: '/messages' })
+        },
+        {
+          check: () => Math.random() < 0.15, // Posting gap
+          notif: () => ({ id: `not_poll_gap_${Date.now()}`, title: 'Content Gap Detected', body: 'No post scheduled for the next 3 days. Your engagement drops 40% without consistent posting.', type: 'reminder', time: 'Just now', read: false, link: '/calendar' })
+        }
+      ];
 
-      const newNotif = {
-        id: `not_poll_${Date.now()}`,
-        title: "Real-time Update",
-        body: randomMsg,
-        type: 'deal',
-        time: 'Just now',
-        read: false
-      };
+      const triggered = jobs.find(j => j.check());
+      if (!triggered) return;
 
+      const newNotif = triggered.notif();
       db.insert('notifications', newNotif);
-      
-      toast.info("New Activity", {
-        description: randomMsg
-      });
-    }, 30000);
 
+      toast.info(newNotif.title, { description: newNotif.body });
+
+      // OS push
+      if (typeof Notification !== 'undefined' && Notification.permission === 'granted') {
+        new Notification(newNotif.title, { body: newNotif.body, icon: '/favicon.ico' });
+      }
+    };
+
+    const pollInterval = setInterval(smartNotifJob, 30000);
     return () => clearInterval(pollInterval);
   }, []);
 

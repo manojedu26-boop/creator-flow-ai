@@ -1,116 +1,414 @@
-import { useState } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  Bell, Search, ChevronDown, CheckCircle2, 
-  Sparkles, DollarSign, Users, Info, 
-  TrendingUp, AlertTriangle, FileText, Target,
-  Menu, X, Trash2
+import {
+  Bell, Search, ChevronDown, X, CheckCheck,
+  Sparkles, DollarSign, TrendingUp, AlertTriangle,
+  MessageSquare, Users, Clock, Zap, Globe
 } from "lucide-react";
 import { useAuth } from "../../contexts/AuthContext";
-import { SwipeAction } from "../shared/MobileInteractions";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { useNavigate } from "react-router-dom";
 import { SearchOverlay } from "./SearchOverlay";
+import { db } from "../../lib/db";
+import { toast } from "@/components/ui/sonner";
 
-const notifications = [
-  { id: 1, type: "platform", icon: TrendingUp, color: "text-blue-400", text: "Your Reel is trending — 3.2x above your average reach!", time: "2m ago", isRead: false },
-  { id: 2, type: "deal", icon: DollarSign, color: "text-green-400", text: "Brand reply received from Nike — respond now", time: "15m ago", isRead: false },
-  { id: 3, type: "ai", icon: Sparkles, color: "text-purple-400", text: "You have no posts scheduled for Thursday", time: "1h ago", isRead: true },
-];
+interface Notification {
+  id: string;
+  title: string;
+  body: string;
+  type: "deal" | "revenue" | "warning" | "trending" | "message" | "connection" | "reminder" | "ai";
+  time: string;
+  read: boolean;
+  link?: string;
+  highlight?: string; // ID of thing to highlight on the linked page
+}
+
+const typeConfig: Record<string, { icon: any; color: string; bg: string }> = {
+  deal:       { icon: DollarSign,    color: "text-emerald-400", bg: "bg-emerald-500/10 border-emerald-500/20" },
+  revenue:    { icon: DollarSign,    color: "text-emerald-400", bg: "bg-emerald-500/10 border-emerald-500/20" },
+  trending:   { icon: TrendingUp,    color: "text-blue-400",    bg: "bg-blue-500/10 border-blue-500/20" },
+  warning:    { icon: AlertTriangle, color: "text-amber-400",   bg: "bg-amber-500/10 border-amber-500/20" },
+  message:    { icon: MessageSquare, color: "text-violet-400",  bg: "bg-violet-500/10 border-violet-500/20" },
+  connection: { icon: Users,         color: "text-cyan-400",    bg: "bg-cyan-500/10 border-cyan-500/20" },
+  reminder:   { icon: Clock,         color: "text-amber-400",   bg: "bg-amber-500/10 border-amber-500/20" },
+  ai:         { icon: Sparkles,      color: "text-primary",     bg: "bg-primary/10 border-primary/20" },
+};
+
+// Request push permission
+const requestPushPermission = async () => {
+  if (!("Notification" in window)) return;
+  if (Notification.permission === "default") {
+    const result = await Notification.requestPermission();
+    if (result === "granted") {
+      toast.success("Push notifications enabled! 🔔", { description: "You'll get alerts even when the app is closed." });
+    }
+  }
+};
+
+// Send OS push notification
+const sendPush = (title: string, body: string) => {
+  if (typeof Notification !== "undefined" && Notification.permission === "granted") {
+    new Notification(title, { body, icon: "/favicon.ico" });
+  }
+};
 
 export const Header = ({ title = "Dashboard" }: { title?: string }) => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [showNotifications, setShowNotifications] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [showUserDropdown, setShowUserDropdown] = useState(false);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const userDropRef = useRef<HTMLDivElement>(null);
+
+  const loadNotifications = useCallback(() => {
+    const all = db.getAll<Notification>("notifications");
+    // Sort newest first (by id timestamp or reverse array)
+    setNotifications([...all].reverse());
+  }, []);
+
+  // Initial load + poll every 60s
+  useEffect(() => {
+    loadNotifications();
+    const id = setInterval(loadNotifications, 60000);
+    return () => clearInterval(id);
+  }, [loadNotifications]);
+
+  // Request push on mount
+  useEffect(() => {
+    setTimeout(() => requestPushPermission(), 3000);
+  }, []);
+
+  const unreadCount = notifications.filter(n => !n.read).length;
+
+  const markAsRead = (notif: Notification) => {
+    if (!notif.read) {
+      db.update<Notification>("notifications", notif.id, { read: true } as any);
+      loadNotifications();
+    }
+    setShowNotifications(false);
+    if (notif.link) navigate(notif.link);
+  };
+
+  const markAllRead = () => {
+    notifications.forEach(n => {
+      if (!n.read) db.update<Notification>("notifications", n.id, { read: true } as any);
+    });
+    loadNotifications();
+    toast.success("All notifications marked as read.");
+  };
+
+  const deleteNotif = (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    db.delete("notifications", id);
+    loadNotifications();
+  };
+
+  // Close panel on outside click
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (panelRef.current && !panelRef.current.contains(e.target as Node)) {
+        setShowNotifications(false);
+      }
+      if (userDropRef.current && !userDropRef.current.contains(e.target as Node)) {
+        setShowUserDropdown(false);
+      }
+    };
+    if (showNotifications || showUserDropdown) document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, [showNotifications, showUserDropdown]);
 
   return (
-    <header className="sticky-header lg:fixed top-0 left-0 lg:left-[80px] right-0 h-[var(--header-h)] bg-black/60 backdrop-blur-3xl border-b border-white/5 z-[100] flex items-center justify-between px-4 md:px-10 transition-all duration-300">
-      <div className="flex items-center gap-8">
-        <h1 className="text-lg md:text-2xl font-black tracking-tight uppercase truncate max-w-[200px] md:max-w-none">{title}</h1>
-        
-        <div className="hidden xl:flex items-center bg-white/5 rounded-2xl p-1 border border-white/10">
-          {["Global", "Instagram", "YouTube", "TikTok"].map((platform, i) => (
-            <button key={platform} className={`px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${i === 0 ? "bg-primary text-white shadow-lg" : "text-zinc-500 hover:text-white"}`}>
-              {platform}
+    <>
+      <header className="sticky-header lg:fixed top-0 left-0 lg:left-[80px] right-0 h-[var(--header-h)] bg-black/70 backdrop-blur-3xl border-b border-white/5 z-[100] flex items-center justify-between px-4 md:px-10 transition-all duration-300">
+        <div className="flex items-center gap-8">
+          <h1 className="text-base md:text-xl font-black tracking-tight uppercase truncate max-w-[160px] md:max-w-none">{title}</h1>
+
+          <div className="hidden xl:flex items-center bg-white/5 rounded-2xl p-1 border border-white/10">
+            {["Global", "Instagram", "YouTube", "TikTok"].map((platform, i) => (
+              <button
+                key={platform}
+                className={`px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${i === 0 ? "bg-primary text-white shadow-lg" : "text-zinc-500 hover:text-white"}`}
+              >
+                {platform}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="flex items-center gap-3 md:gap-6">
+          {/* Desktop Search */}
+          <div className="relative hidden md:block">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+            <input
+              type="text"
+              placeholder="Search insights..."
+              className="h-11 w-64 bg-white/5 border border-white/10 rounded-2xl pl-12 pr-4 text-[11px] font-bold text-white focus:outline-none focus:ring-1 focus:ring-primary/50 transition-all"
+            />
+          </div>
+
+          {/* Mobile Search */}
+          <button onClick={() => setIsSearchOpen(true)} className="md:hidden p-2 text-zinc-500 hover:text-white transition-colors">
+            <Search className="w-5 h-5" />
+          </button>
+
+          {/* Notification Bell */}
+          <div className="relative" ref={panelRef}>
+            <button
+              onClick={() => setShowNotifications(prev => !prev)}
+              className="relative p-2 text-zinc-500 hover:text-white transition-colors rounded-xl hover:bg-white/5"
+              aria-label="Notifications"
+            >
+              <Bell className={`w-5 h-5 transition-all ${showNotifications ? "text-primary" : ""}`} />
+              {unreadCount > 0 && (
+                <motion.span
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  className="absolute top-1.5 right-1.5 min-w-[16px] h-4 bg-rose-500 text-white text-[9px] font-black rounded-full flex items-center justify-center px-1 border border-black"
+                >
+                  {unreadCount > 9 ? "9+" : unreadCount}
+                </motion.span>
+              )}
             </button>
-          ))}
-        </div>
-      </div>
 
-      <div className="flex items-center gap-4 md:gap-8">
-        {/* Desktop Search */}
-        <div className="relative hidden md:block">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
-          <input type="text" placeholder="Search insights..." className="h-11 w-64 bg-white/5 border border-white/10 rounded-2xl pl-12 pr-4 text-[11px] font-bold text-white focus:outline-none focus:ring-1 focus:ring-primary/50 transition-all" />
-        </div>
+            {/* Desktop Dropdown Panel */}
+            <AnimatePresence>
+              {showNotifications && (
+                <motion.div
+                  initial={{ opacity: 0, y: 8, scale: 0.97 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 8, scale: 0.97 }}
+                  transition={{ duration: 0.15 }}
+                  className="hidden lg:flex absolute top-full right-0 mt-2 w-[420px] bg-zinc-950 border border-white/10 rounded-3xl shadow-2xl shadow-black/50 z-[200] flex-col overflow-hidden"
+                >
+                  {/* Panel Header */}
+                  <div className="flex items-center justify-between px-5 py-4 border-b border-white/5">
+                    <div>
+                      <h3 className="font-black text-sm uppercase tracking-widest">Notifications</h3>
+                      {unreadCount > 0 && (
+                        <p className="text-[10px] text-zinc-500 font-bold mt-0.5">{unreadCount} unread</p>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {unreadCount > 0 && (
+                        <button
+                          onClick={markAllRead}
+                          className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-primary hover:text-white transition-colors px-3 py-1.5 rounded-xl hover:bg-white/5"
+                        >
+                          <CheckCheck className="w-3.5 h-3.5" /> Mark all read
+                        </button>
+                      )}
+                      {/* Push permission button */}
+                      {typeof Notification !== "undefined" && Notification.permission === "default" && (
+                        <button
+                          onClick={requestPushPermission}
+                          className="text-[10px] font-black uppercase tracking-widest text-zinc-500 hover:text-white transition-colors px-3 py-1.5 rounded-xl hover:bg-white/5"
+                          title="Enable push notifications"
+                        >
+                          <Bell className="w-3.5 h-3.5" />
+                        </button>
+                      )}
+                    </div>
+                  </div>
 
-        {/* Mobile Search Toggle */}
-        <button 
-          onClick={() => setIsSearchOpen(true)}
-          className="lg:hidden p-2 text-zinc-500 hover:text-white transition-colors"
-        >
-          <Search className="w-5 h-5" />
-        </button>
+                  {/* Notification List */}
+                  <div className="max-h-[420px] overflow-y-auto no-scrollbar">
+                    {notifications.length === 0 ? (
+                      <div className="flex flex-col items-center justify-center py-12 text-zinc-600 gap-3">
+                        <Bell className="w-10 h-10 opacity-30" />
+                        <p className="text-[11px] font-black uppercase tracking-widest">You're all caught up!</p>
+                      </div>
+                    ) : (
+                      notifications.map(notif => {
+                        const config = typeConfig[notif.type] || typeConfig.ai;
+                        const Icon = config.icon;
+                        return (
+                          <motion.div
+                            key={notif.id}
+                            layout
+                            initial={{ opacity: 0, x: 10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            className={`flex items-start gap-4 px-4 py-4 cursor-pointer border-b border-white/[0.03] transition-all hover:bg-white/[0.03] group ${notif.read ? "opacity-60" : ""}`}
+                            onClick={() => markAsRead(notif)}
+                          >
+                            <div className={`w-9 h-9 rounded-2xl border flex items-center justify-center shrink-0 ${config.bg}`}>
+                              <Icon className={`w-4 h-4 ${config.color}`} />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-[12px] font-black text-white">{notif.title}</p>
+                              <p className="text-[11px] text-zinc-400 font-medium leading-relaxed mt-0.5">{notif.body}</p>
+                              <p className="text-[10px] text-zinc-600 font-black uppercase tracking-widest mt-1.5">{notif.time}</p>
+                            </div>
+                            <div className="flex items-center gap-2 shrink-0">
+                              {!notif.read && <div className="w-2 h-2 rounded-full bg-primary" />}
+                              <button
+                                onClick={e => deleteNotif(notif.id, e)}
+                                className="opacity-0 group-hover:opacity-100 p-1 text-zinc-600 hover:text-white transition-all"
+                              >
+                                <X className="w-3.5 h-3.5" />
+                              </button>
+                            </div>
+                          </motion.div>
+                        );
+                      })
+                    )}
+                  </div>
 
-        <button onClick={() => setShowNotifications(!showNotifications)} className="relative p-2 text-zinc-500 hover:text-white transition-colors">
-          <Bell className="w-5 h-5" />
-          <span className="absolute top-2.5 right-2.5 w-1.5 h-1.5 bg-primary rounded-full border border-black" />
-        </button>
-
-        <div className="flex items-center gap-3 cursor-pointer group">
-          <div className="w-8 h-8 md:w-9 md:h-9 shrink-0 relative">
-             {user?.photo ? (
-               <img src={user.photo} alt="" className="w-full h-full rounded-full object-cover border border-white/10 group-hover:border-primary/50 transition-colors" />
-             ) : (
-               <div className="w-full h-full rounded-full bg-gradient-to-tr from-primary to-blue-500 flex items-center justify-center text-[10px] font-black text-white">
-                  {user?.firstName?.[0]}
-               </div>
-             )}
+                  {/* View All */}
+                  <div className="p-3 border-t border-white/5">
+                    <button
+                      onClick={() => { setShowNotifications(false); navigate("/notifications"); }}
+                      className="w-full text-[10px] font-black uppercase tracking-widest text-zinc-500 hover:text-white transition-colors py-2 rounded-xl hover:bg-white/5"
+                    >
+                      View All Notifications →
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
-          <div className="hidden sm:flex flex-col">
-             <span className="text-[10px] font-black text-white uppercase tracking-widest">{user?.firstName || "Naveen"}</span>
-             <span className="text-[8px] font-black text-primary uppercase tracking-widest">Growth Plan</span>
-          </div>
-          <ChevronDown className="hidden md:block w-4 h-4 text-zinc-500 group-hover:text-white transition-colors" />
-        </div>
-      </div>
 
-      <SearchOverlay isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
-      
+          {/* User Avatar */}
+          <div className="relative" ref={userDropRef}>
+            <button
+              onClick={() => setShowUserDropdown(prev => !prev)}
+              className="flex items-center gap-3 cursor-pointer group"
+            >
+              <div className="w-8 h-8 md:w-9 md:h-9 shrink-0 relative">
+                {user?.photo ? (
+                  <img src={user.photo} alt="" className="w-full h-full rounded-full object-cover border border-white/10 group-hover:border-primary/50 transition-colors" />
+                ) : (
+                  <div className="w-full h-full rounded-full bg-gradient-to-tr from-primary to-blue-500 flex items-center justify-center text-[10px] font-black text-white">
+                    {user?.firstName?.[0]}
+                  </div>
+                )}
+              </div>
+              <div className="hidden sm:flex flex-col text-left">
+                <span className="text-[10px] font-black text-white uppercase tracking-widest">{user?.firstName || "Creator"}</span>
+                <span className="text-[8px] font-black text-primary uppercase tracking-widest">{user?.handle || 'Growth Plan'}</span>
+              </div>
+              <ChevronDown className="hidden md:block w-4 h-4 text-zinc-500 group-hover:text-white transition-colors" />
+            </button>
+
+            {/* User dropdown mini */}
+            <AnimatePresence>
+              {showUserDropdown && (
+                <motion.div
+                  initial={{ opacity: 0, y: 6, scale: 0.96 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 6, scale: 0.96 }}
+                  transition={{ duration: 0.12 }}
+                  className="absolute top-full right-0 mt-2 w-52 bg-zinc-950 border border-white/10 rounded-2xl shadow-2xl overflow-hidden z-[200]"
+                >
+                  <div className="p-3 border-b border-white/5">
+                    <p className="text-[11px] font-black uppercase text-white">{user?.name}</p>
+                    <p className="text-[10px] text-zinc-500">{user?.email}</p>
+                  </div>
+                  {[
+                    { label: "View Profile", action: () => navigate("/network/profile/me") },
+                    { label: "Settings", action: () => navigate("/settings") },
+                  ].map(item => (
+                    <button
+                      key={item.label}
+                      onClick={() => { item.action(); setShowUserDropdown(false); }}
+                      className="w-full text-left px-4 py-2.5 text-[11px] font-black uppercase tracking-widest text-zinc-400 hover:text-white hover:bg-white/5 transition-all"
+                    >
+                      {item.label}
+                    </button>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </div>
+      </header>
+
+      {/* Mobile Notification Bottom Sheet */}
       <AnimatePresence>
         {showNotifications && (
-          <>
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setShowNotifications(false)} className="fixed inset-0 bg-black/60 z-[150]" />
-            <motion.div initial={{ x: "100%" }} animate={{ x: 0 }} exit={{ x: "100%" }} transition={{ type: "spring", damping: 30 }} className="fixed top-0 right-0 bottom-0 w-[400px] bg-background border-l border-white/5 z-[160] flex flex-col pt-[var(--header-h)]">
-              <div className="p-6 border-b border-white/5 flex items-center justify-between">
-                <h3 className="text-xl font-black uppercase tracking-tight">Notifications</h3>
-                <button onClick={() => setShowNotifications(false)}><X className="w-5 h-5 text-zinc-500 hover:text-white" /></button>
+          <div className="lg:hidden">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowNotifications(false)}
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[150]"
+            />
+            <motion.div
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "100%" }}
+              transition={{ type: "spring", damping: 30, stiffness: 350 }}
+              className="fixed bottom-0 left-0 right-0 z-[160] bg-zinc-950 border-t border-white/10 rounded-t-[2rem] max-h-[90vh] flex flex-col"
+            >
+              {/* Handle */}
+              <div className="w-8 h-1 rounded-full bg-zinc-700 mx-auto mt-3 mb-2 shrink-0" />
+
+              {/* Header */}
+              <div className="flex items-center justify-between px-6 py-3 border-b border-white/5 shrink-0">
+                <div>
+                  <h3 className="font-black text-base uppercase tracking-tight">Notifications</h3>
+                  {unreadCount > 0 && <p className="text-[10px] text-zinc-500 font-bold">{unreadCount} unread</p>}
+                </div>
+                <div className="flex items-center gap-3">
+                  {unreadCount > 0 && (
+                    <button onClick={markAllRead} className="text-[10px] font-black uppercase tracking-widest text-primary">
+                      Mark all read
+                    </button>
+                  )}
+                  <button onClick={() => setShowNotifications(false)} className="p-1 text-zinc-500">
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
               </div>
-              <div className="flex-1 overflow-y-auto overflow-x-hidden p-4 space-y-2">
-                {[1, 2].map(id => (
-                  <SwipeAction
-                    key={id}
-                    onSwipeLeft={() => setShowNotifications(false)} // Simplification for demo
-                    rightAction={
-                      <div className="flex flex-col items-center justify-center p-4">
-                        <Trash2 className="w-5 h-5" />
-                        <span className="text-[10px] font-black uppercase mt-1">Dismiss</span>
+
+              {/* List */}
+              <div className="flex-1 overflow-y-auto no-scrollbar">
+                {notifications.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center py-16 gap-3 text-zinc-600">
+                    <Bell className="w-10 h-10 opacity-30" />
+                    <p className="text-[11px] font-black uppercase tracking-widest">All caught up!</p>
+                  </div>
+                ) : (
+                  notifications.map(notif => {
+                    const config = typeConfig[notif.type] || typeConfig.ai;
+                    const Icon = config.icon;
+                    return (
+                      <div
+                        key={notif.id}
+                        onClick={() => markAsRead(notif)}
+                        className={`flex items-start gap-4 px-5 py-4 border-b border-white/[0.04] cursor-pointer transition-all active:bg-white/5 ${notif.read ? "opacity-60" : ""}`}
+                      >
+                        <div className={`w-10 h-10 rounded-2xl border flex items-center justify-center shrink-0 ${config.bg}`}>
+                          <Icon className={`w-4.5 h-4.5 ${config.color}`} />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-[13px] font-black text-white">{notif.title}</p>
+                          <p className="text-[12px] text-zinc-400 leading-relaxed mt-0.5">{notif.body}</p>
+                          <p className="text-[10px] text-zinc-600 font-black uppercase tracking-widest mt-1.5">{notif.time}</p>
+                        </div>
+                        {!notif.read && <div className="w-2 h-2 rounded-full bg-primary mt-2 shrink-0" />}
                       </div>
-                    }
-                  >
-                    <div className="p-4 rounded-2xl bg-white/5 border border-white/5 relative z-10 flex gap-4">
-                      <div className="w-2 h-2 rounded-full bg-primary mt-1.5 shrink-0" />
-                      <div>
-                        <p className="text-sm font-bold leading-tight">Decathlon accepted your final contract draft.</p>
-                        <p className="text-[10px] uppercase font-black tracking-widest text-zinc-500 mt-2">Just now</p>
-                      </div>
-                    </div>
-                  </SwipeAction>
-                ))}
+                    );
+                  })
+                )}
+              </div>
+
+              {/* View All */}
+              <div className="p-4 border-t border-white/5 shrink-0">
+                <button
+                  onClick={() => { setShowNotifications(false); navigate("/notifications"); }}
+                  className="w-full h-12 rounded-2xl bg-white/5 border border-white/10 text-[11px] font-black uppercase tracking-widest hover:bg-white/10 transition-all"
+                >
+                  View All Notifications
+                </button>
               </div>
             </motion.div>
-          </>
+          </div>
         )}
       </AnimatePresence>
-    </header>
+
+      <SearchOverlay isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
+    </>
   );
 };

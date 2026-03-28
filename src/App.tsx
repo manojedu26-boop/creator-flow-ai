@@ -32,6 +32,7 @@ const Contracts = lazy(() => import("./pages/dashboard/Contracts.tsx").then(m =>
 const MediaKit = lazy(() => import("./pages/dashboard/MediaKit.tsx").then(m => ({ default: m.MediaKit })));
 const Messages = lazy(() => import("./pages/dashboard/Messages.tsx").then(m => ({ default: m.Messages })));
 const Settings = lazy(() => import("./pages/dashboard/Settings.tsx").then(m => ({ default: m.Settings })));
+const NotificationsPage = lazy(() => import("./pages/dashboard/Notifications.tsx").then(m => ({ default: m.Notifications })));
 
 const BrandLayout = lazy(() => import("./components/brand/BrandLayout").then(m => ({ default: m.BrandLayout })));
 const BrandHome = lazy(() => import("./pages/brand/BrandHome.tsx").then(m => ({ default: m.BrandHome })));
@@ -91,6 +92,7 @@ const App = () => {
                       <Route path="/contracts" element={<Contracts />} />
                       <Route path="/mediakit" element={< MediaKit />} />
                       <Route path="/messages" element={<Messages />} />
+                      <Route path="/notifications" element={<NotificationsPage />} />
                       <Route path="/settings" element={<Settings />} />
                     </Route>
 
