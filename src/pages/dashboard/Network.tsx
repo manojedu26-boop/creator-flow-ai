@@ -8,10 +8,13 @@ import {
   ChevronRight, TrendingUp, UserPlus
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
+import { toast } from "../../components/ui/sonner";
 
 type FeedFilter = 'all' | 'collabs' | 'castings' | 'wins' | 'tips';
 
 export const Network = () => {
+  const { user } = useAuth();
   const [activeFilter, setActiveFilter] = useState<FeedFilter>('all');
 
   return (
@@ -181,12 +184,16 @@ export const Network = () => {
             <div className="bg-card border border-border/40 rounded-3xl p-6 shadow-xl relative overflow-hidden group">
                <div className="absolute top-0 left-0 right-0 h-16 bg-gradient-to-tr from-primary/20 to-secondary/20" />
                <div className="relative mt-8 space-y-4 flex flex-col items-center text-center">
-                  <div className="w-20 h-20 rounded-[1.5rem] bg-background border-4 border-card shadow-2xl flex items-center justify-center font-black text-2xl">
-                     JD
+                  <div className="w-20 h-20 rounded-[1.5rem] bg-background border-4 border-card shadow-2xl flex items-center justify-center font-black text-2xl overflow-hidden">
+                     {user?.photo ? (
+                       <img src={user.photo} alt={user.name} className="w-full h-full object-cover" />
+                     ) : (
+                       <span>{user?.name?.[0]}{user?.name?.split(' ')[1]?.[0]}</span>
+                     )}
                   </div>
                   <div>
-                     <h4 className="font-black text-lg">Jack Dorsey</h4>
-                     <p className="text-[10px] font-bold text-muted-foreground uppercase">Tech Creator • Mumbai</p>
+                     <h4 className="font-black text-lg">{user?.name || 'Creator'}</h4>
+                     <p className="text-[10px] font-bold text-muted-foreground uppercase">{user?.niche || 'Fitness'} • Mumbai</p>
                   </div>
                   <Link to="/network/profile/me" className="text-[10px] font-black uppercase tracking-widest text-primary hover:underline">View Full Profile</Link>
                </div>

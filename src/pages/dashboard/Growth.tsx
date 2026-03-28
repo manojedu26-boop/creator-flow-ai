@@ -13,6 +13,8 @@ import {
 } from 'recharts';
 import { PageTransition, staggerContainer, staggerItem } from "../../components/shared/MotionComponents";
 import { useAuth } from "../../contexts/AuthContext";
+import { toast } from "../../components/ui/sonner";
+import { db } from "../../lib/db";
 
 const growthData = [
   { day: 'Day 1', current: 48200, ai: 48200 },
@@ -53,9 +55,22 @@ export const Growth = () => {
   const [completedActions, setCompletedActions] = useState<number[]>([1, 3]);
 
   const toggleAction = (id: number) => {
-    setCompletedActions(prev => 
-      prev.includes(id) ? prev.filter(a => a !== id) : [...prev, id]
-    );
+    const newCompleted = completedActions.includes(id)
+      ? completedActions.filter(a => a !== id)
+      : [...completedActions, id];
+    setCompletedActions(newCompleted);
+
+    // Persist to tasks DB — mark as completed if it wasn't before
+    if (!completedActions.includes(id)) {
+      const taskId = `growth_task_${id}`;
+      const existingTask = db.getAll<any>('tasks').find((t: any) => t.id === taskId);
+      if (!existingTask) {
+        db.insert('tasks', { id: taskId, text: `Growth task ${id}`, category: 'Strategy', completed: true, time: '—' });
+      } else {
+        db.update('tasks', taskId, { completed: true } as any);
+      }
+      toast.success("Great work! Strategy task completed. 🎯");
+    }
   };
 
   return (
@@ -80,7 +95,7 @@ export const Growth = () => {
                   </div>
                   <h2 className="text-4xl font-black tracking-tight">Mission: Reels Mastery</h2>
                   <p className="text-muted-foreground text-lg max-w-2xl leading-relaxed">
-                     Naveen, your <span className="text-white">Fitness & Lifestyle</span> niche is currently peaking for 'No-Equipment' content. Fixing your 3-second hook drop-off is the priority this week.
+                     {user?.firstName || 'Naveen'}, your <span className="text-white">{user?.niche || 'Fitness & Lifestyle'}</span> niche is currently peaking for 'No-Equipment' content. Fixing your 3-second hook drop-off is the priority this week.
                   </p>
                </div>
 

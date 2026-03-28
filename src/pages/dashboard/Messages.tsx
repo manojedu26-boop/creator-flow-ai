@@ -1,4 +1,4 @@
-import { useState, memo } from "react";
+import { useState, memo, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Search, Star, MessageSquare, Send, 
@@ -12,20 +12,36 @@ import {
 import { PageTransition, staggerContainer, staggerItem } from "../../components/shared/MotionComponents";
 import { EmptyState } from "../../components/shared/EmptyState";
 import { useEffect } from "react";
+import { useAuth } from "../../contexts/AuthContext";
+import { toast } from "../../components/ui/sonner";
 
 type Tab = 'dms' | 'brands' | 'comments' | 'templates';
 
 export const Messages = () => {
+  const { user } = useAuth();
   const [activeTab, setActiveTab] = useState<Tab>('dms');
   const [selectedId, setSelectedId] = useState<string>('1');
   const [showAiSuggest, setShowAiSuggest] = useState(false);
   const [isMobileChatOpen, setIsMobileChatOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [replyText, setReplyText] = useState('');
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoading(false), 1000);
     return () => clearTimeout(timer);
   }, []);
+
+  const handleSend = () => {
+    if (!replyText.trim()) return;
+    toast.success('Message sent!', { description: `Your reply was delivered to ${selectedChat?.name || 'the sender'}.` });
+    setReplyText('');
+  };
+
+  const handleApplyReply = () => {
+    setReplyText("I've checked our timeline and I have a perfect slot in early April. I suggest we include a YouTube integration as well for deeper engagement, as my tech audience spans both platforms. Happy to jump on a call Wednesday?");
+    setShowAiSuggest(false);
+    toast.info('AI reply applied to your message box.');
+  };
 
   const chats = [
     { id: '1', name: 'Nike PR Team', last: 'Looking forward to the Reel drafting!', time: '10:42 AM', unread: 2, brand: true, type: 'brands', avatar: 'N', color: 'bg-zinc-900' },
@@ -44,6 +60,9 @@ export const Messages = () => {
     setSelectedId(id);
     setIsMobileChatOpen(true);
   };
+
+  const selectedChat = chats.find(c => c.id === selectedId);
+  const userInitials = user?.name?.split(' ').map(n => n[0]).join('') || 'ME';
 
   return (
     <PageTransition>
@@ -252,7 +271,7 @@ export const Messages = () => {
                  <div className="max-w-[85%] md:max-w-[65%] space-y-2">
                     <div className="bg-card/40 backdrop-blur-xl border border-border/40 p-4 md:p-6 rounded-[1.5rem] md:rounded-[2.5rem] rounded-tl-none shadow-sm hover:shadow-2xl transition-all group">
                        <p className="text-sm md:text-md font-medium leading-relaxed">
-                          Hi Jack! We reached out because your <span className="text-primary font-bold">"Desk Setup Minimal"</span> video hit massive numbers. We'd love to partner for our Spring 2026 tech line. Are you free to discuss a 3-post reel series?
+                          Hi {user?.firstName || 'there'}! We reached out because your <span className="text-primary font-bold">"Desk Setup Minimal"</span> video hit massive numbers. We'd love to partner for our Spring 2026 tech line. Are you free to discuss a 3-post reel series?
                        </p>
                     </div>
                     <span className="text-[9px] font-black uppercase text-muted-foreground pl-4 flex items-center gap-2">10:42 AM <Clock className="w-3 h-3" /></span>
@@ -260,7 +279,7 @@ export const Messages = () => {
               </div>
 
               <div className="flex items-start gap-4 flex-row-reverse">
-                 <div className="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-primary border border-primary/40 flex items-center justify-center text-white text-xs md:text-md font-black uppercase tracking-widest shadow-2xl shadow-primary/30 shrink-0">ME</div>
+                 <div className="w-10 h-10 md:w-12 md:h-12 rounded-2xl bg-primary border border-primary/40 flex items-center justify-center text-white text-xs md:text-md font-black uppercase tracking-widest shadow-2xl shadow-primary/30 shrink-0">{userInitials}</div>
                  <div className="max-w-[85%] md:max-w-[65%] space-y-2 text-right">
                     <div className="bg-primary text-primary-foreground p-4 md:p-6 rounded-[1.5rem] md:rounded-[2.5rem] rounded-tr-none shadow-2xl shadow-primary/20">
                        <p className="text-sm md:text-md font-black leading-relaxed">
@@ -296,7 +315,7 @@ export const Messages = () => {
                           "I've checked our timeline and I have a perfect slot in early April. I suggest we include a <span className="text-primary font-black">YouTube integration</span> as well for deeper engagement, as my tech audience spans both platforms. Happy to jump on a call Wednesday?"
                        </div>
                        <div className="flex gap-3 md:gap-4 relative z-10">
-                          <button className="flex-1 h-12 md:h-14 bg-primary text-white rounded-xl md:rounded-2xl text-[10px] md:text-[11px] font-black uppercase tracking-widest hover:shadow-2xl hover:shadow-primary/30 active:scale-95 transition-all">Apply Reply</button>
+                          <button onClick={handleApplyReply} className="flex-1 h-12 md:h-14 bg-primary text-white rounded-xl md:rounded-2xl text-[10px] md:text-[11px] font-black uppercase tracking-widest hover:shadow-2xl hover:shadow-primary/30 active:scale-95 transition-all">Apply Reply</button>
                           <button className="h-12 md:h-14 px-4 md:px-8 bg-background/50 border border-border/40 rounded-xl md:rounded-2xl text-[10px] md:text-[11px] font-black uppercase tracking-widest hover:bg-muted transition-all flex items-center gap-2">
                              <Wand2 className="w-4 h-4" /> Try Casual
                           </button>
@@ -312,6 +331,9 @@ export const Messages = () => {
                  <div className="flex-1 h-14 md:h-16 bg-background/50 border border-border/40 rounded-[1.5rem] md:rounded-[2.5rem] px-5 md:px-10 flex items-center relative overflow-hidden group focus-within:border-primary focus-within:ring-1 focus-within:ring-primary shadow-sm hover:border-primary/50 transition-all">
                     <input 
                       placeholder="Type a reply..." 
+                      value={replyText}
+                      onChange={e => setReplyText(e.target.value)}
+                      onKeyDown={e => e.key === 'Enter' && handleSend()}
                       className="w-full bg-transparent focus:outline-none text-xs md:text-sm font-bold placeholder:text-muted-foreground/30" 
                     />
                     <div className="flex items-center gap-3 md:gap-6 text-muted-foreground/50">
@@ -319,7 +341,7 @@ export const Messages = () => {
                        <Smile className="w-5 h-5 hover:text-primary transition-colors cursor-pointer" />
                     </div>
                  </div>
-                 <button className="h-14 w-14 md:h-16 md:w-24 bg-primary text-white rounded-[1.5rem] md:rounded-[2.5rem] shadow-3xl shadow-primary/20 hover:shadow-primary/40 hover:scale-105 active:scale-95 flex items-center justify-center transition-all group relative overflow-hidden shrink-0">
+                 <button onClick={handleSend} className="h-14 w-14 md:h-16 md:w-24 bg-primary text-white rounded-[1.5rem] md:rounded-[2.5rem] shadow-3xl shadow-primary/20 hover:shadow-primary/40 hover:scale-105 active:scale-95 flex items-center justify-center transition-all group relative overflow-hidden shrink-0">
                     <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-500" />
                     <Send className="w-5 h-5 md:w-6 md:h-6 relative z-10 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                  </button>
