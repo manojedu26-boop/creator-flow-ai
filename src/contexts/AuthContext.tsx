@@ -57,10 +57,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setIsLoading(false);
   }, []);
 
-  const login = (email: string, password: string) => {
-    const newUser = { ...mockUser, email };
-    setUser(newUser);
-    db.update<User>('users', mockUser.id, { email });
+  const login = (email: string, _password: string) => {
+    // AuthContext login — credential check is done in Login.tsx before calling this
+    // Find user in DB or create session with mockUser if it's a demo login
+    const users = db.getAll<User & { password?: string }>('users');
+    let found = users.find(u => u.email === email);
+    if (found) {
+      // Remove password from state
+      const { password, ...safeUser } = found as any;
+      setUser(safeUser);
+    } else {
+      // Fallback: create session with mockUser
+      const newUser = { ...mockUser, email };
+      setUser(newUser);
+      db.update<User>('users', mockUser.id, { email });
+    }
   };
 
   const register = (name: string, email: string) => {

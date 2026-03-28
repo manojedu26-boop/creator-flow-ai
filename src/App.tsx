@@ -7,11 +7,14 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Intro } from "./components/shared/Intro.tsx";
 import { AuthProvider } from "./contexts/AuthContext.tsx";
+import { ProtectedRoute } from "./components/shared/ProtectedRoute.tsx";
 
 // Lazy-loaded components
 const Index = lazy(() => import("./pages/Index.tsx"));
 const Login = lazy(() => import("./pages/Login.tsx"));
 const Register = lazy(() => import("./pages/Register.tsx"));
+const ForgotPassword = lazy(() => import("./pages/ForgotPassword.tsx"));
+const ResetPassword = lazy(() => import("./pages/ResetPassword.tsx"));
 const Onboarding = lazy(() => import("./pages/Onboarding.tsx"));
 const NotFound = lazy(() => import("./pages/NotFound.tsx"));
 
@@ -70,10 +73,12 @@ const App = () => {
                     <Route path="/" element={<Index />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
+                    <Route path="/forgot-password" element={<ForgotPassword />} />
+                    <Route path="/reset-password" element={<ResetPassword />} />
                     <Route path="/onboarding" element={<Onboarding />} />
                     
                     {/* Post-Login CreatorForge Architecture */}
-                    <Route element={<DashboardLayout />}>
+                    <Route element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
                       <Route path="/dashboard" element={<DashboardHome />} />
                       <Route path="/analytics" element={<Analytics />} />
                       <Route path="/deals" element={<BrandDeals />} />
