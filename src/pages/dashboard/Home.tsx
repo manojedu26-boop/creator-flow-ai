@@ -95,8 +95,8 @@ export const Home = () => {
 
   return (
     <PageTransition className="space-y-12 pb-24 lg:pb-12 h-screen overflow-y-auto no-scrollbar px-2">
-      <header className="flex flex-col md:flex-row md:items-end justify-between gap-10 mt-4">
-        <div className="space-y-6">
+      <header className="flex flex-col md:flex-row md:items-end justify-between gap-10 mt-2">
+        <div className="space-y-3">
           <motion.div 
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -109,14 +109,14 @@ export const Home = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ type: "spring", stiffness: 100 }}
-            className="text-6xl md:text-9xl font-black tracking-[0.02em] leading-none text-slate-950 uppercase"
+            className="text-4xl md:text-6xl font-black tracking-[0.02em] leading-none text-slate-950 uppercase"
           >
             Good morning, <br />
             <span className="text-blue-600 flex items-center gap-4">
                {user?.firstName || 'Naveen'} <Stars className="w-12 h-12 md:w-20 md:h-20 animate-pulse text-slate-950" />
             </span>
           </motion.h1>
-          <p className="text-slate-500 font-bold text-base md:text-xl max-w-2xl mt-8 leading-relaxed">
+          <p className="text-slate-500 font-bold text-base md:text-xl max-w-2xl mt-2 leading-relaxed">
             Your influence score generated a <span className="text-slate-950 font-black underline decoration-blue-600 decoration-4">11% spike</span>. <br />
             Prime transmission window: <span className="text-blue-600 font-black">19:00 IST</span>.
           </p>
@@ -146,7 +146,7 @@ export const Home = () => {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: i * 0.05, type: "spring" }}
-            className="group relative overflow-hidden rounded-[3rem] bg-white p-10 border border-slate-100 hover:border-blue-600 transition-all shadow-xl shadow-slate-100/50 hover:shadow-2xl hover:shadow-blue-500/10"
+            className="group relative overflow-hidden rounded-[3rem] bg-white p-8 border border-slate-200 transition-all shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:shadow-blue-500/10"
           >
             <div className={cn("p-5 rounded-[1.5rem] w-fit mb-8 shadow-inner transition-transform group-hover:scale-110", stat.bg, stat.color)}>
               <stat.icon className="w-6 h-6" />

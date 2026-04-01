@@ -38,18 +38,18 @@ const Confetti = () => (
 
 // ─── Niches & Goals ─────────────────────────────────────────────────────────
 const niches = [
-  { label: "Fitness", icon: Dumbbell, color: "text-orange-500", bg: "bg-orange-50" },
-  { label: "Lifestyle", icon: Sparkles, color: "text-blue-500", bg: "bg-blue-50" },
-  { label: "Beauty", icon: Heart, color: "text-pink-500", bg: "bg-pink-50" },
-  { label: "Tech", icon: Laptop, color: "text-slate-900", bg: "bg-slate-50" },
-  { label: "Food", icon: UtensilsCrossed, color: "text-amber-600", bg: "bg-amber-50" },
-  { label: "Travel", icon: Plane, color: "text-emerald-600", bg: "bg-emerald-50" },
-  { label: "Finance", icon: DollarSign, color: "text-slate-900", bg: "bg-slate-50" },
-  { label: "Gaming", icon: Zap, color: "text-indigo-600", bg: "bg-indigo-50" },
-  { label: "Fashion", icon: Palette, color: "text-purple-600", bg: "bg-purple-50" },
-  { label: "Education", icon: BookOpen, color: "text-blue-600", bg: "bg-blue-50" },
-  { label: "Comedy", icon: Music2, color: "text-rose-500", bg: "bg-rose-50" },
-  { label: "Photo", icon: Camera, color: "text-slate-900", bg: "bg-slate-50" }
+  { label: "Fitness", icon: Dumbbell, color: "text-orange-500", bg: "bg-orange-50", image: "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=400&auto=format&fit=crop" },
+  { label: "Lifestyle", icon: Sparkles, color: "text-blue-500", bg: "bg-blue-50", image: "https://images.unsplash.com/photo-1511988617509-a57c8a288659?q=80&w=400&auto=format&fit=crop" },
+  { label: "Beauty", icon: Heart, color: "text-pink-500", bg: "bg-pink-50", image: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=400&auto=format&fit=crop" },
+  { label: "Tech", icon: Laptop, color: "text-slate-900", bg: "bg-slate-50", image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=400&auto=format&fit=crop" },
+  { label: "Food", icon: UtensilsCrossed, color: "text-amber-600", bg: "bg-amber-50", image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=400&auto=format&fit=crop" },
+  { label: "Travel", icon: Plane, color: "text-emerald-600", bg: "bg-emerald-50", image: "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=400&auto=format&fit=crop" },
+  { label: "Finance", icon: DollarSign, color: "text-slate-900", bg: "bg-slate-50", image: "https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?q=80&w=400&auto=format&fit=crop" },
+  { label: "Gaming", icon: Zap, color: "text-indigo-600", bg: "bg-indigo-50", image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=400&auto=format&fit=crop" },
+  { label: "Fashion", icon: Palette, color: "text-purple-600", bg: "bg-purple-50", image: "https://images.unsplash.com/photo-1492707892479-7bc8d5a4ee93?q=80&w=400&auto=format&fit=crop" },
+  { label: "Education", icon: BookOpen, color: "text-blue-600", bg: "bg-blue-50", image: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?q=80&w=400&auto=format&fit=crop" },
+  { label: "Comedy", icon: Music2, color: "text-rose-500", bg: "bg-rose-50", image: "https://images.unsplash.com/photo-1516280440614-37939bbacd81?q=80&w=400&auto=format&fit=crop" },
+  { label: "Photo", icon: Camera, color: "text-slate-900", bg: "bg-slate-50", image: "https://images.unsplash.com/photo-1452784444945-3f4227083ea2?q=80&w=400&auto=format&fit=crop" }
 ];
 
 const goalsList = [
@@ -253,7 +253,7 @@ const Onboarding = () => {
                         value={creatorName}
                         onChange={e => { setCreatorName(e.target.value); if (step1Errors.name) setStep1Errors(p => { const n = { ...p }; delete n.name; return n; }); }}
                         placeholder="Naveen Kumar"
-                        className={`w-full h-16 rounded-2xl bg-slate-50 border px-6 text-sm font-bold text-slate-950 placeholder:text-slate-300 focus:outline-none focus:ring-2 transition-all ${step1Errors.name ? "border-rose-300 focus:ring-rose-500/10" : "border-slate-100 focus:ring-blue-600/10"}`}
+                        className={`w-full h-16 rounded-2xl bg-slate-50 border px-6 text-sm font-bold text-slate-950 placeholder:text-slate-300 focus:outline-none focus:ring-2 transition-all ${step1Errors.name ? "border-rose-300 focus:ring-rose-500/10" : "border-slate-200 focus:ring-blue-600/10"}`}
                       />
                       {step1Errors.name && <p className="text-rose-500 text-[10px] font-black uppercase tracking-wider pl-1 mt-1">{step1Errors.name}</p>}
                     </div>
@@ -267,7 +267,7 @@ const Onboarding = () => {
                           value={handle}
                           onChange={e => { setHandle(e.target.value.replace("@", "").toLowerCase()); if (step1Errors.handle) setStep1Errors(p => { const n = { ...p }; delete n.handle; return n; }); }}
                           placeholder="naveen.creates"
-                          className={`w-full h-16 rounded-2xl bg-slate-50 border pl-14 pr-14 text-sm font-bold text-slate-950 placeholder:text-slate-300 focus:outline-none focus:ring-2 transition-all ${step1Errors.handle ? "border-rose-300 focus:ring-rose-500/10" : "border-slate-100 focus:ring-blue-600/10"}`}
+                          className={`w-full h-16 rounded-2xl bg-slate-50 border pl-14 pr-14 text-sm font-bold text-slate-950 placeholder:text-slate-300 focus:outline-none focus:ring-2 transition-all ${step1Errors.handle ? "border-rose-300 focus:ring-rose-500/10" : "border-slate-200 focus:ring-blue-600/10"}`}
                         />
                         <div className="absolute right-6 top-1/2 -translate-y-1/2">
                           {handleStatus === "checking" && <Loader2 className="w-4 h-4 animate-spin text-slate-300" />}
@@ -319,9 +319,9 @@ const Onboarding = () => {
 
                   <div className="space-y-4">
                     {[
-                      { name: "Instagram", icon: Instagram, color: "text-blue-600", bg: "bg-blue-50", border: "border-blue-100", desc: "Engine for Reels & Stories" },
-                      { name: "YouTube", icon: Youtube, color: "text-slate-950", bg: "bg-slate-50", border: "border-slate-200", desc: "Terminal for Video Metrics" },
-                      { name: "TikTok", icon: Zap, color: "text-blue-600", bg: "bg-blue-50", border: "border-blue-100", desc: "Viral Trajectory Hub" },
+                      { name: "Instagram", icon: Instagram, color: "text-pink-600", bg: "bg-pink-50", border: "border-pink-200", desc: "Engine for Reels & Stories" },
+                      { name: "YouTube", icon: Youtube, color: "text-red-600", bg: "bg-red-50", border: "border-red-200", desc: "Terminal for Video Metrics" },
+                      { name: "TikTok", icon: Zap, color: "text-slate-950", bg: "bg-slate-50", border: "border-slate-200", desc: "Viral Trajectory Hub" },
                     ].map(p => {
                       const state = connectedPlatforms[p.name];
                       const connected = state?.connected;
@@ -387,16 +387,24 @@ const Onboarding = () => {
                       <button
                         key={n.label}
                         onClick={() => toggleNiche(n.label)}
-                        className={`p-5 rounded-[2rem] border text-center transition-all group active:scale-[0.95] ${
+                        className={`relative p-5 rounded-[2rem] border text-center transition-all group overflow-hidden active:scale-[0.95] ${
                           selectedNiches.includes(n.label)
                             ? "border-blue-600 bg-blue-50 text-blue-600 shadow-xl shadow-blue-500/10"
-                            : "border-slate-100 bg-slate-50/50 text-slate-400 hover:border-slate-300 hover:text-slate-950"
+                            : "border-slate-200 bg-slate-50/50 text-slate-400 hover:border-blue-600 hover:text-slate-950"
                         }`}
                       >
-                        <div className={`w-10 h-10 rounded-xl mx-auto flex items-center justify-center mb-3 shadow-sm group-hover:scale-110 transition-transform ${selectedNiches.includes(n.label) ? "bg-blue-600 text-white" : "bg-white text-slate-400"}`}>
-                          <n.icon className="w-5 h-5" />
+                        {/* Hover Background Image */}
+                        <div className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity">
+                          <img src={n.image} alt={n.label} className="w-full h-full object-cover scale-110 group-hover:scale-100 transition-transform duration-700" />
+                          <div className="absolute inset-0 bg-white/60" />
                         </div>
-                        <div className="text-[10px] font-black uppercase tracking-[0.1em]">{n.label}</div>
+                        
+                        <div className="relative z-10 transition-transform group-hover:scale-110 duration-500">
+                          <div className={`w-10 h-10 rounded-xl mx-auto flex items-center justify-center mb-3 shadow-sm transition-colors ${selectedNiches.includes(n.label) ? "bg-blue-600 text-white" : "bg-white text-slate-400 group-hover:text-blue-600"}`}>
+                            <n.icon className="w-5 h-5" />
+                          </div>
+                          <div className="text-[10px] font-black uppercase tracking-[0.1em]">{n.label}</div>
+                        </div>
                       </button>
                     ))}
                   </div>

@@ -28,14 +28,14 @@ const Hero = () => {
         </motion.div>
 
         <motion.h1
-          className="text-7xl sm:text-8xl md:text-[8rem] lg:text-[11.5rem] font-black tracking-tighter leading-[0.8] mb-12 text-slate-950 uppercase"
+          className="text-7xl sm:text-8xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.8] mb-12 text-slate-950 uppercase"
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
         >
           Grow Your <br />
           <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-600 flex items-center justify-center gap-4 py-4">
-            Empire <Stars className="w-16 h-16 md:w-24 md:h-24 text-slate-950 animate-pulse" />
+            Empire <Stars className="w-10 h-10 md:w-16 md:h-16 text-slate-950 animate-pulse" />
           </span>
         </motion.h1>
 
@@ -77,7 +77,7 @@ const Hero = () => {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 1.2, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
         >
-          <div className="rounded-[3rem] border border-slate-100 bg-white/70 backdrop-blur-3xl p-4 md:p-8 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.05)] relative group">
+          <div className="rounded-[3rem] border border-slate-200 bg-white/70 backdrop-blur-3xl p-4 md:p-8 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.05)] relative group">
             <div className="absolute -inset-[1px] rounded-[3rem] bg-gradient-to-tr from-blue-500/10 via-transparent to-indigo-500/10 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
             
             {/* Mock Header */}
@@ -101,7 +101,7 @@ const Hero = () => {
                 { label: "Engagement", value: "8.4%", color: "text-slate-950" },
                 { label: "Deal Pipeline", value: "₹ 1.2M", color: "text-blue-600" },
               ].map((stat, i) => (
-                <div key={i} className="bg-slate-50/50 rounded-[2rem] p-6 border border-slate-100 space-y-2">
+                <div key={i} className="bg-slate-50/50 rounded-[2rem] p-6 border border-slate-200 space-y-2">
                   <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">{stat.label}</p>
                   <p className={`text-3xl font-black tracking-tighter ${stat.color}`}>{stat.value}</p>
                 </div>
