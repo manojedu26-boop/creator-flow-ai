@@ -1,61 +1,72 @@
 import { motion } from "framer-motion";
-import { TrendingDown, Clock, DollarSign, BarChart3, Users, FileText, Megaphone, HelpCircle } from "lucide-react";
+import { TrendingDown, Clock, DollarSign, BarChart3, Users, FileText, Megaphone, HelpCircle, XCircle, AlertCircle, Stars } from "lucide-react";
 
 const painPoints = [
   { icon: TrendingDown, title: "Inconsistent Growth", desc: "Follower count stuck? No idea what's working?" },
-  { icon: Clock, title: "No Time to Plan", desc: "Spending hours on content ideas and captions?" },
-  { icon: DollarSign, title: "Undercharging Brands", desc: "Don't know your worth for brand deals?" },
-  { icon: BarChart3, title: "Analytics Overwhelm", desc: "Can't make sense of all those numbers?" },
-  { icon: Users, title: "Finding Collabs", desc: "Struggling to find the right collab partners?" },
-  { icon: FileText, title: "No Media Kit", desc: "Brands ask for one and you don't have it?" },
-  { icon: Megaphone, title: "Pitch Anxiety", desc: "Don't know how to approach brands?" },
-  { icon: HelpCircle, title: "What to Post?", desc: "Blank screen syndrome every single day?" },
+  { icon: Clock, title: "Planning Fatigue", desc: "Spending hours on content ideas and captions?" },
+  { icon: DollarSign, title: "Revenue Leakage", desc: "Undercharging brands because you don't know your worth?" },
+  { icon: BarChart3, title: "Data Overwhelm", desc: "Too many platforms, too many numbers to track?" },
+  { icon: Users, title: "Collab Friction", desc: "Struggling to find the right partners for growth?" },
+  { icon: FileText, title: "Static Media Kits", desc: "Still sending outdated PDFs to high-tier brands?" },
+  { icon: Megaphone, title: "Pitch Anxiety", desc: "Template emails getting ignored by top agencies?" },
+  { icon: HelpCircle, title: "Posting Blinds", desc: "No predictive strategy for your next 30 days?" },
 ];
 
 const container = {
   hidden: {},
-  show: { transition: { staggerChildren: 0.08 } },
+  show: { transition: { staggerChildren: 0.05 } },
 };
 
 const item = {
-  hidden: { opacity: 0, y: 16, filter: "blur(4px)" },
-  show: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] as const } },
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } },
 };
 
 const PainPoints = () => (
-  <section className="py-24 md:py-32 px-4">
-    <div className="container max-w-5xl">
+  <section className="py-32 md:py-48 px-6 bg-slate-50 relative overflow-hidden">
+    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-600 via-slate-950 to-blue-600 opacity-10" />
+    <div className="container max-w-7xl relative z-10">
       <motion.div
-        className="text-center mb-16"
-        initial={{ opacity: 0, y: 16 }}
+        className="text-center mb-32"
+        initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.2 }}
-        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
       >
-        <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4" style={{ textWrap: "balance" }}>
-          Sound familiar?
+        <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white border border-slate-200 text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 mb-8 shadow-sm">
+           <AlertCircle className="w-3.5 h-3.5" /> Market Challenges
+        </div>
+        <h2 className="text-5xl md:text-8xl font-black tracking-tighter leading-none mb-8 text-slate-950 uppercase italic">
+          Every Creator Hits <br />
+          These <span className="text-blue-600 font-black">Walls.</span>
         </h2>
-        <p className="text-muted-foreground text-lg max-w-xl mx-auto">
-          Every creator hits these walls. CREATORX AI breaks through them — with intelligence.
+        <p className="text-slate-500 font-bold text-lg md:text-2xl max-w-2xl mx-auto leading-relaxed italic">
+          Stop struggling with the manual grind. CreatorForge AI provides the technical edge to break through.
         </p>
       </motion.div>
 
       <motion.div
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8"
         variants={container}
         initial="hidden"
         whileInView="show"
-        viewport={{ once: true, amount: 0.15 }}
+        viewport={{ once: true }}
       >
         {painPoints.map((p) => (
           <motion.div
             key={p.title}
             variants={item}
-            className="group rounded-xl bg-glass p-5 transition-all hover:border-primary/30 hover:glow-pink cursor-default"
+            className="group rounded-[2.5rem] bg-white p-8 border border-slate-100 transition-all hover:bg-slate-950 hover:border-slate-950 cursor-default"
           >
-            <p.icon className="w-8 h-8 text-primary mb-3 transition-transform group-hover:scale-110" />
-            <h3 className="font-semibold mb-1">{p.title}</h3>
-            <p className="text-sm text-muted-foreground">{p.desc}</p>
+            <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center mb-6 transition-transform group-hover:scale-110 group-hover:bg-blue-600 group-hover:text-white">
+              <p.icon className="w-6 h-6 text-blue-600 group-hover:text-white transition-colors" />
+            </div>
+            <h3 className="text-xl font-black mb-3 text-slate-950 uppercase italic tracking-tight group-hover:text-white">{p.title}</h3>
+            <p className="text-sm text-slate-500 font-bold leading-relaxed group-hover:text-slate-400">{p.desc}</p>
+            
+            <div className="mt-8 pt-8 border-t border-slate-50 group-hover:border-white/10 flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-slate-300 group-hover:text-blue-600">
+               Critical Pain Point <XCircle className="w-3 h-3" />
+            </div>
           </motion.div>
         ))}
       </motion.div>

@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, ArrowRight, ArrowLeft, Check, Instagram, Youtube, MapPin, AtSign, CheckCircle2, XCircle, Loader2, Zap, Target, TrendingUp, DollarSign, BarChart3, Clock } from "lucide-react";
+import { Sparkles, ArrowRight, ArrowLeft, Check, Instagram, Youtube, MapPin, AtSign, CheckCircle2, XCircle, Loader2, Zap, Target, TrendingUp, DollarSign, BarChart3, Clock, Stars, Shield, Plane, BookOpen, Music2, Camera, Palette, Laptop, UtensilsCrossed, Dumbbell, Globe, Heart } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "@/components/ui/sonner";
 import { useAuth } from "../contexts/AuthContext";
@@ -8,7 +8,7 @@ import { db } from "../lib/db";
 
 // ─── Confetti ──────────────────────────────────────────────────────────────
 const ConfettiParticle = ({ delay }: { delay: number }) => {
-  const colors = ["#FF3CAC", "#784BA0", "#2B86C5", "#10b981", "#f59e0b", "#ef4444"];
+  const colors = ["#2563eb", "#3b82f6", "#6366f1", "#1e40af", "#4f46e5", "#818cf8"];
   const color = colors[Math.floor(Math.random() * colors.length)];
   const startX = Math.random() * 100;
   const size = Math.random() * 8 + 4;
@@ -38,25 +38,30 @@ const Confetti = () => (
 
 // ─── Niches & Goals ─────────────────────────────────────────────────────────
 const niches = [
-  { label: "Fitness", emoji: "💪" }, { label: "Lifestyle", emoji: "✨" },
-  { label: "Beauty", emoji: "💄" }, { label: "Tech", emoji: "⚡" },
-  { label: "Food", emoji: "🍜" }, { label: "Travel", emoji: "✈️" },
-  { label: "Finance", emoji: "💰" }, { label: "Gaming", emoji: "🎮" },
-  { label: "Fashion", emoji: "👗" }, { label: "Education", emoji: "📚" },
-  { label: "Comedy", emoji: "😄" }, { label: "Other", emoji: "🌟" }
+  { label: "Fitness", icon: Dumbbell, color: "text-orange-500", bg: "bg-orange-50" },
+  { label: "Lifestyle", icon: Sparkles, color: "text-blue-500", bg: "bg-blue-50" },
+  { label: "Beauty", icon: Heart, color: "text-pink-500", bg: "bg-pink-50" },
+  { label: "Tech", icon: Laptop, color: "text-slate-900", bg: "bg-slate-50" },
+  { label: "Food", icon: UtensilsCrossed, color: "text-amber-600", bg: "bg-amber-50" },
+  { label: "Travel", icon: Plane, color: "text-emerald-600", bg: "bg-emerald-50" },
+  { label: "Finance", icon: DollarSign, color: "text-slate-900", bg: "bg-slate-50" },
+  { label: "Gaming", icon: Zap, color: "text-indigo-600", bg: "bg-indigo-50" },
+  { label: "Fashion", icon: Palette, color: "text-purple-600", bg: "bg-purple-50" },
+  { label: "Education", icon: BookOpen, color: "text-blue-600", bg: "bg-blue-50" },
+  { label: "Comedy", icon: Music2, color: "text-rose-500", bg: "bg-rose-50" },
+  { label: "Photo", icon: Camera, color: "text-slate-900", bg: "bg-slate-50" }
 ];
 
 const goalsList = [
   { label: "Grow my followers fast", icon: TrendingUp },
-  { label: "Land brand deals", icon: Zap },
-  { label: "Increase my income", icon: DollarSign },
-  { label: "Post consistently", icon: Clock },
-  { label: "Understand my analytics", icon: BarChart3 },
-  { label: "Build a personal brand", icon: Target },
+  { label: "Land premium brand deals", icon: Zap },
+  { label: "Increase affiliate income", icon: DollarSign },
+  { label: "Automate posting schedule", icon: Clock },
+  { label: "Visualise data analytics", icon: BarChart3 },
+  { label: "Establish personal brand", icon: Target },
 ];
 
 type HandleStatus = "idle" | "checking" | "available" | "taken";
-
 const TAKEN_HANDLES = ["naveen", "naveenfitlife", "admin", "creator", "user", "test"];
 
 const Onboarding = () => {
@@ -89,7 +94,6 @@ const Onboarding = () => {
 
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Debounced handle check
   useEffect(() => {
     if (!handle || handle.length < 3) { setHandleStatus("idle"); return; }
     setHandleStatus("checking");
@@ -109,7 +113,7 @@ const Onboarding = () => {
         ...prev,
         [platform]: { followers: defaultFollowers[platform] || "5K", connecting: false, connected: true }
       }));
-      toast.success(`${platform} Connected! ✅`, { description: `${defaultFollowers[platform] || "5K"} followers imported.` });
+      toast.success(`${platform} Synced! ✅`, { description: `Analytics for ${defaultFollowers[platform] || "5K"} followers loaded.` });
     }, 1800);
   };
 
@@ -131,45 +135,35 @@ const Onboarding = () => {
     const firstName = name.split(" ")[0];
     const nicheStr = niches.join(" & ") || "content";
     const goalStr = goals[0]?.toLowerCase() || "grow";
-    return `Hey ${firstName}! 🚀 Your AI warroom is ready. Based on your ${nicheStr} focus and goal to ${goalStr}, I've built a personalised growth strategy and content calendar. Your first AI action plan drops at 8:00 AM tomorrow. Let's build something incredible.`;
+    return `Hey ${firstName}! 🚀 Your AI Warroom is fully deployed. Based on your focus in ${nicheStr} and the objective to ${goalStr}, we've initialised a personalised growth trajectory. Your first intelligence drop is scheduled for 08:00 AM. Let's dominate.`;
   };
 
   const next = () => {
     if (step === 1) {
       const errs: Record<string, string> = {};
-      if (!creatorName.trim()) errs.name = "Full name is required";
-      if (!handle) errs.handle = "Handle is required";
-      else if (handle.length < 3) errs.handle = "Handle must be at least 3 characters";
-      else if (handleStatus === "taken") errs.handle = "This handle is taken — try another";
-      else if (handleStatus === "checking") errs.handle = "Please wait while we check availability";
-      if (!city.trim()) errs.city = "City is required";
+      if (!creatorName.trim()) errs.name = "Identity required";
+      if (!handle) errs.handle = "Handle required";
+      else if (handle.length < 3) errs.handle = "Handle too short";
+      else if (handleStatus === "taken") errs.handle = "Handle taken";
+      if (!city.trim()) errs.city = "Location required";
       if (Object.keys(errs).length) { setStep1Errors(errs); return; }
       updateUser({ name: creatorName, handle: `@${handle}` });
       db.update("users", user?.id || "u1", { name: creatorName, handle: `@${handle}` } as any);
     }
-
     if (step === 2) {
       const anyConnected = Object.values(connectedPlatforms).some(p => p.connected);
-      if (!anyConnected) {
-        toast.error("Connect at least one platform", { description: "You can always add more later in Settings." });
-        return;
-      }
+      if (!anyConnected) { toast.error("Sync at least one platform"); return; }
       const platforms = Object.keys(connectedPlatforms).filter(p => connectedPlatforms[p].connected);
       const followerCounts = Object.fromEntries(platforms.map(p => [p, connectedPlatforms[p].followers]));
       updateUser({ platforms, followerCounts });
     }
-
     if (step === 3) {
-      if (selectedNiches.length === 0) { setNicheError("Select at least one niche"); return; }
+      if (selectedNiches.length === 0) { setNicheError("Select at least one specialty"); return; }
       updateUser({ niche: selectedNiches[0] });
       db.update("users", user?.id || "u1", { niche: selectedNiches[0] } as any);
     }
-
     if (step === 4) {
-      if (selectedGoals.length === 0) { setGoalError("Select at least one goal"); return; }
-    }
-
-    if (step === 4) {
+      if (selectedGoals.length === 0) { setGoalError("Define your objective"); return; }
       const msg = generateAiMessage(creatorName, selectedNiches, selectedGoals);
       setAiMessage(msg);
       setStep(5);
@@ -177,13 +171,11 @@ const Onboarding = () => {
       setTimeout(() => setShowConfetti(false), 4000);
       return;
     }
-
     if (step === 5) {
       updateUser({ onboarded: true });
       navigate("/dashboard");
       return;
     }
-
     setStep(s => s + 1);
   };
 
@@ -192,112 +184,126 @@ const Onboarding = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center px-4 py-8">
+    <div className="min-h-screen bg-white flex items-center justify-center px-6 py-20 relative overflow-hidden font-sans">
       {showConfetti && <Confetti />}
-      <div className="absolute top-1/4 left-1/3 w-96 h-96 rounded-full bg-primary/5 blur-[120px] pointer-events-none" />
+      
+      {/* High-Fidelity Ambient Background */}
+      <div className="absolute top-0 left-0 w-full h-full pointer-events-none -z-10">
+        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-50 rounded-full blur-[120px] opacity-40 animate-pulse" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-slate-50 rounded-full blur-[100px] opacity-50" />
+      </div>
 
       <motion.div
-        className="relative z-10 w-full max-w-lg"
-        initial={{ opacity: 0, y: 20 }}
+        className="relative z-10 w-full max-w-[580px]"
+        initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
       >
-        {/* Progress bar */}
-        <div className="flex items-center gap-2 mb-8">
-          {[1, 2, 3, 4, 5].map(s => (
-            <div key={s} className="flex-1 h-1.5 rounded-full overflow-hidden bg-white/5">
-              <motion.div
-                className="h-full bg-primary rounded-full"
-                initial={{ width: 0 }}
-                animate={{ width: s <= step ? "100%" : "0%" }}
-                transition={{ duration: 0.4 }}
-              />
-            </div>
-          ))}
+        {/* Progress System */}
+        <div className="flex flex-col gap-6 mb-12">
+          <div className="flex items-center justify-between px-1">
+             <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-slate-950 flex items-center justify-center shadow-lg shadow-slate-200">
+                   <Sparkles className="w-4 h-4 text-white" />
+                </div>
+                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-950 italic">CreatorForge Intelligence</span>
+             </div>
+             <span className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-600">Phase {step} // 5</span>
+          </div>
+          <div className="flex items-center gap-3">
+            {[1, 2, 3, 4, 5].map(s => (
+              <div key={s} className="flex-1 h-2 rounded-full overflow-hidden bg-slate-50 border border-slate-100">
+                <motion.div
+                  className={`h-full ${s === step ? "bg-blue-600 shadow-[0_0_10px_rgba(37,99,235,0.4)]" : "bg-slate-200"}`}
+                  initial={{ width: 0 }}
+                  animate={{ width: s <= step ? "100%" : "0%" }}
+                  transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                />
+              </div>
+            ))}
+          </div>
         </div>
 
-        <div className="text-[10px] font-black uppercase tracking-widest text-primary mb-4">Step {step} of 5</div>
+        <div className="rounded-[3rem] bg-white border border-slate-100 p-10 md:p-14 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.05)] relative overflow-hidden group">
+          <div className="absolute top-0 right-0 p-12 opacity-5 group-hover:opacity-10 transition-opacity pointer-events-none">
+             <Stars className="w-24 h-24 text-blue-600" />
+          </div>
 
-        <div className="rounded-[2.5rem] bg-black/40 backdrop-blur-3xl p-8 md:p-10 border border-white/10 shadow-2xl">
           <AnimatePresence mode="wait">
             <motion.div
               key={step}
-              initial={{ opacity: 0, x: 30 }}
+              initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -30 }}
-              transition={{ duration: 0.3 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
             >
               {/* STEP 1 — Creator Details */}
               {step === 1 && (
-                <div className="space-y-5">
+                <div className="space-y-8">
                   <div>
-                    <h2 className="text-2xl font-black uppercase tracking-tight mb-1">Your Creator Identity</h2>
-                    <p className="text-sm text-muted-foreground">Tell us about yourself so we can personalise everything.</p>
+                    <h2 className="text-3xl font-black uppercase tracking-tight mb-3 text-slate-950 italic">Creator Identity</h2>
+                    <p className="text-slate-500 font-bold text-lg">Initialize your profile to calibrate AI recommendations.</p>
                   </div>
 
-                  {/* Name */}
-                  <div className="space-y-1.5">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Full Name</label>
-                    <input
-                      type="text"
-                      value={creatorName}
-                      onChange={e => { setCreatorName(e.target.value); if (step1Errors.name) setStep1Errors(p => { const n = { ...p }; delete n.name; return n; }); }}
-                      placeholder="e.g. Naveen Kumar"
-                      className={`w-full h-14 rounded-2xl bg-white/5 border px-4 text-sm font-bold text-white placeholder:text-zinc-600 focus:outline-none focus:ring-1 transition-all ${step1Errors.name ? "border-rose-500/60 focus:ring-rose-500/30" : "border-white/10 focus:ring-primary/50"}`}
-                    />
-                    {step1Errors.name && <p className="text-rose-400 text-[11px] font-bold">{step1Errors.name}</p>}
-                  </div>
-
-                  {/* Handle */}
-                  <div className="space-y-1.5">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Display Handle</label>
-                    <div className="relative">
-                      <AtSign className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                  <div className="space-y-6">
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 ml-1 italic">Legal Identity</label>
                       <input
                         type="text"
-                        value={handle}
-                        onChange={e => { setHandle(e.target.value.replace("@", "").toLowerCase()); if (step1Errors.handle) setStep1Errors(p => { const n = { ...p }; delete n.handle; return n; }); }}
-                        placeholder="yourcreatorname"
-                        className={`w-full h-14 rounded-2xl bg-white/5 border pl-12 pr-12 text-sm font-bold text-white placeholder:text-zinc-600 focus:outline-none focus:ring-1 transition-all ${step1Errors.handle ? "border-rose-500/60 focus:ring-rose-500/30" : "border-white/10 focus:ring-primary/50"}`}
+                        value={creatorName}
+                        onChange={e => { setCreatorName(e.target.value); if (step1Errors.name) setStep1Errors(p => { const n = { ...p }; delete n.name; return n; }); }}
+                        placeholder="Naveen Kumar"
+                        className={`w-full h-16 rounded-2xl bg-slate-50 border px-6 text-sm font-bold text-slate-950 placeholder:text-slate-300 focus:outline-none focus:ring-2 transition-all ${step1Errors.name ? "border-rose-300 focus:ring-rose-500/10" : "border-slate-100 focus:ring-blue-600/10"}`}
                       />
-                      <div className="absolute right-4 top-1/2 -translate-y-1/2">
-                        {handleStatus === "checking" && <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />}
-                        {handleStatus === "available" && <CheckCircle2 className="w-4 h-4 text-emerald-500" />}
-                        {handleStatus === "taken" && <XCircle className="w-4 h-4 text-rose-500" />}
-                      </div>
+                      {step1Errors.name && <p className="text-rose-500 text-[10px] font-black uppercase tracking-wider pl-1 mt-1">{step1Errors.name}</p>}
                     </div>
-                    {handleStatus === "available" && <p className="text-emerald-500 text-[11px] font-bold">✓ @{handle} is available!</p>}
-                    {handleStatus === "taken" && <p className="text-rose-400 text-[11px] font-bold">✗ @{handle} is taken — try @{handle}fits or @{handle}creates</p>}
-                    {step1Errors.handle && handleStatus !== "available" && handleStatus !== "taken" && <p className="text-rose-400 text-[11px] font-bold">{step1Errors.handle}</p>}
-                  </div>
 
-                  {/* City & Country */}
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="space-y-1.5">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">City</label>
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 ml-1 italic">Visual Handle</label>
                       <div className="relative">
-                        <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                        <AtSign className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                         <input
                           type="text"
-                          value={city}
-                          onChange={e => { setCity(e.target.value); if (step1Errors.city) setStep1Errors(p => { const n = { ...p }; delete n.city; return n; }); }}
-                          placeholder="Mumbai"
-                          className={`w-full h-12 rounded-2xl bg-white/5 border pl-10 pr-3 text-sm font-bold text-white placeholder:text-zinc-600 focus:outline-none focus:ring-1 transition-all ${step1Errors.city ? "border-rose-500/60 focus:ring-rose-500/30" : "border-white/10 focus:ring-primary/50"}`}
+                          value={handle}
+                          onChange={e => { setHandle(e.target.value.replace("@", "").toLowerCase()); if (step1Errors.handle) setStep1Errors(p => { const n = { ...p }; delete n.handle; return n; }); }}
+                          placeholder="naveen.creates"
+                          className={`w-full h-16 rounded-2xl bg-slate-50 border pl-14 pr-14 text-sm font-bold text-slate-950 placeholder:text-slate-300 focus:outline-none focus:ring-2 transition-all ${step1Errors.handle ? "border-rose-300 focus:ring-rose-500/10" : "border-slate-100 focus:ring-blue-600/10"}`}
                         />
+                        <div className="absolute right-6 top-1/2 -translate-y-1/2">
+                          {handleStatus === "checking" && <Loader2 className="w-4 h-4 animate-spin text-slate-300" />}
+                          {handleStatus === "available" && <CheckCircle2 className="w-5 h-5 text-emerald-500" />}
+                          {handleStatus === "taken" && <XCircle className="w-5 h-5 text-rose-500" />}
+                        </div>
                       </div>
-                      {step1Errors.city && <p className="text-rose-400 text-[11px] font-bold">{step1Errors.city}</p>}
+                      {handleStatus === "available" && <p className="text-emerald-500 text-[10px] font-black uppercase tracking-wider pl-1 mt-1">✓ @{handle} protocol available</p>}
                     </div>
-                    <div className="space-y-1.5">
-                      <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Country</label>
-                      <select
-                        value={country}
-                        onChange={e => setCountry(e.target.value)}
-                        className="w-full h-12 rounded-2xl bg-white/5 border border-white/10 px-3 text-sm font-bold text-white focus:outline-none focus:ring-1 focus:ring-primary/50 appearance-none cursor-pointer"
-                      >
-                        {["India", "USA", "UK", "Canada", "Australia", "UAE", "Singapore", "Germany", "France", "Brazil", "Other"].map(c => (
-                          <option key={c} value={c} className="bg-zinc-900">{c}</option>
-                        ))}
-                      </select>
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 ml-1 italic">HQ Location</label>
+                        <div className="relative">
+                          <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
+                          <input
+                            type="text"
+                            value={city}
+                            onChange={e => { setCity(e.target.value); if (step1Errors.city) setStep1Errors(p => { const n = { ...p }; delete n.city; return n; }); }}
+                            placeholder="Mumbai"
+                            className={`w-full h-14 rounded-2xl bg-slate-50 border pl-10 pr-4 text-sm font-bold text-slate-950 placeholder:text-slate-300 focus:outline-none focus:ring-2 transition-all ${step1Errors.city ? "border-rose-300 focus:ring-rose-500/10" : "border-slate-100 focus:ring-blue-600/10"}`}
+                          />
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 ml-1 italic">Region</label>
+                        <select
+                          value={country}
+                          onChange={e => setCountry(e.target.value)}
+                          className="w-full h-14 rounded-2xl bg-slate-50 border border-slate-100 px-4 text-sm font-bold text-slate-950 focus:outline-none focus:ring-2 focus:ring-blue-600/10 appearance-none cursor-pointer"
+                        >
+                          {["India", "USA", "UK", "UAE", "Singapore", "Australia", "Other"].map(c => (
+                            <option key={c} value={c}>{c}</option>
+                          ))}
+                        </select>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -305,17 +311,17 @@ const Onboarding = () => {
 
               {/* STEP 2 — Platform Connection */}
               {step === 2 && (
-                <div className="space-y-6">
+                <div className="space-y-8">
                   <div>
-                    <h2 className="text-2xl font-black uppercase tracking-tight mb-1">Connect Your Platforms</h2>
-                    <p className="text-sm text-muted-foreground">Connect at least one platform to import your data.</p>
+                    <h2 className="text-3xl font-black uppercase tracking-tight mb-3 text-slate-950 italic">Sync Intelligence</h2>
+                    <p className="text-slate-500 font-bold text-lg">Connect nodes to primary social platforms.</p>
                   </div>
 
-                  <div className="space-y-3">
+                  <div className="space-y-4">
                     {[
-                      { name: "Instagram", icon: Instagram, color: "text-pink-500 border-pink-500/30 bg-pink-500/10", desc: "Reels, Stories & Feed Analytics" },
-                      { name: "YouTube", icon: Youtube, color: "text-red-500 border-red-500/30 bg-red-500/10", desc: "Video Performance & Subscribers" },
-                      { name: "TikTok", icon: Sparkles, color: "text-cyan-400 border-cyan-400/30 bg-cyan-400/10", desc: "For You Page & Viral Metrics" },
+                      { name: "Instagram", icon: Instagram, color: "text-blue-600", bg: "bg-blue-50", border: "border-blue-100", desc: "Engine for Reels & Stories" },
+                      { name: "YouTube", icon: Youtube, color: "text-slate-950", bg: "bg-slate-50", border: "border-slate-200", desc: "Terminal for Video Metrics" },
+                      { name: "TikTok", icon: Zap, color: "text-blue-600", bg: "bg-blue-50", border: "border-blue-100", desc: "Viral Trajectory Hub" },
                     ].map(p => {
                       const state = connectedPlatforms[p.name];
                       const connected = state?.connected;
@@ -323,19 +329,19 @@ const Onboarding = () => {
                       return (
                         <div
                           key={p.name}
-                          className={`p-5 rounded-3xl border transition-all ${connected ? "border-emerald-500/30 bg-emerald-500/5" : "border-white/10 bg-white/5"}`}
+                          className={`p-6 rounded-[2rem] border transition-all ${connected ? "border-blue-600 bg-blue-50/30" : "border-slate-100 bg-white hover:bg-slate-50"}`}
                         >
                           <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-4">
-                              <div className={`w-12 h-12 rounded-2xl flex items-center justify-center border ${p.color}`}>
-                                <p.icon className="w-6 h-6" />
+                            <div className="flex items-center gap-5">
+                              <div className={`w-14 h-14 rounded-2xl flex items-center justify-center border ${p.border} ${p.bg}`}>
+                                <p.icon className={`w-6 h-6 ${p.color}`} />
                               </div>
                               <div>
-                                <p className="font-black text-sm">{p.name}</p>
-                                <p className="text-[10px] text-muted-foreground font-bold">{p.desc}</p>
+                                <p className="font-black text-sm text-slate-950 uppercase tracking-tight italic">{p.name}</p>
+                                <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest">{p.desc}</p>
                                 {connected && (
-                                  <p className="text-[10px] text-emerald-500 font-black uppercase tracking-widest mt-0.5">
-                                    ✓ {state.followers} followers imported
+                                  <p className="text-[10px] text-blue-600 font-black uppercase tracking-[0.2em] mt-1 flex items-center gap-1">
+                                    <CheckCircle2 className="w-3 h-3" /> {state.followers} Data Nodes Synced
                                   </p>
                                 )}
                               </div>
@@ -343,13 +349,13 @@ const Onboarding = () => {
                             <button
                               onClick={() => connectPlatform(p.name)}
                               disabled={connecting || connected}
-                              className={`h-10 px-5 rounded-xl font-black uppercase tracking-widest text-[9px] transition-all flex items-center gap-2 ${
+                              className={`h-12 px-6 rounded-xl font-black uppercase tracking-[0.2em] text-[10px] transition-all flex items-center gap-2 ${
                                 connected
-                                  ? "bg-emerald-500/10 border border-emerald-500/30 text-emerald-500 cursor-default"
-                                  : "bg-primary/10 border border-primary/30 text-primary hover:bg-primary hover:text-white disabled:opacity-70"
+                                  ? "bg-slate-950 text-white border-none cursor-default"
+                                  : "bg-white border border-slate-200 text-slate-950 hover:border-blue-600 hover:text-blue-600"
                               }`}
                             >
-                              {connecting ? <><Loader2 className="w-3.5 h-3.5 animate-spin" /> Connecting...</> : connected ? <><Check className="w-3.5 h-3.5" /> Connected</> : "Connect"}
+                              {connecting ? "Syncing..." : connected ? "Synced" : "Deploy Sync"}
                             </button>
                           </div>
                         </div>
@@ -358,80 +364,73 @@ const Onboarding = () => {
                   </div>
 
                   <button
-                    onClick={() => { toast.info("You can connect platforms later in Settings."); setStep(3); }}
-                    className="w-full text-[11px] font-bold text-muted-foreground hover:text-white transition-colors"
+                    onClick={() => setStep(3)}
+                    className="w-full text-[10px] font-black uppercase tracking-[0.3em] text-slate-300 hover:text-blue-600 transition-colors"
                   >
-                    Skip for now → Connect later in Settings
+                    Bypass Synchronisation // Deploy Post-Setup
                   </button>
                 </div>
               )}
 
               {/* STEP 3 — Niche Selection */}
               {step === 3 && (
-                <div className="space-y-5">
+                <div className="space-y-8">
                   <div>
-                    <h2 className="text-2xl font-black uppercase tracking-tight mb-1">Your Content Niche</h2>
-                    <p className="text-sm text-muted-foreground">Select 1–3 niches that best describe your content.</p>
+                    <h2 className="text-3xl font-black uppercase tracking-tight mb-3 text-slate-950 italic">Module Focus</h2>
+                    <p className="text-slate-500 font-bold text-lg">Define 1–3 specialisations for AI content optimization.</p>
                   </div>
-                  {nicheError && (
-                    <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-rose-400 text-[11px] font-bold">
-                      {nicheError}
-                    </motion.p>
-                  )}
-                  <div className="grid grid-cols-3 gap-2.5">
+                  
+                  {nicheError && <p className="text-rose-500 text-[10px] font-black uppercase tracking-wider pl-1">{nicheError}</p>}
+                  
+                  <div className="grid grid-cols-3 gap-4">
                     {niches.map(n => (
                       <button
                         key={n.label}
                         onClick={() => toggleNiche(n.label)}
-                        className={`p-3.5 rounded-2xl border text-center transition-all active:scale-[0.97] ${
+                        className={`p-5 rounded-[2rem] border text-center transition-all group active:scale-[0.95] ${
                           selectedNiches.includes(n.label)
-                            ? "border-primary bg-primary/10 text-primary shadow-lg shadow-primary/10"
-                            : "border-white/10 bg-white/5 text-muted-foreground hover:border-primary/40"
+                            ? "border-blue-600 bg-blue-50 text-blue-600 shadow-xl shadow-blue-500/10"
+                            : "border-slate-100 bg-slate-50/50 text-slate-400 hover:border-slate-300 hover:text-slate-950"
                         }`}
                       >
-                        <div className="text-lg mb-1">{n.emoji}</div>
-                        <div className="text-[11px] font-black uppercase tracking-tight">{n.label}</div>
+                        <div className={`w-10 h-10 rounded-xl mx-auto flex items-center justify-center mb-3 shadow-sm group-hover:scale-110 transition-transform ${selectedNiches.includes(n.label) ? "bg-blue-600 text-white" : "bg-white text-slate-400"}`}>
+                          <n.icon className="w-5 h-5" />
+                        </div>
+                        <div className="text-[10px] font-black uppercase tracking-[0.1em]">{n.label}</div>
                       </button>
                     ))}
                   </div>
-                  {selectedNiches.length > 0 && (
-                    <p className="text-[11px] font-bold text-muted-foreground text-center">
-                      Selected: <span className="text-primary">{selectedNiches.join(", ")}</span> ({selectedNiches.length}/3)
-                    </p>
-                  )}
                 </div>
               )}
 
               {/* STEP 4 — Goals */}
               {step === 4 && (
-                <div className="space-y-5">
+                <div className="space-y-8">
                   <div>
-                    <h2 className="text-2xl font-black uppercase tracking-tight mb-1">Your Creator Goals</h2>
-                    <p className="text-sm text-muted-foreground">These drive your AI's weekly action plan. Select all that apply.</p>
+                    <h2 className="text-3xl font-black uppercase tracking-tight mb-3 text-slate-950 italic">Command Objectives</h2>
+                    <p className="text-slate-500 font-bold text-lg">Establishing target parameters for AI strategy generation.</p>
                   </div>
-                  {goalError && (
-                    <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-rose-400 text-[11px] font-bold">
-                      {goalError}
-                    </motion.p>
-                  )}
-                  <div className="space-y-2.5">
+                  
+                  {goalError && <p className="text-rose-500 text-[10px] font-black uppercase tracking-wider pl-1">{goalError}</p>}
+
+                  <div className="space-y-4">
                     {goalsList.map(g => (
                       <button
                         key={g.label}
                         onClick={() => toggleGoal(g.label)}
-                        className={`w-full flex items-center gap-4 p-4 rounded-2xl border text-left transition-all active:scale-[0.98] ${
+                        className={`w-full flex items-center gap-5 p-6 rounded-[2rem] border text-left transition-all group active:scale-[0.98] ${
                           selectedGoals.includes(g.label)
-                            ? "border-primary bg-primary/10 text-primary"
-                            : "border-white/10 bg-white/5 text-muted-foreground hover:border-primary/40"
+                            ? "border-blue-600 bg-blue-50 text-blue-600"
+                            : "border-slate-100 bg-white text-slate-400 hover:border-slate-200"
                         }`}
                       >
-                        <div className={`w-10 h-10 rounded-xl flex items-center justify-center border shrink-0 ${selectedGoals.includes(g.label) ? "bg-primary/20 border-primary/40" : "bg-white/5 border-white/10"}`}>
-                          <g.icon className="w-5 h-5" />
+                        <div className={`w-12 h-12 rounded-2xl flex items-center justify-center border transition-all ${selectedGoals.includes(g.label) ? "bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue-500/20" : "bg-slate-50 border-slate-100 text-slate-400 group-hover:text-slate-950"}`}>
+                          <g.icon className="w-6 h-6" />
                         </div>
-                        <span className="font-bold text-sm flex-1">{g.label}</span>
+                        <span className="font-black text-sm flex-1 uppercase tracking-tight italic">{g.label}</span>
                         {selectedGoals.includes(g.label) && (
-                          <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center shrink-0">
-                            <Check className="w-3 h-3 text-white" />
+                          <div className="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center">
+                            <Check className="w-3.5 h-3.5 text-white stroke-[4]" />
                           </div>
                         )}
                       </button>
@@ -442,37 +441,42 @@ const Onboarding = () => {
 
               {/* STEP 5 — Welcome */}
               {step === 5 && (
-                <div className="text-center space-y-6 py-2">
+                <div className="text-center space-y-8 py-4">
                   <motion.div
                     initial={{ scale: 0.5, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
-                    transition={{ type: "spring", stiffness: 200, delay: 0.1 }}
-                    className="w-20 h-20 rounded-3xl bg-gradient-to-br from-primary to-purple-500 flex items-center justify-center mx-auto shadow-2xl shadow-primary/30"
+                    transition={{ type: "spring", stiffness: 200, delay: 0.2 }}
+                    className="w-24 h-24 rounded-[2rem] bg-slate-950 flex items-center justify-center mx-auto shadow-2xl shadow-slate-300 group"
                   >
-                    <Sparkles className="w-10 h-10 text-white" />
+                    <Sparkles className="w-12 h-12 text-blue-600 group-hover:scale-110 transition-transform" />
                   </motion.div>
 
-                  <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
-                    <h2 className="text-2xl font-black uppercase tracking-tight mb-2">Your Warroom is Ready! 🚀</h2>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{aiMessage}</p>
-                  </motion.div>
+                  <div className="space-y-4">
+                    <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tighter italic text-slate-950">Warroom Deployed 🚀</h2>
+                    <p className="text-slate-500 font-bold text-lg leading-relaxed max-w-sm mx-auto">{aiMessage}</p>
+                  </div>
 
                   <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.5 }}
-                    className="rounded-2xl bg-white/5 border border-white/10 p-5 text-left space-y-3"
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: 0.4 }}
+                    className="rounded-[2.5rem] bg-slate-50 border border-slate-100 p-8 text-left space-y-5"
                   >
-                    <p className="text-[10px] font-black uppercase tracking-widest text-primary">✨ Your personalised dashboard includes:</p>
-                    <ul className="space-y-2">
+                    <p className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-600 flex items-center gap-2">
+                       <Zap className="w-3 h-3 fill-blue-600" /> Primary Calibration Results:
+                    </p>
+                    <ul className="grid gap-4">
                       {[
-                        `AI content ideas for ${selectedNiches.join(" & ") || "your niche"}`,
-                        `Optimal posting schedule for ${Object.keys(connectedPlatforms).filter(p => connectedPlatforms[p].connected)[0] || "your platforms"}`,
-                        `Growth strategy tailored to: ${selectedGoals[0] || "your goals"}`,
-                        `Brand deal rate calculator based on your followers`,
+                        `AI content studio tuned for ${selectedNiches.join(" & ")|| "Creativity"}`,
+                        `Synchronized schedule for your connected hub`,
+                        `Growth strategy aligned with: ${selectedGoals[0]?.split(' ')[0] || "Empire"} goals`,
+                        `Proprietary Brand CRT pipeline established`,
                       ].map((item, i) => (
-                        <li key={i} className="flex items-start gap-2 text-xs font-medium text-muted-foreground">
-                          <Check className="w-3.5 h-3.5 text-emerald-500 mt-0.5 shrink-0" /> {item}
+                        <li key={i} className="flex items-center gap-4 text-[11px] font-black uppercase tracking-tight text-slate-950 italic">
+                          <div className="w-5 h-5 rounded-full bg-blue-600 flex items-center justify-center shrink-0">
+                             <Check className="w-3 h-3 text-white stroke-[4]" />
+                          </div>
+                          {item}
                         </li>
                       ))}
                     </ul>
@@ -482,23 +486,30 @@ const Onboarding = () => {
             </motion.div>
           </AnimatePresence>
 
-          {/* Navigation */}
-          <div className="flex items-center justify-between mt-8">
+          {/* Navigation Controls */}
+          <div className="flex items-center justify-between mt-12">
             {step > 1 && step < 5 ? (
-              <button onClick={back} className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors group">
-                <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" /> Back
+              <button 
+                onClick={back} 
+                className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.3em] text-slate-300 hover:text-slate-950 transition-all group"
+              >
+                <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" /> Re-Calibrate
               </button>
             ) : <div />}
 
             <button
               onClick={next}
-              className="inline-flex items-center gap-2 rounded-2xl bg-primary px-8 py-3.5 font-black text-[11px] uppercase tracking-widest text-white shadow-xl shadow-primary/20 hover:scale-[1.03] active:scale-[0.98] transition-all"
+              className="group h-16 px-12 rounded-[2rem] bg-slate-950 text-white font-black text-[11px] uppercase tracking-[0.3em] shadow-2xl shadow-slate-200 hover:bg-blue-600 hover:shadow-blue-500/20 active:scale-[0.95] transition-all flex items-center gap-4"
             >
-              {step === 5 ? "Go to My Dashboard" : "Continue"}
-              <ArrowRight className="w-4 h-4" />
+              {step === 5 ? "Launch Command Centre" : "Initialize Next Phase"}
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </button>
           </div>
         </div>
+        
+        <p className="mt-8 text-center text-[10px] font-black uppercase tracking-[0.4em] text-slate-300">
+           © 2026 CreatorForge Intelligence • All Systems Operational
+        </p>
       </motion.div>
     </div>
   );

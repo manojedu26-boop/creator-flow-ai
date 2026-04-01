@@ -3,7 +3,7 @@ import {
   ChevronRight, Zap, Network,
   TrendingUp, Search, 
   ArrowRight, Users, MousePointer2, MessageSquare, Wallet, Briefcase, 
-  Check, Play, Clock, Plus, RefreshCcw as RefreshIcon
+  Check, Play, Clock, Plus, RefreshCcw as RefreshIcon, Stars
 } from "lucide-react";
 import { PageTransition, CountUp } from "../../components/shared/MotionComponents";
 import { 
@@ -39,11 +39,11 @@ export const Home = () => {
       }, 0);
 
       setStats([
-        { label: 'Total Reach', value: 384200, delta: '+14.3%', up: true, icon: Users, color: 'text-blue-600' },
-        { label: 'Follower Growth', value: 892, delta: '+6.1%', up: true, icon: MousePointer2, color: 'text-indigo-600' },
-        { label: 'Engagement Rate', value: 4.8, delta: '+0.4%', up: true, icon: MessageSquare, color: 'text-blue-600' },
-        { label: 'Est. Revenue', value: totalRevenue, delta: '₹', up: true, icon: Wallet, color: 'text-emerald-600' },
-        { label: 'Active Brand Deals', value: dbDeals.length, delta: 'View Hub', up: true, icon: Briefcase, color: 'text-amber-600' },
+        { label: 'Total Reach', value: 384200, delta: '+14.3%', up: true, icon: Users, color: 'text-blue-600', bg: 'bg-blue-50' },
+        { label: 'Follower Growth', value: 892, delta: '+6.1%', up: true, icon: MousePointer2, color: 'text-slate-900', bg: 'bg-slate-100' },
+        { label: 'Engagement Rate', value: 4.8, delta: '+0.4%', up: true, icon: MessageSquare, color: 'text-blue-600', bg: 'bg-blue-50' },
+        { label: 'Est. Revenue', value: totalRevenue, delta: '₹', up: true, icon: Wallet, color: 'text-emerald-600', bg: 'bg-emerald-50' },
+        { label: 'Active Brand Deals', value: dbDeals.length, delta: 'View Hub', up: true, icon: Briefcase, color: 'text-amber-600', bg: 'bg-amber-50' },
       ]);
 
       setIsLoading(false);
@@ -94,70 +94,71 @@ export const Home = () => {
   }
 
   return (
-    <PageTransition className="space-y-10 pb-20 lg:pb-12">
-      <header className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-12">
-        <div className="space-y-3">
+    <PageTransition className="space-y-12 pb-24 lg:pb-12 h-screen overflow-y-auto no-scrollbar px-2">
+      <header className="flex flex-col md:flex-row md:items-end justify-between gap-10 mt-4">
+        <div className="space-y-6">
           <motion.div 
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.3em] text-blue-600"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.4em] text-blue-600 bg-blue-50 w-fit px-4 py-2 rounded-full border border-blue-100 shadow-sm"
           >
-            <Zap className="w-3 h-3 fill-current" />
-            Command Centre Overview
+            <Zap className="w-3 h-3 fill-current shadow-blue-500" />
+            System Operational
           </motion.div>
           <motion.h1 
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-5xl md:text-8xl font-black tracking-tighter leading-[0.8] text-slate-900"
+            transition={{ type: "spring", stiffness: 100 }}
+            className="text-6xl md:text-9xl font-black tracking-[0.02em] leading-none text-slate-950 uppercase italic"
           >
             Good morning, <br />
-            <span className="text-blue-600 italic">
-               {user?.firstName || 'Naveen'}
-            </span> 👋
+            <span className="text-blue-600 flex items-center gap-4">
+               {user?.firstName || 'Naveen'} <Stars className="w-12 h-12 md:w-20 md:h-20 animate-pulse text-slate-950" />
+            </span>
           </motion.h1>
-          <p className="text-slate-500 font-bold text-sm md:text-lg max-w-xl mt-6">
-            Your engagement is up <span className="text-emerald-600">11%</span> this week. Best time to post today is <span className="text-blue-600 font-black">7:00 PM</span>.
+          <p className="text-slate-500 font-bold text-base md:text-xl max-w-2xl mt-8 leading-relaxed">
+            Your influence score generated a <span className="text-slate-950 font-black underline decoration-blue-600 decoration-4">11% spike</span>. <br />
+            Prime transmission window: <span className="text-blue-600 font-black">19:00 IST</span>.
           </p>
         </div>
-        <div className="flex gap-4">
+        <div className="flex flex-wrap gap-4 relative z-20">
           <button 
             onClick={fetchData}
             disabled={isLoading}
-            className="w-14 h-14 rounded-2xl bg-white border border-slate-200 hover:bg-slate-50 transition-all flex items-center justify-center text-slate-400 hover:text-blue-600 disabled:opacity-50 shadow-sm"
+            className="w-16 h-16 rounded-[2rem] bg-white border border-slate-200 hover:border-blue-600 hover:scale-105 transition-all flex items-center justify-center text-slate-400 hover:text-blue-600 shadow-xl shadow-slate-100 active:scale-95"
           >
-            <RefreshIcon className={`w-5 h-5 ${isLoading ? 'animate-spin' : ''}`} />
+            <RefreshIcon className={`w-6 h-6 ${isLoading ? 'animate-spin' : ''}`} />
           </button>
-          <button className="flex-1 md:flex-none h-14 px-8 rounded-2xl bg-white border border-slate-200 hover:bg-slate-50 transition-all flex items-center justify-center gap-3 font-black text-[10px] uppercase tracking-[0.15em] text-slate-900 shadow-sm group">
-            <Plus className="w-4 h-4 text-blue-600 group-hover:scale-110 transition-transform" /> New Campaign
+          <button className="h-16 px-10 rounded-[2rem] bg-white border border-slate-200 hover:border-blue-600 hover:scale-105 transition-all flex items-center justify-center gap-4 font-black text-[11px] uppercase tracking-[0.2em] text-slate-950 shadow-xl shadow-slate-100 group">
+            <Plus className="w-5 h-5 text-blue-600 transition-transform group-hover:rotate-90" /> Launch Brief
           </button>
-          <button className="flex-1 md:flex-none h-14 px-8 rounded-2xl bg-slate-900 text-white hover:bg-blue-600 transition-all flex items-center justify-center gap-3 font-black text-[10px] uppercase tracking-[0.15em] shadow-lg shadow-blue-500/10">
-            <Search className="w-4 h-4" /> Trend Radar
+          <button className="h-16 px-10 rounded-[2rem] bg-slate-950 text-white hover:bg-blue-600 hover:scale-105 transition-all flex items-center justify-center gap-4 font-black text-[11px] uppercase tracking-[0.2em] shadow-2xl shadow-blue-900/20 active:scale-95">
+            <Search className="w-5 h-5" /> Data Discovery
           </button>
         </div>
       </header>
 
       {/* KPI Stats Strip */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 mb-12">
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-8">
         {stats.map((stat, i) => (
           <motion.div
             key={stat.label}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.1 }}
-            className="group relative overflow-hidden rounded-[2.5rem] bg-white p-8 border border-slate-200 hover:border-blue-400 transition-all shadow-sm"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: i * 0.05, type: "spring" }}
+            className="group relative overflow-hidden rounded-[3rem] bg-white p-10 border border-slate-100 hover:border-blue-600 transition-all shadow-xl shadow-slate-100/50 hover:shadow-2xl hover:shadow-blue-500/10"
           >
-            <div className={cn("p-4 rounded-2xl w-fit mb-6 shadow-inner bg-slate-50", stat.color)}>
-              <stat.icon className="w-5 h-5" />
+            <div className={cn("p-5 rounded-[1.5rem] w-fit mb-8 shadow-inner transition-transform group-hover:scale-110", stat.bg, stat.color)}>
+              <stat.icon className="w-6 h-6" />
             </div>
-            <div className="space-y-1">
-              <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">{stat.label}</p>
+            <div className="space-y-2">
+              <p className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-400">{stat.label}</p>
               <div className="flex items-end gap-2">
-                <h3 className="text-3xl font-black tracking-tight text-slate-900">
+                <h3 className="text-4xl font-black tracking-tighter text-slate-950 leading-none">
                   <CountUp value={stat.value} prefix={stat.label === 'Est. Revenue' ? '₹ ' : ''} />
                 </h3>
               </div>
-              <div className={cn("text-[10px] font-black flex items-center gap-1 mt-2", stat.up ? 'text-emerald-600' : 'text-blue-600')}>
+              <div className={cn("inline-flex items-center gap-2 px-3 py-1 rounded-full text-[10px] font-black mt-4", stat.up ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-blue-50 text-blue-600 border border-blue-100')}>
                 {stat.up ? <TrendingUp className="w-3 h-3" /> : <ChevronRight className="w-3 h-3" />}
                 {stat.delta}
               </div>
@@ -166,189 +167,188 @@ export const Home = () => {
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
         {/* Main Content Area */}
-        <div className="lg:col-span-2 space-y-10">
+        <div className="lg:col-span-2 space-y-12">
           {/* AI Action Plan */}
-          <div className="rounded-[3rem] bg-white border border-slate-200 overflow-hidden shadow-sm">
-            <div className="p-10 border-b border-slate-100 flex items-center justify-between">
-              <div>
-                <h3 className="text-2xl font-black tracking-tight flex items-center gap-4 text-slate-900 uppercase">
-                  <Zap className="w-6 h-6 text-blue-600 fill-blue-600" />
-                  AI Action Plan
-                </h3>
-                <p className="text-[11px] font-bold text-slate-400 mt-2 tracking-wide uppercase">
-                   Synchronized with niche trends at 08:00 AM
+          <div className="rounded-[4rem] bg-white border border-slate-100 overflow-hidden shadow-2xl shadow-slate-100/50 group">
+            <div className="p-12 border-b border-slate-50 flex items-center justify-between bg-slate-50/30">
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                   <div className="w-10 h-10 rounded-2xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/30 animate-float">
+                      <Zap className="w-5 h-5 text-white fill-white" />
+                   </div>
+                   <h3 className="text-3xl font-black tracking-tight text-slate-950 uppercase italic">
+                    AI Strategic Plan
+                   </h3>
+                </div>
+                <p className="text-[11px] font-black text-slate-400 tracking-[0.2em] uppercase pl-1">
+                   Live Feed • Updated 2 mins ago
                 </p>
               </div>
-              <div className="bg-blue-50 text-blue-600 text-[10px] font-black px-4 py-2 rounded-2xl uppercase tracking-widest shadow-sm">
-                Progress: {completedCount}/{tasks.length}
+              <div className="bg-slate-950 text-white text-[10px] font-black px-6 py-3 rounded-full uppercase tracking-[0.2em] shadow-xl">
+                Ready: {completedCount}/{tasks.length}
               </div>
             </div>
-            <div className="p-6 md:p-10 space-y-5">
-              {tasks.map((task) => (
+            <div className="p-10 md:p-12 space-y-6">
+              {tasks.map((task, i) => (
                 <motion.div
                   key={task.id}
                   layout
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.05 }}
                   className={cn(
-                    "group flex items-center gap-5 p-6 rounded-3xl transition-all shadow-sm",
-                    task.completed ? "bg-slate-50 border-transparent opacity-60" : "bg-white border border-slate-100 hover:border-blue-300"
+                    "group flex items-center gap-8 p-8 rounded-[2.5rem] transition-all",
+                    task.completed ? "bg-slate-50 border-transparent opacity-50" : "bg-white border border-slate-100 hover:border-blue-400 hover:shadow-xl hover:scale-[1.01]"
                   )}
                 >
                   <button
                     onClick={() => toggleTask(task.id)}
                     className={cn(
-                      "shrink-0 w-7 h-7 rounded-xl border-2 flex items-center justify-center transition-all",
-                      task.completed ? "bg-blue-600 border-blue-600 shadow-lg shadow-blue-500/20" : "border-slate-200 hover:border-blue-600 bg-white"
+                      "shrink-0 w-10 h-10 rounded-[1.2rem] border-2 flex items-center justify-center transition-all",
+                      task.completed ? "bg-blue-600 border-blue-600 shadow-lg shadow-blue-500/40" : "border-slate-200 hover:border-blue-600 bg-white"
                     )}
                   >
-                    {task.completed && <Check className="w-4 h-4 text-white" />}
+                    {task.completed && <Check className="w-6 h-6 text-white stroke-[3]" />}
                   </button>
                   <div className="flex-1 min-w-0">
                     <p className={cn(
-                      "text-md font-bold truncate tracking-tight text-slate-900",
-                      task.completed && "line-through text-slate-400"
+                      "text-xl font-black tracking-tight text-slate-950",
+                      task.completed && "line-through text-slate-400 opacity-60"
                     )}>
                       {task.text}
                     </p>
-                    <div className="flex items-center gap-4 mt-2">
-                      <span className="text-[10px] uppercase font-black tracking-[0.15em] text-blue-600/60">{task.category}</span>
-                      <span className="flex items-center gap-1.5 text-[10px] font-bold text-slate-400">
-                        <Clock className="w-3 h-3" /> {task.time}
+                    <div className="flex items-center gap-6 mt-3">
+                      <span className="text-[10px] uppercase font-black tracking-[0.2em] text-blue-600">{task.category}</span>
+                      <span className="flex items-center gap-2 text-[10px] font-black uppercase text-slate-400 tracking-widest">
+                        <Clock className="w-3.5 h-3.5" /> {task.time}
                       </span>
                     </div>
                   </div>
-                  <button className="hidden group-hover:flex items-center gap-2 text-[10px] font-black uppercase text-blue-600 tracking-widest p-2 hover:underline">
-                    View Task <ArrowRight className="w-3 h-3" />
+                  <button className="w-12 h-12 rounded-[1.2rem] bg-slate-50 flex items-center justify-center text-slate-400 hover:bg-slate-950 hover:text-white transition-all opacity-0 group-hover:opacity-100 active:scale-90">
+                    <ArrowRight className="w-5 h-5" />
                   </button>
                 </motion.div>
               ))}
             </div>
           </div>
 
-          {/* Recent Content Performance */}
-          <div className="rounded-[3rem] bg-white border border-slate-200 overflow-hidden shadow-sm">
-            <div className="p-10 border-b border-slate-100 flex items-center justify-between">
-              <h3 className="text-2xl font-black tracking-tight flex items-center gap-4 text-slate-900 uppercase">
-                <Play className="w-6 h-6 text-blue-600 fill-blue-600" />
-                Performance Stream
+          {/* Performance Stream */}
+          <div className="rounded-[4rem] bg-white border border-slate-100 overflow-hidden shadow-2xl shadow-slate-100/50">
+            <div className="p-12 border-b border-slate-50 flex items-center justify-between">
+              <h3 className="text-3xl font-black tracking-tight flex items-center gap-5 text-slate-950 uppercase italic">
+                <Play className="w-8 h-8 text-blue-600 fill-blue-600" />
+                Live Performance
               </h3>
-              <button className="text-[10px] font-black uppercase text-slate-400 hover:text-blue-600 transition-colors tracking-widest flex items-center gap-2">
-                Launch Creator Studio <ChevronRight className="w-4 h-4" />
+              <button className="text-[10px] font-black uppercase text-blue-600 bg-blue-50 px-6 py-3 rounded-full hover:bg-blue-600 hover:text-white transition-all tracking-[0.2em] shadow-sm">
+                Control Hub
               </button>
             </div>
-            <div className="p-6 md:p-10">
-              <div className="space-y-5">
-                {recentPosts.length > 0 ? recentPosts.map((post) => (
-                  <div key={post.id} className="flex items-center justify-between p-6 rounded-3xl bg-white border border-slate-100 group hover:border-blue-300 transition-all shadow-sm hover:shadow-md">
-                    <div className="flex items-center gap-5">
-                      <div className="w-14 h-14 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center relative overflow-hidden group-hover:scale-105 transition-all">
-                        <span className="text-[9px] font-black uppercase tracking-widest text-slate-400 z-10">{post.platform}</span>
-                        <div className="absolute inset-0 bg-blue-100 opacity-0 group-hover:opacity-40 transition-opacity" />
+            <div className="p-12">
+              <div className="space-y-6">
+                {recentPosts.map((post, i) => (
+                  <div key={post.id} className="flex items-center justify-between p-8 rounded-[2.5rem] bg-white border border-slate-100 group hover:border-slate-950 hover:shadow-2xl transition-all h-32">
+                    <div className="flex items-center gap-8">
+                      <div className="w-20 h-20 rounded-[1.5rem] bg-slate-950 flex items-center justify-center relative overflow-hidden group-hover:scale-105 transition-all shadow-xl">
+                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white z-10">{post.platform}</span>
+                        <div className="absolute inset-0 bg-blue-600 opacity-20" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h4 className="text-md font-black text-slate-900 truncate max-w-[150px] md:max-w-none">{post.text}</h4>
-                        <div className="flex gap-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-2">
+                        <h4 className="text-xl font-black text-slate-950 truncate max-w-[200px] md:max-w-md">{post.text}</h4>
+                        <div className="flex gap-6 text-[10px] font-black text-slate-400 uppercase tracking-[0.25em] mt-3">
                            <span className="text-blue-600 font-black">{post.type}</span>
-                           <span className="opacity-30">•</span>
+                           <span>•</span>
                            <span>{post.date}</span>
                         </div>
                       </div>
                     </div>
-                    <div className="flex items-center gap-6">
-                      <button className="p-3 rounded-2xl bg-white border border-slate-100 hover:bg-slate-900 hover:text-white transition-all shadow-sm">
-                        <ArrowRight className="w-4 h-4" />
-                      </button>
+                    <div className="p-5 rounded-2xl bg-slate-50 border border-slate-100 text-slate-950 font-black text-xs group-hover:bg-blue-600 group-hover:text-white transition-all">
+                       Analyze
                     </div>
                   </div>
-                )) : (
-                  <div className="py-20 text-center text-slate-300 font-black uppercase text-[10px] tracking-[0.3em] border-2 border-dashed border-slate-100 rounded-[2.5rem]">
-                    Waiting for content stream connection
-                  </div>
-                )}
+                ))}
               </div>
             </div>
           </div>
         </div>
 
         {/* Sidebar Widgets */}
-        <div className="space-y-8">
+        <div className="space-y-12">
           {/* Creator Profile Summary Widget */}
-          <div className="rounded-[3rem] bg-blue-50 border border-blue-100 p-10 relative overflow-hidden group shadow-sm">
-            <div className="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 transition-opacity">
-               <Stars className="w-16 h-16 text-blue-600 blur-sm" />
-            </div>
-            <div className="relative z-10 space-y-8">
-              <div className="flex items-center gap-5">
-                <div className="w-20 h-20 rounded-[2.5rem] bg-white border-2 border-blue-200 p-1.5 shadow-sm">
+          <div className="rounded-[4rem] bg-slate-950 p-12 relative overflow-hidden group shadow-2xl shadow-slate-900/30">
+            <div className="absolute -top-10 -right-10 w-40 h-40 bg-blue-600 rounded-full blur-[80px] opacity-20 animate-float" />
+            <div className="relative z-10 space-y-10">
+              <div className="flex items-center gap-6">
+                <div className="w-24 h-24 rounded-[2.5rem] bg-white p-1.5 shadow-2xl shadow-blue-500/20 group-hover:scale-110 transition-transform">
                   <img 
                     src={user?.photo || "https://api.dicebear.com/7.x/avataaars/svg?seed=Naveen"} 
                     alt="Profile" 
                     className="w-full h-full rounded-[2.1rem] object-cover"
                   />
                 </div>
-                <div>
-                  <h4 className="text-2xl font-black tracking-tight leading-none text-slate-900">{user?.name || 'Naveen Kumar'}</h4>
-                  <p className="text-[10px] font-black text-blue-600 mt-2 uppercase tracking-[0.2em]">{user?.handle || '@naveenfitlife'}</p>
+                <div className="space-y-2">
+                  <h4 className="text-3xl font-black tracking-[0.02em] leading-none text-white italic uppercase">{user?.name || 'Naveen'}</h4>
+                  <p className="text-[10px] font-black text-blue-500 uppercase tracking-[0.3em]">{user?.handle || '@naveenfitlife'}</p>
                 </div>
               </div>
               
-              <div className="space-y-5 py-6 border-y border-blue-100">
-                <div className="flex justify-between items-center text-slate-900">
-                   <span className="text-[10px] font-black uppercase tracking-[0.2em] opacity-40">Elite Creator Score</span>
-                   <span className="text-2xl font-black">74<span className="text-xs opacity-30">/100</span></span>
+              <div className="space-y-6 pt-10 border-t border-white/5">
+                <div className="flex justify-between items-center text-white">
+                   <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40">Authority Score</span>
+                   <span className="text-3xl font-black text-white italic">74<span className="text-sm opacity-20">/100</span></span>
                 </div>
-                <div className="h-2.5 rounded-full bg-blue-100 overflow-hidden shadow-inner">
+                <div className="h-4 rounded-full bg-white/5 overflow-hidden shadow-inner p-1">
                   <motion.div 
                     initial={{ width: 0 }}
                     animate={{ width: '74%' }}
-                    className="h-full bg-blue-600 rounded-full"
+                    className="h-full bg-blue-600 rounded-full shadow-[0_0_15px_rgba(37,99,235,0.8)]"
                   />
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div className="text-center py-4 bg-white rounded-2xl border border-blue-100 shadow-sm">
-                   <p className="text-sm font-black text-slate-900">48.2k</p>
-                   <p className="text-[8px] font-black uppercase text-slate-400 tracking-widest mt-1">Followers</p>
+              <div className="grid grid-cols-2 gap-6">
+                <div className="text-center p-6 bg-white/5 rounded-[2rem] border border-white/5 hover:border-blue-500/30 transition-all">
+                   <p className="text-lg font-black text-white">48.2k</p>
+                   <p className="text-[9px] font-black uppercase text-white/30 tracking-[0.3em] mt-2">Scale</p>
                 </div>
-                <div className="text-center py-4 bg-white rounded-2xl border border-blue-100 shadow-sm">
-                   <p className="text-sm font-black text-slate-900">4.8%</p>
-                   <p className="text-[8px] font-black uppercase text-slate-400 tracking-widest mt-1">Engagement</p>
+                <div className="text-center p-6 bg-white/5 rounded-[2rem] border border-white/5 hover:border-blue-500/30 transition-all">
+                   <p className="text-lg font-black text-white">4.8%</p>
+                   <p className="text-[9px] font-black uppercase text-white/30 tracking-[0.3em] mt-2">Impact</p>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Platform Health Section */}
-          <div className="rounded-[3rem] bg-white border border-slate-200 p-10 shadow-sm">
-            <h3 className="text-2xl font-black tracking-tight flex items-center gap-4 mb-10 text-slate-900 uppercase">
-              <Network className="w-6 h-6 text-blue-600" />
-              Platform Pulse
+          <div className="rounded-[4rem] bg-white border border-slate-100 p-12 shadow-2xl shadow-slate-100/50">
+            <h3 className="text-3xl font-black tracking-tight flex items-center gap-5 mb-10 text-slate-950 uppercase italic">
+              <Network className="w-8 h-8 text-blue-600" />
+              Impact Analytics
             </h3>
-            <div className="space-y-6">
+            <div className="space-y-8">
               {platformHealth.map((plat) => (
-                <div key={plat.platform} className="p-6 rounded-3xl bg-slate-50 border border-slate-100 space-y-4 shadow-inner">
+                <div key={plat.platform} className="p-8 rounded-[2.5rem] bg-slate-50/50 border border-slate-50 space-y-6 hover:bg-white hover:shadow-xl transition-all">
                   <div className="flex justify-between items-center">
-                    <div className="flex items-center gap-3">
-                      <div className={cn("w-2.5 h-2.5 rounded-full border border-white", plat.color)} />
-                      <span className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-900">{plat.platform}</span>
+                    <div className="flex items-center gap-4">
+                      <div className={cn("w-3 h-3 rounded-full shadow-[0_0_10px_rgba(37,99,235,0.5)]", plat.color)} />
+                      <span className="text-[12px] font-black uppercase tracking-[0.4em] text-slate-950">{plat.platform}</span>
                     </div>
                     <span className={cn(
-                      "text-[9px] font-black px-3 py-1.5 rounded-2xl uppercase tracking-widest",
-                      plat.status === 'Healthy' ? 'bg-emerald-100 text-emerald-700' : 'bg-blue-100 text-blue-700'
+                      "text-[9px] font-black px-4 py-2 rounded-full uppercase tracking-widest shadow-sm",
+                      plat.status === 'Healthy' ? 'bg-emerald-500 text-white' : 'bg-blue-600 text-white'
                     )}>
                       {plat.status}
                     </span>
                   </div>
                   <div className="flex justify-between items-end">
                     <div>
-                      <p className="text-2xl font-black leading-none text-slate-900">{plat.followers}</p>
-                      <p className="text-[10px] font-bold text-slate-400 mt-2 uppercase tracking-wide">{plat.growth}</p>
+                      <p className="text-3xl font-black leading-none text-slate-950 italic">{plat.followers}</p>
+                      <p className="text-[10px] font-black text-slate-400 mt-3 uppercase tracking-widest">{plat.growth}</p>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm font-black text-slate-900">{plat.engagement}</p>
-                      <p className="text-[8px] font-black uppercase tracking-widest text-slate-400 text-right opacity-60">Reach Index</p>
+                      <p className="text-sm font-black text-slate-950">{plat.engagement}</p>
+                      <p className="text-[8px] font-black uppercase tracking-widest text-slate-300 text-right mt-1">Retention</p>
                     </div>
                   </div>
                 </div>
@@ -357,40 +357,38 @@ export const Home = () => {
           </div>
 
           {/* Revenue Funnel Widget */}
-          <div className="rounded-[3rem] bg-white border border-slate-200 p-10 shadow-sm relative overflow-hidden group">
-             <div className="absolute top-0 right-0 p-10">
-               <div className="w-16 h-16 bg-blue-100 rounded-full blur-[60px] opacity-20 group-hover:opacity-40 transition-opacity" />
-             </div>
-             <h3 className="text-2xl font-black tracking-tight flex items-center gap-4 mb-3 text-slate-900 uppercase">
-               <Briefcase className="w-6 h-6 text-blue-600" />
-               Revenue Funnel
+          <div className="rounded-[4rem] bg-white border border-slate-100 p-12 shadow-xl shadow-slate-100/50 relative overflow-hidden group">
+             <div className="absolute -top-10 -left-10 w-40 h-40 bg-indigo-600 rounded-full blur-[100px] opacity-10" />
+             <h3 className="text-3xl font-black tracking-tight flex items-center gap-5 mb-4 text-slate-950 uppercase italic">
+               <Briefcase className="w-8 h-8 text-blue-600" />
+               Capital Hub
              </h3>
-             <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-10">Projected Value: <span className="text-slate-900">₹ 3,20,000</span></p>
+             <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 mb-12">Projected Liquidity: <span className="text-slate-950">₹ 3.2M</span></p>
              
-             <div className="space-y-8">
+             <div className="space-y-10">
                 {[
-                  { label: 'Outreach', count: 3, percent: 60, color: 'bg-slate-200' },
-                  { label: 'Negotiating', count: 1, percent: 20, color: 'bg-blue-300' },
+                  { label: 'Pipeline', count: 3, percent: 60, color: 'bg-slate-200' },
+                  { label: 'Negotiation', count: 1, percent: 35, color: 'bg-blue-300' },
                   { label: 'Live Deals', count: 3, percent: 85, color: 'bg-blue-600' },
                 ].map((stage) => (
-                  <div key={stage.label} className="space-y-2.5">
-                    <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-slate-900">
+                  <div key={stage.label} className="space-y-4">
+                    <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-[0.3em] text-slate-950">
                        <span className="opacity-40">{stage.label}</span>
                        <span className="text-blue-600">{stage.count} Active</span>
                     </div>
-                    <div className="h-2 rounded-full bg-slate-50 overflow-hidden shadow-inner">
+                    <div className="h-3 rounded-full bg-slate-50 overflow-hidden shadow-inner p-0.5">
                        <motion.div 
                         initial={{ width: 0 }}
                         animate={{ width: `${stage.percent}%` }}
-                        className={cn("h-full rounded-full", stage.color)}
+                        className={cn("h-full rounded-full shadow-[0_0_10px_rgba(0,0,0,0.1)]", stage.color)}
                        />
                     </div>
                   </div>
                 ))}
              </div>
              
-             <button className="w-full mt-10 h-14 rounded-2xl bg-slate-900 text-white hover:bg-blue-600 transition-all font-black text-[10px] uppercase tracking-[0.2em] shadow-lg shadow-blue-500/10 active:scale-95">
-                Manage PipeLine
+             <button className="w-full mt-12 h-16 rounded-[2rem] bg-slate-950 text-white hover:bg-blue-600 hover:scale-[1.02] transition-all font-black text-[11px] uppercase tracking-[0.3em] shadow-2xl shadow-blue-900/20 active:scale-95">
+                Manage Economy
              </button>
           </div>
         </div>
@@ -398,24 +396,3 @@ export const Home = () => {
     </PageTransition>
   );
 };
-
-const Stars = (props: any) => (
-  <svg
-    {...props}
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275z" />
-    <path d="M5 3v4" />
-    <path d="M19 17v4" />
-    <path d="M3 5h4" />
-    <path d="M17 19h4" />
-  </svg>
-);

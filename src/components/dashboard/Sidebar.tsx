@@ -88,7 +88,7 @@ export const Sidebar = () => {
 
   return (
     <motion.div
-      className="fixed left-0 top-0 bottom-0 z-50 bg-white border-r border-slate-100 hidden lg:flex flex-col shadow-sm overflow-visible"
+      className="fixed left-0 top-0 bottom-0 z-sidebar bg-white border-r border-slate-100 hidden lg:flex flex-col shadow-[1px_0_10px_rgba(0,0,0,0.02)] overflow-visible"
       animate={{ width: expanded ? 280 : 80 }}
       transition={springTransition}
       onMouseEnter={() => setIsHoverExpanded(true)}
@@ -96,41 +96,29 @@ export const Sidebar = () => {
     >
       {/* Logo + Pin Toggle */}
       <div
-        className="flex items-center h-20 px-5 gap-3 cursor-pointer border-b border-slate-50 relative shrink-0 group"
+        className="flex items-center h-[var(--header-h)] px-6 gap-3 cursor-pointer border-b border-slate-50 relative shrink-0 group"
         onClick={toggleSidebar}
       >
-        <div className="relative shrink-0">
-          <Sparkles className="w-8 h-8 text-blue-600" />
-          {isExpanded && (
-            <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-blue-600 flex items-center justify-center">
-              <div className="w-1.5 h-1.5 rounded-full bg-white" />
-            </div>
-          )}
+        <div className="relative shrink-0 w-8 h-8 flex items-center justify-center bg-blue-600 rounded-xl shadow-lg shadow-blue-500/20">
+          <Sparkles className="w-5 h-5 text-white" />
+          <motion.div 
+            animate={{ scale: [1, 1.2, 1], rotate: [0, 90, 0] }}
+            transition={{ duration: 4, repeat: Infinity }}
+            className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-white" 
+          />
         </div>
         <AnimatePresence>
           {expanded && (
-            <motion.span
-              className="font-black tracking-tighter text-xl whitespace-nowrap uppercase text-slate-900"
+            <motion.div
+              className="flex flex-col"
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -10 }}
-              transition={{ duration: 0.2 }}
             >
-              CreatorForge<span className="text-blue-600 italic">AI</span>
-            </motion.span>
-          )}
-        </AnimatePresence>
-        <AnimatePresence>
-          {expanded && (
-            <motion.div
-              className="ml-auto"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-            >
-              <div className={`w-4 h-4 rounded-full border-2 border-slate-200 flex items-center justify-center transition-all ${isExpanded ? "bg-blue-600 border-blue-600" : ""}`}>
-                {isExpanded && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
-              </div>
+              <span className="font-black tracking-tighter text-lg uppercase text-slate-950 italic">
+                CreatorForge<span className="text-blue-600">AI</span>
+              </span>
+              <span className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-400 -mt-1">Suite v3.1</span>
             </motion.div>
           )}
         </AnimatePresence>
@@ -147,15 +135,15 @@ export const Sidebar = () => {
             <Link
               key={item.label}
               to={item.href}
-              className={`flex items-center gap-4 px-4 py-3 rounded-xl relative transition-all group ${
-                isActive ? "bg-blue-50 text-blue-600 shadow-sm" : "text-slate-500 hover:bg-slate-50 hover:text-slate-900"
+              className={`flex items-center gap-4 px-4 py-3.5 rounded-2xl relative transition-all group ${
+                isActive ? "bg-slate-950 text-white shadow-xl shadow-slate-200" : "text-slate-400 hover:bg-slate-50 hover:text-slate-900"
               }`}
               title={!expanded ? item.label : undefined}
             >
               {isActive && (
                 <motion.div
                   layoutId="activeNav"
-                  className="absolute left-0 top-0 bottom-0 w-[4px] bg-blue-600 rounded-r-full"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 w-1 h-4 bg-blue-500 rounded-full"
                 />
               )}
 

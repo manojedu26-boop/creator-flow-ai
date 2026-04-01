@@ -1,104 +1,126 @@
 import { motion } from "framer-motion";
-import { Check, ArrowRight } from "lucide-react";
+import { Check, ArrowRight, Zap, Stars, Sparkles, Shield } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+
 const plans = [
   {
     name: "Starter",
     price: "Free",
     period: "",
-    desc: "Perfect for creators just starting out.",
-    features: ["1 platform connected", "10 AI captions/month", "Basic analytics", "1 media kit"],
-    cta: "Get Started Free",
+    desc: "Deploy your first intelligence node.",
+    features: ["1 platform sync", "50 AI captions/month", "Real-time analytics", "Standard media kit"],
+    cta: "Initialize Free",
     highlighted: false,
+    icon: Sparkles,
   },
   {
     name: "Growth",
-    price: "$29",
+    price: "₹ 2,499",
     period: "/mo",
-    desc: "For creators ready to scale their game.",
-    features: ["2 platforms", "Unlimited AI content", "Full analytics suite", "Deal CRM (5 deals)", "Collab finder", "Content calendar"],
-    cta: "Start 14-Day Trial",
+    desc: "Scale your empire with predictive AI.",
+    features: ["3 platforms sync", "Unlimited AI studio", "Advanced growth suite", "Brand CRM (10 deals)", "Contract Shield v1", "Production calendar"],
+    cta: "Start Scaling",
     highlighted: true,
+    icon: Zap,
   },
   {
-    name: "Pro",
-    price: "$79",
+    name: "Elite",
+    price: "₹ 5,999",
     period: "/mo",
-    desc: "For serious creators who mean business.",
-    features: ["All platforms", "Everything unlimited", "Contract Shield", "AI pitch decks", "Team access (2 seats)", "Priority support"],
-    cta: "Start 14-Day Trial",
+    desc: "The ultimate command centre for icons.",
+    features: ["All platforms sync", "Infinite AI generation", "Priority support node", "Automated pitch decks", "Team federation (3 seats)", "Full agency access"],
+    cta: "Go Elite",
     highlighted: false,
+    icon: Shield,
   },
 ];
 
 const Pricing = () => {
   const navigate = useNavigate();
   return (
-    <section className="py-24 md:py-32 px-4" id="pricing">
-    <div className="container max-w-5xl">
-      <motion.div
-        className="text-center mb-16"
-        initial={{ opacity: 0, y: 16 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.2 }}
-        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-      >
-        <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4">
-          Simple, creator-friendly pricing
-        </h2>
-        <p className="text-muted-foreground text-lg">
-          Start free. Upgrade when you're ready. Annual billing saves 2 months.
-        </p>
-      </motion.div>
+    <section className="py-32 md:py-48 px-6 bg-white relative overflow-hidden" id="pricing">
+      <div className="absolute top-0 right-0 w-[40%] h-[40%] bg-blue-50/30 blur-[120px] rounded-full -z-10" />
+      
+      <div className="container max-w-7xl">
+        <motion.div
+           className="text-center mb-32"
+           initial={{ opacity: 0, y: 30 }}
+           whileInView={{ opacity: 1, y: 0 }}
+           viewport={{ once: true }}
+           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-slate-950 border border-slate-900 text-[10px] font-black uppercase tracking-[0.3em] text-white mb-8 shadow-xl shadow-slate-200">
+             <Stars className="w-3.5 h-3.5 text-blue-500" /> Investment Tiers
+          </div>
+          <h2 className="text-5xl md:text-8xl font-black tracking-tighter leading-none mb-8 text-slate-950 uppercase italic">
+            Simple, Powerful <br />
+            <span className="text-blue-600 font-black">Investment</span>
+          </h2>
+          <p className="text-slate-500 font-bold text-lg md:text-2xl max-w-2xl mx-auto leading-relaxed">
+            High-fidelity intelligence for every stage of your creator journey.
+          </p>
+        </motion.div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-        {plans.map((plan, i) => (
-          <motion.div
-            key={plan.name}
-            className={`relative rounded-xl p-6 md:p-8 transition-all ${
-              plan.highlighted
-                ? "bg-card border-2 border-primary/40 glow-pink"
-                : "bg-glass"
-            }`}
-            initial={{ opacity: 0, y: 24, filter: "blur(4px)" }}
-            whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.55, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
-          >
-            {plan.highlighted && (
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-primary px-4 py-0.5 text-xs font-semibold text-primary-foreground">
-                Most Popular
-              </div>
-            )}
-            <h3 className="text-lg font-semibold mb-1">{plan.name}</h3>
-            <p className="text-sm text-muted-foreground mb-4">{plan.desc}</p>
-            <div className="flex items-baseline gap-1 mb-6">
-              <span className="text-4xl font-bold">{plan.price}</span>
-              {plan.period && <span className="text-muted-foreground">{plan.period}</span>}
-            </div>
-            <ul className="space-y-2.5 mb-8">
-              {plan.features.map((f) => (
-                <li key={f} className="flex items-start gap-2 text-sm">
-                  <Check className="w-4 h-4 text-accent mt-0.5 shrink-0" />
-                  <span>{f}</span>
-                </li>
-              ))}
-            </ul>
-            <button
-              onClick={() => navigate("/register")}
-              className={`group w-full inline-flex items-center justify-center gap-2 rounded-lg px-6 py-3 font-semibold transition-all active:scale-[0.97] ${
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+          {plans.map((plan, i) => (
+            <motion.div
+              key={plan.name}
+              className={`relative rounded-[3rem] p-10 md:p-12 transition-all flex flex-col group ${
                 plan.highlighted
-                  ? "bg-primary text-primary-foreground hover:shadow-[0_0_30px_-5px_hsl(318,100%,62%,0.4)]"
-                  : "bg-muted text-foreground hover:bg-muted/80"
+                  ? "bg-white border-2 border-blue-600 shadow-2xl shadow-blue-500/10 scale-105 z-10"
+                  : "bg-slate-50/50 border border-slate-100 hover:border-slate-300"
               }`}
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: i * 0.15, ease: [0.16, 1, 0.3, 1] }}
             >
-              {plan.cta}
-              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-            </button>
-          </motion.div>
-        ))}
+              {plan.highlighted && (
+                <div className="absolute -top-5 left-1/2 -track-x-1/2 -translate-x-1/2 rounded-full bg-blue-600 px-6 py-2 text-[10px] font-black uppercase tracking-widest text-white shadow-lg shadow-blue-500/30">
+                  Most Deployed
+                </div>
+              )}
+              
+              <div className={`w-16 h-16 rounded-[1.5rem] flex items-center justify-center mb-8 shadow-sm transition-transform group-hover:scale-110 ${plan.highlighted ? "bg-blue-600 text-white" : "bg-white text-slate-950 border border-slate-100"}`}>
+                 <plan.icon className="w-7 h-7" />
+              </div>
+
+              <h3 className="text-2xl font-black mb-2 text-slate-950 uppercase italic tracking-tight">{plan.name}</h3>
+              <p className="text-sm text-slate-500 font-bold mb-8">{plan.desc}</p>
+              
+              <div className="flex items-baseline gap-2 mb-10">
+                <span className="text-5xl font-black text-slate-950 italic tracking-tighter">{plan.price}</span>
+                {plan.period && <span className="text-slate-400 font-black uppercase text-xs tracking-widest leading-none">{plan.period}</span>}
+              </div>
+
+              <div className="h-px bg-slate-100 mb-10 w-full" />
+
+              <ul className="space-y-5 mb-12 flex-1">
+                {plan.features.map((f) => (
+                  <li key={f} className="flex items-center gap-3 text-sm font-bold text-slate-600">
+                    <div className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 ${plan.highlighted ? "bg-blue-600" : "bg-slate-950"}`}>
+                       <Check className="w-3 h-3 text-white stroke-[4]" />
+                    </div>
+                    <span>{f}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <button
+                onClick={() => navigate("/register")}
+                className={`group w-full h-16 rounded-[2rem] text-[11px] font-black uppercase tracking-[0.3em] transition-all active:scale-[0.97] flex items-center justify-center gap-4 ${
+                  plan.highlighted
+                    ? "bg-slate-950 text-white shadow-2xl shadow-slate-200 hover:bg-blue-600 hover:shadow-blue-500/20"
+                    : "bg-white border border-slate-200 text-slate-950 hover:bg-slate-50"
+                }`}
+              >
+                {plan.cta}
+                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+              </button>
+            </motion.div>
+          ))}
+        </div>
       </div>
-    </div>
     </section>
   );
 };

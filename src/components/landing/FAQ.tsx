@@ -1,44 +1,63 @@
 import { motion } from "framer-motion";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { HelpCircle, Sparkles, Plus, Minus, Stars } from "lucide-react";
 
 const faqs = [
-  { q: "Is CREATORX AI free to start?", a: "Yes! Our Starter plan is completely free — no credit card needed. You get 1 platform connection, 10 AI generations per month, basic analytics, and 1 media kit." },
-  { q: "Which platforms do you support?", a: "We support Instagram, YouTube, and TikTok. Connect your accounts via OAuth and we pull in your data automatically." },
-  { q: "How does the AI content generation work?", a: "Our AI is trained on high-performing creator content. Tell it your topic, platform, and tone — and it generates scripts, captions, hashtags, and reel ideas tailored to your niche and audience." },
-  { q: "Can I cancel anytime?", a: "Absolutely. No contracts, no lock-in. Cancel your subscription anytime from your account settings." },
-  { q: "Is my data safe?", a: "We take privacy seriously. All data is encrypted, we're GDPR compliant, and we never share your data with third parties. You can export or delete your data at any time." },
-  { q: "Do you actually post to my accounts?", a: "Where platform APIs allow direct publishing (currently Instagram and YouTube), yes. For TikTok, we prepare your content and remind you to post at the optimal time." },
+  { q: "Is CreatorForge AI free to deploy?", a: "Yes. Our Starter node is permanently free — no credit card required. You gain 1 platform sync, 50 AI generations per month, real-time analytics, and a standard media kit." },
+  { q: "Which intelligence nodes are supported?", a: "We currently integrate with Instagram, YouTube, and TikTok. Synchronize your accounts via high-security OAuth for automated data ingestion." },
+  { q: "How does the Predictive AI Studio operate?", a: "Our models are trained on elite-tier creator data. Input your parameters, and our engine generates high-converting scripts, captions, and strategies tailored specifically to your audience's unique velocity." },
+  { q: "Can I terminate my session anytime?", a: "Absolutely. No long-term contracts or lock-in protocols. You can terminate your premium subscription instantly from your secure account settings." },
+  { q: "What is your data security protocol?", a: "We operate on military-grade encryption standards and are fully GDPR compliant. Your intelligence is your own — we never share data with third-party nodes. You retain full control over export and deletion." },
+  { q: "Do you publish directly to platform hubs?", a: "Where platform APIs permit high-fidelity direct publishing (Instagram and YouTube), yes. For TikTok, we prepare your content and provide precise timing notifications for manual execution." },
 ];
 
 const FAQ = () => (
-  <section className="py-24 md:py-32 px-4">
-    <div className="container max-w-3xl">
+  <section className="py-32 md:py-48 px-6 bg-white relative overflow-hidden" id="faq">
+    <div className="absolute bottom-0 left-0 w-[30%] h-[30%] bg-blue-50/20 blur-[100px] rounded-full -z-10" />
+    
+    <div className="container max-w-4xl relative z-10">
       <motion.div
-        className="text-center mb-12"
-        initial={{ opacity: 0, y: 16 }}
+        className="text-center mb-24"
+        initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.2 }}
-        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
       >
-        <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4">
-          Got questions?
+        <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-slate-50 border border-slate-100 text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 mb-8 shadow-sm">
+           <HelpCircle className="w-3.5 h-3.5" /> Operations Support
+        </div>
+        <h2 className="text-5xl md:text-8xl font-black tracking-tighter leading-none mb-8 text-slate-950 uppercase italic">
+          Intelligence <br />
+          <span className="text-blue-600 font-black">Support.</span>
         </h2>
-        <p className="text-muted-foreground text-lg">We've got answers.</p>
+        <p className="text-slate-500 font-bold text-lg md:text-2xl max-w-2xl mx-auto leading-relaxed">
+          Critical answers for your high-performance creator ecosystem.
+        </p>
       </motion.div>
 
       <motion.div
-        initial={{ opacity: 0, y: 16 }}
+        initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.15 }}
-        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        viewport={{ once: true }}
+        transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+        className="bg-slate-50/50 rounded-[3rem] p-8 md:p-12 border border-slate-100"
       >
-        <Accordion type="single" collapsible className="space-y-2">
+        <Accordion type="single" collapsible className="space-y-4">
           {faqs.map((faq, i) => (
-            <AccordionItem key={i} value={`faq-${i}`} className="rounded-lg bg-glass border-none px-5">
-              <AccordionTrigger className="text-left font-medium hover:no-underline py-4">
-                {faq.q}
+            <AccordionItem 
+              key={i} 
+              value={`faq-${i}`} 
+              className="rounded-[2rem] bg-white border border-slate-100 px-8 py-2 transition-all hover:border-blue-600 group"
+            >
+              <AccordionTrigger className="text-left font-black uppercase italic text-slate-950 tracking-tight hover:no-underline py-6">
+                <span className="flex items-center gap-4">
+                   <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600 font-black italic text-xs group-hover:bg-blue-600 group-hover:text-white transition-all">
+                      {i + 1}
+                   </div>
+                   {faq.q}
+                </span>
               </AccordionTrigger>
-              <AccordionContent className="text-muted-foreground pb-4">
+              <AccordionContent className="text-slate-500 font-bold text-[15px] leading-relaxed pb-8 pt-2 max-w-2xl border-t border-slate-50 mt-2">
                 {faq.a}
               </AccordionContent>
             </AccordionItem>
