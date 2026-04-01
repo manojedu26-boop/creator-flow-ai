@@ -13,6 +13,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { BottomSheet } from "../../components/ui/BottomSheet";
 import { AutoResizeTextarea } from "../../components/shared/AutoResizeTextarea";
 import { useNavigate } from "react-router-dom";
+import { cn } from "../../lib/utils";
 
 // ── Types ───────────────────────────────────────────────────────────────────
 type ToolType = "caption" | "script" | "hook" | "hashtag" | "audio" | "pitch" | "bio" | "carousel" | "reel" | "thumbnail";
@@ -173,74 +174,81 @@ export const ContentStudio = () => {
   // ── Render Tools ─────────────────────────────────────────────────────────
 
   const renderCaptionWriter = () => (
-    <div className="space-y-8">
+    <div className="space-y-10">
       <div>
-        <h2 className="text-2xl font-black tracking-tight">Caption Writer</h2>
-        <p className="text-zinc-500 text-sm mt-1">AI generates 3 captions + 25 hashtags tailored to your niche</p>
+        <h2 className="text-3xl font-black tracking-tight text-slate-900 uppercase italic">Caption <span className="text-blue-600">Architect</span></h2>
+        <p className="text-slate-400 text-[11px] font-black uppercase tracking-widest mt-2">AI-driven narrative crafting for maximum engagement</p>
       </div>
 
-      <div className="space-y-4">
-        <label className="text-[10px] font-black uppercase tracking-widest text-zinc-500">What is this post about?</label>
-        <AutoResizeTextarea
-          placeholder={`e.g. My morning ${niche} routine with a focus on natural energy...`}
-          value={captionTopic}
-          onChange={(e: any) => setCaptionTopic(e.target.value)}
-          className="w-full min-h-[100px] bg-white/5 border border-white/10 rounded-2xl p-4 text-sm focus:outline-none focus:ring-1 focus:ring-primary/50 resize-none"
-          maxLength={500}
-        />
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <div className="space-y-6">
+        <div className="space-y-3">
+          <label className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400">Post Core Topic</label>
+          <AutoResizeTextarea
+            placeholder={`e.g. My daily ${niche} ritual for mental clarity...`}
+            value={captionTopic}
+            onChange={(e: any) => setCaptionTopic(e.target.value)}
+            className="w-full min-h-[120px] bg-slate-50 border border-slate-200 rounded-3xl p-6 text-sm font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-100 shadow-inner resize-none"
+            maxLength={500}
+          />
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {/* Platform */}
-          <div className="space-y-1.5">
-            <label className="text-[9px] font-black uppercase tracking-widest text-zinc-500">Platform</label>
-            <div className="flex gap-1">
+          <div className="space-y-2.5">
+            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Platform</label>
+            <div className="flex gap-1.5">
               {["IG", "YT", "TT"].map(p => (
-                <button key={p} onClick={() => setCaptionPlatform(p)} className={`flex-1 py-2.5 rounded-xl border text-[10px] font-black transition-all ${captionPlatform === p ? "bg-primary border-primary text-white" : "bg-white/5 border-white/10 text-zinc-400 hover:border-white/20"}`}>{p}</button>
+                <button key={p} onClick={() => setCaptionPlatform(p)} className={cn(
+                  "flex-1 py-3 rounded-2xl border text-[10px] font-black transition-all",
+                  captionPlatform === p ? "bg-slate-900 border-slate-900 text-white shadow-md shadow-slate-200" : "bg-white border-slate-200 text-slate-400 hover:border-blue-300"
+                )}>{p}</button>
               ))}
             </div>
           </div>
           {/* Tone */}
-          <div className="space-y-1.5">
-            <label className="text-[9px] font-black uppercase tracking-widest text-zinc-500">Tone</label>
-            <select value={captionTone} onChange={e => setCaptionTone(e.target.value)} className="w-full h-10 px-3 bg-white/5 border border-white/10 rounded-xl text-[11px] font-bold focus:outline-none text-white">
+          <div className="space-y-2.5">
+            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Voice Tone</label>
+            <select value={captionTone} onChange={e => setCaptionTone(e.target.value)} className="w-full h-12 px-4 bg-white border border-slate-200 rounded-2xl text-[11px] font-black uppercase tracking-widest focus:outline-none text-slate-900 shadow-sm">
               {["Funny", "Inspiring", "Educational", "Storytelling", "Bold", "Casual"].map(t => <option key={t} className="text-black">{t}</option>)}
             </select>
           </div>
           {/* Length */}
-          <div className="space-y-1.5">
-            <label className="text-[9px] font-black uppercase tracking-widest text-zinc-500">Length</label>
-            <div className="flex gap-1 bg-white/5 p-1 rounded-xl border border-white/10">
+          <div className="space-y-2.5">
+            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Maturity</label>
+            <div className="flex gap-1.5 bg-slate-50 p-1.5 rounded-2xl border border-slate-200 shadow-inner">
               {["S", "M", "L"].map(l => (
-                <button key={l} onClick={() => setCaptionLength(l)} className={`flex-1 py-1.5 rounded-lg text-[9px] font-black transition-all ${captionLength === l ? "bg-primary text-white" : "text-zinc-500 hover:text-white"}`}>{l}</button>
+                <button key={l} onClick={() => setCaptionLength(l)} className={cn(
+                  "flex-1 py-2 rounded-xl text-[10px] font-black transition-all",
+                  captionLength === l ? "bg-white text-blue-600 shadow-sm border border-slate-200" : "text-slate-400 hover:text-slate-900"
+                )}>{l}</button>
               ))}
             </div>
           </div>
           {/* Goal */}
-          <div className="space-y-1.5">
-            <label className="text-[9px] font-black uppercase tracking-widest text-zinc-500">Goal</label>
-            <select value={captionGoal} onChange={e => setCaptionGoal(e.target.value)} className="w-full h-10 px-3 bg-white/5 border border-white/10 rounded-xl text-[11px] font-bold focus:outline-none text-white">
+          <div className="space-y-2.5">
+            <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Conversion</label>
+            <select value={captionGoal} onChange={e => setCaptionGoal(e.target.value)} className="w-full h-12 px-4 bg-white border border-slate-200 rounded-2xl text-[11px] font-black uppercase tracking-widest focus:outline-none text-slate-900 shadow-sm">
               {["Grow Followers", "Drive Clicks", "Boost Saves", "Get Comments"].map(g => <option key={g} className="text-black">{g}</option>)}
             </select>
           </div>
         </div>
 
         {/* Upload */}
-        <div className="p-5 rounded-3xl border-2 border-dashed border-white/10 bg-white/[0.02] flex items-center justify-center gap-3 cursor-pointer hover:border-primary/40 hover:bg-primary/5 transition-all group relative overflow-hidden">
-          <UploadCloud className="w-5 h-5 text-zinc-500 group-hover:text-primary transition-colors" />
-          <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 group-hover:text-white transition-colors">Upload post for AI context (optional)</p>
+        <div className="p-6 rounded-[2.5rem] border-2 border-dashed border-slate-200 bg-slate-50/50 flex items-center justify-center gap-4 cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-all group relative overflow-hidden shadow-inner">
+          <UploadCloud className="w-6 h-6 text-slate-400 group-hover:text-blue-600 transition-colors" />
+          <p className="text-[11px] font-black uppercase tracking-widest text-slate-400 group-hover:text-slate-900 transition-colors">Integrate Visual Reference (Optional)</p>
           <input type="file" className="absolute inset-0 opacity-0 cursor-pointer" />
         </div>
 
         <button
-          onClick={() => runGenerate(() => { setCaptions(SEED_CAPTIONS(niche)); toast.success("3 captions ready!", { description: "Review, edit, and copy your favorites." }); })}
+          onClick={() => runGenerate(() => { setCaptions(SEED_CAPTIONS(niche)); toast.success("3 Professional drafts ready!"); })}
           disabled={isGenerating}
-          className="w-full py-4 bg-primary text-white rounded-2xl font-black uppercase tracking-widest shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-all active:scale-[0.99] disabled:opacity-60 flex items-center justify-center gap-3 overflow-hidden relative"
+          className="w-full py-5 bg-slate-900 text-white rounded-[2.5rem] font-black uppercase tracking-[0.2em] shadow-xl shadow-blue-500/10 hover:bg-blue-600 transition-all active:scale-[0.99] disabled:opacity-60 flex items-center justify-center gap-4 overflow-hidden relative"
         >
           {isGenerating ? (
-            <><Loader2 className="w-5 h-5 animate-spin" /><span className="text-[11px]">{thinkingMsg}</span></>
+            <><Loader2 className="w-5 h-5 animate-spin" /><span className="text-[11px] font-black uppercase tracking-widest">{thinkingMsg}</span></>
           ) : (
-            <><Sparkles className="w-5 h-5" /> Generate Captions</>
+            <><Sparkles className="w-5 h-5 text-blue-400" /> Synthesize Narrative</>
           )}
-          {!isGenerating && <motion.div className="absolute inset-x-0 h-full w-20 bg-white/10 -skew-x-12" animate={{ x: [-100, 1200] }} transition={{ repeat: Infinity, duration: 2.5, ease: "linear" }} />}
         </button>
       </div>
 
@@ -255,26 +263,26 @@ export const ContentStudio = () => {
             {/* Caption cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {captions.map((c, i) => (
-                <div key={i} className="bg-white/[0.03] border border-white/10 rounded-3xl p-5 flex flex-col gap-4 hover:border-primary/30 transition-all group relative overflow-hidden">
+                <div key={i} className="bg-white border border-slate-100 rounded-[2.5rem] p-8 flex flex-col gap-6 hover:border-blue-200 transition-all group relative overflow-hidden shadow-sm hover:shadow-lg">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-black uppercase tracking-widest text-primary">{c.label}</span>
+                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-600">{c.label}</span>
                     {/* Tweak Tone */}
                     <div className="relative">
                       <button
                         onClick={() => setCaptions(prev => prev!.map((v, j) => j === i ? { ...v, toneOpen: !v.toneOpen } : { ...v, toneOpen: false }))}
-                        className="flex items-center gap-1 px-2 py-1 rounded-lg bg-white/5 border border-white/10 text-[9px] font-black uppercase opacity-0 group-hover:opacity-100 transition-opacity hover:border-primary/30"
+                        className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200 text-[9px] font-black uppercase tracking-widest text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity hover:border-blue-400 hover:text-blue-600"
                       >
-                        Tweak Tone <ChevronDown className="w-3 h-3" />
+                        Adjust Tone <ChevronDown className="w-3.5 h-3.5" />
                       </button>
                       <AnimatePresence>
                         {c.toneOpen && (
-                          <motion.div initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 4 }} className="absolute right-0 top-full mt-1 bg-zinc-900 border border-white/10 rounded-2xl overflow-hidden z-20 w-36">
+                          <motion.div initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 4 }} className="absolute right-0 top-full mt-2 bg-white border border-slate-200 rounded-2xl shadow-xl overflow-hidden z-20 w-44">
                             {["Funny", "Bold", "Professional", "Casual", "Emotional"].map(tone => (
                               <button key={tone} onClick={() => {
                                 setCaptions(prev => prev!.map((v, j) => j === i ? { ...v, toneOpen: false } : v));
-                                toast.info(`Regenerating with ${tone} tone...`);
+                                toast.info(`Synthesizing with ${tone} voice...`);
                                 runGenerate(() => setCaptions(SEED_CAPTIONS(niche)));
-                              }} className="w-full text-left px-4 py-2.5 text-[10px] font-black uppercase tracking-widest text-zinc-400 hover:text-white hover:bg-white/5 transition-all">
+                              }} className="w-full text-left px-5 py-3.5 text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-blue-600 hover:bg-blue-50 transition-all border-b border-slate-50 last:border-0">
                                 {tone}
                               </button>
                             ))}
@@ -283,29 +291,35 @@ export const ContentStudio = () => {
                       </AnimatePresence>
                     </div>
                   </div>
-                  <p className="text-[13px] leading-relaxed text-zinc-300 flex-1">{c.text}</p>
-                  <div className="flex items-center justify-between pt-3 border-t border-white/5">
-                    <div className="flex gap-1">
+                  <p className="text-[14px] leading-relaxed text-slate-700 font-medium flex-1">{c.text}</p>
+                  <div className="flex items-center justify-between pt-6 border-t border-slate-100">
+                    <div className="flex gap-2">
                       <button
                         onClick={() => handleCopy(c.text, i, setCaptions)}
-                        className={`p-2 rounded-xl transition-all ${c.copied ? "text-emerald-400 bg-emerald-500/10" : "text-zinc-500 hover:text-white hover:bg-white/5"}`}
+                        className={cn(
+                          "p-2.5 rounded-2xl transition-all shadow-sm",
+                          c.copied ? "text-emerald-600 bg-emerald-50 border border-emerald-200" : "text-slate-400 bg-white border border-slate-100 hover:text-blue-600 hover:border-blue-200 hover:bg-blue-50"
+                        )}
                         title="Copy"
                       >
-                        {c.copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                        {c.copied ? <Check className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
                       </button>
-                      <button onClick={() => { saveToLibrary(c.text, "caption", captionPlatform); setCaptions(prev => prev!.map((v, j) => j === i ? { ...v, saved: true } : v)); }} className={`p-2 rounded-xl transition-all ${c.saved ? "text-primary bg-primary/10" : "text-zinc-500 hover:text-white hover:bg-white/5"}`} title="Save">
-                        <Bookmark className="w-4 h-4" />
+                      <button onClick={() => { saveToLibrary(c.text, "caption", captionPlatform); setCaptions(prev => prev!.map((v, j) => j === i ? { ...v, saved: true } : v)); }} className={cn(
+                        "p-2.5 rounded-2xl transition-all shadow-sm",
+                        c.saved ? "text-blue-600 bg-blue-50 border border-blue-200" : "text-slate-400 bg-white border border-slate-100 hover:text-blue-600 hover:border-blue-200 hover:bg-blue-50"
+                      )} title="Save">
+                        <Bookmark className="w-5 h-5" />
                       </button>
                       <button onClick={() => runGenerate(() => setCaptions(prev => {
                         const next = [...prev!];
                         next[i] = { ...SEED_CAPTIONS(niche)[i], copied: false, saved: false, toneOpen: false };
                         return next;
-                      }))} className="p-2 rounded-xl text-zinc-500 hover:text-white hover:bg-white/5 transition-all" title="Regenerate this one">
-                        <RefreshCcw className="w-4 h-4" />
+                      }))} className="p-2.5 rounded-2xl text-slate-400 bg-white border border-slate-100 hover:text-blue-600 hover:border-blue-200 hover:bg-blue-50 transition-all shadow-sm" title="Regenerate this specific variant">
+                        <RefreshCcw className="w-5 h-5" />
                       </button>
                     </div>
-                    <button onClick={() => setPreviewCaption(c.text)} className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-white/10 text-[9px] font-black uppercase tracking-widest hover:border-primary/40 hover:text-primary transition-all">
-                      <Eye className="w-3 h-3" /> Preview
+                    <button onClick={() => setPreviewCaption(c.text)} className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-slate-900 text-white text-[10px] font-black uppercase tracking-widest hover:bg-blue-600 transition-all shadow-lg shadow-blue-500/10 active:scale-95">
+                      <Eye className="w-4 h-4" /> Live Preview
                     </button>
                   </div>
                 </div>
@@ -351,84 +365,84 @@ export const ContentStudio = () => {
   );
 
   const renderScriptGenerator = () => (
-    <div className="space-y-8">
+    <div className="space-y-10">
       <div>
-        <h2 className="text-2xl font-black tracking-tight">Script Generator</h2>
-        <p className="text-zinc-500 text-sm mt-1">AI builds your full script section by section — each part is individually editable</p>
+        <h2 className="text-3xl font-black tracking-tight text-slate-900 uppercase italic">Cinematic <span className="text-blue-600">Scripts</span></h2>
+        <p className="text-slate-400 text-[11px] font-black uppercase tracking-widest mt-2">AI-built sequencing for high-retention content</p>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
         {/* Inputs */}
-        <div className="md:col-span-2 space-y-4 bg-white/[0.03] border border-white/10 p-6 rounded-3xl h-fit">
-          <div className="space-y-1.5">
-            <label className="text-[9px] font-black uppercase tracking-widest text-zinc-500">Topic or Description</label>
-            <AutoResizeTextarea placeholder="e.g. 5 steps to building a high-income skill in 2025..." value={scriptTopic} onChange={(e: any) => setScriptTopic(e.target.value)} className="w-full min-h-[80px] bg-white/5 border border-white/10 rounded-2xl p-4 text-sm focus:outline-none focus:ring-1 focus:ring-primary/50 resize-none" maxLength={250} />
+        <div className="md:col-span-2 space-y-6 bg-slate-50 border border-slate-200 p-8 rounded-[2.5rem] h-fit shadow-inner">
+          <div className="space-y-3">
+            <label className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400">Core Narrative</label>
+            <AutoResizeTextarea placeholder="e.g. 5 steps to building a high-income skill in 2025..." value={scriptTopic} onChange={(e: any) => setScriptTopic(e.target.value)} className="w-full min-h-[100px] bg-white border border-slate-200 rounded-2xl p-4 text-sm font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-100 resize-none" maxLength={250} />
           </div>
-          <div className="space-y-1.5">
-            <label className="text-[9px] font-black uppercase tracking-widest text-zinc-500">Format</label>
-            <select value={scriptFormat} onChange={e => setScriptFormat(e.target.value)} className="w-full h-10 px-3 bg-white/5 border border-white/10 rounded-xl text-[11px] font-bold focus:outline-none text-white">
+          <div className="space-y-3">
+            <label className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400">Production Format</label>
+            <select value={scriptFormat} onChange={e => setScriptFormat(e.target.value)} className="w-full h-14 px-5 bg-white border border-slate-200 rounded-2xl text-[12px] font-black uppercase tracking-widest focus:outline-none text-slate-900 shadow-sm">
               {["Hook Reel / Short", "Long-form YT Video", "TikTok Story", "Educational Series", "Product Review"].map(f => <option key={f} className="text-black">{f}</option>)}
             </select>
           </div>
-          <div className="grid grid-cols-2 gap-3">
-            <div className="space-y-1.5">
-              <label className="text-[9px] font-black uppercase tracking-widest text-zinc-500">Duration</label>
-              <select value={scriptDuration} onChange={e => setScriptDuration(e.target.value)} className="w-full h-10 px-3 bg-white/5 border border-white/10 rounded-xl text-[11px] font-bold focus:outline-none text-white">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-3">
+              <label className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400">Total Length</label>
+              <select value={scriptDuration} onChange={e => setScriptDuration(e.target.value)} className="w-full h-14 px-5 bg-white border border-slate-200 rounded-2xl text-[12px] font-black uppercase tracking-widest focus:outline-none text-slate-900 shadow-sm">
                 {["30s", "60s", "3 min", "8 min"].map(d => <option key={d} className="text-black">{d}</option>)}
               </select>
             </div>
-            <div className="space-y-1.5">
-              <label className="text-[9px] font-black uppercase tracking-widest text-zinc-500">Audience</label>
-              <select value={scriptAudience} onChange={e => setScriptAudience(e.target.value)} className="w-full h-10 px-3 bg-white/5 border border-white/10 rounded-xl text-[11px] font-bold focus:outline-none text-white">
+            <div className="space-y-3">
+              <label className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400">Dialect</label>
+              <select value={scriptAudience} onChange={e => setScriptAudience(e.target.value)} className="w-full h-14 px-5 bg-white border border-slate-200 rounded-2xl text-[12px] font-black uppercase tracking-widest focus:outline-none text-slate-900 shadow-sm">
                 {["Beginner", "Intermediate", "Advanced"].map(a => <option key={a} className="text-black">{a}</option>)}
               </select>
             </div>
           </div>
-          <button onClick={() => runGenerate(() => { setScriptSections(SEED_SCRIPT()); toast.success("Script generated!", { description: "Edit each section inline." }); })} disabled={isGenerating} className="w-full py-4 bg-primary text-white rounded-2xl font-black uppercase tracking-widest hover:shadow-lg transition-all active:scale-[0.99] disabled:opacity-60 flex items-center justify-center gap-2">
-            {isGenerating ? <><Loader2 className="w-4 h-4 animate-spin" /> {thinkingMsg}</> : <><Sparkles className="w-4 h-4" /> Generate Script</>}
+          <button onClick={() => runGenerate(() => { setScriptSections(SEED_SCRIPT()); toast.success("Sequence Locked & Generated!"); })} disabled={isGenerating} className="w-full py-5 bg-slate-900 text-white rounded-[2rem] font-black uppercase tracking-[0.2em] hover:bg-blue-600 transition-all active:scale-[0.99] disabled:opacity-60 flex items-center justify-center gap-3 shadow-xl shadow-blue-500/10">
+            {isGenerating ? <><Loader2 className="w-5 h-5 animate-spin" /> <span className="text-[11px] font-black tracking-widest">{thinkingMsg}</span></> : <><Sparkles className="w-5 h-5 text-blue-400" /> Synthesize Script</>}
           </button>
         </div>
 
         {/* Script output */}
-        <div className="md:col-span-3 min-h-[400px]">
+        <div className="md:col-span-3 min-h-[500px]">
           <AnimatePresence mode="wait">
             {isGenerating ? (
               <motion.div key="sk" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                <SkeletonCard className="h-full min-h-[400px]" />
+                <SkeletonCard className="h-full min-h-[500px] bg-slate-50" />
               </motion.div>
             ) : scriptSections ? (
-              <motion.div key="out" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-4">
-                <div className="bg-white/[0.03] border border-white/10 border-l-4 border-l-primary rounded-3xl p-6 space-y-8 max-h-[500px] overflow-y-auto no-scrollbar">
+              <motion.div key="out" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-6">
+                <div className="bg-white border border-slate-200 border-l-4 border-l-blue-600 rounded-[2.5rem] p-10 space-y-10 max-h-[600px] overflow-y-auto no-scrollbar shadow-sm">
                   {scriptSections.map((sec, i) => (
-                    <div key={i} className="group border-b border-white/5 pb-6 last:border-0 last:pb-0">
-                      <div className="flex items-center justify-between mb-3">
-                        <span className="text-[10px] font-black uppercase tracking-widest text-primary">{sec.act}</span>
+                    <div key={i} className="group border-b border-slate-100 pb-8 last:border-0 last:pb-0">
+                      <div className="flex items-center justify-between mb-4">
+                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-600">{sec.act}</span>
                         <button onClick={() => {
                           setScriptSections(prev => prev!.map((s, j) => j === i ? { ...s, editing: !s.editing } : s));
-                        }} className="text-[9px] font-black uppercase text-zinc-500 hover:text-primary transition-colors border border-transparent hover:border-primary/30 rounded-lg px-2 py-1">
-                          {sec.editing ? "Done" : "Edit"}
+                        }} className="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-blue-600 transition-colors border border-slate-100 hover:border-blue-200 rounded-xl px-3 py-1.5 bg-slate-50">
+                          {sec.editing ? "Secure Edit" : "Refine Draft"}
                         </button>
                       </div>
                       {sec.editing ? (
-                        <AutoResizeTextarea value={sec.text} onChange={(e: any) => setScriptSections(prev => prev!.map((s, j) => j === i ? { ...s, text: e.target.value } : s))} className="w-full bg-white/5 border border-primary/30 rounded-xl p-3 text-sm focus:outline-none resize-none" />
+                        <AutoResizeTextarea value={sec.text} onChange={(e: any) => setScriptSections(prev => prev!.map((s, j) => j === i ? { ...s, text: e.target.value } : s))} className="w-full bg-slate-50 border border-blue-200 rounded-2xl p-4 text-sm font-medium text-slate-900 focus:outline-none resize-none shadow-inner" />
                       ) : (
-                        <p className={`text-sm leading-relaxed ${sec.act.includes("HOOK") ? "text-xl font-black text-white" : "text-zinc-300 font-medium"}`}>{sec.text}</p>
+                        <p className={cn("text-sm leading-relaxed", sec.act.includes("HOOK") ? "text-2xl font-black text-slate-900 italic tracking-tight" : "text-slate-600 font-medium")}>{sec.text}</p>
                       )}
                     </div>
                   ))}
                 </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <button onClick={() => { const full = scriptSections.map(s => `${s.act}\n${s.text}`).join("\n\n"); handleCopy(full); }} className="h-10 bg-white/5 border border-white/10 rounded-2xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-white/10 transition-all">
-                    <Copy className="w-4 h-4" /> Copy Full Script
+                <div className="grid grid-cols-2 gap-4">
+                  <button onClick={() => { const full = scriptSections.map(s => `${s.act}\n${s.text}`).join("\n\n"); handleCopy(full); }} className="h-14 bg-slate-900 text-white rounded-2xl text-[11px] font-black uppercase tracking-[0.2em] flex items-center justify-center gap-3 hover:bg-blue-600 transition-all shadow-xl shadow-blue-500/10">
+                    <Copy className="w-5 h-5" /> Copy Teleprompter
                   </button>
-                  <button onClick={() => { saveToLibrary(scriptSections.map(s => `${s.act}: ${s.text}`).join(" | "), "script"); }} className="h-10 bg-white/5 border border-white/10 rounded-2xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-white/10 transition-all">
-                    <Bookmark className="w-4 h-4" /> Save to Library
+                  <button onClick={() => { saveToLibrary(scriptSections.map(s => `${s.act}: ${s.text}`).join(" | "), "script"); }} className="h-14 bg-white border border-slate-200 rounded-2xl text-[11px] font-black uppercase tracking-[0.2em] flex items-center justify-center gap-3 hover:bg-slate-50 transition-all text-slate-600">
+                    <Bookmark className="w-5 h-5" /> Commit to Library
                   </button>
                 </div>
               </motion.div>
             ) : (
-              <motion.div key="ph" className="h-full min-h-[400px] border-2 border-dashed border-white/10 rounded-3xl flex flex-col items-center justify-center text-center p-12 text-zinc-600">
-                <Video className="w-12 h-12 mb-4 opacity-20" />
-                <p className="text-sm font-bold uppercase tracking-widest">Your script will appear here</p>
+              <motion.div key="ph" className="h-full min-h-[500px] border-2 border-dashed border-slate-200 rounded-[3rem] bg-slate-50/50 flex flex-col items-center justify-center text-center p-12 text-slate-400">
+                <Video className="w-16 h-16 mb-6 opacity-20 text-blue-600" />
+                <p className="text-[12px] font-black uppercase tracking-[0.2em]">Sequence Blueprint Pending</p>
               </motion.div>
             )}
           </AnimatePresence>
@@ -438,15 +452,15 @@ export const ContentStudio = () => {
   );
 
   const renderHookGenerator = () => (
-    <div className="space-y-8">
+    <div className="space-y-10">
       <div>
-        <h2 className="text-2xl font-black tracking-tight">Hook Generator</h2>
-        <p className="text-zinc-500 text-sm mt-1">10 high-performing hooks per topic — copy any, save your favorites</p>
+        <h2 className="text-3xl font-black tracking-tight text-slate-900 uppercase italic">Attention <span className="text-blue-600">Hooks</span></h2>
+        <p className="text-slate-400 text-[11px] font-black uppercase tracking-widest mt-2">10 high-velocity openers designed for viral retention</p>
       </div>
-      <div className="flex gap-3 bg-white/[0.03] border border-white/10 p-3 rounded-3xl">
-        <input placeholder="Enter post topic (e.g. Productivity Hacks for Creators)..." value={hookTopic} onChange={e => setHookTopic(e.target.value)} className="flex-1 h-12 bg-transparent border-none px-3 text-sm font-medium focus:outline-none placeholder:text-zinc-600" />
-        <button onClick={() => runGenerate(() => { setHooks(SEED_HOOKS()); toast.success("10 hooks generated!"); })} disabled={isGenerating} className="h-12 px-6 bg-primary text-white rounded-2xl font-black uppercase tracking-widest hover:shadow-lg transition-all active:scale-[0.99] disabled:opacity-60 flex items-center gap-2 shrink-0">
-          {isGenerating ? <><Loader2 className="w-4 h-4 animate-spin" /> {thinkingMsg}</> : <><Sparkles className="w-4 h-4" /> Generate 10 Hooks</>}
+      <div className="flex gap-4 bg-slate-50 border border-slate-200 p-4 rounded-[2.5rem] shadow-inner">
+        <input placeholder="Core topic (e.g. Productivity Hacks for Creators)..." value={hookTopic} onChange={e => setHookTopic(e.target.value)} className="flex-1 h-14 bg-transparent border-none px-6 text-sm font-bold text-slate-900 focus:outline-none placeholder:text-slate-400" />
+        <button onClick={() => runGenerate(() => { setHooks(SEED_HOOKS()); toast.success("10 Retention Hooks Ready!"); })} disabled={isGenerating} className="h-14 px-8 bg-slate-900 text-white rounded-2xl font-black uppercase tracking-widest hover:bg-blue-600 transition-all active:scale-[0.99] disabled:opacity-60 flex items-center gap-3 shrink-0 shadow-xl shadow-blue-500/10">
+          {isGenerating ? <><Loader2 className="w-5 h-5 animate-spin" /> <span className="text-[11px] font-black tracking-widest">{thinkingMsg}</span></> : <><Sparkles className="w-5 h-5 text-blue-400" /> Synthesize Hooks</>}
         </button>
       </div>
       <AnimatePresence mode="wait">
@@ -456,28 +470,31 @@ export const ContentStudio = () => {
           </motion.div>
         )}
         {hooks && !isGenerating && (
-          <motion.div key="out" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-2">
+          <motion.div key="out" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
             <div className="flex justify-end">
-              <button onClick={() => runGenerate(() => setHooks(SEED_HOOKS()))} className="h-9 px-4 bg-white/5 border border-white/10 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center gap-2 hover:bg-white/10 transition-all">
-                <RefreshCcw className="w-3.5 h-3.5" /> Regenerate All
+              <button onClick={() => runGenerate(() => setHooks(SEED_HOOKS()))} className="h-11 px-6 bg-white border border-slate-200 rounded-2xl text-[10px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-2 hover:bg-slate-50 hover:text-blue-600 transition-all shadow-sm">
+                <RefreshCcw className="w-4 h-4" /> Refresh All Directives
               </button>
             </div>
             {hooks.map((h, i) => (
-              <motion.div key={i} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.04 }} className="bg-white/[0.03] border border-white/10 p-4 rounded-2xl flex items-center justify-between gap-4 group hover:border-primary/30 transition-all">
+              <motion.div key={i} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.04 }} className="bg-white border border-slate-100 p-6 rounded-3xl flex items-center justify-between gap-6 group hover:border-blue-200 transition-all shadow-sm">
                 <div className="flex-1 min-w-0">
-                  <span className="text-[9px] font-black text-primary uppercase tracking-widest block mb-1">{h.type}</span>
-                  <p className="text-[13px] font-bold text-zinc-200">{h.text}</p>
+                  <span className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em] block mb-2">{h.type}</span>
+                  <p className="text-[15px] font-bold text-slate-900 tracking-tight">{h.text}</p>
                 </div>
                 <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
-                  <button onClick={() => handleCopy(h.text)} className="p-2 bg-white/5 border border-white/10 rounded-xl hover:text-white transition-all"><Copy className="w-4 h-4" /></button>
+                  <button onClick={() => handleCopy(h.text)} className="p-3 bg-slate-50 border border-slate-200 rounded-2xl text-slate-400 hover:text-blue-600 hover:border-blue-200 transition-all shadow-sm"><Copy className="w-5 h-5" /></button>
                   <button
                     onClick={() => {
                       setHooks(prev => prev!.map((item, j) => j === i ? { ...item, saved: !item.saved } : item));
                       if (!h.saved) saveToLibrary(h.text, "hook");
                     }}
-                    className={`p-2 rounded-xl border transition-all ${h.saved ? "bg-primary/10 border-primary/30 text-primary" : "bg-white/5 border-white/10 hover:text-white"}`}
+                    className={cn(
+                      "p-3 rounded-2xl border transition-all shadow-sm",
+                      h.saved ? "bg-blue-50 border-blue-200 text-blue-600" : "bg-slate-50 border-slate-200 text-slate-400 hover:text-blue-600 hover:border-blue-200"
+                    )}
                   >
-                    <Bookmark className="w-4 h-4" />
+                    <Bookmark className="w-5 h-5" />
                   </button>
                 </div>
               </motion.div>
@@ -503,37 +520,38 @@ export const ContentStudio = () => {
       case "caption": return renderCaptionWriter();
       case "script": return renderScriptGenerator();
       case "hook": return renderHookGenerator();
-      case "hashtag": return <HashtagEnginePanel niche={niche} saveToLibrary={saveToLibrary} />;
-      case "audio": return <TrendingAudioPanel onUseForReel={() => { setActiveTool("script"); toast.info("Script Generator opened with audio context!"); }} />;
+      case "hashtag": return <HashtagEnginePanel niche={niche} />;
+      case "audio": return <TrendingAudioPanel onUseForReel={() => { setActiveTool("script"); toast.info("Cinematic Scripting Engine activated!"); }} />;
       default: return renderComingSoon(activeTool);
     }
   };
 
   // ── Library History ──────────────────────────────────────────────────────
   const renderHistory = () => (
-    <div className="space-y-8">
+    <div className="space-y-10">
       <div>
-        <h2 className="text-2xl font-black tracking-tight">Content Library</h2>
-        <p className="text-zinc-500 text-sm mt-1">Last 10 AI-generated pieces saved across all tools</p>
+        <h2 className="text-3xl font-black tracking-tight text-slate-900 uppercase italic">Creative <span className="text-blue-600">Vault</span></h2>
+        <p className="text-slate-400 text-[11px] font-black uppercase tracking-widest mt-2">Archived AI outputs and refined narratives</p>
       </div>
       {history.length === 0 ? (
-        <div className="h-48 border-2 border-dashed border-white/10 rounded-3xl flex items-center justify-center">
-          <p className="text-[10px] font-black uppercase tracking-widest text-zinc-600">Generate and save content to see it here</p>
+        <div className="h-64 border-2 border-dashed border-slate-200 rounded-[3rem] flex flex-col items-center justify-center bg-slate-50/50">
+          <BookOpen className="w-12 h-12 text-slate-200 mb-4" />
+          <p className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400">Generate and commit content to view your vault</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {history.map(item => (
-            <div key={item.id} className="bg-white/[0.03] border border-white/10 rounded-3xl p-5 hover:border-white/20 transition-all group">
-              <div className="flex items-center justify-between mb-3">
-                <span className="px-2.5 py-1 bg-primary/10 border border-primary/20 text-primary text-[9px] font-black uppercase tracking-widest rounded-lg">{item.type}</span>
-                <span className="text-[9px] font-bold text-zinc-600 uppercase">{item.date}</span>
+            <div key={item.id} className="bg-white border border-slate-100 rounded-[2.5rem] p-8 hover:border-blue-200 transition-all group shadow-sm hover:shadow-lg">
+              <div className="flex items-center justify-between mb-6">
+                <span className="px-4 py-1.5 bg-blue-50 border border-blue-100 text-blue-600 text-[9px] font-black uppercase tracking-[0.2em] rounded-xl">{item.type}</span>
+                <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">{item.date}</span>
               </div>
-              <p className="text-[12px] font-medium leading-relaxed text-zinc-300 line-clamp-3 mb-4">{item.text}</p>
-              <div className="flex items-center justify-between pt-3 border-t border-white/5">
-                <span className="text-[9px] font-black uppercase tracking-widest text-zinc-600">{item.platform}</span>
-                <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <button onClick={() => handleCopy(item.text)} className="p-1.5 text-zinc-500 hover:text-white transition-colors"><Copy className="w-3.5 h-3.5" /></button>
-                  <button onClick={() => { db.delete("content", item.id); setHistory(prev => prev.filter(h => h.id !== item.id)); toast.info("Removed."); }} className="p-1.5 text-zinc-600 hover:text-rose-400 transition-colors"><Trash2 className="w-3.5 h-3.5" /></button>
+              <p className="text-[13px] font-medium leading-relaxed text-slate-600 line-clamp-3 mb-6">{item.text}</p>
+              <div className="flex items-center justify-between pt-6 border-t border-slate-50">
+                <span className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400">{item.platform}</span>
+                <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <button onClick={() => handleCopy(item.text)} className="p-2.5 text-slate-400 bg-slate-50 rounded-xl hover:text-blue-600 hover:bg-blue-50 transition-all shadow-sm"><Copy className="w-4 h-4" /></button>
+                  <button onClick={() => { db.delete("content", item.id); setHistory(prev => prev.filter(h => h.id !== item.id)); toast.info("Asset decomissioned."); }} className="p-2.5 text-slate-300 hover:text-rose-500 transition-colors"><Trash2 className="w-4 h-4" /></button>
                 </div>
               </div>
             </div>
@@ -546,12 +564,18 @@ export const ContentStudio = () => {
   const workspaceContent = (
     <div className="max-w-4xl mx-auto py-8 px-2 md:px-0">
       {/* Tool / History tabs */}
-      <div className="flex gap-2 mb-8 bg-white/5 p-1 rounded-2xl border border-white/10 w-fit">
-        <button onClick={() => setActiveHistoryTab("tool")} className={`h-9 px-5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${activeHistoryTab === "tool" ? "bg-primary text-white" : "text-zinc-500 hover:text-white"}`}>
-          <Sparkles className="w-3.5 h-3.5 inline mr-1.5" />{tools.find(t => t.id === activeTool)?.label}
+      <div className="flex gap-3 mb-12 bg-slate-50 p-1.5 rounded-3xl border border-slate-200 w-fit">
+        <button onClick={() => setActiveHistoryTab("tool")} className={cn(
+          "h-11 px-8 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all",
+          activeHistoryTab === "tool" ? "bg-white text-blue-600 shadow-sm border border-slate-100" : "text-slate-400 hover:text-slate-900"
+        )}>
+          <Sparkles className="w-4 h-4 inline mr-2 text-blue-600" />{tools.find(t => t.id === activeTool)?.label}
         </button>
-        <button onClick={() => setActiveHistoryTab("history")} className={`h-9 px-5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-1.5 ${activeHistoryTab === "history" ? "bg-primary text-white" : "text-zinc-500 hover:text-white"}`}>
-          <BookOpen className="w-3.5 h-3.5" />Library {history.length > 0 && <span className="w-4 h-4 bg-primary/30 rounded-full text-[8px] flex items-center justify-center">{history.length}</span>}
+        <button onClick={() => setActiveHistoryTab("history")} className={cn(
+          "h-11 px-8 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] transition-all flex items-center gap-2",
+          activeHistoryTab === "history" ? "bg-white text-blue-600 shadow-sm border border-slate-100" : "text-slate-400 hover:text-slate-900"
+        )}>
+          <BookOpen className="w-4 h-4" />Library {history.length > 0 && <span className="w-5 h-5 bg-blue-100 text-blue-600 rounded-full text-[9px] flex items-center justify-center border border-blue-200">{history.length}</span>}
         </button>
       </div>
       <AnimatePresence mode="wait">
@@ -566,22 +590,25 @@ export const ContentStudio = () => {
     <PageTransition>
       <div className="h-[calc(100vh-160px)] -mx-8 -my-6 flex overflow-hidden">
         {/* LEFT TOOL PANEL */}
-        <div className="w-[260px] border-r border-white/5 bg-black/20 overflow-y-auto no-scrollbar pt-6 shrink-0 relative z-20">
-          <div className="px-5 mb-6 text-[10px] font-black uppercase tracking-widest text-zinc-600 flex items-center gap-2">
-            <Zap className="w-3 h-3 text-primary fill-primary" /> AI Content Suite
+        <div className="w-[300px] border-r border-slate-200 bg-slate-50 overflow-y-auto no-scrollbar pt-10 shrink-0 relative z-20">
+          <div className="px-8 mb-10 text-[11px] font-black uppercase tracking-[0.2em] text-slate-400 flex items-center gap-3">
+            <Zap className="w-4 h-4 text-blue-600 fill-blue-600" /> AI Creative Suite
           </div>
-          <div className="px-3 space-y-0.5">
+          <div className="px-4 space-y-2">
             {tools.map(tool => (
               <button
                 key={tool.id}
                 onClick={() => { setActiveTool(tool.id as ToolType); setActiveHistoryTab("tool"); if (isMobile) setIsSheetOpen(true); }}
-                className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl transition-all relative group ${activeTool === tool.id ? "bg-primary/10 text-primary" : "text-zinc-500 hover:bg-white/5 hover:text-white"}`}
+                className={cn(
+                  "w-full flex items-center gap-4 px-6 py-4.5 rounded-[2rem] transition-all relative group",
+                  activeTool === tool.id ? "bg-white text-blue-600 shadow-sm border border-slate-100" : "text-slate-400 hover:bg-white hover:text-slate-900"
+                )}
               >
                 {activeTool === tool.id && (
-                  <motion.div layoutId="toolHighlight" className="absolute left-0 top-3 bottom-3 w-[3px] bg-primary rounded-full shadow-[2px_0_8px_rgba(255,60,172,0.6)]" />
+                  <motion.div layoutId="toolHighlight" className="absolute left-0 top-4 bottom-4 w-1 bg-blue-600 rounded-full" />
                 )}
-                <tool.icon className={`w-4 h-4 shrink-0 ${activeTool === tool.id ? "text-primary" : "group-hover:text-white transition-colors"}`} />
-                <span className="text-[11px] font-black uppercase tracking-wide truncate">{tool.label}</span>
+                <tool.icon className={cn("w-5 h-5 shrink-0", activeTool === tool.id ? "text-blue-600" : "group-hover:text-slate-900 transition-colors")} />
+                <span className="text-[12px] font-black uppercase tracking-widest truncate">{tool.label}</span>
               </button>
             ))}
           </div>
@@ -589,7 +616,7 @@ export const ContentStudio = () => {
 
         {/* RIGHT WORKSPACE (Desktop) */}
         {!isMobile && (
-          <div className="flex-1 overflow-y-auto px-8 relative bg-background no-scrollbar">
+          <div className="flex-1 overflow-y-auto px-12 relative bg-white no-scrollbar">
             {workspaceContent}
           </div>
         )}
@@ -597,7 +624,7 @@ export const ContentStudio = () => {
         {/* Bottom sheet (Mobile) */}
         {isMobile && (
           <BottomSheet isOpen={isSheetOpen} onClose={() => setIsSheetOpen(false)} height="90vh" title={tools.find(t => t.id === activeTool)?.label}>
-            <div className="pt-4 pb-safe px-4">{workspaceContent}</div>
+            <div className="pt-6 pb-safe px-6 bg-white">{workspaceContent}</div>
           </BottomSheet>
         )}
       </div>
@@ -607,24 +634,26 @@ export const ContentStudio = () => {
         {previewCaption && (
           <div className="fixed inset-0 z-[300] flex items-center justify-center p-6">
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setPreviewCaption(null)} className="absolute inset-0 bg-black/80 backdrop-blur-lg" />
-            <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} className="relative w-full max-w-[340px] bg-zinc-950 border border-white/10 rounded-[3rem] shadow-2xl overflow-hidden" style={{ aspectRatio: "9/19" }}>
-              <div className="h-10 border-b border-white/5 flex items-center px-6 justify-between">
-                <div className="w-20 h-3 bg-white/10 rounded-full" />
+            <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} className="relative w-full max-w-[340px] bg-white border border-slate-200 rounded-[3rem] shadow-2xl overflow-hidden" style={{ aspectRatio: "9/19" }}>
+              <div className="h-12 border-b border-slate-100 flex items-center px-8 justify-between bg-white">
+                <div className="w-24 h-3 bg-slate-100 rounded-full" />
               </div>
               <div className="flex-1 overflow-y-auto no-scrollbar">
-                <div className="p-4 flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white font-black text-[10px]">{user?.firstName?.[0]}</div>
-                  <span className="text-xs font-black uppercase">{user?.handle || "@creator"}</span>
+                <div className="p-6 flex items-center gap-4">
+                  <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-black text-[12px]">{user?.firstName?.[0]}</div>
+                  <span className="text-xs font-black uppercase tracking-widest text-slate-900">{user?.handle || "@creator"}</span>
                 </div>
-                <div className="aspect-square bg-gradient-to-br from-primary/20 to-violet-500/20 border-y border-white/5" />
-                <div className="p-5">
-                  <div className="flex gap-4 mb-4 text-zinc-500">
-                    <Play className="w-5 h-5" /><RefreshCcw className="w-5 h-5" /><Share2 className="w-5 h-5" />
+                <div className="aspect-square bg-slate-50 border-y border-slate-100 flex items-center justify-center">
+                   <Sparkles className="w-12 h-12 text-blue-100" />
+                </div>
+                <div className="p-8">
+                  <div className="flex gap-6 mb-6 text-slate-300">
+                    <Play className="w-6 h-6 hover:text-blue-600 transition-colors cursor-pointer" /><RefreshCcw className="w-6 h-6" /><Share2 className="w-6 h-6" />
                   </div>
-                  <p className="text-[11px] leading-relaxed"><span className="font-black mr-2">{user?.handle}</span>{previewCaption}</p>
+                  <p className="text-[13px] leading-relaxed text-slate-900"><span className="font-black mr-3 text-slate-900">{user?.handle}</span>{previewCaption}</p>
                 </div>
               </div>
-              <button onClick={() => setPreviewCaption(null)} className="absolute top-4 right-4 p-2 bg-black/60 backdrop-blur-md rounded-full"><X className="w-4 h-4" /></button>
+              <button onClick={() => setPreviewCaption(null)} className="absolute top-6 right-6 p-2 bg-white border border-slate-100 rounded-full shadow-lg hover:border-blue-200 transition-all active:scale-90"><X className="w-5 h-5 text-slate-400" /></button>
             </motion.div>
           </div>
         )}
@@ -635,7 +664,7 @@ export const ContentStudio = () => {
 
 // ── Proper sub-components (hooks used at component top level) ─────────────────
 
-const HashtagEnginePanel = ({ niche, saveToLibrary }: { niche: string; saveToLibrary: (text: string, type: string) => void }) => {
+const HashtagEnginePanel = ({ niche }: { niche: string }) => {
   const [pills, setPills] = useState<HashtagItem[] | null>(null);
   const [topic, setTopic] = useState("");
   const [running, setRunning] = useState(false);
@@ -655,41 +684,44 @@ const HashtagEnginePanel = ({ niche, saveToLibrary }: { niche: string; saveToLib
   const selected = pills?.filter(p => p.selected) || [];
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-10">
       <div>
-        <h2 className="text-2xl font-black tracking-tight">Hashtag Engine</h2>
-        <p className="text-zinc-500 text-sm mt-1">30 hashtags grouped by size tier — tap to deselect, copy only what you want</p>
+        <h2 className="text-3xl font-black tracking-tight text-slate-900 uppercase italic">Hashtag <span className="text-blue-600">Oracle</span></h2>
+        <p className="text-slate-400 text-[11px] font-black uppercase tracking-widest mt-2">Data-backed tagging strategy for algorithmic penetration</p>
       </div>
-      <div className="flex gap-3 bg-white/[0.03] border border-white/10 p-3 rounded-3xl">
-        <input placeholder="Topic / niche / post description..." value={topic} onChange={e => setTopic(e.target.value)} className="flex-1 h-12 bg-transparent border-none px-3 text-sm font-medium focus:outline-none placeholder:text-zinc-600" />
-        <button onClick={generate} disabled={running} className="h-12 px-6 bg-primary text-white rounded-2xl font-black uppercase tracking-widest hover:shadow-lg transition-all active:scale-[0.99] disabled:opacity-60 flex items-center gap-2 shrink-0">
-          {running ? <><Loader2 className="w-4 h-4 animate-spin" /><span className="text-[10px] max-w-[80px] truncate hidden sm:block">{thinkLocal}</span></> : <><Hash className="w-4 h-4" /> Generate Hashtags</>}
+      <div className="flex gap-4 bg-slate-50 border border-slate-200 p-4 rounded-[2.5rem] shadow-inner">
+        <input placeholder="Keywords / Context / Narrative..." value={topic} onChange={e => setTopic(e.target.value)} className="flex-1 h-14 bg-transparent border-none px-6 text-sm font-bold text-slate-900 focus:outline-none placeholder:text-slate-400" />
+        <button onClick={generate} disabled={running} className="h-14 px-8 bg-slate-900 text-white rounded-2xl font-black uppercase tracking-widest hover:bg-blue-600 transition-all active:scale-[0.99] disabled:opacity-60 flex items-center gap-3 shrink-0 shadow-xl shadow-blue-500/10">
+          {running ? <><Loader2 className="w-5 h-5 animate-spin" /><span className="text-[10px] max-w-[80px] truncate hidden sm:block font-black uppercase tracking-widest">{thinkLocal}</span></> : <><Hash className="w-5 h-5 text-blue-400" /> Extract Tags</>}
         </button>
       </div>
       {pills && !running && (
-        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-6">
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-8">
           {[
-            { label: "🔴 Mega (1M+ posts)", tier: "mega" as const },
-            { label: "🟡 Mid (100K–1M)", tier: "mid" as const },
-            { label: "🟢 Niche (< 100K)", tier: "niche" as const },
+            { label: "🔴 High Density (1M+)", tier: "mega" as const },
+            { label: "🟡 Strategic Growth (100K–1M)", tier: "mid" as const },
+            { label: "🟢 Precision Niche (< 100K)", tier: "niche" as const },
           ].map(group => (
-            <div key={group.tier} className="space-y-2">
-              <span className="text-[9px] font-black uppercase tracking-widest text-zinc-500">{group.label}</span>
-              <div className="flex flex-wrap gap-2">
+            <div key={group.tier} className="space-y-3">
+              <span className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400">{group.label}</span>
+              <div className="flex flex-wrap gap-2.5">
                 {pills.filter(p => p.tier === group.tier).map(p => (
-                  <button key={p.text} onClick={() => setPills(prev => prev!.map(h => h.text === p.text ? { ...h, selected: !h.selected } : h))} className={`px-3 py-1.5 rounded-xl text-[11px] font-bold transition-all border ${p.selected ? "bg-primary/10 border-primary/40 text-primary" : "bg-white/5 border-white/5 text-zinc-600 line-through"}`}>
+                  <button key={p.text} onClick={() => setPills(prev => prev!.map(h => h.text === p.text ? { ...h, selected: !h.selected } : h))} className={cn(
+                    "px-4 py-2 rounded-2xl text-[12px] font-bold transition-all border shadow-sm",
+                    p.selected ? "bg-white border-blue-200 text-blue-600 shadow-blue-100" : "bg-slate-50 border-slate-200 text-slate-300 line-through opacity-50"
+                  )}>
                     {p.text}
                   </button>
                 ))}
               </div>
             </div>
           ))}
-          <div className="flex gap-3 pt-2 flex-wrap">
-            <button onClick={() => { navigator.clipboard.writeText(selected.map(h => h.text).join(" ")); toast.success(`${selected.length} hashtags copied!`); }} className="h-10 px-5 bg-primary text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:shadow-lg transition-all flex items-center gap-2">
-              <Copy className="w-4 h-4" /> Copy Selected ({selected.length})
+          <div className="flex gap-4 pt-6 flex-wrap">
+            <button onClick={() => { navigator.clipboard.writeText(selected.map(h => h.text).join(" ")); toast.success(`${selected.length} tags secured!`); }} className="h-14 px-8 bg-slate-900 text-white rounded-2xl text-[11px] font-black uppercase tracking-[0.2em] hover:bg-blue-600 transition-all flex items-center gap-3 shadow-xl shadow-blue-500/10">
+              <Copy className="w-5 h-5" /> Copy Selected ({selected.length})
             </button>
-            <button onClick={() => { navigator.clipboard.writeText(pills.map(h => h.text).join(" ")); toast.success("All hashtags copied!"); }} className="h-10 px-5 bg-white/5 border border-white/10 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-white/10 transition-all flex items-center gap-2">
-              <Copy className="w-4 h-4" /> Copy All
+            <button onClick={() => { navigator.clipboard.writeText(pills.map(h => h.text).join(" ")); toast.success("Full stack copied!"); }} className="h-14 px-8 bg-white border border-slate-200 rounded-2xl text-[11px] font-black uppercase tracking-[0.2em] hover:bg-slate-50 transition-all flex items-center gap-3 text-slate-600">
+              <Copy className="w-5 h-5" /> Copy Full Stack
             </button>
           </div>
         </motion.div>
@@ -707,35 +739,35 @@ const TrendingAudioPanel = ({ onUseForReel }: { onUseForReel: () => void }) => {
     await new Promise(r => setTimeout(r, 1500));
     setList(SEED_AUDIO().sort(() => Math.random() - 0.5));
     setLoading(false);
-    toast.success("Trending audio refreshed!");
+    toast.success("Viral Index Refreshed");
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-10">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-black tracking-tight">Trending Audio</h2>
-          <p className="text-zinc-500 text-sm mt-1">Top sounds trending across TikTok & Reels — click Use for Reel to start scripting</p>
+          <h2 className="text-3xl font-black tracking-tight text-slate-900 uppercase italic">Viral <span className="text-blue-600">Frequency</span></h2>
+          <p className="text-slate-400 text-[11px] font-black uppercase tracking-widest mt-2">Real-time trending audio spikes across social platforms</p>
         </div>
-        <button onClick={refresh} disabled={loading} className="h-10 px-5 bg-white/5 border border-white/10 rounded-2xl text-[10px] font-black uppercase tracking-widest flex items-center gap-2 hover:bg-white/10 disabled:opacity-50 transition-all">
-          {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCcw className="w-4 h-4" />} Refresh
+        <button onClick={refresh} disabled={loading} className="h-12 px-6 bg-slate-50 border border-slate-200 rounded-[1.5rem] text-[10px] font-black uppercase tracking-[0.2em] flex items-center gap-3 hover:bg-white hover:text-blue-600 transition-all shadow-sm">
+          {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : <RefreshCcw className="w-5 h-5" />} Sync
         </button>
       </div>
-      <div className="space-y-2">
+      <div className="grid grid-cols-1 gap-4">
         {list.map((audio, i) => (
-          <motion.div key={audio.id} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.04 }} className="flex items-center gap-4 p-4 bg-white/[0.03] border border-white/10 rounded-2xl hover:border-white/20 transition-all group">
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-primary/30 to-violet-500/30 flex items-center justify-center shrink-0">
-              <Music className="w-4 h-4 text-primary" />
+          <motion.div key={audio.id} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.04 }} className="flex items-center gap-6 p-6 bg-white border border-slate-100 rounded-[2.5rem] hover:border-blue-200 transition-all group shadow-sm hover:shadow-lg">
+            <div className="w-14 h-14 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center shrink-0">
+              <Music className="w-6 h-6 text-blue-600" />
             </div>
             <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 flex-wrap">
-                <p className="font-black text-[13px]">{audio.name}</p>
-                {audio.trending && <span className="px-1.5 py-0.5 bg-rose-500/10 border border-rose-500/20 text-rose-400 text-[8px] font-black uppercase rounded-full shrink-0">🔥 Hot</span>}
+              <div className="flex items-center gap-3 flex-wrap">
+                <p className="font-black text-[15px] text-slate-900 uppercase tracking-tight">{audio.name}</p>
+                {audio.trending && <span className="px-3 py-1 bg-rose-50 border border-rose-100 text-rose-500 text-[9px] font-black uppercase rounded-full shrink-0 tracking-widest">🔥 Viral Spiking</span>}
               </div>
-              <p className="text-[11px] text-zinc-500">{audio.creator} · {audio.uses} uses</p>
+              <p className="text-[11px] font-black text-slate-400 uppercase tracking-widest mt-1">{audio.creator} · {audio.uses} Utilizations</p>
             </div>
-            <button onClick={onUseForReel} className="shrink-0 h-9 px-4 bg-primary/10 border border-primary/20 text-primary text-[10px] font-black uppercase tracking-widest rounded-xl opacity-0 group-hover:opacity-100 hover:bg-primary hover:text-white transition-all flex items-center gap-1.5">
-              <Play className="w-3 h-3" /> Use for Reel
+            <button onClick={onUseForReel} className="shrink-0 h-11 px-6 bg-slate-900 text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-2xl opacity-0 group-hover:opacity-100 hover:bg-blue-600 transition-all flex items-center gap-2 shadow-xl shadow-blue-500/10">
+              <Play className="w-4 h-4 text-blue-400" /> Initialize Reel
             </button>
           </motion.div>
         ))}

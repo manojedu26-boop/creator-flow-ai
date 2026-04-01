@@ -11,6 +11,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { PageTransition } from "../../components/shared/MotionComponents";
 import { BottomSheet } from "../../components/ui/BottomSheet";
 import { AutoResizeTextarea } from "../../components/shared/AutoResizeTextarea";
+import { cn } from "../../lib/utils";
 import { useEffect, useRef } from "react";
 import jsPDF from "jspdf";
 import { toast } from "../../components/ui/sonner";
@@ -19,7 +20,7 @@ type Template = 'bold-dark' | 'clean-light' | 'pastel' | 'neon' | 'luxury';
 
 export const MediaKit = () => {
   const { user } = useAuth();
-  const [activeTemplate, setActiveTemplate] = useState<Template>('bold-dark');
+  const [activeTemplate, setActiveTemplate] = useState<Template>('clean-light');
   const [sections, setSections] = useState({
     about: true,
     stats: true,
@@ -220,34 +221,35 @@ export const MediaKit = () => {
 
   return (
     <PageTransition className="space-y-[var(--grid-gap)] pb-20 lg:pb-0">
-      <header className="mb-[var(--section-mb)]">
-        <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-2">
-          <Layout className="w-3 h-3" />
-          Brand Identity
+      <header className="mb-10">
+        <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-blue-600 mb-3">
+          <Layout className="w-3.5 h-3.5" />
+          Brand Positioning
         </div>
-        <h1 className="text-4xl md:text-5xl font-black tracking-tighter uppercase leading-none">
+        <h1 className="text-4xl md:text-5xl font-black tracking-tighter uppercase leading-[0.85] text-slate-900">
            Media Kit<br/>
-           <span className="text-primary italic">Architect</span>
+           <span className="text-blue-600 italic">Architect</span>
         </h1>
       </header>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* LEFT — MEDIA KIT EDITOR */}
-        <div className="lg:col-span-4 bg-black/20 border-r lg:border-border/30 rounded-[2.5rem] p-6 lg:p-10 space-y-12">
-           <div className="space-y-6">
-              <h2 className="text-2xl font-black uppercase tracking-tight flex items-center gap-3">
-                 <Sparkles className="w-5 h-5 text-primary" /> Visual Identity
+        <div className="lg:col-span-4 bg-white border border-slate-200 rounded-[3rem] p-8 lg:p-10 space-y-12 shadow-sm">
+           <div className="space-y-8">
+              <h2 className="text-2xl font-black uppercase tracking-tighter text-slate-900 italic flex items-center gap-4">
+                 <Sparkles className="w-6 h-6 text-blue-600" /> Identity Logic
               </h2>
-            <div className="p-6 bg-muted/10 border border-border/40 rounded-[2rem] space-y-4">
-               <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Select Template</span>
+            <div className="p-8 bg-slate-50 border border-slate-100 rounded-[2.5rem] space-y-6">
+               <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Core Visual Preset</span>
                <div className="flex flex-wrap gap-2">
                   {templates.map(t => (
                     <button 
                       key={t.id} 
                       onClick={() => setActiveTemplate(t.id as Template)}
-                      className={`flex-1 py-3 px-4 rounded-xl text-[9px] font-black uppercase tracking-widest border transition-all ${
-                        activeTemplate === t.id ? 'bg-primary text-white border-primary shadow-lg' : 'bg-background border-border/40 hover:border-primary/40'
-                      }`}
+                      className={cn(
+                        "flex-1 py-4 px-4 rounded-2xl text-[9px] font-black uppercase tracking-[0.15em] border transition-all",
+                        activeTemplate === t.id ? "bg-slate-900 text-white border-slate-900 shadow-xl" : "bg-white border-slate-200 text-slate-400 hover:border-blue-600 hover:text-blue-600"
+                      )}
                     >
                        {t.label}
                     </button>
@@ -256,24 +258,25 @@ export const MediaKit = () => {
             </div>
          </div>
 
-         <div className="space-y-6">
-            <h4 className="text-xs font-black uppercase tracking-widest text-muted-foreground flex items-center justify-between">
-               <span>Sections Control</span>
-               <button className="text-[10px] text-primary hover:underline">Reset All</button>
+         <div className="space-y-8">
+            <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 flex items-center justify-between">
+               <span>Data Stream Control</span>
+               <button className="text-[10px] text-blue-600 hover:underline">Reset Factory</button>
             </h4>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-4">
                {Object.entries(sections).map(([key, val]) => (
                  <button 
                   key={key} 
                   onClick={() => toggleSection(key as keyof typeof sections)}
-                  className={`p-4 rounded-3xl border flex flex-col gap-3 transition-all ${
-                    val ? 'bg-primary/5 border-primary/30' : 'bg-muted/10 border-border/40 opacity-50 grayscale'
-                  }`}
+                  className={cn(
+                    "p-6 rounded-[2rem] border flex flex-col gap-4 transition-all shadow-inner",
+                    val ? "bg-blue-50 border-blue-100" : "bg-slate-50 border-slate-100 opacity-60 grayscale"
+                  )}
                  >
                     <div className="flex justify-between items-center w-full">
-                       <span className="text-[10px] font-black uppercase tracking-widest">{key}</span>
-                       <div className={`w-8 h-4 rounded-full relative transition-all ${val ? 'bg-primary' : 'bg-muted'}`}>
-                          <div className={`absolute top-1 w-2 h-2 rounded-full bg-white transition-all ${val ? 'right-1' : 'left-1'}`} />
+                       <span className={cn("text-[10px] font-black uppercase tracking-[0.2em]", val ? "text-blue-600" : "text-slate-400")}>{key}</span>
+                       <div className={cn("w-10 h-5 rounded-full relative transition-all", val ? "bg-blue-600" : "bg-slate-300")}>
+                          <div className={cn("absolute top-1 w-3 h-3 rounded-full bg-white transition-all shadow-sm", val ? "right-1" : "left-1")} />
                        </div>
                     </div>
                  </button>
@@ -281,10 +284,10 @@ export const MediaKit = () => {
             </div>
          </div>
 
-         <div className="space-y-8">
-            <div className="space-y-4">
+         <div className="space-y-10">
+            <div className="space-y-5">
                <div className="flex justify-between items-center">
-                  <label className="text-[10px] font-black uppercase tracking-widest">Headline / Hook</label>
+                  <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Headline Hook</label>
                   <button 
                     onClick={() => {
                       toast.promise(new Promise(res => setTimeout(() => res("Viral Storytelling: Where Tech Meets Human Soul"), 1500)), {
@@ -293,15 +296,15 @@ export const MediaKit = () => {
                         error: 'Generation failed.'
                       });
                     }}
-                    className="text-[9px] font-black text-primary flex items-center gap-1.5 uppercase tracking-widest hover:underline"
+                    className="text-[10px] font-black text-blue-600 flex items-center gap-2 uppercase tracking-[0.2em] hover:underline"
                   >
-                     <Sparkles className="w-3 h-3" /> AI Write
+                     <Sparkles className="w-3.5 h-3.5" /> AI Write
                   </button>
                </div>
                <input 
                  value={headline}
                  onChange={(e) => setHeadline(e.target.value)}
-                 className="w-full h-14 bg-muted/20 border border-border/40 rounded-2xl px-6 text-sm font-bold focus:outline-none focus:ring-1 focus:ring-primary"
+                 className="w-full h-16 bg-slate-50 border border-slate-100 rounded-2xl px-8 text-sm font-bold focus:outline-none focus:ring-1 focus:ring-blue-600 focus:bg-white transition-all shadow-inner"
                />
             </div>
 
@@ -377,9 +380,9 @@ export const MediaKit = () => {
             </div>
          </div>
 
-         <div className="pt-10 space-y-4">
-            <button className="w-full py-5 bg-black text-white rounded-2xl text-[11px] font-black uppercase tracking-widest flex items-center justify-center gap-3 shadow-2xl hover:scale-105 active:scale-95 transition-all">
-               <RefreshCcw className="w-4 h-4" /> Save & Sync All Data
+         <div className="pt-10 space-y-6">
+            <button className="w-full py-6 bg-slate-900 border border-slate-800 text-white rounded-[2rem] text-[11px] font-black uppercase tracking-[0.2em] flex items-center justify-center gap-4 shadow-xl shadow-blue-500/10 hover:bg-blue-600 transition-all active:scale-[0.98]">
+               <RefreshCcw className="w-4 h-4 text-blue-400" /> Finalize & Synchronize
             </button>
          </div>
       </div>
@@ -485,22 +488,22 @@ export const MediaKit = () => {
           </div>
         </BottomSheet>
       ) : (
-        <div className="lg:col-span-8 bg-muted/10 rounded-[2.5rem] border border-white/5 p-6 md:p-12 overflow-hidden hidden lg:block">
-           <div className="max-w-4xl mx-auto space-y-10">
-            <div className="flex items-center justify-between px-4">
-               <div className="flex items-center gap-6">
-                  <div className="flex items-center gap-2">
-                     <Eye className="w-4 h-4 text-emerald-500" />
-                     <span className="text-[10px] font-black uppercase text-emerald-500">Live Preview</span>
+        <div className="lg:col-span-8 bg-slate-50 rounded-[3rem] border border-slate-200 p-10 md:p-12 overflow-hidden hidden lg:block shadow-inner">
+           <div className="max-w-4xl mx-auto space-y-12">
+            <div className="flex items-center justify-between px-8 bg-white py-6 rounded-[2.5rem] border border-slate-200 shadow-sm">
+               <div className="flex items-center gap-8">
+                  <div className="flex items-center gap-3">
+                     <Eye className="w-5 h-5 text-emerald-600" />
+                     <span className="text-[10px] font-black uppercase text-emerald-600 tracking-[0.2em]">Real-time rendering</span>
                   </div>
                    <div 
                     onClick={() => setAutoUpdateStats(!autoUpdateStats)}
-                    className="flex items-center gap-3 bg-muted/20 px-3 py-1.5 rounded-full border border-border/40 cursor-pointer hover:bg-muted/30 transition-all"
+                    className="flex items-center gap-4 bg-slate-50 px-4 py-2 rounded-2xl border border-slate-100 cursor-pointer hover:border-blue-200 transition-all shadow-inner"
                    >
-                      <div className={`w-10 h-5 rounded-full relative transition-all ${autoUpdateStats ? 'bg-emerald-500' : 'bg-muted'}`}>
-                         <div className={`absolute top-1 w-3 h-3 rounded-full bg-white transition-all ${autoUpdateStats ? 'right-1' : 'left-1'}`} />
+                      <div className={cn("w-10 h-5 rounded-full relative transition-all", autoUpdateStats ? "bg-emerald-600" : "bg-slate-300")}>
+                         <div className={cn("absolute top-1 w-3 h-3 rounded-full bg-white transition-all shadow-sm", autoUpdateStats ? "right-1" : "left-1")} />
                       </div>
-                      <span className="text-[9px] font-black uppercase text-muted-foreground">Auto-Update Stats</span>
+                      <span className="text-[9px] font-black uppercase text-slate-400 tracking-widest">Auto-Sync</span>
                    </div>
                </div>
                 <div className="flex gap-4">
@@ -510,15 +513,15 @@ export const MediaKit = () => {
                         navigator.clipboard.writeText(url);
                         toast.success("Live Link Copied!", { description: url });
                     }}
-                    className="h-11 px-6 rounded-xl border border-white/10 text-[10px] font-black uppercase tracking-widest flex items-center gap-2 hover:bg-white/5 transition-all"
+                    className="h-12 px-6 rounded-2xl border border-slate-200 text-slate-400 text-[10px] font-black uppercase tracking-[0.2em] flex items-center gap-3 hover:bg-slate-50 transition-all"
                   >
                      <Link2 className="w-4 h-4" /> Share Link
                   </button>
                   <button 
                     onClick={() => handleDownloadPDF()}
-                    className="h-11 px-8 rounded-xl bg-primary text-white text-[10px] font-black uppercase tracking-widest flex items-center gap-2 shadow-xl shadow-primary/20 hover:scale-[1.02] transition-all active:scale-95"
+                    className="h-12 px-8 rounded-2xl bg-blue-600 text-white text-[10px] font-black uppercase tracking-[0.2em] flex items-center gap-3 shadow-xl shadow-blue-500/20 hover:bg-blue-700 transition-all active:scale-[0.98]"
                   >
-                     <Download className="w-4 h-4" /> Download PDF
+                     <Download className="w-4 h-4" /> Export PDF
                   </button>
                </div>
             </div>
@@ -530,7 +533,7 @@ export const MediaKit = () => {
                   <div className="flex justify-between items-start">
                      <div className="space-y-4">
                         {user?.photo ? (
-                          <img src={data?.photo || user.photo} alt={user.name} className="w-20 h-20 rounded-3xl object-cover" />
+                          <img src={user.photo} alt={user.name} className="w-20 h-20 rounded-3xl object-cover" />
                         ) : (
                           <div className={`w-20 h-20 ${style.border} bg-muted rounded-3xl`} />
                         )}

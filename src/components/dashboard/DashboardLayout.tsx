@@ -111,7 +111,7 @@ export const DashboardLayout = () => {
   }, [user]);
 
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col lg:flex-row overflow-hidden font-sans">
+    <div className="min-h-screen bg-white text-slate-900 flex flex-col lg:flex-row overflow-hidden font-sans">
       
       {/* Desktop Sidebar (Left Zone) */}
       <div className="hidden lg:block">

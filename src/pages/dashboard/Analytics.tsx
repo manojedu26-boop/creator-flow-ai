@@ -37,10 +37,10 @@ const engagementBreakdown = [
 ];
 
 const contentFormatData = [
-  { name: "Reels / Shorts", value: 58, color: "#a855f7" },
-  { name: "Carousels", value: 24, color: "#ec4899" },
-  { name: "Static Posts", value: 9, color: "#06b6d4" },
-  { name: "Stories", value: 9, color: "#f59e0b" },
+  { name: "Reels / Shorts", value: 58, color: "#2563eb" },
+  { name: "Carousels", value: 24, color: "#4f46e5" },
+  { name: "Static Posts", value: 9, color: "#6366f1" },
+  { name: "Stories", value: 9, color: "#94a3b8" },
 ];
 
 const heatmapData = [
@@ -59,39 +59,35 @@ const GrowthChart = memo(({ data }: { data: any[] }) => (
   <ResponsiveContainer width="100%" height="100%">
     <AreaChart data={data}>
       <defs>
-        <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-          <feGaussianBlur stdDeviation="3" result="blur" />
-          <feComposite in="SourceGraphic" in2="blur" operator="over" />
-        </filter>
         <linearGradient id="colorIg" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#ec4899" stopOpacity={0.5}/>
+          <stop offset="0%" stopColor="#ec4899" stopOpacity={0.2}/>
           <stop offset="100%" stopColor="#ec4899" stopOpacity={0}/>
         </linearGradient>
         <linearGradient id="colorYt" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#ef4444" stopOpacity={0.5}/>
+          <stop offset="0%" stopColor="#ef4444" stopOpacity={0.2}/>
           <stop offset="100%" stopColor="#ef4444" stopOpacity={0}/>
         </linearGradient>
         <linearGradient id="colorTt" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#a855f7" stopOpacity={0.5}/>
+          <stop offset="0%" stopColor="#a855f7" stopOpacity={0.2}/>
           <stop offset="100%" stopColor="#a855f7" stopOpacity={0}/>
         </linearGradient>
       </defs>
-      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.03)" />
-      <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#64748b', fontWeight: 'bold' }} dy={10} />
-      <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#64748b', fontWeight: 'bold' }} />
+      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+      <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#64748b', fontWeight: '700' }} dy={10} />
+      <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#64748b', fontWeight: '700' }} />
       <Tooltip 
         contentStyle={{ 
-          backgroundColor: 'rgba(15, 23, 42, 0.9)', 
-          backdropFilter: 'blur(12px)',
-          border: '1px solid rgba(255,255,255,0.1)', 
-          borderRadius: '16px', 
+          backgroundColor: '#ffffff', 
+          border: '1px solid #e2e8f0', 
+          borderRadius: '12px', 
           fontSize: '11px', 
-          fontWeight: '900',
+          fontWeight: '700',
+          boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)'
         }}
       />
-      <Area type="monotone" dataKey="ig" stroke="#ec4899" strokeWidth={4} fill="url(#colorIg)" name="Instagram" filter="url(#glow)" />
-      <Area type="monotone" dataKey="yt" stroke="#ef4444" strokeWidth={4} fill="url(#colorYt)" name="YouTube" filter="url(#glow)" />
-      <Area type="monotone" dataKey="tt" stroke="#a855f7" strokeWidth={4} fill="url(#colorTt)" name="TikTok" filter="url(#glow)" />
+      <Area type="monotone" dataKey="ig" stroke="#ec4899" strokeWidth={3} fill="url(#colorIg)" name="Instagram" />
+      <Area type="monotone" dataKey="yt" stroke="#ef4444" strokeWidth={3} fill="url(#colorYt)" name="YouTube" />
+      <Area type="monotone" dataKey="tt" stroke="#a855f7" strokeWidth={3} fill="url(#colorTt)" name="TikTok" />
     </AreaChart>
   </ResponsiveContainer>
 ));
@@ -99,11 +95,11 @@ const GrowthChart = memo(({ data }: { data: any[] }) => (
 const EngagementChart = memo(({ data }: { data: any[] }) => (
   <ResponsiveContainer width="100%" height="100%">
     <LineChart data={data}>
-      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.05)" />
+      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
       <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#64748b' }} dy={10} />
       <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#64748b' }} />
-      <Tooltip contentStyle={{ backgroundColor: '#0f172a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px' }} />
-      <Line type="monotone" dataKey="rate" stroke="#a855f7" strokeWidth={4} dot={{ r: 6, fill: '#a855f7' }} name="Engagement Rate (%)" />
+      <Tooltip contentStyle={{ backgroundColor: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '12px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' }} />
+      <Line type="monotone" dataKey="rate" stroke="#2563eb" strokeWidth={3} dot={{ r: 4, fill: '#2563eb', strokeWidth: 2, stroke: '#fff' }} name="Engagement Rate (%)" />
     </LineChart>
   </ResponsiveContainer>
 ));
@@ -116,8 +112,8 @@ const ContentFormatChart = memo(({ data }: { data: any[] }) => (
           <Cell key={`cell-${index}`} fill={entry.color} />
         ))}
       </Pie>
-      <Tooltip contentStyle={{ backgroundColor: '#0f172a', border: 'none', borderRadius: '12px' }} />
-      <Legend verticalAlign="middle" align="right" layout="vertical" iconType="circle" wrapperStyle={{ fontSize: '11px', fontWeight: 'bold' }} />
+      <Tooltip contentStyle={{ backgroundColor: '#ffffff', border: '1px solid #f1f5f9', borderRadius: '16px', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)', fontSize: '11px', fontWeight: 'bold' }} />
+      <Legend verticalAlign="middle" align="right" layout="vertical" iconType="circle" wrapperStyle={{ fontSize: '10px', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '0.05em' }} />
     </PieChart>
   </ResponsiveContainer>
 ));
@@ -193,101 +189,110 @@ export const Analytics = () => {
 
   const renderOverview = () => (
     <motion.div variants={staggerContainer} initial="hidden" animate="show" className="space-y-[var(--grid-gap)]">
-      <motion.div variants={staggerItem} className="premium-card bg-card border border-border/40 rounded-[2.5rem] p-[var(--card-p)] shadow-xl">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h3 className="text-xl font-black tracking-tight uppercase">30-Day Follower Growth</h3>
-            <p className="text-sm text-muted-foreground mt-1">Cross-platform momentum for {user?.name || 'Naveen'}</p>
+      <motion.div variants={staggerItem} className="premium-card bg-white border border-slate-200 rounded-[2.5rem] shadow-sm relative overflow-hidden group">
+        <div className="absolute inset-0 bg-mesh-primary opacity-40 group-hover:opacity-60 transition-opacity duration-700 pointer-events-none" />
+        
+        <div className="relative z-10 p-[var(--card-p)] space-y-8">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <span className="w-2 h-2 rounded-full bg-blue-600" />
+                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-600">Growth Momentum</span>
+              </div>
+              <h3 className="text-2xl md:text-3xl font-black tracking-tight uppercase leading-none text-slate-900">30-Day Follower <span className="text-blue-600 italic">Intelligence</span></h3>
+              <p className="text-xs text-slate-400 mt-2 font-black uppercase tracking-widest">Strategic cross-platform reach for {user?.name || 'Naveen'}</p>
+            </div>
+            
+            <div className="flex items-center gap-4">
+               <div className="flex items-center gap-1 bg-slate-50 p-1.5 rounded-2xl border border-slate-100">
+                  {[
+                    { id: 'ig', color: '#ec4899', icon: Instagram },
+                    { id: 'yt', color: '#ef4444', icon: Youtube },
+                    { id: 'tt', color: '#2563eb', icon: Sparkles },
+                  ].map(p => (
+                    <button 
+                       key={p.id}
+                       onClick={() => togglePlatform(p.id)}
+                       className={cn(
+                        "p-2.5 rounded-xl transition-all duration-300",
+                        activePlatforms.includes(p.id) ? "bg-white shadow-sm ring-1 ring-slate-200" : "opacity-30 hover:opacity-60"
+                       )}
+                    >
+                       <p.icon className="w-4 h-4" style={{ color: p.color }} />
+                    </button>
+                  ))}
+               </div>
+               
+               <div className="bg-emerald-50 border border-emerald-100 text-emerald-700 px-6 py-3 rounded-2xl flex items-center gap-3">
+                 <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center">
+                   <TrendingUp className="w-4 h-4" />
+                 </div>
+                 <div className="flex flex-col">
+                   <span className="text-lg font-black leading-none">+5,100</span>
+                   <span className="text-[8px] font-black uppercase tracking-widest opacity-70">Total Surge</span>
+                 </div>
+               </div>
+            </div>
           </div>
-          <div className="flex items-center gap-3">
-             <div className="flex items-center gap-1 bg-white/5 p-1 rounded-xl border border-white/10">
-                {[
-                  { id: 'ig', color: '#ec4899', icon: Instagram },
-                  { id: 'yt', color: '#ef4444', icon: Youtube },
-                  { id: 'tt', color: '#a855f7', icon: Sparkles },
-                ].map(p => (
-                  <button 
-                     key={p.id}
-                     onClick={() => togglePlatform(p.id)}
-                     className={`p-2 rounded-lg transition-all ${activePlatforms.includes(p.id) ? 'bg-white/10' : 'opacity-20 hover:opacity-50'}`}
-                  >
-                     <p.icon className="w-3.5 h-3.5" style={{ color: p.color }} />
-                  </button>
-                ))}
-             </div>
-             <div className="bg-emerald-500/10 text-emerald-500 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest flex items-center gap-2">
-               <TrendingUp className="w-4 h-4" /> +5,100 Total
-             </div>
+
+          <div className="h-[340px] w-full -mx-4">
+             <GrowthChart data={snapshots} />
+          </div>
+          
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pb-4">
+            {[
+              { label: 'Avg Daily', val: '+170', change: '+12%', color: 'text-blue-600' },
+              { label: 'Peak Hour', val: '7:30 PM', change: 'Stable', color: 'text-slate-900' },
+              { label: 'Top Platform', val: 'Insta', change: '42% Share', color: 'text-blue-600' },
+              { label: 'Engagement', val: '4.8%', change: '+0.4%', color: 'text-emerald-600' },
+            ].map((stat, i) => (
+              <div key={i} className="bg-white border border-slate-100 p-5 rounded-[2rem] hover:shadow-lg hover:border-blue-100 transition-all shadow-sm">
+                <p className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2">{stat.label}</p>
+                <div className="flex items-baseline gap-2">
+                  <span className={cn("text-xl font-black italic tracking-tighter uppercase", stat.color)}>{stat.val}</span>
+                  <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest">{stat.change}</span>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
-         <div className="h-[320px] w-full">
-            <ResponsiveContainer width="100%" height="100%">
-               <AreaChart data={snapshots}>
-                  <defs>
-                    <linearGradient id="colorIg" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#ec4899" stopOpacity={0.5}/>
-                      <stop offset="100%" stopColor="#ec4899" stopOpacity={0}/>
-                    </linearGradient>
-                    <linearGradient id="colorYt" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#ef4444" stopOpacity={0.5}/>
-                      <stop offset="100%" stopColor="#ef4444" stopOpacity={0}/>
-                    </linearGradient>
-                    <linearGradient id="colorTt" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="#a855f7" stopOpacity={0.5}/>
-                      <stop offset="100%" stopColor="#a855f7" stopOpacity={0}/>
-                    </linearGradient>
-                     <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-                        <feGaussianBlur stdDeviation="3" result="blur" />
-                        <feComposite in="SourceGraphic" in2="blur" operator="over" />
-                     </filter>
-                  </defs>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.03)" />
-                  <XAxis dataKey="date" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#64748b' }} />
-                  <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#64748b' }} />
-                  <Tooltip contentStyle={{ backgroundColor: '#0f172a', border: 'none', borderRadius: '12px' }} />
-                  {activePlatforms.includes('ig') && <Area type="monotone" dataKey="ig" stroke="#ec4899" strokeWidth={4} fill="url(#colorIg)" filter="url(#glow)" />}
-                  {activePlatforms.includes('yt') && <Area type="monotone" dataKey="yt" stroke="#ef4444" strokeWidth={4} fill="url(#colorYt)" filter="url(#glow)" />}
-                  {activePlatforms.includes('tt') && <Area type="monotone" dataKey="tt" stroke="#a855f7" strokeWidth={4} fill="url(#colorTt)" filter="url(#glow)" />}
-               </AreaChart>
-            </ResponsiveContainer>
-         </div>
       </motion.div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <motion.div variants={staggerItem} className="premium-card bg-card border border-border/40 rounded-[2.5rem] p-[var(--card-p)] shadow-xl">
-          <h3 className="text-lg font-black tracking-tight mb-8 uppercase">Engagement Rate by Week</h3>
+        <motion.div variants={staggerItem} className="premium-card bg-white border border-slate-200 rounded-[2rem] p-[var(--card-p)] shadow-sm">
+          <h3 className="text-sm font-black tracking-widest mb-8 uppercase text-slate-500">Engagement Rate by Week</h3>
           <div className="h-[260px] w-full">
             <EngagementChart data={engagementBreakdown} />
           </div>
         </motion.div>
 
-        <motion.div variants={staggerItem} className="premium-card bg-card border border-border/40 rounded-[2.5rem] p-8 shadow-xl relative">
-          <h3 className="text-lg font-black tracking-tight mb-8 uppercase">Content Format Performance</h3>
+        <motion.div variants={staggerItem} className="premium-card bg-white border border-slate-200 rounded-[2rem] p-8 shadow-sm relative">
+          <h3 className="text-sm font-black tracking-widest mb-8 uppercase text-slate-500">Content Format Performance</h3>
           <div className="h-[260px] w-full flex items-center justify-center">
              <ContentFormatChart data={contentFormatData} />
              <div className="absolute flex flex-col items-center justify-center">
-                <span className="text-2xl font-black">58%</span>
-                <span className="text-[9px] text-muted-foreground uppercase tracking-widest font-black text-center">Reels /<br/>Shorts</span>
+                <span className="text-2xl font-black text-slate-900">58%</span>
+                <span className="text-[9px] text-slate-500 uppercase tracking-widest font-black text-center">Reels /<br/>Shorts</span>
              </div>
           </div>
         </motion.div>
       </div>
 
-      <motion.div variants={staggerItem} className="premium-card bg-primary/10 border border-primary/20 rounded-[2.5rem] p-8 shadow-xl relative overflow-hidden group">
-        <div className="absolute top-0 right-0 p-8 text-primary opacity-10 group-hover:opacity-20 transition-opacity">
+      <motion.div variants={staggerItem} className="premium-card bg-blue-50/50 border border-blue-100 rounded-[2.5rem] p-8 shadow-sm relative overflow-hidden group">
+        <div className="absolute top-0 right-0 p-8 text-blue-600 opacity-5 group-hover:opacity-10 transition-opacity">
           <Sparkles className="w-32 h-32 rotate-12" />
         </div>
         <div className="flex items-start gap-6 relative z-10">
-          <div className="w-14 h-14 rounded-2xl bg-primary/20 flex items-center justify-center shrink-0 border border-primary/30">
-             <Sparkles className="w-7 h-7 text-primary" />
+          <div className="w-14 h-14 rounded-2xl bg-white flex items-center justify-center shrink-0 border border-blue-100 shadow-sm">
+             <Sparkles className="w-7 h-7 text-blue-600" />
           </div>
-          <div className="space-y-4">
-             <h3 className="text-xl font-black tracking-tight uppercase flex items-center gap-3">
-               AI Analytics Insight
-               <span className="px-2 py-0.5 rounded-full bg-primary text-primary-foreground text-[9px] font-black tracking-widest">PERSONALIZED</span>
+          <div className="space-y-3">
+             <h3 className="text-lg font-black tracking-tight uppercase flex items-center gap-3 text-slate-900">
+               AI Strategy Insight
+               <span className="px-2 py-0.5 rounded-full bg-blue-600 text-white text-[9px] font-black tracking-widest">ACTIONABLE</span>
              </h3>
-             <p className="text-lg font-bold leading-relaxed max-w-4xl text-white/90 underline-offset-4 decoration-primary/30">
-               {user?.firstName || 'Naveen'}, your Reels are outperforming all other formats by <span className="text-primary tracking-tight font-black underline decoration-primary decoration-4">3.2x</span>. Your audience is most active on Tuesday and Thursday evenings between 6PM–9PM IST. Your 4.8% engagement rate puts you in the top 12% of fitness creators in India. However, your posting frequency dropped 30% in the last 10 days — this directly caused a dip in reach on YouTube. Post 3 Reels this week across IG and TikTok to recover momentum. Your 'no-equipment' content consistently gets 40% more saves than gym-focused content — lean into this.
+             <p className="text-lg font-bold leading-relaxed max-w-4xl text-slate-700 underline-offset-4 decoration-blue-200">
+                {user?.firstName || 'Naveen'}, your Reels are outperforming all other formats by <span className="text-blue-600 tracking-tight font-black underline decoration-blue-400 decoration-4">3.2x</span>. Your audience is most active on Tuesday and Thursday evenings between 6PM–9PM IST. Your 4.8% engagement rate puts you in the top 12% of fitness creators in India. However, your posting frequency dropped 30% in the last 10 days — this directly caused a dip in reach on YouTube. Post 3 Reels this week across IG and TikTok to recover momentum.
              </p>
           </div>
         </div>
@@ -298,49 +303,57 @@ export const Analytics = () => {
   const renderAudience = () => (
     <motion.div variants={staggerContainer} initial="hidden" animate="show" className="space-y-6">
        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <motion.div variants={staggerItem} className="premium-card bg-card border border-border/40 rounded-[2.5rem] p-8">
-             <h3 className="text-lg font-black tracking-tight mb-8 uppercase">Age Range</h3>
-             <div className="h-[260px] w-full">
+          <motion.div variants={staggerItem} className="premium-card bg-white border border-slate-200 rounded-[2rem] p-8 shadow-sm">
+             <div className="flex items-center justify-between mb-8">
+                <h3 className="text-sm font-black tracking-widest uppercase text-slate-500">Age Distribution</h3>
+                <div className="px-3 py-1 rounded-full bg-blue-50 border border-blue-100 text-[8px] font-black uppercase text-blue-600">Core Audience</div>
+             </div>
+             <div className="h-[220px] w-full">
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={[
-                    { age: "18-24", value: 34 }, { age: "25-34", value: 41 }, { age: "35-44", value: 18 }, { age: "45+", value: 7 }
-                  ]} layout="vertical">
-                    <XAxis type="number" hide />
-                    <YAxis dataKey="age" type="category" axisLine={false} tickLine={false} tick={{ fontSize: 11, fontWeight: 'bold', fill: '#64748b' }} width={60} />
-                    <Bar dataKey="value" fill="#a855f7" radius={[0, 4, 4, 0]} barSize={30}>
-                       {[1,2,3,4].map((_, i) => <Cell key={i} fill={i === 1 ? "#ec4899" : "#334155"} />)}
-                    </Bar>
-                  </BarChart>
+                   <BarChart data={[
+                     { age: "18-24", value: 34 }, { age: "25-34", value: 41 }, { age: "35-44", value: 18 }, { age: "45+", value: 7 }
+                   ]} layout="vertical" margin={{ left: 0, right: 20 }}>
+                     <XAxis type="number" hide />
+                     <YAxis dataKey="age" type="category" axisLine={false} tickLine={false} tick={{ fontSize: 11, fontWeight: '700', fill: '#64748b' }} width={60} />
+                     <Bar dataKey="value" radius={[0, 12, 12, 0]} barSize={24}>
+                        {[1,2,3,4].map((_, i) => <Cell key={i} fill={i === 1 ? "#2563eb" : "#f1f5f9"} />)}
+                     </Bar>
+                   </BarChart>
                 </ResponsiveContainer>
              </div>
           </motion.div>
-          <motion.div variants={staggerItem} className="premium-card bg-card border border-border/40 rounded-[2.5rem] p-8 relative">
-             <h3 className="text-lg font-black tracking-tight mb-8 uppercase">Gender Split</h3>
-             <div className="h-[260px] w-full flex items-center justify-center">
+          
+          <motion.div variants={staggerItem} className="premium-card bg-white border border-slate-200 rounded-[2rem] p-8 shadow-sm relative flex flex-col items-center">
+             <h3 className="text-sm font-black tracking-widest uppercase text-slate-500 self-start mb-8">Identity Breakdown</h3>
+             <div className="h-[200px] w-full flex items-center justify-center relative">
                 <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie data={[{ name: "female", v: 38 }, { name: "male", v: 62 }]} innerRadius={60} outerRadius={90} dataKey="v" stroke="none">
-                       <Cell fill="#ec4899" /> <Cell fill="#06b6d4" />
-                    </Pie>
-                  </PieChart>
+                   <PieChart>
+                     <Pie data={[{ name: "female", v: 38 }, { name: "male", v: 62 }]} innerRadius={65} outerRadius={85} dataKey="v" stroke="#fff" strokeWidth={4} paddingAngle={8}>
+                        <Cell fill="#3b82f6" /> <Cell fill="#06b6d4" />
+                     </Pie>
+                   </PieChart>
                 </ResponsiveContainer>
-                <div className="absolute flex gap-8">
-                   <div className="flex flex-col items-center">
-                    <span className="text-xl font-black text-[#06b6d4]">62%</span>
-                    <span className="text-[8px] font-black text-muted-foreground tracking-widest">MALE</span>
-                   </div>
-                   <div className="flex flex-col items-center">
-                    <span className="text-xl font-black text-[#ec4899]">38%</span>
-                    <span className="text-[8px] font-black text-muted-foreground tracking-widest">FEMALE</span>
-                   </div>
+                <div className="absolute flex flex-col items-center">
+                    <span className="text-3xl font-black text-slate-900">62<span className="text-xs text-slate-400">%</span></span>
+                    <span className="text-[8px] font-black text-blue-600 tracking-widest uppercase">Male Dominant</span>
+                </div>
+             </div>
+             <div className="flex gap-12 mt-4">
+                <div className="flex items-center gap-2">
+                   <div className="w-2 h-2 rounded-full bg-blue-500" />
+                   <span className="text-[10px] font-bold text-slate-500">38% Female</span>
+                </div>
+                <div className="flex items-center gap-2">
+                   <div className="w-2 h-2 rounded-full bg-cyan-500" />
+                   <span className="text-[10px] font-bold text-slate-500">62% Male</span>
                 </div>
              </div>
           </motion.div>
        </div>
 
        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <motion.div variants={staggerItem} className="premium-card bg-card border border-border/40 rounded-[2.5rem] p-8">
-             <h3 className="text-lg font-black tracking-tight mb-8 uppercase">Top Countries</h3>
+          <motion.div variants={staggerItem} className="premium-card bg-white border border-slate-200 rounded-[2rem] p-8 shadow-sm">
+             <h3 className="text-sm font-black tracking-widest mb-8 uppercase text-slate-500">Top Countries</h3>
              <div className="space-y-6">
                 {[
                   { country: "India", value: 78, color: "bg-orange-500" },
@@ -349,31 +362,31 @@ export const Analytics = () => {
                   { country: "USA", value: 4, color: "bg-red-500" },
                 ].map((c) => (
                   <div key={c.country} className="space-y-2">
-                    <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest">
+                    <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-widest text-slate-600">
                        <span>{c.country}</span>
                        <span>{c.value}%</span>
                     </div>
-                    <div className="h-2 rounded-full bg-white/5 overflow-hidden">
+                    <div className="h-1.5 rounded-full bg-slate-100 overflow-hidden">
                        <motion.div initial={{ width: 0 }} animate={{ width: `${c.value}%` }} className={`h-full ${c.color}`} />
                     </div>
                   </div>
                 ))}
              </div>
           </motion.div>
-          <motion.div variants={staggerItem} className="premium-card bg-card border border-border/40 rounded-[2.5rem] p-8">
-             <h3 className="text-lg font-black tracking-tight mb-8 uppercase">Active Hours Peak</h3>
-             <div className="space-y-4">
+          <motion.div variants={staggerItem} className="premium-card bg-white border border-slate-200 rounded-[2rem] p-8 shadow-sm">
+             <h3 className="text-sm font-black tracking-widest mb-8 uppercase text-slate-500">Active Hours Peak</h3>
+             <div className="space-y-3">
                 {[
                   { day: "Tuesday", time: "7:00 PM IST", score: "High" },
                   { day: "Thursday", time: "6:30 PM IST", score: "High" },
                   { day: "Saturday", time: "8:00 AM IST", score: "Medium" },
                 ].map((h) => (
-                  <div key={h.day} className="p-4 rounded-2xl bg-white/5 border border-white/5 flex justify-between items-center">
+                  <div key={h.day} className="p-4 rounded-2xl bg-slate-50 border border-slate-100 flex justify-between items-center group hover:bg-white hover:shadow-sm transition-all">
                     <div>
-                      <p className="text-sm font-black">{h.day}</p>
-                      <p className="text-xs font-bold text-muted-foreground">{h.time}</p>
+                      <p className="text-sm font-black text-slate-900">{h.day}</p>
+                      <p className="text-xs font-bold text-slate-500">{h.time}</p>
                     </div>
-                    <div className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest ${h.score === 'High' ? 'bg-emerald-500/20 text-emerald-500' : 'bg-primary/20 text-primary'}`}>
+                    <div className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest ${h.score === 'High' ? 'bg-emerald-100 text-emerald-700' : 'bg-blue-100 text-blue-700'}`}>
                        {h.score} Impact
                     </div>
                   </div>
@@ -388,67 +401,81 @@ export const Analytics = () => {
     <motion.div variants={staggerContainer} initial="hidden" animate="show" className="space-y-6">
         <div className="flex flex-col md:flex-row gap-6 mb-8">
            <div className="flex-1 relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
               <input 
                 type="text" 
-                placeholder="Enter competitor handle (e.g. @fitnees_pro)..."
+                placeholder="Analyze competitor handle (e.g. @fitness_pro)..."
                 value={newCompHandle}
                 onChange={(e) => setNewCompHandle(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleAddCompetitor()}
-                className="w-full h-14 bg-white/5 border border-white/10 rounded-2xl pl-12 pr-4 text-sm font-medium focus:outline-none focus:ring-1 focus:ring-primary"
+                className="w-full h-14 bg-slate-50 border border-slate-200 rounded-2xl pl-12 pr-4 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-100 focus:bg-white transition-all"
               />
            </div>
-           <button 
-             onClick={handleAddCompetitor}
-             className="h-14 px-8 bg-primary text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:scale-105 transition-all shadow-xl shadow-primary/20 flex items-center justify-center gap-2"
-           >
-              <Plus className="w-4 h-4" /> Track Competitor
-           </button>
         </div>
 
-        <div className="grid grid-cols-1 gap-6">
+        <div className="grid grid-cols-1 gap-8">
           {competitors.map((comp, i) => (
-            <motion.div key={comp.id} variants={staggerItem} className="premium-card bg-card border border-border/40 rounded-[2.5rem] p-8 flex flex-col md:flex-row gap-8 relative overflow-hidden group">
+            <motion.div key={comp.id} variants={staggerItem} className="premium-card bg-white border border-slate-200 rounded-[2.5rem] p-8 flex flex-col md:flex-row gap-10 relative overflow-hidden group">
+               <div className="absolute inset-0 bg-mesh-primary opacity-5 group-hover:opacity-10 transition-opacity pointer-events-none" />
+               
                <button 
                  onClick={() => handleRemoveCompetitor(comp.id)}
-                 className="absolute top-6 right-6 p-2 bg-white/5 border border-white/10 rounded-xl text-muted-foreground hover:text-red-500 hover:bg-red-500/10 transition-all opacity-0 group-hover:opacity-100"
+                 className="absolute top-8 right-8 p-3 bg-slate-50 border border-slate-100 rounded-2xl text-slate-400 hover:text-red-500 hover:bg-red-50 transition-all opacity-0 group-hover:opacity-100 shadow-sm"
                >
-                  <Plus className="w-4 h-4 rotate-45" />
+                  <Plus className="w-5 h-5 rotate-45" />
                </button>
-               <div className="md:w-1/3 space-y-4">
-                  <div className="flex items-center gap-4">
-                     <div className="w-14 h-14 rounded-full bg-primary/20 overflow-hidden border border-white/10 shrink-0">
-                        <img src={comp.photo} alt={comp.name} className="w-full h-full object-cover" />
+
+               <div className="md:w-[35%] space-y-6 relative z-10">
+                  <div className="flex items-center gap-6">
+                     <div className="relative">
+                        <div className="w-20 h-20 rounded-3xl bg-slate-100 p-1">
+                           <div className="w-full h-full rounded-[1.4rem] overflow-hidden border-2 border-white shadow-md">
+                              <img src={comp.photo} alt={comp.name} className="w-full h-full object-cover" />
+                           </div>
+                        </div>
+                        <div className="absolute -bottom-2 -right-2 w-8 h-8 rounded-xl bg-white border border-slate-200 shadow-sm flex items-center justify-center">
+                           <Instagram className="w-3.5 h-3.5 text-pink-500" />
+                        </div>
                      </div>
                      <div>
-                        <h4 className="text-xl font-black">{comp.handle}</h4>
-                        <span className="text-[10px] font-black uppercase text-muted-foreground tracking-[0.2em]">{comp.followers} Follows</span>
+                        <h4 className="text-xl font-black tracking-tight text-slate-900">{comp.handle}</h4>
+                        <div className="flex items-center gap-1.5 mt-1">
+                           <Users className="w-3 h-3 text-slate-400" />
+                           <span className="text-[10px] font-black uppercase text-slate-500 tracking-[0.1em]">{comp.followers} Growth</span>
+                        </div>
                      </div>
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
-                     <div className="p-3 bg-white/5 rounded-2xl">
-                        <p className="text-xs font-black text-emerald-500">{comp.engagement}</p>
-                        <p className="text-[8px] font-black uppercase text-muted-foreground tracking-widest mt-0.5">Engagement</p>
+
+                  <div className="grid grid-cols-2 gap-3">
+                     <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                        <p className="text-xl font-black text-emerald-600">{comp.engagement}</p>
+                        <p className="text-[8px] font-black uppercase text-slate-500 tracking-widest mt-1">Engagement</p>
                      </div>
-                     <div className="p-3 bg-white/5 rounded-2xl">
-                        <p className="text-xs font-black">{comp.posts || '6x/week'}</p>
-                        <p className="text-[8px] font-black uppercase text-muted-foreground tracking-widest mt-0.5">Post Freq</p>
+                     <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                        <p className="text-xl font-black text-slate-900">{comp.posts || 'High'}</p>
+                        <p className="text-[8px] font-black uppercase text-slate-500 tracking-widest mt-1">Consistency</p>
                      </div>
                   </div>
                </div>
-               <div className="flex-1 bg-primary/5 rounded-[2rem] p-8 border border-primary/10">
-                  <h5 className="text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-3">AI Opportunity Gap</h5>
-                  <p className="text-md font-bold italic text-white/90 leading-relaxed md:line-clamp-2">
-                     {comp.handle === '@fitbharat_ig' ? '"They never cover mental health + fitness crossover — this is a gap you can own"' : '"Their audience asks about home workouts repeatedly — no content on this yet"'}
+
+               <div className="flex-1 bg-blue-50/50 rounded-[2.5rem] p-8 border border-blue-100 relative group/insight">
+                  <div className="absolute top-0 right-0 p-8 text-blue-600/5 group-hover/insight:text-blue-600/10 transition-colors">
+                     <Sparkles className="w-24 h-24" />
+                  </div>
+                  <h5 className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-600 mb-4 flex items-center gap-2">
+                    <Zap className="w-3 h-3" /> Strategic Insight
+                  </h5>
+                  <p className="text-lg md:text-xl font-bold text-slate-700 leading-relaxed relative z-10 pr-10">
+                     {comp.handle === '@fitbharat_ig' ? '“They never cover mental health + fitness crossover — own this segment immediately.”' : '“A major gap identified: Their audience craves bite-sized home routines. Post 3 next week.”'}
                   </p>
                   <button 
                     onClick={() => {
                         setSelectedCompetitor(comp);
                         setIsGapModalOpen(true);
                     }}
-                    className="mt-6 h-10 px-6 rounded-xl bg-primary text-white text-[10px] font-black uppercase tracking-widest hover:scale-105 transition-all shadow-xl shadow-primary/20 flex items-center gap-2"
+                    className="mt-8 h-12 px-8 rounded-xl bg-white border border-slate-200 text-slate-900 text-[10px] font-black uppercase tracking-widest hover:border-blue-600 hover:text-blue-600 active:scale-95 transition-all shadow-sm flex items-center gap-2 relative z-10"
                   >
-                     <Zap className="w-4 h-4" /> AI Intelligence Analysis
+                     <Zap className="w-3.5 h-3.5" /> Full Analysis Report
                   </button>
                </div>
             </motion.div>
@@ -456,12 +483,12 @@ export const Analytics = () => {
         </div>
 
         <BottomSheet isOpen={isGapModalOpen} onClose={() => setIsGapModalOpen(false)} title="AI Competitor Gap Analysis" height="auto">
-           <div className="p-8 space-y-8">
-              <div className="flex items-center gap-4 p-6 bg-primary/5 border border-primary/20 rounded-[2rem]">
-                 <div className="w-14 h-14 rounded-2xl bg-primary/20 flex items-center justify-center font-black text-primary">AI</div>
+           <div className="p-10 space-y-10">
+              <div className="flex items-center gap-6 p-8 bg-blue-50 border border-blue-100 rounded-[2.5rem]">
+                 <div className="w-16 h-16 rounded-2xl bg-blue-600 flex items-center justify-center font-black text-white shadow-xl shadow-blue-500/20">AI</div>
                  <div>
-                    <h3 className="text-lg font-black uppercase italic">Deep Intelligence Report</h3>
-                    <p className="text-xs text-muted-foreground font-bold uppercase tracking-widest">Comparing your profile with {selectedCompetitor?.handle}</p>
+                    <h3 className="text-2xl font-black text-slate-900 uppercase italic tracking-tighter">Deep <span className="text-blue-600">Intelligence</span></h3>
+                    <p className="text-[10px] text-slate-400 font-black uppercase tracking-[0.2em] mt-1">Cross-Platform Competitor Delta: {selectedCompetitor?.handle}</p>
                  </div>
               </div>
               
@@ -471,15 +498,15 @@ export const Analytics = () => {
                     { label: "Engagement Edge", text: "You reply to 40% more comments than them. This is building a tribal loyalty that they lack." },
                     { label: "Video Optimization", text: "Their YouTube Shorts are high quality, but lack clear CTAs. Your hook structure is the winning factor." }
                  ].map((insight, i) => (
-                    <div key={i} className="p-5 bg-white/5 border border-white/5 rounded-2xl space-y-2">
-                       <span className="text-[10px] font-black text-primary uppercase tracking-widest">{insight.label}</span>
-                       <p className="text-sm font-bold text-white/80 leading-relaxed">{insight.text}</p>
+                    <div key={i} className="p-8 bg-slate-50 border border-slate-100 rounded-[2rem] space-y-3">
+                       <span className="text-[10px] font-black text-blue-600 uppercase tracking-[0.2em]">{insight.label}</span>
+                       <p className="text-[15px] font-bold text-slate-700 leading-relaxed">{insight.text}</p>
                     </div>
                  ))}
               </div>
 
-              <button className="w-full py-5 bg-primary text-white rounded-[2rem] text-[11px] font-black uppercase tracking-widest shadow-2xl hover:scale-[1.02] transition-all">
-                 Generate Content Strategy to Beat {selectedCompetitor?.handle}
+              <button className="w-full py-6 bg-slate-900 text-white rounded-[2rem] text-[11px] font-black uppercase tracking-[0.2em] shadow-xl shadow-blue-500/10 hover:bg-blue-600 transition-all active:scale-[0.98]">
+                 Synthesize Offensive Strategy
               </button>
            </div>
         </BottomSheet>
@@ -491,30 +518,30 @@ export const Analytics = () => {
       <header className="flex flex-col gap-6 mb-[var(--section-mb)]">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
-            <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-2">
-              <BarChart3 className="w-3 h-3" />
+            <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-blue-600 mb-2">
+              <BarChart3 className="w-3.5 h-3.5" />
               Intelligence Engine
             </div>
-            <h1 className="text-4xl md:text-5xl font-black tracking-tighter uppercase leading-[0.9]">
-               Impact <span className="text-primary italic">Intelligence</span>
+            <h1 className="text-4xl md:text-5xl font-black tracking-tighter uppercase leading-[0.9] text-slate-900">
+               Impact <span className="text-blue-600 italic">Analysis</span>
             </h1>
           </div>
           <div className="flex items-center gap-3">
              <button 
                onClick={handleExport}
-               className="px-5 py-3 h-12 bg-white text-black border border-white/10 rounded-2xl text-[11px] font-black uppercase tracking-widest flex items-center gap-2 active:scale-95 transition-all w-fit shadow-xl"
+               className="px-5 py-3 h-12 bg-white text-slate-900 border border-slate-200 rounded-xl text-[11px] font-black uppercase tracking-widest flex items-center gap-2 active:scale-95 transition-all w-fit shadow-sm hover:border-blue-600"
              >
                 <Share2 className="w-4 h-4" /> Export Report
              </button>
              {!isMobile ? (
-              <div className="flex items-center gap-2 bg-white/5 p-1 rounded-2xl border border-white/10 w-fit">
+              <div className="flex items-center gap-1 bg-slate-50 p-1 rounded-xl border border-slate-100 w-fit">
                 {['7D', '30D', '90D', 'ALL'].map((range) => (
                   <button 
                     key={range}
                     onClick={() => setDateRange(range)}
                     className={cn(
-                      "px-4 py-2 rounded-xl text-[10px] font-black transition-all",
-                      dateRange === range ? "bg-primary text-white shadow-lg" : "text-zinc-500 hover:text-white"
+                      "px-4 py-2 rounded-lg text-[10px] font-black transition-all",
+                      dateRange === range ? "bg-white text-blue-600 shadow-sm border border-slate-200" : "text-slate-400 hover:text-slate-600"
                     )}
                   >
                     {range}
@@ -525,13 +552,13 @@ export const Analytics = () => {
               <>
                 <button 
                    onClick={() => setIsDateSheetOpen(true)}
-                   className="px-5 py-3 h-12 bg-white/5 border border-white/10 rounded-2xl text-[11px] font-black uppercase tracking-widest flex items-center gap-2 active:scale-95 transition-all text-white w-fit"
+                   className="px-5 py-3 h-12 bg-slate-50 border border-slate-200 rounded-xl text-[11px] font-black uppercase tracking-widest flex items-center gap-2 active:scale-95 transition-all text-slate-900 w-fit"
                 >
-                   <Calendar className="w-4 h-4 text-primary" /> {dateRange === 'ALL' ? 'All Time' : `Last ${dateRange}`}
+                   <Calendar className="w-4 h-4 text-blue-600" /> {dateRange === 'ALL' ? 'All Time' : `Last ${dateRange}`}
                 </button>
                 
                 <BottomSheet isOpen={isDateSheetOpen} onClose={() => setIsDateSheetOpen(false)} height="auto" title="Select Date Range">
-                   <div className="space-y-4 pt-4 pb-safe-offset">
+                   <div className="space-y-3 pt-4 pb-safe-offset">
                       {[
                         { label: 'Last 7 Days', val: '7D' }, 
                         { label: 'Last 30 Days', val: '30D' }, 
@@ -544,40 +571,41 @@ export const Analytics = () => {
                              setDateRange(range.val);
                              setIsDateSheetOpen(false);
                            }}
-                           className={`w-full p-5 rounded-[2rem] text-left font-black text-xs transition-all uppercase tracking-widest border ${dateRange === range.val ? 'bg-primary/10 border-primary shadow-xl shadow-primary/20 text-primary' : 'bg-white/5 hover:bg-white/10 border-white/5 text-white'}`}
+                           className={`w-full p-5 rounded-2xl text-left font-black text-xs transition-all uppercase tracking-widest border ${dateRange === range.val ? 'bg-blue-50 border-blue-200 text-blue-600' : 'bg-slate-50 hover:bg-white border-slate-100 text-slate-500'}`}
                          >
                             {range.label}
                          </button>
                       ))}
                       
                       <div className="flex items-center py-4">
-                         <div className="flex-1 h-px bg-white/10" />
-                         <span className="px-4 text-[10px] font-black uppercase text-muted-foreground tracking-widest">Custom Range</span>
-                         <div className="flex-1 h-px bg-white/10" />
+                         <div className="flex-1 h-px bg-slate-100" />
+                         <span className="px-4 text-[10px] font-black uppercase text-slate-400 tracking-widest">Custom Range</span>
+                         <div className="flex-1 h-px bg-slate-100" />
                       </div>
                       
-                      <button className="w-full p-5 rounded-[2rem] border-2 border-dashed border-white/10 text-muted-foreground flex items-center justify-center gap-2 font-black text-xs uppercase tracking-widest hover:border-primary/40 hover:text-primary transition-all">
+                      <button className="w-full p-5 rounded-2xl border-2 border-dashed border-slate-200 text-slate-400 flex items-center justify-center gap-2 font-black text-[10px] uppercase tracking-widest hover:border-blue-300 hover:text-blue-600 transition-all">
                          <Calendar className="w-4 h-4" /> Pick Dates
                       </button>
                    </div>
                 </BottomSheet>
               </>
             )}
+          </div>
         </div>
       </header>
 
-      <div className="sticky-tabs h-scroll-fade flex items-center gap-6 border-b border-white/5 overflow-x-auto scrollbar-none pb-0 -mx-[var(--page-px)] px-[var(--page-px)]">
+      <div className="sticky-tabs h-scroll-fade flex items-center gap-6 border-b border-slate-100 overflow-x-auto scrollbar-none pb-0 -mx-[var(--page-px)] px-[var(--page-px)] bg-white/80 backdrop-blur-md">
         {tabs.map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
             className={`pb-4 text-[10px] font-black uppercase tracking-widest relative transition-all whitespace-nowrap ${
-              activeTab === tab ? "text-primary" : "text-muted-foreground hover:text-white"
+              activeTab === tab ? "text-blue-600" : "text-slate-400 hover:text-slate-600"
             }`}
           >
             {tab}
             {activeTab === tab && (
-              <motion.div layoutId="activeTab" className="absolute bottom-0 left-0 right-0 h-1 bg-primary shadow-[0_0_20px_rgba(255,60,172,0.4)]" />
+              <motion.div layoutId="activeTab" className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600" />
             )}
           </button>
         ))}

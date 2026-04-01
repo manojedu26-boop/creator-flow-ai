@@ -88,7 +88,7 @@ export const Sidebar = () => {
 
   return (
     <motion.div
-      className="fixed left-0 top-0 bottom-0 z-50 bg-black/50 backdrop-blur-3xl border-r border-white/5 hidden lg:flex flex-col shadow-2xl overflow-visible"
+      className="fixed left-0 top-0 bottom-0 z-50 bg-white border-r border-slate-100 hidden lg:flex flex-col shadow-sm overflow-visible"
       animate={{ width: expanded ? 280 : 80 }}
       transition={springTransition}
       onMouseEnter={() => setIsHoverExpanded(true)}
@@ -96,13 +96,13 @@ export const Sidebar = () => {
     >
       {/* Logo + Pin Toggle */}
       <div
-        className="flex items-center h-20 px-5 gap-3 cursor-pointer border-b border-white/5 relative shrink-0 group"
+        className="flex items-center h-20 px-5 gap-3 cursor-pointer border-b border-slate-50 relative shrink-0 group"
         onClick={toggleSidebar}
       >
         <div className="relative shrink-0">
-          <Sparkles className="w-8 h-8 text-primary" />
+          <Sparkles className="w-8 h-8 text-blue-600" />
           {isExpanded && (
-            <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-primary flex items-center justify-center">
+            <div className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-blue-600 flex items-center justify-center">
               <div className="w-1.5 h-1.5 rounded-full bg-white" />
             </div>
           )}
@@ -110,13 +110,13 @@ export const Sidebar = () => {
         <AnimatePresence>
           {expanded && (
             <motion.span
-              className="font-black tracking-tighter text-xl whitespace-nowrap uppercase"
+              className="font-black tracking-tighter text-xl whitespace-nowrap uppercase text-slate-900"
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -10 }}
               transition={{ duration: 0.2 }}
             >
-              CreatorForge<span className="text-primary italic">AI</span>
+              CreatorForge<span className="text-blue-600 italic">AI</span>
             </motion.span>
           )}
         </AnimatePresence>
@@ -128,7 +128,7 @@ export const Sidebar = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
             >
-              <div className={`w-4 h-4 rounded-full border-2 border-white/20 flex items-center justify-center transition-all ${isExpanded ? "bg-primary border-primary" : ""}`}>
+              <div className={`w-4 h-4 rounded-full border-2 border-slate-200 flex items-center justify-center transition-all ${isExpanded ? "bg-blue-600 border-blue-600" : ""}`}>
                 {isExpanded && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
               </div>
             </motion.div>
@@ -148,22 +148,22 @@ export const Sidebar = () => {
               key={item.label}
               to={item.href}
               className={`flex items-center gap-4 px-4 py-3 rounded-xl relative transition-all group ${
-                isActive ? "bg-primary/[0.08] text-white" : "text-zinc-500 hover:bg-white/5 hover:text-white"
+                isActive ? "bg-blue-50 text-blue-600 shadow-sm" : "text-slate-500 hover:bg-slate-50 hover:text-slate-900"
               }`}
               title={!expanded ? item.label : undefined}
             >
               {isActive && (
                 <motion.div
                   layoutId="activeNav"
-                  className="absolute left-0 top-0 bottom-0 w-[3px] bg-primary rounded-r-full shadow-[2px_0_12px_rgba(255,60,172,0.6)]"
+                  className="absolute left-0 top-0 bottom-0 w-[4px] bg-blue-600 rounded-r-full"
                 />
               )}
 
               {/* Icon with notification badge */}
               <div className="relative shrink-0">
-                <item.icon className={`w-5 h-5 transition-all ${isActive ? "text-primary" : "group-hover:text-white"}`} />
+                <item.icon className={`w-5 h-5 transition-all ${isActive ? "text-blue-600" : "group-hover:text-slate-900"}`} />
                 {isNotifications && unreadCount > 0 && (
-                  <span className="absolute -top-1.5 -right-1.5 min-w-[16px] h-4 bg-rose-500 text-white text-[9px] font-black rounded-full flex items-center justify-center px-1 border border-black">
+                  <span className="absolute -top-1.5 -right-1.5 min-w-[16px] h-4 bg-rose-600 text-white text-[9px] font-black rounded-full flex items-center justify-center px-1 border border-white">
                     {unreadCount > 9 ? "9+" : unreadCount}
                   </span>
                 )}
@@ -198,7 +198,7 @@ export const Sidebar = () => {
       </nav>
 
       {/* Creator Profile Bottom */}
-      <div className="p-3 border-t border-white/5 relative" ref={userMenuRef}>
+      <div className="p-3 border-t border-slate-50 relative" ref={userMenuRef}>
         {/* User Menu Popup */}
         <AnimatePresence>
           {showUserMenu && (
@@ -207,11 +207,11 @@ export const Sidebar = () => {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 8, scale: 0.95 }}
               transition={{ duration: 0.15 }}
-              className="absolute bottom-full left-3 right-3 mb-2 bg-zinc-900 border border-white/10 rounded-2xl shadow-2xl overflow-hidden z-50"
+              className="absolute bottom-full left-3 right-3 mb-2 bg-white border border-slate-200 rounded-2xl shadow-[0_20px_50px_-12px_rgba(0,0,0,0.15)] overflow-hidden z-50 text-slate-900 font-bold"
             >
-              <div className="p-3 border-b border-white/5">
-                <p className="text-[11px] font-black uppercase tracking-widest text-white">{user?.name || "Creator"}</p>
-                <p className="text-[10px] text-zinc-500 font-bold">{user?.email}</p>
+              <div className="p-4 border-b border-slate-50">
+                <p className="text-[11px] font-black uppercase tracking-widest text-slate-900">{user?.name || "Creator"}</p>
+                <p className="text-[10px] text-slate-400 font-bold tracking-tight">{user?.email}</p>
               </div>
               {[
                 { icon: User, label: "View Profile", action: () => { navigate("/network/profile/me"); setShowUserMenu(false); } },
@@ -222,7 +222,7 @@ export const Sidebar = () => {
                 <button
                   key={item.label}
                   onClick={item.action}
-                  className={`w-full flex items-center gap-3 px-3 py-2.5 text-[11px] font-black uppercase tracking-widest transition-all hover:bg-white/5 ${(item as any).danger ? "text-rose-400 hover:text-rose-300" : "text-zinc-400 hover:text-white"}`}
+                  className={`w-full flex items-center gap-3 px-4 py-3 text-[11px] font-black uppercase tracking-widest transition-all hover:bg-slate-50 ${(item as any).danger ? "text-rose-600 hover:bg-rose-50" : "text-slate-500 hover:text-slate-900"}`}
                 >
                   <item.icon className="w-4 h-4 shrink-0" />
                   {item.label}
@@ -235,17 +235,17 @@ export const Sidebar = () => {
 
         <button
           onClick={() => setShowUserMenu(prev => !prev)}
-          className="w-full flex items-center gap-3 p-2 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 hover:border-white/10 transition-all group"
+          className="w-full flex items-center gap-3 p-2 rounded-2xl bg-white border border-slate-200 hover:bg-slate-50 transition-all group shadow-sm"
         >
           <div className="w-9 h-9 shrink-0 relative">
             {user?.photo ? (
-              <img src={user.photo} alt="" className="w-full h-full rounded-full object-cover border border-white/10" />
+              <img src={user.photo} alt="" className="w-full h-full rounded-full object-cover border border-slate-100 shadow-sm" />
             ) : (
-              <div className="w-full h-full rounded-full bg-gradient-to-br from-primary to-blue-500 flex items-center justify-center text-[10px] font-black text-white">
+              <div className="w-full h-full rounded-full bg-blue-600 flex items-center justify-center text-[11px] font-black text-white">
                 {user?.firstName?.[0]}
               </div>
             )}
-            <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 border-2 border-black rounded-full" />
+            <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full" />
           </div>
 
           <AnimatePresence>
@@ -256,18 +256,18 @@ export const Sidebar = () => {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -10 }}
               >
-                <span className="text-[11px] font-black text-white truncate uppercase tracking-tight">{user?.handle || "@creator"}</span>
+                <span className="text-[11px] font-black text-slate-900 truncate uppercase tracking-tight">{user?.handle || "@creator"}</span>
                 <div className="flex gap-1.5 mt-0.5">
                   {user?.platforms?.includes("Instagram") && <Instagram className="w-3 h-3 text-pink-500" />}
                   {user?.platforms?.includes("YouTube") && <Youtube className="w-3 h-3 text-red-500" />}
-                  {user?.platforms?.includes("TikTok") && <Play className="w-3 h-3 text-white" />}
+                  {user?.platforms?.includes("TikTok") && <Play className="w-3 h-3 text-slate-900" />}
                 </div>
               </motion.div>
             )}
           </AnimatePresence>
 
           {expanded && (
-            <ChevronRight className={`w-4 h-4 text-zinc-500 transition-transform ${showUserMenu ? "-rotate-90" : "rotate-90"}`} />
+            <ChevronRight className={`w-4 h-4 text-slate-400 transition-transform ${showUserMenu ? "-rotate-90" : "rotate-90"}`} />
           )}
         </button>
       </div>

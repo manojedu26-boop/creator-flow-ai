@@ -24,14 +24,14 @@ interface Notification {
 }
 
 const typeConfig: Record<string, { icon: any; color: string; bg: string }> = {
-  deal:       { icon: DollarSign,    color: "text-emerald-400", bg: "bg-emerald-500/10 border-emerald-500/20" },
-  revenue:    { icon: DollarSign,    color: "text-emerald-400", bg: "bg-emerald-500/10 border-emerald-500/20" },
-  trending:   { icon: TrendingUp,    color: "text-blue-400",    bg: "bg-blue-500/10 border-blue-500/20" },
-  warning:    { icon: AlertTriangle, color: "text-amber-400",   bg: "bg-amber-500/10 border-amber-500/20" },
-  message:    { icon: MessageSquare, color: "text-violet-400",  bg: "bg-violet-500/10 border-violet-500/20" },
-  connection: { icon: Users,         color: "text-cyan-400",    bg: "bg-cyan-500/10 border-cyan-500/20" },
-  reminder:   { icon: Clock,         color: "text-amber-400",   bg: "bg-amber-500/10 border-amber-500/20" },
-  ai:         { icon: Sparkles,      color: "text-primary",     bg: "bg-primary/10 border-primary/20" },
+  deal:       { icon: DollarSign,    color: "text-emerald-600", bg: "bg-emerald-50 border-emerald-100" },
+  revenue:    { icon: DollarSign,    color: "text-emerald-600", bg: "bg-emerald-50 border-emerald-100" },
+  trending:   { icon: TrendingUp,    color: "text-blue-600",    bg: "bg-blue-50 border-blue-100" },
+  warning:    { icon: AlertTriangle, color: "text-amber-600",   bg: "bg-amber-50 border-amber-100" },
+  message:    { icon: MessageSquare, color: "text-violet-600",  bg: "bg-violet-50 border-violet-100" },
+  connection: { icon: Users,         color: "text-cyan-600",    bg: "bg-cyan-50 border-cyan-100" },
+  reminder:   { icon: Clock,         color: "text-slate-600",   bg: "bg-slate-100 border-slate-200" },
+  ai:         { icon: Sparkles,      color: "text-blue-600",    bg: "bg-blue-50 border-blue-100" },
 };
 
 // Request push permission
@@ -125,15 +125,15 @@ export const Header = ({ title = "Dashboard" }: { title?: string }) => {
 
   return (
     <>
-      <header className="sticky-header lg:fixed top-0 left-0 lg:left-[80px] right-0 h-[var(--header-h)] bg-black/70 dark:bg-black/70 light:bg-white/80 backdrop-blur-3xl border-b border-white/5 z-[100] flex items-center justify-between px-4 md:px-10 transition-all duration-300">
+      <header className="sticky-header lg:fixed top-0 left-0 lg:left-[80px] right-0 h-[var(--header-h)] bg-white/80 backdrop-blur-xl border-b border-slate-100 z-[100] flex items-center justify-between px-4 md:px-10 transition-all duration-300">
         <div className="flex items-center gap-8">
-          <h1 className="text-base md:text-xl font-black tracking-tight uppercase truncate max-w-[160px] md:max-w-none">{title}</h1>
+          <h1 className="text-base md:text-xl font-black tracking-tight uppercase truncate max-w-[160px] md:max-w-none text-slate-900">{title}</h1>
 
-          <div className="hidden xl:flex items-center bg-white/5 rounded-2xl p-1 border border-white/10">
+          <div className="hidden xl:flex items-center bg-slate-50 shadow-inner rounded-2xl p-1 border border-slate-200/50">
             {["Global", "Instagram", "YouTube", "TikTok"].map((platform, i) => (
               <button
                 key={platform}
-                className={`px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${i === 0 ? "bg-primary text-white shadow-lg" : "text-zinc-500 hover:text-white"}`}
+                className={`px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${i === 0 ? "bg-slate-900 text-white shadow-sm" : "text-slate-400 hover:text-slate-700"}`}
               >
                 {platform}
               </button>
@@ -144,16 +144,16 @@ export const Header = ({ title = "Dashboard" }: { title?: string }) => {
         <div className="flex items-center gap-3 md:gap-6">
           {/* Desktop Search */}
           <div className="relative hidden md:block">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
             <input
               type="text"
               placeholder="Search insights..."
-              className="h-11 w-64 bg-white/5 border border-white/10 rounded-2xl pl-12 pr-4 text-[11px] font-bold text-white focus:outline-none focus:ring-1 focus:ring-primary/50 transition-all"
+              className="h-11 w-64 bg-slate-50 border border-slate-200 rounded-2xl pl-12 pr-4 text-[11px] font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-100 transition-all shadow-inner"
             />
           </div>
 
           {/* Mobile Search */}
-          <button onClick={() => setIsSearchOpen(true)} className="md:hidden p-2 text-zinc-500 hover:text-white transition-colors">
+          <button onClick={() => setIsSearchOpen(true)} className="md:hidden p-2 text-slate-400 hover:text-slate-900 transition-colors">
             <Search className="w-5 h-5" />
           </button>
 
@@ -161,7 +161,7 @@ export const Header = ({ title = "Dashboard" }: { title?: string }) => {
           {mounted && (
             <button
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="p-2 text-zinc-500 hover:text-white transition-colors rounded-xl hover:bg-white/5"
+              className="p-2 text-slate-400 hover:text-slate-900 transition-colors rounded-xl hover:bg-slate-50"
               aria-label="Toggle Theme"
             >
               {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
@@ -172,15 +172,15 @@ export const Header = ({ title = "Dashboard" }: { title?: string }) => {
           <div className="relative" ref={panelRef}>
             <button
               onClick={() => setShowNotifications(prev => !prev)}
-              className="relative p-2 text-zinc-500 hover:text-white transition-colors rounded-xl hover:bg-white/5"
+              className="relative p-2 text-slate-400 hover:text-slate-900 transition-colors rounded-xl hover:bg-slate-50"
               aria-label="Notifications"
             >
-              <Bell className={`w-5 h-5 transition-all ${showNotifications ? "text-primary" : ""}`} />
+              <Bell className={`w-5 h-5 transition-all ${showNotifications ? "text-blue-600" : ""}`} />
               {unreadCount > 0 && (
                 <motion.span
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
-                  className="absolute top-1.5 right-1.5 min-w-[16px] h-4 bg-rose-500 text-white text-[9px] font-black rounded-full flex items-center justify-center px-1 border border-black"
+                  className="absolute top-1.5 right-1.5 min-w-[16px] h-4 bg-rose-600 text-white text-[9px] font-black rounded-full flex items-center justify-center px-1 border-2 border-white"
                 >
                   {unreadCount > 9 ? "9+" : unreadCount}
                 </motion.span>
@@ -195,33 +195,23 @@ export const Header = ({ title = "Dashboard" }: { title?: string }) => {
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 8, scale: 0.97 }}
                   transition={{ duration: 0.15 }}
-                  className="hidden lg:flex absolute top-full right-0 mt-2 w-[420px] bg-zinc-950 border border-white/10 rounded-3xl shadow-2xl shadow-black/50 z-[200] flex-col overflow-hidden"
+                  className="hidden lg:flex absolute top-full right-0 mt-2 w-[420px] bg-white border border-slate-200 rounded-3xl shadow-[0_20px_50px_-12px_rgba(0,0,0,0.15)] z-[200] flex-col overflow-hidden"
                 >
                   {/* Panel Header */}
-                  <div className="flex items-center justify-between px-5 py-4 border-b border-white/5">
+                  <div className="flex items-center justify-between px-5 py-4 border-b border-slate-50">
                     <div>
-                      <h3 className="font-black text-sm uppercase tracking-widest">Notifications</h3>
+                      <h3 className="font-black text-sm uppercase tracking-widest text-slate-900">Recent Notifications</h3>
                       {unreadCount > 0 && (
-                        <p className="text-[10px] text-zinc-500 font-bold mt-0.5">{unreadCount} unread</p>
+                        <p className="text-[10px] text-slate-400 font-bold mt-0.5">{unreadCount} unread alerts</p>
                       )}
                     </div>
                     <div className="flex items-center gap-2">
                       {unreadCount > 0 && (
                         <button
                           onClick={markAllRead}
-                          className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-primary hover:text-white transition-colors px-3 py-1.5 rounded-xl hover:bg-white/5"
+                          className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-blue-600 hover:text-blue-700 transition-colors px-3 py-1.5 rounded-xl hover:bg-blue-50"
                         >
                           <CheckCheck className="w-3.5 h-3.5" /> Mark all read
-                        </button>
-                      )}
-                      {/* Push permission button */}
-                      {typeof Notification !== "undefined" && Notification.permission === "default" && (
-                        <button
-                          onClick={requestPushPermission}
-                          className="text-[10px] font-black uppercase tracking-widest text-zinc-500 hover:text-white transition-colors px-3 py-1.5 rounded-xl hover:bg-white/5"
-                          title="Enable push notifications"
-                        >
-                          <Bell className="w-3.5 h-3.5" />
                         </button>
                       )}
                     </div>
@@ -230,7 +220,7 @@ export const Header = ({ title = "Dashboard" }: { title?: string }) => {
                   {/* Notification List */}
                   <div className="max-h-[420px] overflow-y-auto no-scrollbar">
                     {notifications.length === 0 ? (
-                      <div className="flex flex-col items-center justify-center py-12 text-zinc-600 gap-3">
+                      <div className="flex flex-col items-center justify-center py-12 text-slate-300 gap-3">
                         <Bell className="w-10 h-10 opacity-30" />
                         <p className="text-[11px] font-black uppercase tracking-widest">You're all caught up!</p>
                       </div>
@@ -244,22 +234,22 @@ export const Header = ({ title = "Dashboard" }: { title?: string }) => {
                             layout
                             initial={{ opacity: 0, x: 10 }}
                             animate={{ opacity: 1, x: 0 }}
-                            className={`flex items-start gap-4 px-4 py-4 cursor-pointer border-b border-white/[0.03] transition-all hover:bg-white/[0.03] group ${notif.read ? "opacity-60" : ""}`}
+                            className={`flex items-start gap-4 px-4 py-4 cursor-pointer border-b border-slate-50 transition-all hover:bg-slate-50 group ${notif.read ? "opacity-60" : ""}`}
                             onClick={() => markAsRead(notif)}
                           >
                             <div className={`w-9 h-9 rounded-2xl border flex items-center justify-center shrink-0 ${config.bg}`}>
                               <Icon className={`w-4 h-4 ${config.color}`} />
                             </div>
                             <div className="flex-1 min-w-0">
-                              <p className="text-[12px] font-black text-white">{notif.title}</p>
-                              <p className="text-[11px] text-zinc-400 font-medium leading-relaxed mt-0.5">{notif.body}</p>
-                              <p className="text-[10px] text-zinc-600 font-black uppercase tracking-widest mt-1.5">{notif.time}</p>
+                              <p className="text-[12px] font-black text-slate-900">{notif.title}</p>
+                              <p className="text-[11px] text-slate-500 font-medium leading-relaxed mt-0.5">{notif.body}</p>
+                              <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest mt-1.5">{notif.time}</p>
                             </div>
                             <div className="flex items-center gap-2 shrink-0">
-                              {!notif.read && <div className="w-2 h-2 rounded-full bg-primary" />}
+                              {!notif.read && <div className="w-2.5 h-2.5 rounded-full bg-blue-600 shadow-sm" />}
                               <button
                                 onClick={e => deleteNotif(notif.id, e)}
-                                className="opacity-0 group-hover:opacity-100 p-1 text-zinc-600 hover:text-white transition-all"
+                                className="opacity-0 group-hover:opacity-100 p-1 text-slate-300 hover:text-rose-600 transition-all"
                               >
                                 <X className="w-3.5 h-3.5" />
                               </button>
@@ -271,10 +261,10 @@ export const Header = ({ title = "Dashboard" }: { title?: string }) => {
                   </div>
 
                   {/* View All */}
-                  <div className="p-3 border-t border-white/5">
+                  <div className="p-3 border-t border-slate-50">
                     <button
                       onClick={() => { setShowNotifications(false); navigate("/notifications"); }}
-                      className="w-full text-[10px] font-black uppercase tracking-widest text-zinc-500 hover:text-white transition-colors py-2 rounded-xl hover:bg-white/5"
+                      className="w-full text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-blue-600 transition-colors py-2.5 rounded-xl hover:bg-slate-50"
                     >
                       View All Notifications →
                     </button>
@@ -292,18 +282,18 @@ export const Header = ({ title = "Dashboard" }: { title?: string }) => {
             >
               <div className="w-8 h-8 md:w-9 md:h-9 shrink-0 relative">
                 {user?.photo ? (
-                  <img src={user.photo} alt="" className="w-full h-full rounded-full object-cover border border-white/10 group-hover:border-primary/50 transition-colors" />
+                  <img src={user.photo} alt="" className="w-full h-full rounded-full object-cover border border-slate-100 shadow-sm group-hover:border-blue-400 transition-colors" />
                 ) : (
-                  <div className="w-full h-full rounded-full bg-gradient-to-tr from-primary to-blue-500 flex items-center justify-center text-[10px] font-black text-white">
+                  <div className="w-full h-full rounded-full bg-blue-600 flex items-center justify-center text-[10px] font-black text-white shadow-sm">
                     {user?.firstName?.[0]}
                   </div>
                 )}
               </div>
               <div className="hidden sm:flex flex-col text-left">
-                <span className="text-[10px] font-black text-white uppercase tracking-widest">{user?.firstName || "Creator"}</span>
-                <span className="text-[8px] font-black text-primary uppercase tracking-widest">{user?.handle || 'Growth Plan'}</span>
+                <span className="text-[10px] font-black text-slate-900 uppercase tracking-widest">{user?.firstName || "Creator"}</span>
+                <span className="text-[8px] font-black text-blue-600 uppercase tracking-widest">{user?.handle || 'Elite Creator'}</span>
               </div>
-              <ChevronDown className="hidden md:block w-4 h-4 text-zinc-500 group-hover:text-white transition-colors" />
+              <ChevronDown className="hidden md:block w-4 h-4 text-slate-400 group-hover:text-slate-900 transition-colors" />
             </button>
 
             {/* User dropdown mini */}
@@ -314,11 +304,11 @@ export const Header = ({ title = "Dashboard" }: { title?: string }) => {
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 6, scale: 0.96 }}
                   transition={{ duration: 0.12 }}
-                  className="absolute top-full right-0 mt-2 w-52 bg-zinc-950 border border-white/10 rounded-2xl shadow-2xl overflow-hidden z-[200]"
+                  className="absolute top-full right-0 mt-2 w-52 bg-white border border-slate-200 rounded-2xl shadow-[0_20px_50px_-12px_rgba(0,0,0,0.15)] overflow-hidden z-[200]"
                 >
-                  <div className="p-3 border-b border-white/5">
-                    <p className="text-[11px] font-black uppercase text-white">{user?.name}</p>
-                    <p className="text-[10px] text-zinc-500">{user?.email}</p>
+                  <div className="p-4 border-b border-slate-50">
+                    <p className="text-[11px] font-black uppercase text-slate-900 tracking-tight">{user?.name}</p>
+                    <p className="text-[10px] text-slate-400 font-bold">{user?.email}</p>
                   </div>
                   {[
                     { label: "View Profile", action: () => navigate("/network/profile/me") },
@@ -327,7 +317,7 @@ export const Header = ({ title = "Dashboard" }: { title?: string }) => {
                     <button
                       key={item.label}
                       onClick={() => { item.action(); setShowUserDropdown(false); }}
-                      className="w-full text-left px-4 py-2.5 text-[11px] font-black uppercase tracking-widest text-zinc-400 hover:text-white hover:bg-white/5 transition-all"
+                      className="w-full text-left px-4 py-3 text-[11px] font-black uppercase tracking-widest text-slate-500 hover:text-slate-900 hover:bg-slate-50 transition-all font-bold"
                     >
                       {item.label}
                     </button>

@@ -1,17 +1,18 @@
-import { useState, useEffect, useRef, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import { motion } from "framer-motion";
 import {
   Search, Star, MessageSquare, Send, Sparkles, ShieldCheck, Clock,
   MoreHorizontal, ChevronRight, Filter, CheckCircle2, Trash2,
   Wand2, Smile, Paperclip, ChevronLeft, Target, X, Check,
-  CheckCheck, Loader2, UserPlus, DollarSign, HandshakeIcon
+  CheckCheck, Loader2, DollarSign, HandshakeIcon, Lightbulb
 } from "lucide-react";
-import { PageTransition, staggerContainer, staggerItem } from "../../components/shared/MotionComponents";
+import { PageTransition, staggerItem } from "../../components/shared/MotionComponents";
 import { EmptyState } from "../../components/shared/EmptyState";
 import { useAuth } from "../../contexts/AuthContext";
 import { toast } from "../../components/ui/sonner";
 import { db } from "../../lib/db";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { cn } from "../../lib/utils";
 
 // ─── Types ─────────────────────────────────────────────────────────────────
 type Tab = "dms" | "brands" | "comments";
@@ -98,7 +99,6 @@ const COMMENTS = [
   { id: "c3", post: "New Desk Setup", user: "spam_bot99", text: "Check bio for free cash!!!", time: "10h", type: "Spam", sentiment: "Negative" },
 ];
 
-// ─── Component ──────────────────────────────────────────────────────────────
 export const Messages = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -118,25 +118,21 @@ export const Messages = () => {
   const selectedChat = chats.find(c => c.id === selectedId);
   const currentMessages = messages[selectedId] || [];
 
-  // Deep-link: open specific conversation from URL param
   useEffect(() => {
     const convId = searchParams.get("conv");
     if (convId) { setSelectedId(convId); setIsMobileChatOpen(true); }
-  }, []);
+  }, [searchParams]);
 
-  // Auto-scroll to bottom on new messages
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [messages, selectedId]);
 
-  // Mark as read when chat opened — clear unread badge
   useEffect(() => {
     setChats(prev => prev.map(c => c.id === selectedId ? { ...c, unread: 0 } : c));
   }, [selectedId]);
 
-  // Simulate incoming message every 30s
   useEffect(() => {
     const interval = setInterval(() => {
       const incomingMsg: Message = {
@@ -164,12 +160,6 @@ export const Messages = () => {
           description: incomingMsg.text,
           action: { label: "Open", onClick: () => { setSelectedId("1"); setIsMobileChatOpen(true); } }
         });
-        db.insert("notifications", {
-          id: `notif_msg_${Date.now()}`,
-          title: "New Message from Nike PR Team",
-          body: incomingMsg.text,
-          type: "message", time: "Just now", read: false, link: "/messages?conv=1"
-        });
       }
     }, 30000);
     return () => clearInterval(interval);
@@ -188,7 +178,6 @@ export const Messages = () => {
     setChats(prev => prev.map(c => c.id === selectedId ? { ...c, last: replyText.trim(), time: "Just now" } : c));
     setReplyText("");
 
-    // Optimistic → sent → read transition
     setTimeout(() => {
       setMessages(prev => ({
         ...prev,
@@ -208,7 +197,6 @@ export const Messages = () => {
     setReplyText("");
     await new Promise(r => setTimeout(r, 1800));
     const suggestion = AI_REPLIES[selectedId] || "I appreciate your message! Let me get back to you with a detailed response shortly.";
-    // Typewriter effect
     let i = 0;
     const interval = setInterval(() => {
       setReplyText(suggestion.slice(0, i));
@@ -218,7 +206,7 @@ export const Messages = () => {
         clearInterval(interval);
         setIsAiGenerating(false);
         inputRef.current?.focus();
-        toast.success("AI reply generated!", { description: "Edit it before sending." });
+        toast.success("AI response optimized!", { description: "Ready for your review." });
       }
     }, 20);
   };
@@ -231,12 +219,12 @@ export const Messages = () => {
       ),
     }));
     if (action === "accepted") {
-      toast.success("Collab Accepted! 🎉", { description: "A draft deal has been created in your Brand Deals hub." });
+      toast.success("Connection Established! 🎉", { description: "Deal details synced to hub." });
       navigate("/deals");
     } else if (action === "declined") {
-      toast.info("Collab Declined", { description: "A polite decline has been sent automatically." });
+      toast.info("Request Archived", { description: "Formal notification sent." });
     } else {
-      toast.info("Counter-Propose sent!", { description: "Your modified terms have been sent back." });
+      toast.info("AI Countering...", { description: "Terms recalibrating." });
     }
   };
 
@@ -248,41 +236,42 @@ export const Messages = () => {
 
   return (
     <PageTransition>
-      <div className="flex h-[calc(100vh-140px)] -mx-4 md:-mx-8 -my-6 overflow-hidden bg-background/50 relative">
-        {/* BG accents */}
-        <div className="absolute top-[-10%] right-[-10%] w-[40%] h-[40%] bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
+      <div className="flex h-[calc(100vh-140px)] -mx-4 md:-mx-8 -my-6 overflow-hidden bg-slate-50 relative">
+        <div className="absolute top-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-500/5 blur-[120px] rounded-full pointer-events-none" />
         <div className="absolute bottom-[-10%] left-[-10%] w-[30%] h-[30%] bg-indigo-500/5 blur-[100px] rounded-full pointer-events-none" />
 
-        {/* ══════════ LEFT — INBOX ══════════ */}
-        <div className={`w-full lg:w-[380px] border-r border-white/5 flex-col h-full bg-black/30 backdrop-blur-3xl z-10 shrink-0 ${isMobileChatOpen ? "hidden lg:flex" : "flex"}`}>
-          <div className="p-5 md:p-6 space-y-4 border-b border-white/5">
+        <div className={cn(
+          "w-full lg:w-[400px] border-r border-slate-200 flex flex-col h-full bg-white z-10 shrink-0 shadow-sm transition-all",
+          isMobileChatOpen ? "hidden lg:flex" : "flex"
+        )}>
+          <div className="p-6 md:p-8 space-y-6 border-b border-slate-100">
             <div className="flex items-center justify-between">
-              <h2 className="text-xl font-black uppercase tracking-tighter flex items-center gap-2">
+              <h2 className="text-2xl font-black uppercase tracking-tighter text-slate-900 italic flex items-center gap-3">
                 Inbox
-                <span className="px-2 py-0.5 rounded-md bg-primary/10 text-primary text-[10px] font-black border border-primary/20 animate-pulse">LIVE</span>
+                <span className="px-3 py-1 rounded-full bg-blue-50 text-blue-600 text-[9px] font-black border border-blue-100 uppercase tracking-widest">Live Sync</span>
               </h2>
-              <div className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-primary/10 hover:border-primary/30 transition-all cursor-pointer">
+              <div className="w-10 h-10 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 hover:text-blue-600 hover:border-blue-200 transition-all cursor-pointer shadow-sm">
                 <Filter className="w-4 h-4" />
               </div>
             </div>
 
             <div className="relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+              <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
               <input
-                placeholder="Search conversations..."
+                placeholder="Find creator or brand..."
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
-                className="w-full h-12 bg-white/5 border border-white/10 rounded-2xl pl-11 pr-4 text-sm font-bold focus:outline-none focus:ring-1 focus:ring-primary/40 transition-all placeholder:text-zinc-600"
+                className="w-full h-14 bg-slate-50 border border-slate-100 rounded-[1.5rem] pl-12 pr-4 text-sm font-bold focus:outline-none focus:ring-1 focus:ring-blue-600 focus:bg-white transition-all shadow-inner placeholder:text-slate-400"
               />
             </div>
 
-            <div className="flex gap-1 bg-white/5 p-1 rounded-2xl border border-white/5">
+            <div className="flex gap-1.5 bg-slate-50 p-1.5 rounded-[1.5rem] border border-slate-100 shadow-inner">
               {(["brands", "dms", "comments"] as Tab[]).map(t => (
                 <button
                   key={t}
                   onClick={() => setActiveTab(t)}
-                  className={`flex-1 py-2.5 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${
-                    activeTab === t ? "bg-primary text-white shadow-lg shadow-primary/20" : "text-zinc-500 hover:text-white"
+                  className={`flex-1 py-3 rounded-2xl text-[9px] font-black uppercase tracking-[0.15em] transition-all ${
+                    activeTab === t ? "bg-slate-900 text-white shadow-xl" : "text-slate-400 hover:text-slate-900"
                   }`}
                 >
                   {t === "dms" ? "Network" : t === "brands" ? "Brands" : "Audience"}
@@ -293,30 +282,33 @@ export const Messages = () => {
 
           <div className="flex-1 overflow-y-auto no-scrollbar py-2">
             {activeTab === "comments" ? (
-              <div className="space-y-2 px-3">
+              <div className="space-y-4 px-5">
                 {COMMENTS.map(c => (
-                  <div key={c.id} className="p-4 rounded-3xl border border-white/5 bg-white/[0.03] hover:border-primary/30 transition-all cursor-pointer space-y-3">
+                  <div key={c.id} className="p-6 rounded-[2rem] border border-slate-100 bg-white hover:border-blue-200 transition-all cursor-pointer space-y-4 shadow-sm group">
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <div className="w-7 h-7 rounded-full bg-primary/20 flex items-center justify-center text-primary font-black text-[10px]">{c.user[0].toUpperCase()}</div>
+                      <div className="flex items-center gap-3">
+                        <div className="w-9 h-9 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-600 font-black text-[11px] border border-blue-100 shadow-sm">{c.user[0].toUpperCase()}</div>
                         <div>
-                          <span className="text-xs font-black block">{c.user}</span>
-                          <span className="text-[9px] font-bold text-zinc-500 uppercase">{c.post}</span>
+                          <span className="text-xs font-black block text-slate-900 uppercase italic tracking-tighter">{c.user}</span>
+                          <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{c.post}</span>
                         </div>
                       </div>
-                      <span className={`text-[8px] font-black uppercase px-2 py-0.5 rounded-full border ${c.type === "Spam" ? "bg-rose-500/10 text-rose-400 border-rose-500/20" : "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"}`}>{c.type}</span>
+                      <span className={cn(
+                        "text-[8px] font-black uppercase px-2.5 py-1 rounded-full border shadow-sm",
+                        c.type === "Spam" ? "bg-rose-50 text-rose-500 border-rose-100" : "bg-emerald-50 text-emerald-600 border-emerald-100"
+                      )}>{c.type}</span>
                     </div>
-                    <p className="text-[12px] text-zinc-400 leading-relaxed">"{c.text}"</p>
-                    <button className="w-full h-8 rounded-xl bg-primary/10 border border-primary/20 text-primary text-[9px] font-black uppercase tracking-widest hover:bg-primary hover:text-white transition-all flex items-center justify-center gap-2">
-                      <Sparkles className="w-3 h-3" /> AI Reply
+                    <p className="text-[12px] text-slate-500 leading-relaxed font-medium italic">"{c.text}"</p>
+                    <button className="w-full h-10 rounded-xl bg-slate-50 border border-slate-100 text-slate-400 text-[9px] font-black uppercase tracking-[0.2em] group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600 transition-all flex items-center justify-center gap-2">
+                       AI Smart Reply
                     </button>
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="space-y-1 px-3">
+              <div className="space-y-2 px-5">
                 {filteredChats.length === 0 ? (
-                  <EmptyState icon={MessageSquare} title="No conversations" description="Start a new conversation from the Creator Network." />
+                  <EmptyState icon={MessageSquare} title="No sessions found" description="Connect with elite creators via the Network." />
                 ) : (
                   filteredChats.map(chat => (
                     <motion.div
@@ -324,31 +316,32 @@ export const Messages = () => {
                       onClick={() => { setSelectedId(chat.id); setIsMobileChatOpen(true); }}
                       initial={{ opacity: 0, y: 4 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className={`p-4 rounded-3xl flex items-center gap-3 cursor-pointer border transition-all ${
-                        selectedId === chat.id ? "bg-white/[0.07] border-primary/30 shadow-lg" : "border-transparent hover:bg-white/[0.03]"
-                      }`}
+                      className={cn(
+                        "p-5 rounded-[2.5rem] flex items-center gap-4 cursor-pointer border transition-all",
+                        selectedId === chat.id ? "bg-blue-50 border-blue-200 shadow-md transform scale-[1.02]" : "border-transparent bg-white hover:bg-slate-50 hover:border-slate-100"
+                      )}
                     >
                       <div className="relative shrink-0">
-                        <div className={`w-12 h-12 rounded-2xl ${chat.color} flex items-center justify-center text-white font-black text-lg shadow-lg border border-white/10`}>{chat.avatar}</div>
+                        <div className={cn("w-14 h-14 rounded-[1.5rem] flex items-center justify-center text-white font-black text-xl shadow-lg border border-white/20", chat.color)}>{chat.avatar}</div>
                         {chat.brand && (
-                          <div className="absolute -top-1 -right-1 p-0.5 bg-amber-400 rounded-full shadow-lg border-2 border-black">
-                            <Star className="w-2.5 h-2.5 text-white fill-white" />
+                          <div className="absolute -top-1 -right-1 p-1 bg-amber-400 rounded-lg shadow-lg border-2 border-white">
+                            <Star className="w-3 h-3 text-white fill-white" />
                           </div>
                         )}
-                        {chat.online && <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-emerald-500 rounded-full border-2 border-black" />}
+                        {chat.online && <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-emerald-500 rounded-full border-2 border-white shadow-sm" />}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className="flex justify-between items-center mb-0.5">
-                          <h4 className="font-black text-[13px] truncate uppercase tracking-tight flex items-center gap-1.5">
+                        <div className="flex justify-between items-center mb-1">
+                          <h4 className={cn("font-black text-sm truncate uppercase tracking-tighter italic flex items-center gap-2", selectedId === chat.id ? 'text-blue-600' : 'text-slate-900')}>
                             {chat.name}
-                            {chat.verified && <CheckCircle2 className="w-3 h-3 text-blue-400 shrink-0" />}
+                            {chat.verified && <CheckCircle2 className="w-3.5 h-3.5 text-blue-500 shrink-0" />}
                           </h4>
-                          <span className="text-[9px] font-bold text-zinc-500 shrink-0">{chat.time}</span>
+                          <span className="text-[10px] font-black text-slate-400 shrink-0 uppercase tracking-widest">{chat.time}</span>
                         </div>
-                        <div className="flex justify-between items-center gap-2">
-                          <p className={`text-[11px] truncate flex-1 ${chat.unread > 0 ? "text-white font-black" : "text-zinc-500 font-medium"}`}>{chat.last}</p>
+                        <div className="flex justify-between items-center gap-3">
+                          <p className={`text-[11px] truncate flex-1 font-medium ${chat.unread > 0 ? "text-slate-900 font-black" : "text-slate-500"}`}>{chat.last}</p>
                           {chat.unread > 0 && (
-                            <span className="w-5 h-5 rounded-full bg-primary flex items-center justify-center text-[9px] font-black text-white shrink-0">{chat.unread}</span>
+                            <span className="h-5 px-2 rounded-full bg-blue-600 flex items-center justify-center text-[9px] font-black text-white shrink-0 shadow-lg shadow-blue-500/20">{chat.unread}</span>
                           )}
                         </div>
                       </div>
@@ -360,69 +353,68 @@ export const Messages = () => {
           </div>
         </div>
 
-        {/* ══════════ RIGHT — CONVERSATION ══════════ */}
-        <div className={`flex-1 flex flex-col h-full bg-transparent relative overflow-hidden ${isMobileChatOpen ? "flex" : "hidden lg:flex"}`}>
-          {/* Chat header */}
-          <div className="h-[68px] border-b border-white/5 bg-black/40 backdrop-blur-3xl flex items-center px-4 lg:px-6 justify-between z-10 shrink-0">
-            <div className="flex items-center gap-3">
-              <button onClick={() => setIsMobileChatOpen(false)} className="lg:hidden p-2 hover:bg-white/5 rounded-xl transition-all">
-                <ChevronLeft className="w-5 h-5" />
+        <div className={cn(
+          "flex-1 flex flex-col h-full bg-transparent relative overflow-hidden",
+          isMobileChatOpen ? "flex" : "hidden lg:flex"
+        )}>
+          <div className="h-[80px] border-b border-slate-200 bg-white flex items-center px-6 lg:px-10 justify-between z-10 shrink-0 shadow-sm">
+            <div className="flex items-center gap-5">
+              <button onClick={() => setIsMobileChatOpen(false)} className="lg:hidden p-3 hover:bg-slate-50 rounded-2xl transition-all">
+                <ChevronLeft className="w-6 h-6 text-slate-900" />
               </button>
-              <div className={`w-9 h-9 rounded-2xl ${selectedChat?.color || "bg-zinc-800"} flex items-center justify-center text-white font-black shrink-0`}>
+              <div className={cn("w-11 h-11 rounded-[1.25rem] flex items-center justify-center text-white font-black shrink-0 shadow-md", selectedChat?.color || "bg-slate-900")}>
                 {selectedChat?.avatar}
               </div>
               <div>
-                <h3 className="text-sm font-black uppercase tracking-tight flex items-center gap-1.5">
+                <h3 className="text-lg font-black uppercase tracking-tighter text-slate-900 italic flex items-center gap-2">
                   {selectedChat?.name}
-                  {selectedChat?.verified && <CheckCircle2 className="w-3.5 h-3.5 text-blue-400 shrink-0" />}
+                  {selectedChat?.verified && <CheckCircle2 className="w-4 h-4 text-blue-500 shrink-0" />}
                 </h3>
-                <p className="text-[9px] text-emerald-500 font-bold uppercase tracking-widest flex items-center gap-1">
-                  {selectedChat?.online ? <><span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> Online now</> : <span className="text-zinc-500">Offline</span>}
+                <p className="text-[10px] text-emerald-600 font-black uppercase tracking-[0.2em] flex items-center gap-2">
+                  {selectedChat?.online ? <><span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]" /> Negotiating Live</> : <span className="text-slate-400 italic">Offline Intelligence</span>}
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              <button className="hidden sm:flex h-9 px-4 rounded-xl border border-white/10 hover:bg-white/5 transition-all text-[10px] font-black uppercase tracking-widest items-center gap-2">
-                <Clock className="w-3.5 h-3.5" /> Deal History
+            <div className="flex items-center gap-3">
+              <button className="hidden sm:flex h-11 px-6 rounded-2xl border border-slate-200 hover:bg-slate-50 transition-all text-[10px] font-black uppercase tracking-[0.2em] items-center gap-3 shadow-sm">
+                 Campaign Ledger
               </button>
-              <button className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition-all cursor-pointer">
-                <MoreHorizontal className="w-4 h-4" />
+              <button className="w-11 h-11 rounded-2xl bg-white border border-slate-200 flex items-center justify-center hover:text-blue-600 hover:border-blue-200 transition-all cursor-pointer shadow-sm text-slate-400">
+                <MoreHorizontal className="w-5 h-5" />
               </button>
             </div>
           </div>
 
-          {/* AI Co-Pilot toolbar */}
-          <div className="bg-primary/5 py-3 px-4 lg:px-6 flex items-center gap-4 border-b border-white/5 overflow-x-auto no-scrollbar shrink-0">
-            <span className="text-[10px] font-black uppercase tracking-widest text-primary whitespace-nowrap flex items-center gap-1.5 shrink-0">
-              <Sparkles className="w-3.5 h-3.5" /> AI Co-Pilot
+          <div className="bg-blue-50/80 py-4 px-6 lg:px-10 flex items-center gap-6 border-b border-blue-100/50 backdrop-blur-md overflow-x-auto no-scrollbar shrink-0 shadow-inner">
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-600 whitespace-nowrap flex items-center gap-3 shrink-0 italic">
+               Decision Engine
             </span>
-            <div className="flex gap-2">
+            <div className="flex gap-4">
               {[
-                { label: "Suggest Reply", icon: Wand2, primary: true, action: handleAiSuggest },
-                { label: "Contract", icon: ShieldCheck, action: () => navigate("/contracts") },
-                { label: "Pricing", icon: Target, action: () => toast.info("Opening rate calculator...") },
-                { label: "Next Steps", icon: ChevronRight, action: () => toast.info("AI analyzing conversation...") },
+                { label: "AI Drafting", icon: Sparkles, primary: true, action: handleAiSuggest },
+                { label: "Protection", icon: ShieldCheck, action: () => navigate("/contracts") },
+                { label: "Market Rates", icon: DollarSign, action: () => toast.info("Analyzing market parity...") },
+                { label: "Strategies", icon: Lightbulb, action: () => toast.info("Strategizing next response...") },
               ].map(tool => (
                 <button
                   key={tool.label}
                   onClick={tool.action}
                   disabled={isAiGenerating && tool.primary}
-                  className={`h-8 px-4 rounded-xl text-[9px] font-black uppercase tracking-widest flex items-center gap-1.5 border transition-all whitespace-nowrap disabled:opacity-60 ${
-                    tool.primary ? "bg-primary text-white border-primary shadow-lg shadow-primary/20 hover:scale-[1.02]" : "bg-black/30 border-white/10 hover:bg-white/5"
+                  className={`h-10 px-5 rounded-[1.25rem] text-[9px] font-black uppercase tracking-[0.2em] flex items-center gap-2.5 border transition-all whitespace-nowrap disabled:opacity-60 shadow-sm ${
+                    tool.primary ? "bg-blue-600 text-white border-blue-600 shadow-blue-500/10 hover:bg-blue-700 active:scale-[0.98]" : "bg-white border-slate-200 text-slate-700 hover:border-blue-600 hover:text-blue-600"
                   }`}
                 >
-                  {isAiGenerating && tool.primary ? <Loader2 className="w-3 h-3 animate-spin" /> : <tool.icon className="w-3 h-3" />}
-                  {isAiGenerating && tool.primary ? "Generating..." : tool.label}
+                  {isAiGenerating && tool.primary ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <tool.icon className="w-3.5 h-3.5" />}
+                  {isAiGenerating && tool.primary ? "Simulating..." : tool.label}
                 </button>
               ))}
             </div>
           </div>
 
-          {/* Messages */}
-          <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 md:p-8 space-y-6 no-scrollbar">
-            <div className="flex flex-col items-center py-4 opacity-30 pointer-events-none select-none">
-              <div className="px-4 py-1 rounded-full border border-white/20 bg-black text-[8px] font-black uppercase tracking-widest">End-to-End Encrypted</div>
-              <div className="h-px w-32 bg-gradient-to-r from-transparent via-primary/40 to-transparent mt-3" />
+          <div ref={scrollRef} className="flex-1 overflow-y-auto p-6 md:p-14 space-y-10 no-scrollbar bg-slate-50/30">
+            <div className="flex flex-col items-center py-6 opacity-20 pointer-events-none select-none">
+              <div className="px-6 py-1.5 rounded-full border border-slate-200 bg-white text-[9px] font-black uppercase tracking-[0.3em] text-slate-400 shadow-sm">Verified Corporate Session</div>
+              <div className="h-px w-48 bg-gradient-to-r from-transparent via-blue-500/30 to-transparent mt-4" />
             </div>
 
             {currentMessages.map(msg => (
@@ -435,25 +427,29 @@ export const Messages = () => {
                     onCounter={() => handleCollabAction(selectedId, msg.id, "countered")}
                   />
                 ) : (
-                  <div className={`flex items-end gap-3 ${msg.from === "me" ? "flex-row-reverse" : ""}`}>
-                    <div className={`w-8 h-8 rounded-2xl flex items-center justify-center text-white font-black text-[10px] shrink-0 ${msg.from === "me" ? "bg-primary shadow-lg shadow-primary/30" : `${selectedChat?.color || "bg-zinc-800"}`}`}>
+                  <div className={cn("flex items-end gap-5", msg.from === "me" ? "flex-row-reverse" : "")}>
+                    <div className={cn(
+                      "w-10 h-10 rounded-[1.25rem] flex items-center justify-center text-white font-black text-[11px] shrink-0 border border-white/20 shadow-md",
+                      msg.from === "me" ? "bg-blue-600" : `${selectedChat?.color || "bg-slate-900"}`
+                    )}>
                       {msg.from === "me" ? userInitials : selectedChat?.avatar}
                     </div>
-                    <div className={`max-w-[75%] space-y-1 ${msg.from === "me" ? "items-end" : "items-start"} flex flex-col`}>
-                      <div className={`px-5 py-3.5 rounded-3xl text-[13px] leading-relaxed font-medium ${
+                    <div className={cn("max-w-[75%] space-y-2 flex flex-col", msg.from === "me" ? "items-end" : "items-start")}>
+                      <div className={cn(
+                        "px-7 py-4 rounded-[2rem] text-[15px] leading-relaxed font-semibold shadow-sm transition-all",
                         msg.from === "me"
-                          ? "bg-primary text-white rounded-br-sm shadow-lg shadow-primary/20"
-                          : "bg-white/[0.07] border border-white/10 rounded-bl-sm"
-                      }`}>
+                          ? "bg-blue-600 text-white rounded-br-none shadow-blue-500/10"
+                          : "bg-white border border-slate-200 text-slate-800 rounded-bl-none"
+                      )}>
                         {msg.text}
                       </div>
-                      <div className={`flex items-center gap-1 px-1 ${msg.from === "me" ? "flex-row-reverse" : ""}`}>
-                        <span className="text-[9px] font-black uppercase text-zinc-600">{msg.time}</span>
+                      <div className={cn("flex items-center gap-2 px-2", msg.from === "me" ? "flex-row-reverse" : "")}>
+                        <span className="text-[10px] font-black uppercase text-slate-400 tracking-widest">{msg.time}</span>
                         {msg.from === "me" && msg.status && (
-                          <span className="text-[9px]">
-                            {msg.status === "sending" && <Loader2 className="w-3 h-3 animate-spin text-zinc-600" />}
-                            {msg.status === "sent" && <Check className="w-3 h-3 text-zinc-500" />}
-                            {msg.status === "read" && <CheckCheck className="w-3 h-3 text-primary" />}
+                          <span className="text-[10px]">
+                            {msg.status === "sending" && <Loader2 className="w-3.5 h-3.5 animate-spin text-slate-300" />}
+                            {msg.status === "sent" && <Check className="w-3.5 h-3.5 text-slate-300" />}
+                            {msg.status === "read" && <CheckCheck className="w-3.5 h-3.5 text-blue-600" />}
                           </span>
                         )}
                       </div>
@@ -464,30 +460,32 @@ export const Messages = () => {
             ))}
           </div>
 
-          {/* Input area */}
-          <div className="p-4 md:p-6 bg-black/40 backdrop-blur-3xl border-t border-white/5 shrink-0">
-            <div className="flex items-center gap-3">
-              <div className={`flex-1 h-14 bg-white/5 border rounded-3xl px-5 flex items-center gap-3 transition-all focus-within:border-primary/50 focus-within:ring-1 focus-within:ring-primary/20 ${isAiGenerating ? "border-primary/40 bg-primary/5" : "border-white/10"}`}>
+          <div className="p-6 md:p-8 bg-white border-t border-slate-200 shrink-0 shadow-2xl">
+            <div className="flex items-center gap-5">
+              <div className={cn(
+                  "flex-1 h-16 bg-slate-50 border rounded-3xl px-8 flex items-center gap-4 transition-all shadow-inner",
+                  isAiGenerating ? "border-blue-600 bg-blue-50 shadow-blue-500/5 shadow-inner-2xl" : "border-slate-100 focus-within:border-blue-600 focus-within:bg-white focus-within:shadow-xl"
+              )}>
                 <input
                   ref={inputRef}
-                  placeholder={isAiGenerating ? "AI is thinking..." : "Type a reply... (Enter to send)"}
+                  placeholder={isAiGenerating ? "AI is processing your optimal response..." : "Type your message... (Shift + Enter for new line)"}
                   value={replyText}
                   onChange={e => setReplyText(e.target.value)}
                   onKeyDown={e => e.key === "Enter" && !e.shiftKey && handleSend()}
                   disabled={isAiGenerating}
-                  className="flex-1 bg-transparent focus:outline-none text-sm font-medium placeholder:text-zinc-600 disabled:opacity-50"
+                  className="flex-1 bg-transparent focus:outline-none text-sm font-bold text-slate-900 placeholder:text-slate-400 disabled:opacity-50"
                 />
-                <div className="flex items-center gap-3 text-zinc-600">
-                  <Paperclip className="hidden sm:block w-4 h-4 hover:text-white transition-colors cursor-pointer" />
-                  <Smile className="w-4 h-4 hover:text-white transition-colors cursor-pointer" />
+                <div className="flex items-center gap-5 text-slate-400 border-l border-slate-200 pl-5 ml-2">
+                  <Paperclip className="hidden sm:block w-5 h-5 hover:text-blue-600 transition-colors cursor-pointer" />
+                  <Smile className="w-5 h-5 hover:text-blue-600 transition-colors cursor-pointer" />
                 </div>
               </div>
               <button
                 onClick={handleSend}
                 disabled={!replyText.trim() || isAiGenerating}
-                className="w-14 h-14 bg-primary text-white rounded-3xl shadow-lg shadow-primary/20 hover:scale-105 active:scale-95 flex items-center justify-center transition-all group disabled:opacity-40 disabled:scale-100 shrink-0"
+                className="w-16 h-16 bg-slate-900 text-white rounded-3xl shadow-xl shadow-slate-500/10 hover:bg-blue-600 transition-all flex items-center justify-center group disabled:opacity-40 shrink-0 active:scale-95"
               >
-                <Send className="w-5 h-5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                <Send className="w-6 h-6 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
               </button>
             </div>
           </div>
@@ -509,42 +507,43 @@ const CollabCard = ({
   <motion.div
     initial={{ opacity: 0, scale: 0.97, y: 10 }}
     animate={{ opacity: 1, scale: 1, y: 0 }}
-    className="border border-primary/30 bg-primary/5 rounded-3xl p-5 space-y-4 max-w-md"
+    className="border border-blue-200 bg-white rounded-[2.5rem] p-8 space-y-6 max-w-lg shadow-sm"
   >
-    <div className="flex items-center gap-3">
-      <div className="w-9 h-9 rounded-2xl bg-primary/20 border border-primary/30 flex items-center justify-center">
-        <HandshakeIcon className="w-4 h-4 text-primary" />
+    <div className="flex items-center gap-4">
+      <div className="w-11 h-11 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center shadow-inner">
+        <HandshakeIcon className="w-5 h-5 text-blue-600" />
       </div>
       <div>
-        <p className="text-[11px] font-black uppercase tracking-widest text-primary">Collab Request</p>
-        <p className="text-[10px] text-zinc-500 font-bold">{data.summary}</p>
+        <p className="text-[11px] font-black uppercase tracking-[0.2em] text-blue-600">Dynamic Collaboration</p>
+        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{data.summary}</p>
       </div>
     </div>
 
-    <div className="space-y-2 text-[12px] text-zinc-300">
-      <div className="flex gap-2"><span className="text-zinc-500 font-bold w-14 shrink-0">Idea:</span> <span>{data.idea}</span></div>
-      <div className="flex gap-2"><span className="text-zinc-500 font-bold w-14 shrink-0">Rate:</span> <span className="text-emerald-400 font-bold">{data.rate}</span></div>
+    <div className="space-y-4 text-[13px] text-slate-600">
+      <div className="flex gap-4"><span className="text-slate-400 font-black uppercase tracking-widest text-[9px] w-16 shrink-0 pt-1">Strategy:</span> <span className="font-semibold">{data.idea}</span></div>
+      <div className="flex gap-4"><span className="text-slate-400 font-black uppercase tracking-widest text-[9px] w-16 shrink-0 pt-1">Proposed:</span> <span className="text-emerald-600 font-black uppercase italic tracking-tight text-base">{data.rate}</span></div>
     </div>
 
     {data.status === "pending" ? (
-      <div className="flex gap-2 pt-1">
-        <button onClick={onAccept} className="flex-1 h-10 rounded-2xl bg-emerald-500 text-white text-[10px] font-black uppercase tracking-widest hover:bg-emerald-400 transition-all">
-          ✓ Accept
+      <div className="flex gap-3 pt-4">
+        <button onClick={onAccept} className="flex-1 h-14 rounded-2xl bg-emerald-600 text-white text-[10px] font-black uppercase tracking-[0.2em] shadow-lg shadow-emerald-500/10 hover:bg-emerald-700 transition-all active:scale-[0.98]">
+           Confirm Collab
         </button>
-        <button onClick={onDecline} className="flex-1 h-10 rounded-2xl bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-widest hover:bg-rose-500/10 hover:text-rose-400 hover:border-rose-500/30 transition-all">
-          Decline
+        <button onClick={onCounter} className="flex-1 h-14 rounded-2xl bg-slate-900 text-white text-[10px] font-black uppercase tracking-[0.2em] shadow-lg shadow-slate-500/10 hover:bg-blue-600 transition-all active:scale-[0.98]">
+           AI Counter
         </button>
-        <button onClick={onCounter} className="flex-1 h-10 rounded-2xl bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-widest hover:bg-primary/10 hover:text-primary hover:border-primary/30 transition-all">
-          Counter
+        <button onClick={onDecline} className="w-14 h-14 rounded-2xl bg-slate-50 border border-slate-100 text-slate-400 hover:text-rose-600 hover:border-rose-100 flex items-center justify-center transition-all shadow-sm">
+           <Trash2 className="w-5 h-5" />
         </button>
       </div>
     ) : (
-      <div className={`h-9 rounded-2xl flex items-center justify-center text-[10px] font-black uppercase tracking-widest ${
-        data.status === "accepted" ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20" :
-        data.status === "declined" ? "bg-rose-500/10 text-rose-400 border border-rose-500/20" :
-        "bg-amber-500/10 text-amber-400 border border-amber-500/20"
-      }`}>
-        {data.status === "accepted" ? "✓ Accepted — deal created" : data.status === "declined" ? "✗ Declined" : "Counter-proposal sent"}
+      <div className={cn(
+        "h-12 rounded-2xl flex items-center justify-center text-[10px] font-black uppercase tracking-[0.2em] border shadow-sm",
+        data.status === "accepted" ? "bg-emerald-50 text-emerald-600 border-emerald-100" :
+        data.status === "declined" ? "bg-rose-50 text-rose-500 border-rose-100" :
+        "bg-amber-50 text-amber-600 border-amber-100"
+      )}>
+        {data.status === "accepted" ? "✓ Request Executed — hub updated" : data.status === "declined" ? "✗ Request Archived" : "Counter-Proposal Synced"}
       </div>
     )}
   </motion.div>
