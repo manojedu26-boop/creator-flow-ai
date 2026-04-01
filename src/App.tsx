@@ -18,6 +18,7 @@ const ForgotPassword = lazy(() => import("./pages/ForgotPassword.tsx"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword.tsx"));
 const Onboarding = lazy(() => import("./pages/Onboarding.tsx"));
 const NotFound = lazy(() => import("./pages/NotFound.tsx"));
+const PublicMediaKit = lazy(() => import("./pages/PublicMediaKit.tsx"));
 
 const DashboardLayout = lazy(() => import("./components/dashboard/DashboardLayout.tsx").then(m => ({ default: m.DashboardLayout })));
 const DashboardHome = lazy(() => import("./pages/dashboard/Home.tsx").then(m => ({ default: m.Home })));
@@ -75,6 +76,7 @@ const App = () => {
                   <Suspense fallback={<PageLoader />}>
                     <Routes>
                       {/* Public Routes */}
+                      <Route path="/media-kit/:id" element={<PublicMediaKit />} />
                       <Route path="/" element={<Index />} />
                       <Route path="/login" element={<Login />} />
                       <Route path="/register" element={<Register />} />

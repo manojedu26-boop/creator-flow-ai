@@ -15,6 +15,7 @@ import { PageTransition, staggerContainer, staggerItem } from "../../components/
 import { useAuth } from "../../contexts/AuthContext";
 import { toast } from "../../components/ui/sonner";
 import { db } from "../../lib/db";
+import { EmailComposer } from "../../components/dashboard/EmailComposer";
 
 const growthData = [
   { day: 'Day 1', current: 48200, ai: 48200 },
@@ -53,6 +54,8 @@ const GrowthProjectionChart = memo(({ data }: { data: any[] }) => (
 export const Growth = () => {
   const { user } = useAuth();
   const [completedActions, setCompletedActions] = useState<number[]>([1, 3]);
+  const [selectedCollab, setSelectedCollab] = useState<any>(null);
+  const [showPitcher, setShowPitcher] = useState(false);
 
   const toggleAction = (id: number) => {
     const newCompleted = completedActions.includes(id)
@@ -176,7 +179,15 @@ export const Growth = () => {
                        </div>
                        <div className="text-[10px] font-black text-emerald-500">{c.match}% Match</div>
                     </div>
-                    <button className="w-full py-2.5 bg-white/5 hover:bg-primary hover:text-white rounded-xl text-[9px] font-black uppercase tracking-widest transition-all">Draft AI Pitch</button>
+                    <button 
+                        onClick={() => {
+                           setSelectedCollab(c);
+                           setShowPitcher(true);
+                        }}
+                        className="w-full py-2.5 bg-white/5 hover:bg-primary hover:text-white rounded-xl text-[9px] font-black uppercase tracking-widest transition-all"
+                     >
+                        Draft AI Pitch
+                     </button>
                  </div>
                ))}
             </div>
@@ -204,6 +215,20 @@ export const Growth = () => {
             </div>
          </motion.div>
       </div>
+
+      {selectedCollab && (
+        <EmailComposer 
+          isOpen={showPitcher}
+          onClose={() => setShowPitcher(false)}
+          initialTo={`${selectedCollab.name.toLowerCase().replace(/\s+/g, '')}@example.com`}
+          initialSubject={`Collab Idea: ${user?.firstName} x ${selectedCollab.name}`}
+          initialBody={`Hi ${selectedCollab.name.split(' ')[0]},\n\nI've been following your ${selectedCollab.niche} content and I love your style! I noticed a ~${selectedCollab.match}% overlap in our audience interests.\n\nI'd love to chat about a potential collaboration — maybe a shared Instagram Reel or a YouTube guest spot? Let me know if you're open to it!\n\nBest,\n${user?.firstName}`}
+          templates={[
+            { name: "Casual Hey", subject: "Collab?", body: "Hey! Love your work..." },
+            { name: "Strategic Pitch", subject: "Audience Growth Collab", body: "Hi, I noticed our audiences overlap..." }
+          ]}
+        />
+      )}
     </PageTransition>
   );
 };

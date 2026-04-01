@@ -1,7 +1,7 @@
 // src/lib/db.ts
 // Mock Database Engine using LocalStorage for persistence
 
-export type CollectionName = 'users' | 'invoices' | 'contracts' | 'deals' | 'notifications' | 'messages' | 'content' | 'tasks';
+export type CollectionName = 'users' | 'invoices' | 'contracts' | 'deals' | 'notifications' | 'messages' | 'content' | 'tasks' | 'cal_posts' | 'castings' | 'applications' | 'shortlists';
 
 class Database {
   private prefix = 'cf_db_';
@@ -166,5 +166,24 @@ export const initializeDB = () => {
     { id: 't2', text: 'Reply to 12 unanswered comments on last post', time: '5 min', completed: true, category: 'Community' },
     { id: 't3', text: 'Follow up with Nike Brand Partnership — no reply in 5 days', time: '3 min', completed: false, category: 'Deals' },
     { id: 't4', text: 'Generate captions for Thursday\'s carousel post', time: '2 min', completed: false, category: 'Content' },
+  ]);
+
+  // 7. Calendar Posts
+  db.seed('cal_posts', [
+    { id: 'cp1', caption: 'Morning Mobility Flow ☀️', time: '08:30', platforms: ['IG'], status: 'Scheduled', day: 15, month: 2, year: 2026 },
+    { id: 'cp2', caption: 'High Protein Dinner Idea 🥘', time: '19:00', platforms: ['IG', 'TT'], status: 'Draft', day: 18, month: 2, year: 2026 }
+  ]);
+
+  // 8. Brand Castings (Campaign Briefs)
+  db.seed('castings', [
+    { id: 'cast_1', brand: 'Adobe India', title: 'Creative Cloud Mastery', description: 'Seeking 5 visual creators for a series of tips & tricks Reels.', niche: 'Design', budget: '₹ 45k - 70k', status: 'Live', date: '2025-03-28' },
+    { id: 'cast_2', brand: 'Samsung Bharat', title: 'Galaxy S26 Launch', description: 'Cinematic unboxing and low-light photography showcase.', niche: 'Tech', budget: '₹ 1.2L - 2L', status: 'Live', date: '2025-03-27' },
+    { id: 'cast_3', brand: 'MyProtein', title: 'Unlock Your Flow', description: 'Home workout routine using MyProtein supplements.', niche: 'Fitness', budget: '₹ 25k - 35k', status: 'Draft', date: '2025-03-25' }
+  ]);
+
+  // 9. Applications (Creators applying to Brand Briefs)
+  db.seed('applications', [
+    { id: 'app_1', castingId: 'cast_1', creatorId: 'u1', creatorName: 'Naveen Kumar', status: 'Pending', match: 92, date: '2025-03-29' },
+    { id: 'app_2', castingId: 'cast_2', creatorId: 'u1', creatorName: 'Naveen Kumar', status: 'Shortlisted', match: 88, date: '2025-03-30' }
   ]);
 };

@@ -7,10 +7,38 @@ import {
   ListFilter, Grid, LayoutList, Mail,
   Plus, Check, Sparkles, SlidersHorizontal
 } from "lucide-react";
+import { db } from "../../lib/db";
+import { Link } from "react-router-dom";
 
 export const DiscoverCreators = () => {
+  const [search, setSearch] = useState("");
+  const [activeFilter, setActiveFilter] = useState("All");
+  const [creators, setCreators] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [selectedCreators, setSelectedCreators] = useState<string[]>([]);
   const [isCelebrating, setIsCelebrating] = useState(false);
+
+  useEffect(() => {
+    // Simulated load from DB
+    setIsLoading(true);
+    setTimeout(() => {
+      const allUsers = db.getAll<any>('users').filter(u => u.type === 'Creator');
+      setCreators(allUsers);
+      setIsLoading(false);
+    }, 800);
+  }, []);
+
+  const filteredCreators = creators.filter(c => {
+    const matchesSearch = c.name.toLowerCase().includes(search.toLowerCase()) || 
+                         c.niche.toLowerCase().includes(search.toLowerCase());
+    const matchesFilter = activeFilter === "All" || c.niche.includes(activeFilter);
+    return matchesSearch && matchesFilter;
+  });
+
+  const handleApplication = (id: string, status: 'Approved' | 'Skipped') => {
+    db.update<any>('applications', id, { status });
+    setCreators(prev => prev.filter(a => a.id !== id));
+  };
 
   const toggleCreator = (id: string) => {
     setSelectedCreators(prev => {
@@ -40,6 +68,8 @@ export const DiscoverCreators = () => {
          <div className="relative flex-1 group">
             <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-500 group-focus-within:text-primary transition-colors" />
             <input 
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
               placeholder="Search by name, niche, or platform..." 
               className="w-full h-16 bg-white/5 border border-white/10 rounded-[2rem] pl-16 pr-6 text-sm font-medium text-white focus:outline-none focus:ring-1 focus:ring-primary shadow-2xl transition-all"
             />
@@ -57,8 +87,14 @@ export const DiscoverCreators = () => {
 
       {/* FILTER PILLS */}
       <div className="flex gap-3 overflow-x-auto no-scrollbar pb-2">
-         {['Tech', 'Wellness', 'Gaming', 'India', 'USA', 'Reach: 100K+', 'Engagement: 5%+', 'Budget: <₹ 50K'].map(f => (
-           <span key={f} className="whitespace-nowrap px-4 py-2 bg-white/5 border border-white/10 rounded-xl text-[10px] font-black uppercase tracking-widest text-zinc-400 hover:text-white hover:border-primary/40 cursor-pointer transition-all">
+         {['All', 'Fitness', 'Tech', 'Lifestyle', 'Design'].map(f => (
+           <span 
+             key={f} 
+             onClick={() => setActiveFilter(f)}
+             className={`whitespace-nowrap px-6 py-3 border rounded-xl text-[10px] font-black uppercase tracking-widest cursor-pointer transition-all ${
+               activeFilter === f ? 'bg-primary border-primary text-white shadow-lg' : 'bg-white/5 border-white/10 text-zinc-400 hover:text-white'
+             }`}
+           >
               {f}
            </span>
          ))}
@@ -66,16 +102,11 @@ export const DiscoverCreators = () => {
 
       {/* CREATOR GRID */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-         {[
-           { id: '1', name: 'Kabir Varma', niche: 'Luxury Travel', reach: '450K', eng: '5.2%', loc: 'Mumbai', avatar: 'KV' },
-           { id: '2', name: 'Sarah Chen', niche: 'Tech Lifestyle', reach: '120K', eng: '4.8%', loc: 'SF, USA', avatar: 'SC' },
-           { id: '3', name: 'Alex Rivera', niche: 'Elite Fitness', reach: '890K', eng: '3.1%', loc: 'Madrid', avatar: 'AR' },
-           { id: '4', name: 'Jasmine K.', niche: 'Beauty/Vlog', reach: '22K', eng: '12.4%', loc: 'London', avatar: 'JK' },
-           { id: '5', name: 'Rohan D.', niche: 'Gaming/Setup', reach: '1.2M', eng: '2.9%', loc: 'Delhi', avatar: 'RD' },
-           { id: '6', name: 'Elena G.', niche: 'Zero Waste', reach: '75K', eng: '6.5%', loc: 'Berlin', avatar: 'EG' },
-           { id: '7', name: 'Sam Wilson', niche: 'Video Gear', reach: '150K', eng: '4.2%', loc: 'NY, USA', avatar: 'SW' },
-           { id: '8', name: 'Isha Reddy', niche: 'Food/Aesthetic', reach: '310K', eng: '5.8%', loc: 'Bangalore', avatar: 'IR' },
-         ].map((c) => (
+         {isLoading ? (
+           Array(8).fill(0).map((_, i) => (
+             <div key={i} className="h-[400px] bg-white/5 border border-white/10 rounded-[2.5rem] animate-pulse" />
+           ))
+         ) : filteredCreators.map((c) => (
            <motion.div 
              key={c.id}
              whileHover={{ y: -5 }}
@@ -95,7 +126,7 @@ export const DiscoverCreators = () => {
 
               <div className="flex flex-col items-center text-center space-y-4 pt-4">
                  <div className="w-24 h-24 rounded-[2rem] bg-gradient-to-br from-indigo-500 via-primary to-purple-500 flex items-center justify-center text-white font-black text-4xl shadow-2xl shadow-primary/20">
-                    {c.avatar}
+                    {c.photo ? <img src={c.photo} className="w-full h-full object-cover rounded-[2rem]" /> : (c.name[0] + (c.name.split(' ')[1]?.[0] || ''))}
                  </div>
                  <div>
                     <h4 className="text-lg font-black text-white uppercase tracking-tight">{c.name}</h4>
@@ -105,21 +136,21 @@ export const DiscoverCreators = () => {
                  <div className="grid grid-cols-2 gap-2 w-full pt-4">
                     <div className="bg-white/5 p-3 rounded-2xl flex flex-col items-center">
                        <span className="text-[9px] font-black uppercase text-zinc-500">Reach</span>
-                       <span className="text-xs font-black text-white">{c.reach}</span>
+                       <span className="text-xs font-black text-white">{c.followerCounts?.ig || '10K'}</span>
                     </div>
                     <div className="bg-white/5 p-3 rounded-2xl flex flex-col items-center">
                        <span className="text-[9px] font-black uppercase text-zinc-500">Engage</span>
-                       <span className="text-xs font-black text-white">{c.eng}</span>
+                       <span className="text-xs font-black text-white">4.8%</span>
                     </div>
                  </div>
 
                  <div className="flex items-center gap-2 text-[10px] font-bold text-zinc-500 uppercase tracking-tighter">
-                    <MapPin className="w-3 h-3" /> {c.loc}
+                    <MapPin className="w-3 h-3" /> Mumbai, IN
                  </div>
 
-                 <button className="w-full h-12 mt-4 bg-white/10 hover:bg-white text-zinc-400 hover:text-black rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-xl">
+                 <Link to={`/network/profile/${c.id === 'u1' ? 'me' : c.id}`} className="w-full h-12 mt-4 bg-white/10 hover:bg-white text-zinc-400 hover:text-black rounded-xl text-[10px] font-black uppercase tracking-widest transition-all shadow-xl flex items-center justify-center">
                     View Profile
-                 </button>
+                 </Link>
               </div>
            </motion.div>
          ))}

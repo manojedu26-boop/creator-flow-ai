@@ -1,21 +1,58 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
-  Users, Search, Filter, Sparkles, 
-  MessageSquare, Heart, Share2, Link2, 
-  CheckCircle, Briefcase, Trophy, Lightbulb,
-  MoreHorizontal, PlusCircle, Globe, MapPin, 
-  ChevronRight, TrendingUp, UserPlus
+  Users, MessageSquare, Heart, Share2, 
+  Search, Filter, Plus, TrendingUp,
+  Award, Target, Sparkles, CheckCircle2,
+  Briefcase, Trophy, Lightbulb, MoreHorizontal, 
+  PlusCircle, Globe, MapPin, ChevronRight, UserPlus
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import { toast } from "../../components/ui/sonner";
+import { BottomSheet } from "../../components/ui/BottomSheet";
+
+interface Post {
+  id: number;
+  type: string;
+  author: string;
+  avatar: string;
+  niche: string;
+  content: string;
+  followers: string;
+  time: string;
+  likes: number;
+  comments: number;
+  liked: boolean;
+}
 
 type FeedFilter = 'all' | 'collabs' | 'castings' | 'wins' | 'tips';
 
 export const Network = () => {
   const { user } = useAuth();
   const [activeFilter, setActiveFilter] = useState<FeedFilter>('all');
+  const [posts, setPosts] = useState<Post[]>([
+    { id: 1, type: 'collab', author: 'Maya Hills', avatar: 'MH', niche: 'Travel / Wellness', content: 'Looking for a NYC-based creator for a high-energy vlog swap! My audience is 85% US-based. Hit me up if you are interested in a day-in-the-life series.', followers: '24K', time: '2h ago', likes: 84, comments: 12, liked: false },
+    { id: 2, type: 'win', author: 'David V.', avatar: 'DV', niche: 'Gaming', content: 'Just signed my first long-term contract with Razer! 🐉 Huge shoutout to the Forge AI community for the pitch feedback. Keep grinding everyone!', followers: '105K', time: '5h ago', likes: 242, comments: 45, liked: true },
+    { id: 3, type: 'casting', author: 'Lululemon', avatar: 'LL', niche: 'Brand', content: 'URGENT: Looking for fitness creators in London for an upcoming popup shop opening. 3-week campaign starting April 1st. Application link in profile.', followers: 'Brand', time: '8h ago', likes: 12, comments: 3, liked: false },
+  ]);
+  const [connections, setConnections] = useState<Record<number, string>>({});
+  const [showApplyModal, setShowApplyModal] = useState(false);
+  const [selectedCasting, setSelectedCasting] = useState<any>(null);
+
+  const handleLike = (id: number) => {
+    setPosts(prev => prev.map(p => {
+      if (p.id === id) {
+        return { ...p, liked: !p.liked, likes: p.liked ? p.likes - 1 : p.likes + 1 };
+      }
+      return p;
+    }));
+  };
+
+  const handleConnect = (id: number) => {
+    setConnections(prev => ({ ...prev, [id]: 'pending' }));
+    toast.success("Connection Request Sent", { description: "You will be notified once they accept." });
+  };
 
   return (
     <div className="flex h-[calc(100vh-80px)] -mx-8 -my-6 overflow-hidden">
@@ -114,11 +151,7 @@ export const Network = () => {
 
             {/* FEED ITEMS */}
             <div className="space-y-6">
-               {[
-                 { id: 1, type: 'collab', author: 'Maya Hills', avatar: 'MH', niche: 'Travel / Wellness', content: 'Looking for a NYC-based creator for a high-energy vlog swap! My audience is 85% US-based. Hit me up if you are interested in a day-in-the-life series.', followers: '24K', time: '2h ago' },
-                 { id: 2, type: 'win', author: 'David V.', avatar: 'DV', niche: 'Gaming', content: 'Just signed my first long-term contract with Razer! 🐉 Huge shoutout to the Forge AI community for the pitch feedback. Keep grinding everyone!', followers: '105K', time: '5h ago' },
-                 { id: 3, type: 'casting', author: 'Lululemon', avatar: 'LL', niche: 'Brand', content: 'URGENT: Looking for fitness creators in London for an upcoming popup shop opening. 3-week campaign starting April 1st. Application link in profile.', followers: 'Brand', time: '8h ago' },
-               ].map(post => (
+               {posts.filter(p => activeFilter === 'all' || p.type === activeFilter.slice(0, -1)).map((post: Post) => (
                  <motion.div 
                    layout
                    initial={{ opacity: 0, y: 20 }}
@@ -133,7 +166,7 @@ export const Network = () => {
                           </Link>
                           <div>
                              <h4 className="font-black text-base flex items-center gap-1.5">
-                                {post.author} <CheckCircle className="w-3.5 h-3.5 text-blue-500 fill-blue-500/10" />
+                                {post.author} <CheckCircle2 className="w-3.5 h-3.5 text-blue-500 fill-blue-500/10" />
                              </h4>
                              <div className="flex items-center gap-3">
                                 <span className="text-[10px] font-bold text-muted-foreground uppercase">{post.niche} • {post.followers}</span>
@@ -148,19 +181,35 @@ export const Network = () => {
                        <p className="text-sm font-medium leading-[1.7] text-foreground/90">{post.content}</p>
                        <div className="pt-6 border-t border-border/30 flex items-center justify-between">
                           <div className="flex items-center gap-6">
-                             <button className="flex items-center gap-2 text-[10px] font-black uppercase text-muted-foreground hover:text-rose-500 transition-colors">
-                                <Heart className="w-4 h-4" /> 84
-                             </button>
+                             <button 
+                                onClick={() => handleLike(post.id)}
+                                className={`flex items-center gap-2 text-[10px] font-black uppercase transition-colors ${post.liked ? 'text-rose-500' : 'text-muted-foreground hover:text-rose-500'}`}
+                              >
+                                 <Heart className={`w-4 h-4 ${post.liked ? 'fill-rose-500' : ''}`} /> {post.likes}
+                              </button>
                              <button className="flex items-center gap-2 text-[10px] font-black uppercase text-muted-foreground hover:text-primary transition-colors">
-                                <MessageSquare className="w-4 h-4" /> 12
+                                <MessageSquare className="w-4 h-4" /> {post.comments}
                              </button>
                              <button className="flex items-center gap-2 text-[10px] font-black uppercase text-muted-foreground hover:text-primary transition-colors">
                                 <Share2 className="w-4 h-4" /> Share
                              </button>
                           </div>
-                          <button className="h-10 px-6 bg-primary text-primary-foreground rounded-xl text-[10px] font-black uppercase tracking-widest hover:shadow-lg transition-all active:scale-95">
-                             {post.type === 'casting' ? 'Apply Now' : 'Connect'}
-                          </button>
+                          <button 
+                             onClick={() => {
+                                if (post.type === 'casting') {
+                                  setSelectedCasting(post);
+                                  setShowApplyModal(true);
+                                } else {
+                                  handleConnect(post.id);
+                                }
+                             }}
+                             disabled={connections[post.id] === 'pending'}
+                             className={`h-10 px-6 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all active:scale-95 ${
+                               connections[post.id] === 'pending' ? 'bg-zinc-800 text-zinc-500 cursor-not-allowed' : 'bg-primary text-primary-foreground hover:shadow-lg'
+                             }`}
+                           >
+                              {post.type === 'casting' ? 'Apply Now' : connections[post.id] === 'pending' ? 'Pending' : 'Connect'}
+                           </button>
                        </div>
                     </div>
                     {post.type === 'win' && (
@@ -243,6 +292,51 @@ export const Network = () => {
             </div>
          </div>
       </div>
+
+      <BottomSheet isOpen={showApplyModal} onClose={() => setShowApplyModal(false)} title="Apply for Campaign" height="auto">
+         <div className="p-8 space-y-8">
+            <div className="flex items-center gap-4 p-6 bg-emerald-500/5 border border-emerald-500/20 rounded-[2rem]">
+               <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 flex items-center justify-center font-black text-emerald-500">
+                  {selectedCasting?.avatar}
+               </div>
+               <div>
+                  <h3 className="text-lg font-black uppercase italic">{selectedCasting?.author} Campaign</h3>
+                  <p className="text-xs text-muted-foreground font-bold uppercase tracking-widest">Brand Casting • Verified</p>
+               </div>
+            </div>
+
+            <div className="space-y-4">
+               <label className="text-[10px] font-black uppercase tracking-widest">Your Pitch</label>
+               <textarea 
+                  placeholder="Tell the brand why you're a perfect fit..."
+                  className="w-full h-32 bg-muted/20 border border-border/40 rounded-2xl p-6 text-sm focus:outline-none focus:ring-1 focus:ring-primary resize-none"
+               />
+            </div>
+
+            <div className="p-6 bg-primary/5 border border-primary/20 rounded-[2rem] flex items-center justify-between">
+               <div className="flex items-center gap-4">
+                  <CheckCircle2 className="w-6 h-6 text-primary" />
+                  <div>
+                     <p className="text-[10px] font-black uppercase tracking-widest">Attach Media Kit</p>
+                     <p className="text-[9px] text-muted-foreground font-bold uppercase tracking-wide">Latest stats & portfolio included</p>
+                  </div>
+               </div>
+               <div className="w-10 h-5 bg-primary rounded-full relative">
+                  <div className="absolute top-1 right-1 w-3 h-3 bg-white rounded-full" />
+               </div>
+            </div>
+
+            <button 
+               onClick={() => {
+                  toast.success("Application Sent", { description: "Lululemon will review your profile shortly." });
+                  setShowApplyModal(false);
+               }}
+               className="w-full py-5 bg-primary text-white rounded-2xl text-[11px] font-black uppercase tracking-widest shadow-2xl hover:scale-105 transition-all"
+            >
+               Submit Application
+            </button>
+         </div>
+      </BottomSheet>
     </div>
   );
 };

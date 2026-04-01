@@ -4,7 +4,7 @@ import {
   Calendar as CalendarIcon, ChevronLeft, ChevronRight, Plus,
   Instagram, Youtube, Sparkles, Clock, Video, X, Check,
   Trash2, Loader2, Zap, Edit3, Music, Hash, Wand2, GripVertical,
-  Bell, CheckCircle2, LayoutGrid, List, ArrowRight
+  Bell, CheckCircle2, LayoutGrid, List, ArrowRight, UploadCloud, RefreshCcw
 } from "lucide-react";
 import { PageTransition } from "../../components/shared/MotionComponents";
 import { BottomSheet } from "../../components/ui/BottomSheet";
@@ -137,6 +137,9 @@ export const Calendar = () => {
   const [draggedPostId, setDraggedPostId] = useState<string | null>(null);
   const [dragOverDay, setDragOverDay] = useState<number | null>(null);
   const [viewMode, setViewMode] = useState<"month" | "list">("month");
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [uploadedMedia, setUploadedMedia] = useState<string | null>(null);
 
   // Form state
   const [form, setForm] = useState({
@@ -171,6 +174,23 @@ export const Calendar = () => {
     setIsEditing(true);
     setForm({ platform: post.platform, type: post.type, caption: post.caption, hashtags: post.hashtags || "", time: post.time, status: post.status });
     setIsScheduleOpen(true);
+  };
+
+  const handleMediaUpload = () => {
+    if (isUploading) return;
+    setIsUploading(true);
+    let p = 0;
+    const iv = setInterval(() => {
+      p += 10;
+      setUploadProgress(p);
+      if (p >= 100) {
+        clearInterval(iv);
+        setIsUploading(false);
+        setUploadProgress(0);
+        setUploadedMedia(`https://picsum.photos/seed/${Math.random()}/800/800`);
+        toast.success("Media uploaded successfully!");
+      }
+    }, 100);
   };
 
   const handleSavePost = () => {

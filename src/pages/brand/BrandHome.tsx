@@ -3,19 +3,54 @@ import {
   TrendingUp, Users, Megaphone, 
   ArrowUpRight, Clock, Sparkles, 
   Target, BarChart3, ChevronRight,
-  ShieldCheck, Zap, MessageSquare, Plus
+  ShieldCheck, Zap, MessageSquare, Plus, Check, X
 } from "lucide-react";
+import { useState, useEffect } from "react";
+import { db } from "../../lib/db";
+import { toast } from "../../components/ui/sonner";
 
 export const BrandHome = () => {
+  const [stats, setStats] = useState({
+    live: 0,
+    reach: '4.2M',
+    spend: '₹ 8.5L',
+    booked: 0
+  });
+  const [applications, setApplications] = useState<any[]>([]);
+
+  useEffect(() => {
+    const castings = db.getAll<any>('castings');
+    const apps = db.getAll<any>('applications');
+    
+    setStats(prev => ({
+      ...prev,
+      live: castings.filter(c => c.status === 'Live').length,
+      booked: apps.filter(a => a.status === 'Approved').length
+    }));
+    
+    setApplications(apps.filter(a => a.status === 'Pending'));
+  }, []);
+
+  const handleApplication = (id: string, status: 'Approved' | 'Skipped') => {
+    db.update('applications', id, { status });
+    setApplications(prev => prev.filter(a => a.id !== id));
+    toast.success(status === 'Approved' ? "Creator Approved!" : "Application Skipped", {
+       description: status === 'Approved' ? "They've been moved to the Active Deals section." : "This application has been archived."
+    });
+    if (status === 'Approved') {
+       setStats(prev => ({ ...prev, booked: prev.booked + 1 }));
+    }
+  };
+
   return (
     <div className="max-w-7xl mx-auto space-y-10 pb-20">
       {/* ACTIVE CAMPAIGNS STRIP */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
          {[
-           { label: 'Live Campaigns', value: '12', sub: 'Across 4 Platforms', icon: Megaphone, color: 'text-primary' },
-           { label: 'Total Reach (30d)', value: '4.2M', sub: '+14% vs last mo', icon: Users, color: 'text-indigo-400' },
-           { label: 'Total Spend (YTD)', value: '₹ 8.5L', sub: 'Budget: ₹ 12L', icon: IndianRupee, color: 'text-emerald-400' },
-           { label: 'Creators Booked', value: '42', sub: '8 Pending Replies', icon: Zap, color: 'text-amber-400' },
+           { label: 'Live Campaigns', value: stats.live.toString(), sub: 'Across 4 Platforms', icon: Megaphone, color: 'text-primary' },
+           { label: 'Total Reach (30d)', value: stats.reach, sub: '+14% vs last mo', icon: Users, color: 'text-indigo-400' },
+           { label: 'Total Spend (YTD)', value: stats.spend, sub: 'Budget: ₹ 12L', icon: IndianRupee, color: 'text-emerald-400' },
+           { label: 'Creators Booked', value: stats.booked.toString(), sub: '8 Pending Replies', icon: Zap, color: 'text-amber-400' },
          ].map((stat, i) => (
            <motion.div 
              initial={{ opacity: 0, y: 20 }}
@@ -81,17 +116,16 @@ export const BrandHome = () => {
                <Target className="w-5 h-5 text-indigo-500" /> Recent Applications
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-               {[
-                 { name: 'Mike Ross', niche: 'Law/Legal Tech', match: 94, avatar: 'MR' },
-                 { name: 'Elena G.', niche: 'Eco-Lifestyle', match: 89, avatar: 'EG' },
-               ].map(a => (
-                 <div key={a.name} className="p-6 bg-white/5 border border-white/10 rounded-3xl space-y-4 group">
+               {applications.length > 0 ? applications.map(a => (
+                 <div key={a.id} className="p-6 bg-white/5 border border-white/10 rounded-3xl space-y-4 group">
                     <div className="flex items-center justify-between">
                        <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-black">{a.avatar}</div>
+                          <div className="w-10 h-10 rounded-xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-black">
+                             {a.creatorName?.[0]}
+                          </div>
                           <div>
-                             <h4 className="font-black text-sm text-white">{a.name}</h4>
-                             <span className="text-[9px] font-bold text-zinc-500 uppercase">{a.niche}</span>
+                             <h4 className="font-black text-sm text-white">{a.creatorName}</h4>
+                             <span className="text-[9px] font-bold text-zinc-500 uppercase">Applied to {a.castingId === 'cast_1' ? 'Adobe Brief' : 'Samsung Launch'}</span>
                           </div>
                        </div>
                        <div className="text-right">
@@ -99,11 +133,25 @@ export const BrandHome = () => {
                        </div>
                     </div>
                     <div className="flex gap-2">
-                       <button className="flex-1 py-1.5 bg-white/5 text-[9px] font-black uppercase rounded-lg text-zinc-400 hover:bg-white/10">Skip</button>
-                       <button className="flex-1 py-1.5 bg-indigo-500 text-white text-[9px] font-black uppercase rounded-lg shadow-lg shadow-indigo-500/20 active:scale-95 transition-all">Approve</button>
+                       <button 
+                         onClick={() => handleApplication(a.id, 'Skipped')}
+                         className="flex-1 py-1.5 bg-white/5 text-[9px] font-black uppercase rounded-lg text-zinc-400 hover:bg-white/10"
+                       >
+                          Skip
+                       </button>
+                       <button 
+                         onClick={() => handleApplication(a.id, 'Approved')}
+                         className="flex-1 py-1.5 bg-indigo-500 text-white text-[9px] font-black uppercase rounded-lg shadow-lg shadow-indigo-500/20 active:scale-95 transition-all"
+                       >
+                          Approve
+                       </button>
                     </div>
                  </div>
-               ))}
+               )) : (
+                 <div className="md:col-span-2 p-12 text-center bg-white/2 rounded-[2.5rem] border border-dashed border-white/10">
+                    <p className="text-zinc-500 text-xs font-black uppercase tracking-widest">No new applications</p>
+                 </div>
+               )}
             </div>
          </div>
 
