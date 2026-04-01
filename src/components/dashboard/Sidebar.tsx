@@ -58,6 +58,12 @@ export const Sidebar = () => {
   const [isHoverExpanded, setIsHoverExpanded] = useState(false);
   const expanded = isExpanded || isHoverExpanded;
 
+  // Sync sidebar width to CSS variable for layout awareness
+  useEffect(() => {
+    const width = expanded ? 280 : 80;
+    document.documentElement.style.setProperty("--sidebar-w", `${width}px`);
+  }, [expanded]);
+
   // Load unread count + poll every 60s
   useEffect(() => {
     const load = () => {
@@ -115,7 +121,7 @@ export const Sidebar = () => {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -10 }}
             >
-              <span className="font-black tracking-tighter text-lg uppercase text-slate-950 italic">
+              <span className="font-black tracking-tighter text-lg uppercase text-slate-950">
                 CreatorForge<span className="text-blue-600">AI</span>
               </span>
               <span className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-400 -mt-1">Suite v3.1</span>

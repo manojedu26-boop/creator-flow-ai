@@ -17,6 +17,7 @@ import { BottomSheet } from "../../components/ui/BottomSheet";
 import { MobilePicker } from "../../components/ui/MobilePicker";
 import { EmailComposer, EmailTemplate } from "../../components/dashboard/EmailComposer";
 import { InvoiceGenerator } from "../../components/dashboard/InvoiceGenerator";
+import { cn } from "../../lib/utils";
 import confetti from "canvas-confetti";
 
 type DealStatus = 'prospecting' | 'negotiating' | 'signed' | 'live' | 'paid';
@@ -131,7 +132,8 @@ export const BrandDeals = () => {
       exit={{ opacity: 0, scale: 0.9 }}
       onClick={() => setSelectedDeal(deal)}
       draggable
-      onDragStart={(e) => e.dataTransfer.setData("dealId", deal.id)}
+      // @ts-ignore - Native drag event on motion component
+      onDragStart={(e: React.DragEvent) => e.dataTransfer.setData("dealId", deal.id)}
       className="group relative bg-white border border-slate-100 p-6 rounded-[2.5rem] cursor-grab active:cursor-grabbing hover:border-blue-400 transition-all shadow-sm hover:shadow-md overflow-hidden"
     >
       <div className="flex items-center gap-5 mb-5">
@@ -155,7 +157,7 @@ export const BrandDeals = () => {
         <div className="flex items-end justify-between">
           <div>
             <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Deal Maturity</p>
-            <p className="text-xl font-black text-blue-600 leading-none italic">{deal.value}</p>
+            <p className="text-xl font-black text-blue-600 leading-none">{deal.value}</p>
           </div>
           <div className="text-right">
              <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1.5">Action Date</p>
@@ -190,7 +192,7 @@ export const BrandDeals = () => {
       {/* Search & Stats */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 mb-10">
         <div>
-          <h2 className="text-5xl font-black tracking-tighter uppercase leading-none text-slate-900">Brand <span className="text-blue-600 italic">Partnerships</span></h2>
+          <h2 className="text-5xl font-black tracking-tighter uppercase leading-none text-slate-900">Brand <span className="text-blue-600">Partnerships</span></h2>
           <div className="flex items-center gap-4 mt-4">
             <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Active Pipeline: <span className="text-slate-900">₹ 2,45,000</span></p>
             <div className="w-1.5 h-1.5 rounded-full bg-slate-200" />
@@ -277,7 +279,7 @@ export const BrandDeals = () => {
             <span className="text-[11px] font-black text-slate-400 uppercase tracking-widest mt-2">{brand.cat}</span>
             <div className="mt-10">
                <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.15em] block mb-2">Avg Partnership Value</span>
-               <span className="text-2xl font-black text-blue-600 italic tracking-tight">{brand.budget}</span>
+               <span className="text-2xl font-black text-blue-600 tracking-tight">{brand.budget}</span>
             </div>
             <button className="w-full mt-12 py-5 bg-slate-900 text-white rounded-3xl text-[10px] font-black uppercase tracking-widest shadow-xl shadow-blue-500/10 hover:bg-blue-600 transition-all active:scale-95">
                Engage with AI Proposal
@@ -329,7 +331,7 @@ export const BrandDeals = () => {
                 <div className="grid grid-cols-2 gap-6">
                    <div className="p-8 rounded-[3rem] bg-slate-50 border border-slate-100 shadow-inner">
                       <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3">Partnership Value</p>
-                      <p className="text-4xl font-black text-blue-600 italic leading-none">{selectedDeal.value}</p>
+                      <p className="text-4xl font-black text-blue-600 leading-none">{selectedDeal.value}</p>
                    </div>
                    <div className="p-8 rounded-[3rem] bg-white border border-slate-100 shadow-sm">
                       <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-3">Campaign ROI</p>
@@ -472,7 +474,7 @@ export const BrandDeals = () => {
             </div>
             <div className="space-y-3">
               <label className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400">Total Contract Value (INR)</label>
-              <input name="value" type="number" required className="w-full h-16 bg-slate-50 border border-slate-200 rounded-3xl px-6 transition-all focus:ring-2 focus:ring-blue-100 font-black italic text-2xl text-blue-600 shadow-inner" placeholder="50,000" />
+              <input name="value" type="number" required className="w-full h-16 bg-slate-50 border border-slate-200 rounded-3xl px-6 transition-all focus:ring-2 focus:ring-blue-100 font-black text-2xl text-blue-600 shadow-inner" placeholder="50,000" />
             </div>
             <div className="space-y-3">
               <label className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400">Initial Pipeline Stage</label>

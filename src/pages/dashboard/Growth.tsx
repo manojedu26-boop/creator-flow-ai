@@ -87,7 +87,7 @@ export const Growth = () => {
           Growth Intelligence
         </div>
         <h1 className="text-4xl md:text-5xl font-black tracking-tighter uppercase leading-[0.85] text-slate-900">
-           Operation <span className="text-blue-600 italic">Scale</span>
+           Operation <span className="text-blue-600">Scale</span>
         </h1>
       </header>
 
@@ -106,7 +106,7 @@ export const Growth = () => {
                      </div>
                   </div>
                   <h2 className="text-4xl md:text-6xl font-black tracking-tighter uppercase leading-[0.85] text-slate-900">
-                    Mission: <span className="text-blue-600 italic">Market Capture</span>
+                    Mission: <span className="text-blue-600">Market Capture</span>
                   </h2>
                   <p className="text-slate-500 text-lg max-w-3xl leading-relaxed font-medium">
                      {user?.firstName || 'Naveen'}, your <span className="text-slate-900 font-bold underline decoration-blue-500/30 decoration-4 underline-offset-4">{user?.niche || 'Fitness & Lifestyle'}</span> ecosystem is approaching critical mass. Data models suggest immediate scaling via automated outreach.
@@ -171,7 +171,7 @@ export const Growth = () => {
                </div>
                <div className="bg-slate-50/50 p-8 rounded-[3rem] border border-slate-100 w-full text-center shadow-inner">
                   <p className="text-[10px] font-black uppercase text-slate-400 tracking-[0.3em] mb-3">Live Network Potency</p>
-                  <p className="text-4xl font-black text-blue-600 tracking-tighter italic">384.2K</p>
+                  <p className="text-4xl font-black text-blue-600 tracking-tighter">384.2K</p>
                </div>
             </div>
          </div>
@@ -197,7 +197,7 @@ export const Growth = () => {
                           {c.avatar}
                        </div>
                        <div className="flex-1 min-w-0">
-                          <h4 className="font-black text-md tracking-tight text-slate-900 uppercase italic">{c.name}</h4>
+                          <h4 className="font-black text-md tracking-tight text-slate-900 uppercase">{c.name}</h4>
                           <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">{c.niche}</span>
                        </div>
                        <div className="flex flex-col items-end">
@@ -235,7 +235,7 @@ export const Growth = () => {
                ].map(stat => (
                  <div key={stat.label} className={cn("p-6 rounded-[2rem] border border-slate-100 shadow-sm", stat.bg)}>
                     <p className="text-[9px] font-black text-slate-400 uppercase mb-2 tracking-[0.1em]">{stat.label}</p>
-                    <p className={`text-sm font-black ${stat.color} uppercase italic`}>{stat.val}</p>
+                    <p className={`text-sm font-black ${stat.color} uppercase`}>{stat.val}</p>
                  </div>
                ))}
             </div>
@@ -264,11 +264,11 @@ export const Growth = () => {
                         {t.platform}
                      </span>
                      <div className="flex flex-col items-end">
-                        <span className="text-[12px] font-black italic text-emerald-600">{t.surge} Surge</span>
+                        <span className="text-[12px] font-black text-emerald-600">{t.surge} Surge</span>
                         <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest mt-1">Velocity</span>
                      </div>
                   </div>
-                  <h4 className="font-black text-2xl mb-4 tracking-tighter leading-tight relative z-10 text-slate-900 uppercase italic">{t.trend}</h4>
+                  <h4 className="font-black text-2xl mb-4 tracking-tighter leading-tight relative z-10 text-slate-900 uppercase">{t.trend}</h4>
                   <p className="text-[10px] font-black text-slate-400 mb-10 uppercase tracking-[0.2em] relative z-10">Niche Fit: <span className="text-slate-900">{user?.niche}</span></p>
                   <button className="w-full py-5 bg-slate-900 text-white rounded-[2rem] text-[10px] font-black uppercase tracking-[0.2em] hover:bg-blue-600 transition-all shadow-xl shadow-slate-500/10 active:scale-[0.98]">
                     Capitalize Now

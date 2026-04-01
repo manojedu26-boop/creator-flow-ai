@@ -39,7 +39,7 @@ const Features = () => (
         <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-blue-50 border border-blue-100 text-[10px] font-black uppercase tracking-[0.3em] text-blue-600 mb-8">
            <Stars className="w-3.5 h-3.5" /> Core Intelligence
         </div>
-        <h2 className="text-5xl md:text-8xl font-black tracking-tighter leading-none mb-8 text-slate-950 uppercase italic">
+        <h2 className="text-5xl md:text-8xl font-black tracking-tighter leading-none mb-8 text-slate-950 uppercase">
           Everything You Need <br />
           To <span className="text-blue-600">Dominate</span>
         </h2>
@@ -65,7 +65,7 @@ const Features = () => (
             <div className={`w-16 h-16 rounded-[1.5rem] ${f.bg} flex items-center justify-center mb-8 shadow-sm transition-transform group-hover:scale-110 group-hover:bg-slate-950 group-hover:text-white`}>
                <f.icon className={`w-7 h-7 ${f.color} group-hover:text-white transition-colors`} />
             </div>
-            <h3 className="text-xl font-black mb-3 text-slate-950 uppercase italic tracking-tight">{f.title}</h3>
+            <h3 className="text-xl font-black mb-3 text-slate-950 uppercase tracking-tight">{f.title}</h3>
             <p className="text-sm text-slate-500 font-bold leading-relaxed">{f.desc}</p>
             
             <div className="mt-8 pt-8 border-t border-slate-50 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-300 group-hover:text-blue-600 transition-colors">

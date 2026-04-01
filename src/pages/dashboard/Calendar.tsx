@@ -348,7 +348,7 @@ export const Calendar = () => {
                 <PlatformIcon platform={post.platform} className="w-6 h-6" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="font-black text-lg text-slate-900 tracking-tight italic uppercase">{post.caption}</p>
+                <p className="font-black text-lg text-slate-900 tracking-tight uppercase">{post.caption}</p>
                 <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest mt-1">{MONTH_NAMES[month]} {post.day} · {post.time} · {post.type}</p>
               </div>
               <span className={cn("px-4 py-2 rounded-xl border text-[10px] font-black uppercase tracking-widest shadow-sm", STATUS_COLOR[post.status])}>{post.status}</span>
@@ -367,7 +367,7 @@ export const Calendar = () => {
           <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-blue-600 mb-3">
             <CalendarIcon className="w-3.5 h-3.5" /> Content Master-Plan
           </div>
-          <h1 className="text-4xl md:text-5xl font-black tracking-tighter uppercase leading-[0.85] text-slate-900 italic">
+          <h1 className="text-4xl md:text-5xl font-black tracking-tighter uppercase leading-[0.85] text-slate-900">
             Visual <span className="text-blue-600">Roadmap</span>
           </h1>
         </div>
@@ -424,7 +424,7 @@ export const Calendar = () => {
            <Zap className="w-6 h-6 text-blue-600" />
         </div>
         <p className="text-[13px] font-bold text-slate-600 leading-relaxed">
-          <span className="text-blue-600 font-extrabold uppercase italic tracking-tight mr-2">Momentum Engine:</span> Tuesdays and Fridays are your peak visibility windows. Data suggests prioritizing <span className="text-slate-900 underline decoration-blue-500/30 decoration-2 underline-offset-4 font-black">Fitness Education</span> content for those slots.
+          <span className="text-blue-600 font-extrabold uppercase tracking-tight mr-2">Momentum Engine:</span> Tuesdays and Fridays are your peak visibility windows. Data suggests prioritizing <span className="text-slate-900 underline decoration-blue-500/30 decoration-2 underline-offset-4 font-black">Fitness Education</span> content for those slots.
         </p>
       </div>
 
@@ -516,7 +516,7 @@ export const Calendar = () => {
                   <PlatformIcon platform={selectedPost.platform} className="w-8 h-8" />
                 </div>
                 <div>
-                  <h4 className="font-black text-2xl tracking-tighter uppercase italic text-slate-900">{selectedPost.caption}</h4>
+                  <h4 className="font-black text-2xl tracking-tighter uppercase text-slate-900">{selectedPost.caption}</h4>
                   <p className="text-[11px] font-black text-slate-400 uppercase tracking-widest mt-1">{selectedPost.type} · {MONTH_NAMES[selectedPost.month]} {selectedPost.day} · {selectedPost.time}</p>
                 </div>
               </div>
@@ -533,7 +533,7 @@ export const Calendar = () => {
               <p className="text-[11px] font-black text-blue-600 uppercase tracking-[0.3em] flex items-center gap-3">
                 <Sparkles className="w-4 h-4" /> Editorial Intelligence
               </p>
-              <p className="text-base font-bold text-slate-600 leading-relaxed italic">
+              <p className="text-base font-bold text-slate-600 leading-relaxed">
                 "Start with a strong educational hook — your audience reacts 60% better to '3 common mistakes' vs 'how to' formats for this time slot."
               </p>
             </div>
@@ -564,7 +564,7 @@ export const Calendar = () => {
                   <Sparkles className="w-7 h-7 text-blue-600" />
                 </div>
                 <div>
-                  <h3 className="font-black text-2xl uppercase tracking-tighter italic text-slate-900">AI Momentum Matrix</h3>
+                  <h3 className="font-black text-2xl uppercase tracking-tighter text-slate-900">AI Momentum Matrix</h3>
                   <p className="text-[10px] text-slate-400 font-black uppercase tracking-[0.2em] mt-1">High-Fidelity Content Strategy</p>
                 </div>
                 <button onClick={() => setIsOptimiseOpen(false)} className="ml-auto w-10 h-10 hover:bg-slate-50 border border-slate-100 rounded-xl flex items-center justify-center text-slate-400 hover:text-slate-900 transition-all"><X className="w-5 h-5" /></button>
@@ -576,7 +576,7 @@ export const Calendar = () => {
                       <PlatformIcon platform={p.platform} className="w-5 h-5" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="font-black text-sm text-slate-900 truncate uppercase italic">{p.caption}</p>
+                      <p className="font-black text-sm text-slate-900 truncate uppercase">{p.caption}</p>
                       <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest mt-1">{MONTH_NAMES[month]} {p.day} · {p.time} · {p.type}</p>
                     </div>
                     <CheckCircle2 className="w-6 h-6 text-emerald-500 shrink-0 shadow-md rounded-full" />

@@ -119,7 +119,10 @@ export const DashboardLayout = () => {
       </div>
       
       {/* Main Content Wrapper */}
-      <div className="flex-1 flex flex-col relative z-header w-full overflow-hidden transition-all duration-300">
+      <div 
+        className="flex-1 flex flex-col relative z-header w-full overflow-hidden transition-all duration-300"
+        style={{ paddingLeft: "var(--sidebar-w, 0px)" }}
+      >
         {/* Header - Always visible but height is variable via CSS */}
         <Header title={pageTitle} />
         

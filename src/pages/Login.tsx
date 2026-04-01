@@ -98,7 +98,7 @@ const Login = () => {
         </button>
 
         <div className="flex flex-col gap-4 mb-12">
-          <div className="flex items-center gap-3 font-black text-3xl tracking-tighter uppercase italic text-slate-950">
+          <div className="flex items-center gap-3 font-black text-3xl tracking-tighter uppercase text-slate-950">
             <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
                <Sparkles className="w-5 h-5 text-white" />
             </div>
@@ -141,7 +141,7 @@ const Login = () => {
             )}
 
             <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 ml-1 italic">Email Identity</label>
+              <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 ml-1">Email Identity</label>
               <div className="relative">
                 <Mail className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-blue-600 transition-colors" />
                 <input
@@ -159,7 +159,7 @@ const Login = () => {
 
             <div className="space-y-2">
               <div className="flex items-center justify-between ml-1">
-                <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 italic">Access Key</label>
+                <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Access Key</label>
                 <Link to="/forgot-password" title="Reset your password" className="text-[10px] font-black uppercase tracking-widest text-blue-600 hover:underline">Reset Key?</Link>
               </div>
               <div className="relative">

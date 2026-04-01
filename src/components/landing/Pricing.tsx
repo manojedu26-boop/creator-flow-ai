@@ -52,7 +52,7 @@ const Pricing = () => {
           <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-slate-950 border border-slate-900 text-[10px] font-black uppercase tracking-[0.3em] text-white mb-8 shadow-xl shadow-slate-200">
              <Stars className="w-3.5 h-3.5 text-blue-500" /> Investment Tiers
           </div>
-          <h2 className="text-5xl md:text-8xl font-black tracking-tighter leading-none mb-8 text-slate-950 uppercase italic">
+          <h2 className="text-5xl md:text-8xl font-black tracking-tighter leading-none mb-8 text-slate-950 uppercase">
             Simple, Powerful <br />
             <span className="text-blue-600 font-black">Investment</span>
           </h2>
@@ -85,11 +85,11 @@ const Pricing = () => {
                  <plan.icon className="w-7 h-7" />
               </div>
 
-              <h3 className="text-2xl font-black mb-2 text-slate-950 uppercase italic tracking-tight">{plan.name}</h3>
+              <h3 className="text-2xl font-black mb-2 text-slate-950 uppercase tracking-tight">{plan.name}</h3>
               <p className="text-sm text-slate-500 font-bold mb-8">{plan.desc}</p>
               
               <div className="flex items-baseline gap-2 mb-10">
-                <span className="text-5xl font-black text-slate-950 italic tracking-tighter">{plan.price}</span>
+                <span className="text-5xl font-black text-slate-950 tracking-tighter">{plan.price}</span>
                 {plan.period && <span className="text-slate-400 font-black uppercase text-xs tracking-widest leading-none">{plan.period}</span>}
               </div>
 

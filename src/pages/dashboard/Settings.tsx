@@ -51,10 +51,10 @@ export const Settings = () => {
       <div className="max-w-6xl mx-auto space-y-10 pb-24">
         {/* Header Section */}
         <div className="flex flex-col gap-2">
-            <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.3em] text-blue-600 mb-1 italic">
+            <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.3em] text-blue-600 mb-1">
                System Configuration
             </div>
-            <h1 className="text-4xl md:text-5xl font-black tracking-tighter uppercase text-slate-900 italic leading-none">
+            <h1 className="text-4xl md:text-5xl font-black tracking-tighter uppercase text-slate-900 leading-none">
               Control <span className="text-blue-600">Center</span>
             </h1>
         </div>
@@ -84,7 +84,7 @@ export const Settings = () => {
             </div>
 
             <div className="p-8 bg-blue-50/50 rounded-[2.5rem] border border-blue-100/50 mt-8">
-               <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-3 italic">Security Status</p>
+               <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest mb-3">Security Status</p>
                <div className="flex items-center gap-3">
                   <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.4)]" />
                   <span className="text-[11px] font-bold text-slate-600">Encrypted Session</span>
@@ -118,9 +118,9 @@ export const Settings = () => {
                          </button>
                       </div>
                       <div className="flex-1 text-center md:text-left space-y-2">
-                         <h3 className="text-3xl font-black tracking-tighter text-slate-900 uppercase italic leading-none">{user?.name}</h3>
+                         <h3 className="text-3xl font-black tracking-tighter text-slate-900 uppercase leading-none">{user?.name}</h3>
                          <p className="text-sm font-bold text-slate-400">@{user?.handle?.replace('@', '')}</p>
-                         <div className="inline-flex px-4 py-1.5 rounded-full bg-blue-50 text-blue-600 border border-blue-100 text-[10px] font-black uppercase tracking-[0.2em] italic">
+                         <div className="inline-flex px-4 py-1.5 rounded-full bg-blue-50 text-blue-600 border border-blue-100 text-[10px] font-black uppercase tracking-[0.2em]">
                             Verified {user?.niche} Authority
                          </div>
                       </div>
@@ -173,7 +173,7 @@ export const Settings = () => {
                   className="space-y-8"
                 >
                   <div className="bg-white border border-slate-100 rounded-[3.5rem] p-10 md:p-14 shadow-sm">
-                     <h3 className="text-2xl font-black tracking-tighter uppercase italic text-slate-900 mb-10">Live Integrations</h3>
+                     <h3 className="text-2xl font-black tracking-tighter uppercase text-slate-900 mb-10">Live Integrations</h3>
                      <div className="space-y-6">
                         {[
                           { name: "Instagram", icon: Instagram, color: "text-pink-500", bg: "bg-pink-50" },
@@ -186,7 +186,7 @@ export const Settings = () => {
                                    <p.icon className={cn("w-8 h-8", p.color)} />
                                 </div>
                                 <div>
-                                   <span className="text-lg font-black uppercase tracking-tight text-slate-900 italic">{p.name}</span>
+                                   <span className="text-lg font-black uppercase tracking-tight text-slate-900">{p.name}</span>
                                    <div className="flex items-center gap-2 mt-1">
                                       <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.5)]" />
                                       <span className="text-[10px] font-black text-emerald-600 uppercase tracking-widest">Active Data Stream</span>
@@ -217,7 +217,7 @@ export const Settings = () => {
               {activeTab === "Appearance" && (
                 <motion.div key="appearance" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-8">
                   <div className="bg-white border border-slate-100 rounded-[3.5rem] p-10 md:p-14 shadow-sm">
-                     <h3 className="text-2xl font-black tracking-tighter uppercase italic text-slate-900 mb-10">Brand Esthetic</h3>
+                     <h3 className="text-2xl font-black tracking-tighter uppercase text-slate-900 mb-10">Brand Esthetic</h3>
                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         {[
                           { mode: 'Professional White', icon: Sun, desc: 'Corporate high-fidelity light interface' },
@@ -254,7 +254,7 @@ export const Settings = () => {
               {activeTab === "Privacy" && (
                 <motion.div key="privacy" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-8">
                   <div className="bg-white border border-slate-100 rounded-[3.5rem] p-10 md:p-14 shadow-sm">
-                     <h3 className="text-2xl font-black tracking-tighter uppercase italic text-slate-900 mb-10">Data Shield</h3>
+                     <h3 className="text-2xl font-black tracking-tighter uppercase text-slate-900 mb-10">Data Shield</h3>
                      <div className="space-y-4">
                         {[
                           { label: 'Public Profile Visibility', desc: 'Allow top-tier brands to discover your media kit.', icon: Globe },
@@ -284,7 +284,7 @@ export const Settings = () => {
               {activeTab === "Notifications" && (
                 <motion.div key="notifications" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-8">
                   <div className="bg-white border border-slate-100 rounded-[3.5rem] p-10 md:p-14 shadow-sm">
-                     <h3 className="text-2xl font-black tracking-tighter uppercase italic text-slate-900 mb-10">Dispatch Prefs</h3>
+                     <h3 className="text-2xl font-black tracking-tighter uppercase text-slate-900 mb-10">Dispatch Prefs</h3>
                      <div className="space-y-4">
                         {[
                           { label: 'High-Value Deal Alerts', desc: 'Real-time synchronization for contract opportunities.', icon: Sparkles },
@@ -319,8 +319,8 @@ export const Settings = () => {
                      
                      <div className="flex flex-col md:flex-row items-center justify-between relative z-10 gap-8">
                         <div className="text-center md:text-left">
-                           <p className="text-[10px] font-black uppercase text-blue-400 tracking-[0.4em] mb-4 italic">Subscription Matrix</p>
-                           <h3 className="text-5xl font-black text-white tracking-tighter uppercase italic leading-none">CreatorForge <span className="text-blue-500">Pro</span></h3>
+                           <p className="text-[10px] font-black uppercase text-blue-400 tracking-[0.4em] mb-4">Subscription Matrix</p>
+                           <h3 className="text-5xl font-black text-white tracking-tighter uppercase leading-none">CreatorForge <span className="text-blue-500">Pro</span></h3>
                         </div>
                         <div className="text-center md:text-right">
                            <p className="text-4xl font-black text-white tracking-tight">$29<span className="text-sm font-bold text-white/40 uppercase">/month</span></p>
@@ -336,7 +336,7 @@ export const Settings = () => {
                      </div>
                   </div>
                   <div className="bg-white border border-slate-100 rounded-[3.5rem] p-10 md:p-14 shadow-sm">
-                     <h3 className="text-xs font-black uppercase tracking-[0.3em] text-slate-400 mb-8 italic">Access Protection</h3>
+                     <h3 className="text-xs font-black uppercase tracking-[0.3em] text-slate-400 mb-8">Access Protection</h3>
                      <div className="space-y-6">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                            <div className="space-y-3">
@@ -358,7 +358,7 @@ export const Settings = () => {
             {/* SAVE BUTTON */}
             <div className="flex flex-col md:flex-row justify-between items-center pt-8 gap-6">
                {activeTab === "Privacy" && (
-                 <button className="text-[11px] font-black uppercase tracking-[0.3em] text-rose-500 hover:text-rose-600 transition-all flex items-center gap-3 italic">
+                 <button className="text-[11px] font-black uppercase tracking-[0.3em] text-rose-500 hover:text-rose-600 transition-all flex items-center gap-3">
                    <X className="w-5 h-5" /> Terminate Account
                  </button>
                )}

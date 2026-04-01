@@ -206,7 +206,7 @@ const Onboarding = () => {
                 <div className="w-8 h-8 rounded-lg bg-slate-950 flex items-center justify-center shadow-lg shadow-slate-200">
                    <Sparkles className="w-4 h-4 text-white" />
                 </div>
-                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-950 italic">CreatorForge Intelligence</span>
+                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-950">CreatorForge Intelligence</span>
              </div>
              <span className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-600">Phase {step} // 5</span>
           </div>
@@ -241,13 +241,13 @@ const Onboarding = () => {
               {step === 1 && (
                 <div className="space-y-8">
                   <div>
-                    <h2 className="text-3xl font-black uppercase tracking-tight mb-3 text-slate-950 italic">Creator Identity</h2>
+                    <h2 className="text-3xl font-black uppercase tracking-tight mb-3 text-slate-950">Creator Identity</h2>
                     <p className="text-slate-500 font-bold text-lg">Initialize your profile to calibrate AI recommendations.</p>
                   </div>
 
                   <div className="space-y-6">
                     <div className="space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 ml-1 italic">Legal Identity</label>
+                      <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 ml-1">Legal Identity</label>
                       <input
                         type="text"
                         value={creatorName}
@@ -259,7 +259,7 @@ const Onboarding = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 ml-1 italic">Visual Handle</label>
+                      <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 ml-1">Visual Handle</label>
                       <div className="relative">
                         <AtSign className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                         <input
@@ -280,7 +280,7 @@ const Onboarding = () => {
 
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 ml-1 italic">HQ Location</label>
+                        <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 ml-1">HQ Location</label>
                         <div className="relative">
                           <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
                           <input
@@ -293,7 +293,7 @@ const Onboarding = () => {
                         </div>
                       </div>
                       <div className="space-y-2">
-                        <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 ml-1 italic">Region</label>
+                        <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 ml-1">Region</label>
                         <select
                           value={country}
                           onChange={e => setCountry(e.target.value)}
@@ -313,7 +313,7 @@ const Onboarding = () => {
               {step === 2 && (
                 <div className="space-y-8">
                   <div>
-                    <h2 className="text-3xl font-black uppercase tracking-tight mb-3 text-slate-950 italic">Sync Intelligence</h2>
+                    <h2 className="text-3xl font-black uppercase tracking-tight mb-3 text-slate-950">Sync Intelligence</h2>
                     <p className="text-slate-500 font-bold text-lg">Connect nodes to primary social platforms.</p>
                   </div>
 
@@ -337,7 +337,7 @@ const Onboarding = () => {
                                 <p.icon className={`w-6 h-6 ${p.color}`} />
                               </div>
                               <div>
-                                <p className="font-black text-sm text-slate-950 uppercase tracking-tight italic">{p.name}</p>
+                                <p className="font-black text-sm text-slate-950 uppercase tracking-tight">{p.name}</p>
                                 <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest">{p.desc}</p>
                                 {connected && (
                                   <p className="text-[10px] text-blue-600 font-black uppercase tracking-[0.2em] mt-1 flex items-center gap-1">
@@ -376,7 +376,7 @@ const Onboarding = () => {
               {step === 3 && (
                 <div className="space-y-8">
                   <div>
-                    <h2 className="text-3xl font-black uppercase tracking-tight mb-3 text-slate-950 italic">Module Focus</h2>
+                    <h2 className="text-3xl font-black uppercase tracking-tight mb-3 text-slate-950">Module Focus</h2>
                     <p className="text-slate-500 font-bold text-lg">Define 1–3 specialisations for AI content optimization.</p>
                   </div>
                   
@@ -407,7 +407,7 @@ const Onboarding = () => {
               {step === 4 && (
                 <div className="space-y-8">
                   <div>
-                    <h2 className="text-3xl font-black uppercase tracking-tight mb-3 text-slate-950 italic">Command Objectives</h2>
+                    <h2 className="text-3xl font-black uppercase tracking-tight mb-3 text-slate-950">Command Objectives</h2>
                     <p className="text-slate-500 font-bold text-lg">Establishing target parameters for AI strategy generation.</p>
                   </div>
                   
@@ -427,7 +427,7 @@ const Onboarding = () => {
                         <div className={`w-12 h-12 rounded-2xl flex items-center justify-center border transition-all ${selectedGoals.includes(g.label) ? "bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue-500/20" : "bg-slate-50 border-slate-100 text-slate-400 group-hover:text-slate-950"}`}>
                           <g.icon className="w-6 h-6" />
                         </div>
-                        <span className="font-black text-sm flex-1 uppercase tracking-tight italic">{g.label}</span>
+                        <span className="font-black text-sm flex-1 uppercase tracking-tight">{g.label}</span>
                         {selectedGoals.includes(g.label) && (
                           <div className="w-6 h-6 rounded-full bg-blue-600 flex items-center justify-center">
                             <Check className="w-3.5 h-3.5 text-white stroke-[4]" />
@@ -452,7 +452,7 @@ const Onboarding = () => {
                   </motion.div>
 
                   <div className="space-y-4">
-                    <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tighter italic text-slate-950">Warroom Deployed 🚀</h2>
+                    <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tighter text-slate-950">Warroom Deployed 🚀</h2>
                     <p className="text-slate-500 font-bold text-lg leading-relaxed max-w-sm mx-auto">{aiMessage}</p>
                   </div>
 
@@ -472,7 +472,7 @@ const Onboarding = () => {
                         `Growth strategy aligned with: ${selectedGoals[0]?.split(' ')[0] || "Empire"} goals`,
                         `Proprietary Brand CRT pipeline established`,
                       ].map((item, i) => (
-                        <li key={i} className="flex items-center gap-4 text-[11px] font-black uppercase tracking-tight text-slate-950 italic">
+                        <li key={i} className="flex items-center gap-4 text-[11px] font-black uppercase tracking-tight text-slate-950">
                           <div className="w-5 h-5 rounded-full bg-blue-600 flex items-center justify-center shrink-0">
                              <Check className="w-3 h-3 text-white stroke-[4]" />
                           </div>

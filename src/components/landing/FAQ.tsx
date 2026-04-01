@@ -26,7 +26,7 @@ const FAQ = () => (
         <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-slate-50 border border-slate-100 text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 mb-8 shadow-sm">
            <HelpCircle className="w-3.5 h-3.5" /> Operations Support
         </div>
-        <h2 className="text-5xl md:text-8xl font-black tracking-tighter leading-none mb-8 text-slate-950 uppercase italic">
+        <h2 className="text-5xl md:text-8xl font-black tracking-tighter leading-none mb-8 text-slate-950 uppercase">
           Intelligence <br />
           <span className="text-blue-600 font-black">Support.</span>
         </h2>
@@ -49,9 +49,9 @@ const FAQ = () => (
               value={`faq-${i}`} 
               className="rounded-[2rem] bg-white border border-slate-100 px-8 py-2 transition-all hover:border-blue-600 group"
             >
-              <AccordionTrigger className="text-left font-black uppercase italic text-slate-950 tracking-tight hover:no-underline py-6">
+              <AccordionTrigger className="text-left font-black uppercase text-slate-950 tracking-tight hover:no-underline py-6">
                 <span className="flex items-center gap-4">
-                   <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600 font-black italic text-xs group-hover:bg-blue-600 group-hover:text-white transition-all">
+                   <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600 font-black text-xs group-hover:bg-blue-600 group-hover:text-white transition-all">
                       {i + 1}
                    </div>
                    {faq.q}

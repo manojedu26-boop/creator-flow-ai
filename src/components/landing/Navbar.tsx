@@ -29,7 +29,7 @@ const Navbar = () => {
           <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/20 group-hover:scale-110 transition-transform">
              <Sparkles className="w-5 h-5 text-white" />
           </div>
-          <span className="text-slate-950 uppercase italic">CREATORFORGE<span className="text-blue-600">AI</span></span>
+          <span className="text-slate-950 uppercase">CREATORFORGE<span className="text-blue-600">AI</span></span>
         </div>
 
         {/* Desktop Nav */}
@@ -74,7 +74,7 @@ const Navbar = () => {
                       <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
                         <Sparkles className="w-5 h-5 text-white" />
                       </div>
-                      <span className="text-slate-950 uppercase italic">CREATORFORGE<span className="text-blue-600">AI</span></span>
+                      <span className="text-slate-950 uppercase">CREATORFORGE<span className="text-blue-600">AI</span></span>
                     </div>
                   </div>
                   <nav className="flex-1 px-8 py-12 space-y-10">
@@ -83,7 +83,7 @@ const Navbar = () => {
                         key={link.label} 
                         href={link.href} 
                         onClick={() => setIsOpen(false)}
-                        className="block text-3xl font-black uppercase tracking-tight text-slate-400 hover:text-slate-950 transition-all italic"
+                        className="block text-3xl font-black uppercase tracking-tight text-slate-400 hover:text-slate-950 transition-all"
                       >
                         {link.label}
                       </a>

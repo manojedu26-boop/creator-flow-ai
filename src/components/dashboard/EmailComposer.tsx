@@ -153,7 +153,7 @@ export const EmailComposer = ({
             <button className="hover:text-white transition-colors"><Paperclip className="w-4 h-4" /></button>
             <div className="w-px h-4 bg-white/10" />
             <button className="text-[10px] font-black uppercase">B</button>
-            <button className="text-[10px] font-black uppercase italic">I</button>
+            <button className="text-[10px] font-black uppercase">I</button>
             <button className="text-[10px] font-black uppercase underline">U</button>
           </div>
           {attachments.length > 0 && (

@@ -199,7 +199,7 @@ export const Analytics = () => {
                 <span className="w-2 h-2 rounded-full bg-blue-600" />
                 <span className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-600">Growth Momentum</span>
               </div>
-              <h3 className="text-2xl md:text-3xl font-black tracking-tight uppercase leading-none text-slate-900">30-Day Follower <span className="text-blue-600 italic">Intelligence</span></h3>
+              <h3 className="text-2xl md:text-3xl font-black tracking-tight uppercase leading-none text-slate-900">30-Day Follower <span className="text-blue-600">Intelligence</span></h3>
               <p className="text-xs text-slate-400 mt-2 font-black uppercase tracking-widest">Strategic cross-platform reach for {user?.name || 'Naveen'}</p>
             </div>
             
@@ -249,7 +249,7 @@ export const Analytics = () => {
               <div key={i} className="bg-white border border-slate-100 p-5 rounded-[2rem] hover:shadow-lg hover:border-blue-100 transition-all shadow-sm">
                 <p className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2">{stat.label}</p>
                 <div className="flex items-baseline gap-2">
-                  <span className={cn("text-xl font-black italic tracking-tighter uppercase", stat.color)}>{stat.val}</span>
+                  <span className={cn("text-xl font-black tracking-tighter uppercase", stat.color)}>{stat.val}</span>
                   <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest">{stat.change}</span>
                 </div>
               </div>
@@ -487,7 +487,7 @@ export const Analytics = () => {
               <div className="flex items-center gap-6 p-8 bg-blue-50 border border-blue-100 rounded-[2.5rem]">
                  <div className="w-16 h-16 rounded-2xl bg-blue-600 flex items-center justify-center font-black text-white shadow-xl shadow-blue-500/20">AI</div>
                  <div>
-                    <h3 className="text-2xl font-black text-slate-900 uppercase italic tracking-tighter">Deep <span className="text-blue-600">Intelligence</span></h3>
+                    <h3 className="text-2xl font-black text-slate-900 uppercase tracking-tighter">Deep <span className="text-blue-600">Intelligence</span></h3>
                     <p className="text-[10px] text-slate-400 font-black uppercase tracking-[0.2em] mt-1">Cross-Platform Competitor Delta: {selectedCompetitor?.handle}</p>
                  </div>
               </div>
@@ -523,7 +523,7 @@ export const Analytics = () => {
               Intelligence Engine
             </div>
             <h1 className="text-4xl md:text-5xl font-black tracking-tighter uppercase leading-[0.9] text-slate-900">
-               Impact <span className="text-blue-600 italic">Analysis</span>
+               Impact <span className="text-blue-600">Analysis</span>
             </h1>
           </div>
           <div className="flex items-center gap-3">

@@ -148,7 +148,7 @@ export const Contracts = () => {
           </div>
           <h1 className="text-4xl md:text-5xl font-black tracking-tighter uppercase leading-[0.85] text-slate-900">
              Contract<br/>
-             <span className="text-blue-600 italic">Shield</span>
+             <span className="text-blue-600">Shield</span>
           </h1>
         </div>
         <button 
@@ -208,7 +208,7 @@ export const Contracts = () => {
                  <div className="space-y-3 border-b border-slate-100 pb-10 mb-10">
                     <div className="flex items-center gap-3 mb-4">
                        <div className="w-12 h-12 rounded-2xl bg-slate-900 flex items-center justify-center font-black text-white shadow-xl shadow-slate-500/20">C</div>
-                       <h2 className="text-3xl font-black tracking-tighter text-slate-900 italic uppercase">{selectedContract.brand} Participation Agreement</h2>
+                       <h2 className="text-3xl font-black tracking-tighter text-slate-900 uppercase">{selectedContract.brand} Participation Agreement</h2>
                     </div>
                     <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 flex items-center gap-2">
                        <ShieldCheck className="w-3.5 h-3.5 text-blue-600" /> Legal Integrity Verified by AI Engine • {selectedContract.date}
@@ -224,7 +224,7 @@ export const Contracts = () => {
                         className="absolute inset-y-0 w-1 bg-blue-600 shadow-[0_0_20px_rgba(37,99,235,0.6)] z-20"
                       />
                     )}
-                    <p className="opacity-50 italic">...Clause 1.2: The Creator represents and warrants that they have the legal right to enter into this Agreement and perform the Services described herein...</p>
+                    <p className="opacity-50">...Clause 1.2: The Creator represents and warrants that they have the legal right to enter into this Agreement and perform the Services described herein...</p>
                     <div className={cn(
                        "p-10 rounded-[2.5rem] border-l-8 relative overflow-hidden shadow-sm transition-all",
                        selectedContract.risk === 'high' ? "bg-rose-50 border-rose-500" : "bg-amber-50 border-amber-500"
@@ -237,11 +237,11 @@ export const Contracts = () => {
                           <ShieldAlert className={cn("w-5 h-5", selectedContract.risk === 'high' ? "text-rose-600" : "text-amber-600")} />
                           <span className={cn("text-[10px] font-black uppercase tracking-[0.2em]", selectedContract.risk === 'high' ? "text-rose-600" : "text-amber-600")}>AI Critical Observation</span>
                        </div>
-                       <p className="font-black text-slate-900 leading-relaxed text-lg italic">
+                       <p className="font-black text-slate-900 leading-relaxed text-lg">
                           {selectedContract.content}
                        </p>
                     </div>
-                    <p className="opacity-50 italic">...Clause 15.1: This Agreement shall be governed by and construed in accordance with the laws of the Republic of India...</p>
+                    <p className="opacity-50">...Clause 15.1: This Agreement shall be governed by and construed in accordance with the laws of the Republic of India...</p>
                  </div>
 
                  <div className="flex flex-col sm:flex-row gap-4 pt-10 border-t border-slate-100 mt-14">
@@ -336,7 +336,7 @@ export const Contracts = () => {
                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div className="space-y-4">
                      <span className="text-[10px] font-black text-rose-600 uppercase tracking-[0.2em] block">Contested Clause</span>
-                     <div className="p-8 bg-rose-50 border border-rose-100 rounded-[2.5rem] min-h-[160px] text-[13px] font-bold text-slate-500 italic leading-relaxed shadow-inner">
+                     <div className="p-8 bg-rose-50 border border-rose-100 rounded-[2.5rem] min-h-[160px] text-[13px] font-bold text-slate-500 leading-relaxed shadow-inner">
                         {activeFlag?.clause === '9.1' ? 'Brand owns your content forever across all media. This is a high-risk standard clause.' : 'The Creator shall not promote, represent, or be seen using any competing tech brand worldwide for 18 months.'}
                      </div>
                   </div>
@@ -347,7 +347,7 @@ export const Contracts = () => {
                      </div>
                      <div className="p-8 bg-emerald-50 border border-emerald-100 rounded-[2.5rem] min-h-[160px] flex items-center justify-center shadow-inner">
                         {counterClause ? (
-                          <p className="text-[13px] font-black leading-relaxed text-slate-900 italic">"{counterClause}"</p>
+                          <p className="text-[13px] font-black leading-relaxed text-slate-900">"{counterClause}"</p>
                         ) : (
                           <div className="flex flex-col items-center gap-4">
                             <RefreshCcw className="w-8 h-8 animate-spin text-slate-300" />

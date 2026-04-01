@@ -300,7 +300,7 @@ export const Network = () => {
                   {selectedCasting?.avatar}
                </div>
                <div>
-                  <h3 className="text-lg font-black uppercase italic">{selectedCasting?.author} Campaign</h3>
+                  <h3 className="text-lg font-black uppercase">{selectedCasting?.author} Campaign</h3>
                   <p className="text-xs text-muted-foreground font-bold uppercase tracking-widest">Brand Casting • Verified</p>
                </div>
             </div>

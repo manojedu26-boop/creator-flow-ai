@@ -99,7 +99,7 @@ export const SearchOverlay = ({ isOpen, onClose }: SearchOverlayProps) => {
           <div className="pt-6 border-t border-white/5">
              <div className="p-4 rounded-2xl bg-primary/10 border border-primary/20 flex items-center gap-4">
                 <Sparkles className="w-5 h-5 text-primary" />
-                <p className="text-[10px] font-bold italic text-white/90">
+                <p className="text-[10px] font-bold text-white/90">
                   Try asking "Who were my top 3 brand partners in January?"
                 </p>
              </div>

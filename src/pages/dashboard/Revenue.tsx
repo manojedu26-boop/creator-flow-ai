@@ -106,7 +106,7 @@ export const Revenue = () => {
             Strategic Finance
           </div>
           <h1 className="text-4xl md:text-5xl font-black tracking-tighter uppercase leading-[0.9] text-slate-900">
-             Revenue <span className="text-blue-600 italic">Command</span>
+             Revenue <span className="text-blue-600">Command</span>
           </h1>
         </div>
         <button 
@@ -130,10 +130,10 @@ export const Revenue = () => {
                   <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${stat.bg} ${stat.color} shadow-inner`}>
                      <stat.icon className="w-6 h-6" />
                   </div>
-                  {stat.change && <span className="text-[10px] font-black text-emerald-600 bg-emerald-50 border border-emerald-100 px-3 py-1 rounded-xl italic tracking-widest">{stat.change}</span>}
+                  {stat.change && <span className="text-[10px] font-black text-emerald-600 bg-emerald-50 border border-emerald-100 px-3 py-1 rounded-xl tracking-widest">{stat.change}</span>}
                </div>
                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2">{stat.label}</p>
-               <h3 className="text-3xl font-black tracking-tighter text-slate-900 italic"><CountUp value={stat.value} prefix="₹ " /></h3>
+               <h3 className="text-3xl font-black tracking-tighter text-slate-900"><CountUp value={stat.value} prefix="₹ " /></h3>
                {stat.count && <p className="text-[10px] font-black text-amber-600 uppercase tracking-widest mt-3 flex items-center gap-2"><div className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" /> {stat.count}</p>}
             </motion.div>
           ))}
@@ -141,7 +141,7 @@ export const Revenue = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
          <div className="lg:col-span-2 premium-card bg-white border border-slate-200 rounded-[3rem] p-10 shadow-sm">
-            <h3 className="text-2xl font-black uppercase tracking-tighter text-slate-900 italic mb-10">Revenue <span className="text-blue-600">Dynamics</span></h3>
+            <h3 className="text-2xl font-black uppercase tracking-tighter text-slate-900 mb-10">Revenue <span className="text-blue-600">Dynamics</span></h3>
             <div className="h-[400px] w-full">
                <RevenueChart data={revenueData} />
             </div>
@@ -151,7 +151,7 @@ export const Revenue = () => {
             <div className="absolute top-0 right-0 p-10 text-blue-600/5 group-hover:text-blue-600/10 transition-colors">
                <Calculator className="w-40 h-40 rotate-12" />
             </div>
-            <h3 className="text-xl font-black uppercase tracking-tighter mb-2 flex items-center gap-3 relative z-10 text-slate-900 italic">
+            <h3 className="text-xl font-black uppercase tracking-tighter mb-2 flex items-center gap-3 relative z-10 text-slate-900">
                <Sparkles className="w-6 h-6 text-blue-600" />
                AI Rate Card
             </h3>
@@ -178,7 +178,7 @@ export const Revenue = () => {
             </div>
 
             <div className="mt-10 p-6 rounded-[2rem] bg-blue-50 border border-blue-100 shadow-inner">
-               <p className="text-[11px] font-bold leading-relaxed italic text-slate-600">
+               <p className="text-[11px] font-bold leading-relaxed text-slate-600">
                  "Strategic Audit: Your Reels engagement is 18% above the benchmark. Recalibrate your pitch to maximize yield."
                </p>
             </div>
@@ -187,7 +187,7 @@ export const Revenue = () => {
 
       <div className="premium-card bg-white border border-slate-200 rounded-[3rem] shadow-sm overflow-hidden">
          <div className="p-10 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-6">
-            <h3 className="text-2xl font-black uppercase tracking-tighter text-slate-900 italic flex items-center gap-4">
+            <h3 className="text-2xl font-black uppercase tracking-tighter text-slate-900 flex items-center gap-4">
                <FileText className="w-6 h-6 text-blue-600" />
                Pending Invoices
             </h3>

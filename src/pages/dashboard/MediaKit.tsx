@@ -170,7 +170,7 @@ export const MediaKit = () => {
     // Footer
     doc.setFontSize(8);
     doc.setTextColor(150);
-    doc.setFont("helvetica", "italic");
+    doc.setFont("helvetica", "normal");
     const footerY = 280;
     doc.text("Verified by CreatorForge Engine • Official Creator Document", 14, footerY);
     doc.text("Mar 2026 Edition", 196, footerY, { align: "right" });
@@ -228,7 +228,7 @@ export const MediaKit = () => {
         </div>
         <h1 className="text-4xl md:text-5xl font-black tracking-tighter uppercase leading-[0.85] text-slate-900">
            Media Kit<br/>
-           <span className="text-blue-600 italic">Architect</span>
+           <span className="text-blue-600">Architect</span>
         </h1>
       </header>
 
@@ -236,7 +236,7 @@ export const MediaKit = () => {
         {/* LEFT — MEDIA KIT EDITOR */}
         <div className="lg:col-span-4 bg-white border border-slate-200 rounded-[3rem] p-8 lg:p-10 space-y-12 shadow-sm">
            <div className="space-y-8">
-              <h2 className="text-2xl font-black uppercase tracking-tighter text-slate-900 italic flex items-center gap-4">
+              <h2 className="text-2xl font-black uppercase tracking-tighter text-slate-900 flex items-center gap-4">
                  <Sparkles className="w-6 h-6 text-blue-600" /> Identity Logic
               </h2>
             <div className="p-8 bg-slate-50 border border-slate-100 rounded-[2.5rem] space-y-6">

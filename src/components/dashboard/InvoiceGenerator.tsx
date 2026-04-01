@@ -116,7 +116,7 @@ export const InvoiceGenerator = ({ isOpen, onClose, brandName, dealValue, dealTy
     
     // Footer
     doc.setFontSize(8);
-    doc.setFont("helvetica", "italic");
+    doc.setFont("helvetica", "normal");
     doc.setTextColor(150);
     doc.text("Notes: Thank you for your business! Please settle the amount by the due date.", 14, 280);
     
@@ -220,7 +220,7 @@ export const InvoiceGenerator = ({ isOpen, onClose, brandName, dealValue, dealTy
           <div className="h-px bg-white/5 my-1" />
           <div className="flex justify-between items-center text-lg font-black text-white">
             <span className="uppercase tracking-tighter">Total Amount</span>
-            <span className="text-primary italic">INR {total.toLocaleString()}</span>
+            <span className="text-primary">INR {total.toLocaleString()}</span>
           </div>
         </div>
 
@@ -231,7 +231,7 @@ export const InvoiceGenerator = ({ isOpen, onClose, brandName, dealValue, dealTy
            </div>
            <div>
               <p className="text-[10px] font-black uppercase text-emerald-400">AI Financial Check</p>
-              <p className="text-xs font-bold text-emerald-400/80 mt-0.5 leading-relaxed italic">
+              <p className="text-xs font-bold text-emerald-400/80 mt-0.5 leading-relaxed">
                 "Naveen, you've hit your revenue milestone! This invoice brings your monthly brand deal income to ₹1,45,000."
               </p>
            </div>

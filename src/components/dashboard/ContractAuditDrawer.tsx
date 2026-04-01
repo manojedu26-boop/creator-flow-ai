@@ -38,10 +38,10 @@ export const ContractAuditDrawer = ({ isOpen, onClose, brandName, riskScore, fla
                     transition={{ duration: 1.5, ease: "easeOut" }}
                  />
               </svg>
-              <div className="absolute inset-0 flex items-center justify-center font-black text-xl italic text-white">{riskScore}%</div>
+              <div className="absolute inset-0 flex items-center justify-center font-black text-xl text-white">{riskScore}%</div>
            </div>
            <div className="text-center md:text-left space-y-2">
-              <h3 className="text-2xl font-black uppercase tracking-tight italic">{brandName} Shield Report</h3>
+              <h3 className="text-2xl font-black uppercase tracking-tight">{brandName} Shield Report</h3>
               <p className="text-xs font-bold text-muted-foreground leading-relaxed">
                  Our AI scanned 14 pages and identified <span className="text-white">{flags.length} potential friction points</span>. 
                  Overall risk is <span className={riskScore > 60 ? "text-rose-500" : riskScore > 30 ? "text-amber-500" : "text-emerald-500"}>
@@ -71,7 +71,7 @@ export const ContractAuditDrawer = ({ isOpen, onClose, brandName, riskScore, fla
                            f.level === 'yellow' ? 'bg-amber-500' : 
                            'bg-emerald-500'
                          }`} />
-                         <span className="text-xs font-black uppercase italic text-white">{f.title}</span>
+                         <span className="text-xs font-black uppercase text-white">{f.title}</span>
                       </div>
                       <span className="text-[9px] font-black text-muted-foreground uppercase">Sec {f.clause}</span>
                    </div>
@@ -81,7 +81,7 @@ export const ContractAuditDrawer = ({ isOpen, onClose, brandName, riskScore, fla
                       <span className="text-[9px] font-black text-primary uppercase tracking-widest flex items-center gap-1.5">
                          <Zap className="w-3 h-3" /> AI Recommendation
                       </span>
-                      <p className="text-[11px] font-bold text-white italic">"{f.recommendation}"</p>
+                      <p className="text-[11px] font-bold text-white">"{f.recommendation}"</p>
                    </div>
                 </div>
               ))}
@@ -92,7 +92,7 @@ export const ContractAuditDrawer = ({ isOpen, onClose, brandName, riskScore, fla
         <div className="p-8 rounded-[2.5rem] bg-primary/10 border border-primary/20 text-center space-y-6">
            <ShieldCheck className="w-10 h-10 text-primary mx-auto" />
            <div className="space-y-2">
-              <h5 className="text-xl font-black uppercase italic tracking-tight italic">Ready to Sign?</h5>
+              <h5 className="text-xl font-black uppercase tracking-tight">Ready to Sign?</h5>
               <p className="text-xs font-medium text-muted-foreground leading-relaxed max-w-xs mx-auto">
                  We recommend negotiating the <span className="text-rose-400">Section 8.4 exclusivity</span> before final signature.
               </p>

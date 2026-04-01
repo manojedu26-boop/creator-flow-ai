@@ -109,7 +109,7 @@ export const Home = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ type: "spring", stiffness: 100 }}
-            className="text-6xl md:text-9xl font-black tracking-[0.02em] leading-none text-slate-950 uppercase italic"
+            className="text-6xl md:text-9xl font-black tracking-[0.02em] leading-none text-slate-950 uppercase"
           >
             Good morning, <br />
             <span className="text-blue-600 flex items-center gap-4">
@@ -178,7 +178,7 @@ export const Home = () => {
                    <div className="w-10 h-10 rounded-2xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/30 animate-float">
                       <Zap className="w-5 h-5 text-white fill-white" />
                    </div>
-                   <h3 className="text-3xl font-black tracking-tight text-slate-950 uppercase italic">
+                   <h3 className="text-3xl font-black tracking-tight text-slate-950 uppercase">
                     AI Strategic Plan
                    </h3>
                 </div>
@@ -237,7 +237,7 @@ export const Home = () => {
           {/* Performance Stream */}
           <div className="rounded-[4rem] bg-white border border-slate-100 overflow-hidden shadow-2xl shadow-slate-100/50">
             <div className="p-12 border-b border-slate-50 flex items-center justify-between">
-              <h3 className="text-3xl font-black tracking-tight flex items-center gap-5 text-slate-950 uppercase italic">
+              <h3 className="text-3xl font-black tracking-tight flex items-center gap-5 text-slate-950 uppercase">
                 <Play className="w-8 h-8 text-blue-600 fill-blue-600" />
                 Live Performance
               </h3>
@@ -288,7 +288,7 @@ export const Home = () => {
                   />
                 </div>
                 <div className="space-y-2">
-                  <h4 className="text-3xl font-black tracking-[0.02em] leading-none text-white italic uppercase">{user?.name || 'Naveen'}</h4>
+                  <h4 className="text-3xl font-black tracking-[0.02em] leading-none text-white uppercase">{user?.name || 'Naveen'}</h4>
                   <p className="text-[10px] font-black text-blue-500 uppercase tracking-[0.3em]">{user?.handle || '@naveenfitlife'}</p>
                 </div>
               </div>
@@ -296,7 +296,7 @@ export const Home = () => {
               <div className="space-y-6 pt-10 border-t border-white/5">
                 <div className="flex justify-between items-center text-white">
                    <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40">Authority Score</span>
-                   <span className="text-3xl font-black text-white italic">74<span className="text-sm opacity-20">/100</span></span>
+                   <span className="text-3xl font-black text-white">74<span className="text-sm opacity-20">/100</span></span>
                 </div>
                 <div className="h-4 rounded-full bg-white/5 overflow-hidden shadow-inner p-1">
                   <motion.div 
@@ -322,7 +322,7 @@ export const Home = () => {
 
           {/* Platform Health Section */}
           <div className="rounded-[4rem] bg-white border border-slate-100 p-12 shadow-2xl shadow-slate-100/50">
-            <h3 className="text-3xl font-black tracking-tight flex items-center gap-5 mb-10 text-slate-950 uppercase italic">
+            <h3 className="text-3xl font-black tracking-tight flex items-center gap-5 mb-10 text-slate-950 uppercase">
               <Network className="w-8 h-8 text-blue-600" />
               Impact Analytics
             </h3>
@@ -343,7 +343,7 @@ export const Home = () => {
                   </div>
                   <div className="flex justify-between items-end">
                     <div>
-                      <p className="text-3xl font-black leading-none text-slate-950 italic">{plat.followers}</p>
+                      <p className="text-3xl font-black leading-none text-slate-950">{plat.followers}</p>
                       <p className="text-[10px] font-black text-slate-400 mt-3 uppercase tracking-widest">{plat.growth}</p>
                     </div>
                     <div className="text-right">
@@ -359,7 +359,7 @@ export const Home = () => {
           {/* Revenue Funnel Widget */}
           <div className="rounded-[4rem] bg-white border border-slate-100 p-12 shadow-xl shadow-slate-100/50 relative overflow-hidden group">
              <div className="absolute -top-10 -left-10 w-40 h-40 bg-indigo-600 rounded-full blur-[100px] opacity-10" />
-             <h3 className="text-3xl font-black tracking-tight flex items-center gap-5 mb-4 text-slate-950 uppercase italic">
+             <h3 className="text-3xl font-black tracking-tight flex items-center gap-5 mb-4 text-slate-950 uppercase">
                <Briefcase className="w-8 h-8 text-blue-600" />
                Capital Hub
              </h3>

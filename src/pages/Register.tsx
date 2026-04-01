@@ -96,7 +96,7 @@ const Register = () => {
         </button>
 
         <div className="flex flex-col gap-4 mb-12">
-          <div className="flex items-center gap-3 font-black text-3xl tracking-tighter uppercase italic text-slate-950">
+          <div className="flex items-center gap-3 font-black text-3xl tracking-tighter uppercase text-slate-950">
             <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
                <Sparkles className="w-5 h-5 text-white" />
             </div>
@@ -131,7 +131,7 @@ const Register = () => {
 
           {/* Account Type */}
           <div className="space-y-3">
-            <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 ml-1 italic">Operative Role</label>
+            <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 ml-1">Operative Role</label>
             <div className="grid grid-cols-2 gap-4">
               {(["Creator", "Brand"] as const).map(t => (
                 <button
@@ -150,7 +150,7 @@ const Register = () => {
           <form onSubmit={handleRegister} className="space-y-6" noValidate>
             {/* Full Name */}
             <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 ml-1 italic">Full Identity</label>
+              <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 ml-1">Full Identity</label>
               <div className="relative">
                 <User className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 transition-colors" />
                 <input
@@ -167,7 +167,7 @@ const Register = () => {
 
             {/* Email */}
             <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 ml-1 italic">Intelligence Link (Email)</label>
+              <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 ml-1">Intelligence Link (Email)</label>
               <div className="relative">
                 <Mail className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 transition-colors" />
                 <input
@@ -184,7 +184,7 @@ const Register = () => {
 
             {/* Password */}
             <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 ml-1 italic">Security Protocol (Password)</label>
+              <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 ml-1">Security Protocol (Password)</label>
               <div className="relative">
                 <Lock className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 transition-colors" />
                 <input
@@ -218,7 +218,7 @@ const Register = () => {
 
             {/* Confirm Password */}
             <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 ml-1 italic">Verify Protocol</label>
+              <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 ml-1">Verify Protocol</label>
               <div className="relative">
                 <Lock className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                 <input

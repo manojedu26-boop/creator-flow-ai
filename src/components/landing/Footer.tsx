@@ -5,13 +5,13 @@ const Footer = () => (
     <div className="container max-w-7xl">
       <div className="grid grid-cols-1 md:grid-cols-12 gap-12 mb-24">
         <div className="col-span-1 md:col-span-5">
-          <div className="flex items-center gap-3 font-black text-3xl tracking-tighter uppercase italic text-slate-950 mb-8">
+          <div className="flex items-center gap-3 font-black text-3xl tracking-tighter uppercase text-slate-950 mb-8">
             <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
                <Sparkles className="w-5 h-5 text-white" />
             </div>
             <span>CreatorForge<span className="text-blue-600 font-black">AI</span></span>
           </div>
-          <p className="text-slate-500 font-bold text-lg leading-relaxed max-w-sm mb-10 italic">
+          <p className="text-slate-500 font-bold text-lg leading-relaxed max-w-sm mb-10">
             The high-fidelity command centre for the world's most ambitious creators. Based in Jersey, Channel Islands.
           </p>
           <div className="flex items-center gap-6">
@@ -24,7 +24,7 @@ const Footer = () => (
         </div>
         
         <div className="col-span-1 md:col-span-2">
-          <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-950 mb-8 italic">Intelligence</h4>
+          <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-950 mb-8">Intelligence</h4>
           <ul className="space-y-4 text-sm font-bold text-slate-500">
             <li><a href="#features" className="hover:text-blue-600 transition-colors">Module Set</a></li>
             <li><a href="#pricing" className="hover:text-blue-600 transition-colors">Investment</a></li>
@@ -34,7 +34,7 @@ const Footer = () => (
         </div>
 
         <div className="col-span-1 md:col-span-2">
-          <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-950 mb-8 italic">Company</h4>
+          <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-950 mb-8">Company</h4>
           <ul className="space-y-4 text-sm font-bold text-slate-500">
             <li><a href="#" className="hover:text-blue-600 transition-colors">Manifesto</a></li>
             <li><a href="#" className="hover:text-blue-600 transition-colors">Journal</a></li>
@@ -44,7 +44,7 @@ const Footer = () => (
         </div>
 
         <div className="col-span-1 md:col-span-3">
-          <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-950 mb-8 italic">Legal Nodes</h4>
+          <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-950 mb-8">Legal Nodes</h4>
           <ul className="space-y-4 text-sm font-bold text-slate-500">
             <li><a href="#" className="hover:text-blue-600 transition-colors">Privacy Protocol</a></li>
             <li><a href="#" className="hover:text-blue-600 transition-colors">Terms of Service</a></li>
@@ -62,7 +62,7 @@ const Footer = () => (
            </p>
         </div>
         <div className="flex items-center gap-8">
-           <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 italic">
+           <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">
               <Globe className="w-3.5 h-3.5 text-blue-600" /> English Node (GBR)
            </div>
            <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">

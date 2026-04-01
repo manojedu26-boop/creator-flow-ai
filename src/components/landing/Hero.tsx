@@ -9,11 +9,11 @@ const Hero = () => {
   
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-white px-6 pt-32 pb-20">
-      {/* High-Fidelity Ambient Background */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full max-w-[1440px] pointer-events-none -z-10">
+      {/* High-Fidelity Ambient Background + Tech Grid */}
+      <div className="absolute inset-0 pointer-events-none -z-10">
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
         <div className="absolute top-[-10%] left-[-10%] w-[60%] h-[60%] bg-blue-50 rounded-full blur-[120px] opacity-40 animate-pulse" />
         <div className="absolute bottom-[10%] right-[-5%] w-[40%] h-[40%] bg-indigo-50 rounded-full blur-[100px] opacity-30 animate-pulse" style={{ animationDelay: "2s" }} />
-        <div className="absolute top-[20%] right-[10%] w-[30%] h-[30%] bg-slate-50 rounded-full blur-[80px] opacity-50" />
       </div>
 
       <div className="container relative z-10 max-w-7xl text-center">
@@ -28,13 +28,13 @@ const Hero = () => {
         </motion.div>
 
         <motion.h1
-          className="text-7xl sm:text-8xl md:text-[8rem] lg:text-[11rem] font-black tracking-tighter leading-[0.8] mb-12 text-slate-950 uppercase italic"
+          className="text-7xl sm:text-8xl md:text-[8rem] lg:text-[11.5rem] font-black tracking-tighter leading-[0.8] mb-12 text-slate-950 uppercase"
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
         >
           Grow Your <br />
-          <span className="text-blue-600 flex items-center justify-center gap-4">
+          <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-600 flex items-center justify-center gap-4 py-4">
             Empire <Stars className="w-16 h-16 md:w-24 md:h-24 text-slate-950 animate-pulse" />
           </span>
         </motion.h1>
@@ -103,7 +103,7 @@ const Hero = () => {
               ].map((stat, i) => (
                 <div key={i} className="bg-slate-50/50 rounded-[2rem] p-6 border border-slate-100 space-y-2">
                   <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">{stat.label}</p>
-                  <p className={`text-3xl font-black italic tracking-tighter ${stat.color}`}>{stat.value}</p>
+                  <p className={`text-3xl font-black tracking-tighter ${stat.color}`}>{stat.value}</p>
                 </div>
               ))}
             </div>

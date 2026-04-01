@@ -176,7 +176,7 @@ export const ContentStudio = () => {
   const renderCaptionWriter = () => (
     <div className="space-y-10">
       <div>
-        <h2 className="text-3xl font-black tracking-tight text-slate-900 uppercase italic">Caption <span className="text-blue-600">Architect</span></h2>
+        <h2 className="text-3xl font-black tracking-tight text-slate-900 uppercase">Caption <span className="text-blue-600">Architect</span></h2>
         <p className="text-slate-400 text-[11px] font-black uppercase tracking-widest mt-2">AI-driven narrative crafting for maximum engagement</p>
       </div>
 
@@ -367,7 +367,7 @@ export const ContentStudio = () => {
   const renderScriptGenerator = () => (
     <div className="space-y-10">
       <div>
-        <h2 className="text-3xl font-black tracking-tight text-slate-900 uppercase italic">Cinematic <span className="text-blue-600">Scripts</span></h2>
+        <h2 className="text-3xl font-black tracking-tight text-slate-900 uppercase">Cinematic <span className="text-blue-600">Scripts</span></h2>
         <p className="text-slate-400 text-[11px] font-black uppercase tracking-widest mt-2">AI-built sequencing for high-retention content</p>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
@@ -425,7 +425,7 @@ export const ContentStudio = () => {
                       {sec.editing ? (
                         <AutoResizeTextarea value={sec.text} onChange={(e: any) => setScriptSections(prev => prev!.map((s, j) => j === i ? { ...s, text: e.target.value } : s))} className="w-full bg-slate-50 border border-blue-200 rounded-2xl p-4 text-sm font-medium text-slate-900 focus:outline-none resize-none shadow-inner" />
                       ) : (
-                        <p className={cn("text-sm leading-relaxed", sec.act.includes("HOOK") ? "text-2xl font-black text-slate-900 italic tracking-tight" : "text-slate-600 font-medium")}>{sec.text}</p>
+                        <p className={cn("text-sm leading-relaxed", sec.act.includes("HOOK") ? "text-2xl font-black text-slate-900 tracking-tight" : "text-slate-600 font-medium")}>{sec.text}</p>
                       )}
                     </div>
                   ))}
@@ -454,7 +454,7 @@ export const ContentStudio = () => {
   const renderHookGenerator = () => (
     <div className="space-y-10">
       <div>
-        <h2 className="text-3xl font-black tracking-tight text-slate-900 uppercase italic">Attention <span className="text-blue-600">Hooks</span></h2>
+        <h2 className="text-3xl font-black tracking-tight text-slate-900 uppercase">Attention <span className="text-blue-600">Hooks</span></h2>
         <p className="text-slate-400 text-[11px] font-black uppercase tracking-widest mt-2">10 high-velocity openers designed for viral retention</p>
       </div>
       <div className="flex gap-4 bg-slate-50 border border-slate-200 p-4 rounded-[2.5rem] shadow-inner">
@@ -530,7 +530,7 @@ export const ContentStudio = () => {
   const renderHistory = () => (
     <div className="space-y-10">
       <div>
-        <h2 className="text-3xl font-black tracking-tight text-slate-900 uppercase italic">Creative <span className="text-blue-600">Vault</span></h2>
+        <h2 className="text-3xl font-black tracking-tight text-slate-900 uppercase">Creative <span className="text-blue-600">Vault</span></h2>
         <p className="text-slate-400 text-[11px] font-black uppercase tracking-widest mt-2">Archived AI outputs and refined narratives</p>
       </div>
       {history.length === 0 ? (
@@ -686,7 +686,7 @@ const HashtagEnginePanel = ({ niche }: { niche: string }) => {
   return (
     <div className="space-y-10">
       <div>
-        <h2 className="text-3xl font-black tracking-tight text-slate-900 uppercase italic">Hashtag <span className="text-blue-600">Oracle</span></h2>
+        <h2 className="text-3xl font-black tracking-tight text-slate-900 uppercase">Hashtag <span className="text-blue-600">Oracle</span></h2>
         <p className="text-slate-400 text-[11px] font-black uppercase tracking-widest mt-2">Data-backed tagging strategy for algorithmic penetration</p>
       </div>
       <div className="flex gap-4 bg-slate-50 border border-slate-200 p-4 rounded-[2.5rem] shadow-inner">
@@ -746,7 +746,7 @@ const TrendingAudioPanel = ({ onUseForReel }: { onUseForReel: () => void }) => {
     <div className="space-y-10">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-3xl font-black tracking-tight text-slate-900 uppercase italic">Viral <span className="text-blue-600">Frequency</span></h2>
+          <h2 className="text-3xl font-black tracking-tight text-slate-900 uppercase">Viral <span className="text-blue-600">Frequency</span></h2>
           <p className="text-slate-400 text-[11px] font-black uppercase tracking-widest mt-2">Real-time trending audio spikes across social platforms</p>
         </div>
         <button onClick={refresh} disabled={loading} className="h-12 px-6 bg-slate-50 border border-slate-200 rounded-[1.5rem] text-[10px] font-black uppercase tracking-[0.2em] flex items-center gap-3 hover:bg-white hover:text-blue-600 transition-all shadow-sm">

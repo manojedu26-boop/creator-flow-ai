@@ -89,7 +89,8 @@
 
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Outfit', sans-serif;
-    @apply font-black tracking-tighter italic uppercase;
+    @apply font-black tracking-tighter uppercase;
+    /* Removed global italic per user feedback */
   }
 
   /* Section 7: Mobile Input Zoom Prevention */
@@ -115,8 +116,8 @@
 
   .bg-mesh-primary {
     background: 
-      radial-gradient(at 0% 0%, hsla(221, 83%, 53%, 0.03) 0px, transparent 50%),
-      radial-gradient(at 100% 0%, hsla(199, 89%, 48%, 0.03) 0px, transparent 50%);
+    radial-gradient(at 0% 0%, hsla(221, 83%, 53%, 0.03) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, hsla(199, 89%, 48%, 0.03) 0px, transparent 50%);
     background-color: #ffffff;
   }
 
@@ -125,24 +126,29 @@
     background: #ffffff;
     border: 1px solid rgba(0, 0, 0, 0.03);
     box-shadow: 
-      0 4px 6px -1px rgba(0, 0, 0, 0.02),
-      0 2px 4px -1px rgba(0, 0, 0, 0.01),
-      inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+    0 4px 6px -1px rgba(0, 0, 0, 0.02),
+    0 2px 4px -1px rgba(0, 0, 0, 0.01),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.5);
   }
 
   .premium-card:hover {
     @apply -translate-y-2;
     box-shadow: 
-      0 20px 25px -5px rgba(0, 0, 0, 0.05),
-      0 10px 10px -5px rgba(0, 0, 0, 0.01);
+    0 20px 25px -5px rgba(0, 0, 0, 0.05),
+    0 10px 10px -5px rgba(0, 0, 0, 0.01);
     border-color: rgba(37, 99, 235, 0.1);
   }
 
-  /* Robust Z-Index Layering */
+  /* Structural Recalibration per User Feedback: Sidebar MUST be on top and clickable */
   .z-header { z-index: 1000; }
-  .z-sidebar { z-index: 900; }
-  .z-modal { z-index: 2000; }
-  .z-popover { z-index: 1500; }
+  .z-sidebar { z-index: 2000; }
+  .z-modal { z-index: 5000; }
+  .z-popover { z-index: 3000; }
+
+  /* Dynamic Sidebar Width variable fallback */
+  :root {
+    --sidebar-w: 80px; 
+  }
 
   /* Section 14: Mobile-First Overlays prevention */
   @media (max-width: 1024px) {

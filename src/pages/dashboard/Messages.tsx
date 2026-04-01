@@ -246,7 +246,7 @@ export const Messages = () => {
         )}>
           <div className="p-6 md:p-8 space-y-6 border-b border-slate-100">
             <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-black uppercase tracking-tighter text-slate-900 italic flex items-center gap-3">
+              <h2 className="text-2xl font-black uppercase tracking-tighter text-slate-900 flex items-center gap-3">
                 Inbox
                 <span className="px-3 py-1 rounded-full bg-blue-50 text-blue-600 text-[9px] font-black border border-blue-100 uppercase tracking-widest">Live Sync</span>
               </h2>
@@ -289,7 +289,7 @@ export const Messages = () => {
                       <div className="flex items-center gap-3">
                         <div className="w-9 h-9 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-600 font-black text-[11px] border border-blue-100 shadow-sm">{c.user[0].toUpperCase()}</div>
                         <div>
-                          <span className="text-xs font-black block text-slate-900 uppercase italic tracking-tighter">{c.user}</span>
+                          <span className="text-xs font-black block text-slate-900 uppercase tracking-tighter">{c.user}</span>
                           <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{c.post}</span>
                         </div>
                       </div>
@@ -298,7 +298,7 @@ export const Messages = () => {
                         c.type === "Spam" ? "bg-rose-50 text-rose-500 border-rose-100" : "bg-emerald-50 text-emerald-600 border-emerald-100"
                       )}>{c.type}</span>
                     </div>
-                    <p className="text-[12px] text-slate-500 leading-relaxed font-medium italic">"{c.text}"</p>
+                    <p className="text-[12px] text-slate-500 leading-relaxed font-medium">"{c.text}"</p>
                     <button className="w-full h-10 rounded-xl bg-slate-50 border border-slate-100 text-slate-400 text-[9px] font-black uppercase tracking-[0.2em] group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600 transition-all flex items-center justify-center gap-2">
                        AI Smart Reply
                     </button>
@@ -332,7 +332,7 @@ export const Messages = () => {
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex justify-between items-center mb-1">
-                          <h4 className={cn("font-black text-sm truncate uppercase tracking-tighter italic flex items-center gap-2", selectedId === chat.id ? 'text-blue-600' : 'text-slate-900')}>
+                          <h4 className={cn("font-black text-sm truncate uppercase tracking-tighter flex items-center gap-2", selectedId === chat.id ? 'text-blue-600' : 'text-slate-900')}>
                             {chat.name}
                             {chat.verified && <CheckCircle2 className="w-3.5 h-3.5 text-blue-500 shrink-0" />}
                           </h4>
@@ -366,12 +366,12 @@ export const Messages = () => {
                 {selectedChat?.avatar}
               </div>
               <div>
-                <h3 className="text-lg font-black uppercase tracking-tighter text-slate-900 italic flex items-center gap-2">
+                <h3 className="text-lg font-black uppercase tracking-tighter text-slate-900 flex items-center gap-2">
                   {selectedChat?.name}
                   {selectedChat?.verified && <CheckCircle2 className="w-4 h-4 text-blue-500 shrink-0" />}
                 </h3>
                 <p className="text-[10px] text-emerald-600 font-black uppercase tracking-[0.2em] flex items-center gap-2">
-                  {selectedChat?.online ? <><span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]" /> Negotiating Live</> : <span className="text-slate-400 italic">Offline Intelligence</span>}
+                  {selectedChat?.online ? <><span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]" /> Negotiating Live</> : <span className="text-slate-400">Offline Intelligence</span>}
                 </p>
               </div>
             </div>
@@ -386,7 +386,7 @@ export const Messages = () => {
           </div>
 
           <div className="bg-blue-50/80 py-4 px-6 lg:px-10 flex items-center gap-6 border-b border-blue-100/50 backdrop-blur-md overflow-x-auto no-scrollbar shrink-0 shadow-inner">
-            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-600 whitespace-nowrap flex items-center gap-3 shrink-0 italic">
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-600 whitespace-nowrap flex items-center gap-3 shrink-0">
                Decision Engine
             </span>
             <div className="flex gap-4">
@@ -521,7 +521,7 @@ const CollabCard = ({
 
     <div className="space-y-4 text-[13px] text-slate-600">
       <div className="flex gap-4"><span className="text-slate-400 font-black uppercase tracking-widest text-[9px] w-16 shrink-0 pt-1">Strategy:</span> <span className="font-semibold">{data.idea}</span></div>
-      <div className="flex gap-4"><span className="text-slate-400 font-black uppercase tracking-widest text-[9px] w-16 shrink-0 pt-1">Proposed:</span> <span className="text-emerald-600 font-black uppercase italic tracking-tight text-base">{data.rate}</span></div>
+      <div className="flex gap-4"><span className="text-slate-400 font-black uppercase tracking-widest text-[9px] w-16 shrink-0 pt-1">Proposed:</span> <span className="text-emerald-600 font-black uppercase tracking-tight text-base">{data.rate}</span></div>
     </div>
 
     {data.status === "pending" ? (

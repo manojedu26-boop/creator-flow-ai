@@ -19,7 +19,7 @@ const container = {
 
 const item = {
   hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } },
+  show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] as any } },
 };
 
 const PainPoints = () => (
@@ -36,11 +36,11 @@ const PainPoints = () => (
         <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white border border-slate-200 text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 mb-8 shadow-sm">
            <AlertCircle className="w-3.5 h-3.5" /> Market Challenges
         </div>
-        <h2 className="text-5xl md:text-8xl font-black tracking-tighter leading-none mb-8 text-slate-950 uppercase italic">
+        <h2 className="text-5xl md:text-8xl font-black tracking-tighter leading-none mb-8 text-slate-950 uppercase">
           Every Creator Hits <br />
           These <span className="text-blue-600 font-black">Walls.</span>
         </h2>
-        <p className="text-slate-500 font-bold text-lg md:text-2xl max-w-2xl mx-auto leading-relaxed italic">
+        <p className="text-slate-500 font-bold text-lg md:text-2xl max-w-2xl mx-auto leading-relaxed">
           Stop struggling with the manual grind. CreatorForge AI provides the technical edge to break through.
         </p>
       </motion.div>
@@ -61,7 +61,7 @@ const PainPoints = () => (
             <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center mb-6 transition-transform group-hover:scale-110 group-hover:bg-blue-600 group-hover:text-white">
               <p.icon className="w-6 h-6 text-blue-600 group-hover:text-white transition-colors" />
             </div>
-            <h3 className="text-xl font-black mb-3 text-slate-950 uppercase italic tracking-tight group-hover:text-white">{p.title}</h3>
+            <h3 className="text-xl font-black mb-3 text-slate-950 uppercase tracking-tight group-hover:text-white">{p.title}</h3>
             <p className="text-sm text-slate-500 font-bold leading-relaxed group-hover:text-slate-400">{p.desc}</p>
             
             <div className="mt-8 pt-8 border-t border-slate-50 group-hover:border-white/10 flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-slate-300 group-hover:text-blue-600">

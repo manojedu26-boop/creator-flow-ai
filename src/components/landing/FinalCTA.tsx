@@ -35,12 +35,12 @@ const FinalCTA = () => {
             Immediate Session Deployment Available
           </motion.div>
 
-          <h2 className="text-5xl md:text-8xl font-black tracking-tighter leading-[0.9] mb-12 text-white uppercase italic">
+          <h2 className="text-5xl md:text-8xl font-black tracking-tighter leading-[0.9] mb-12 text-white uppercase">
             Stop Guessing. <br />
             <span className="text-blue-500 font-black">Start Scaling.</span>
           </h2>
 
-          <p className="text-lg md:text-2xl text-slate-400 font-bold mb-16 max-w-2xl mx-auto leading-relaxed italic">
+          <p className="text-lg md:text-2xl text-slate-400 font-bold mb-16 max-w-2xl mx-auto leading-relaxed">
             Your high-fidelity creator intelligence engine is ready. Initialize your command centre and dominate your growth trajectory in under 4 minutes.
           </p>
 
