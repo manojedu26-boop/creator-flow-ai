@@ -1,7 +1,7 @@
 // src/lib/db.ts
 // Mock Database Engine using LocalStorage for persistence
 
-export type CollectionName = 'users' | 'invoices' | 'contracts' | 'deals' | 'notifications' | 'messages' | 'content' | 'tasks' | 'cal_posts' | 'castings' | 'applications' | 'shortlists';
+export type CollectionName = 'users' | 'invoices' | 'contracts' | 'deals' | 'notifications' | 'messages' | 'content' | 'tasks' | 'cal_posts' | 'castings' | 'applications' | 'shortlists' | 'competitors' | 'growthTasks' | 'analyticsSnapshots' | 'aiChatHistory';
 
 class Database {
   private prefix = 'cf_db_';

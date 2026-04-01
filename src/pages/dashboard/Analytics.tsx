@@ -15,6 +15,8 @@ import { PageTransition, CountUp, staggerContainer, staggerItem } from "../../co
 import { useAuth } from "../../contexts/AuthContext";
 import { BottomSheet } from "../../components/ui/BottomSheet";
 import { EmptyState } from "../../components/shared/EmptyState";
+import { db } from "../../lib/db";
+import { toast } from "../../components/ui/sonner";
 import { 
   KpiSkeleton, ChartSkeleton, TextSkeleton 
 } from "../../components/shared/Skeleton";
@@ -127,6 +129,12 @@ export const Analytics = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [isDateSheetOpen, setIsDateSheetOpen] = useState(false);
   const [dateRange, setDateRange] = useState("30D");
+  const [snapshots, setSnapshots] = useState<any[]>([]);
+  const [competitors, setCompetitors] = useState<any[]>([]);
+  const [activePlatforms, setActivePlatforms] = useState(['ig', 'yt', 'tt']);
+  const [isGapModalOpen, setIsGapModalOpen] = useState(false);
+  const [selectedCompetitor, setSelectedCompetitor] = useState<any>(null);
+  const [newCompHandle, setNewCompHandle] = useState("");
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 1024);
@@ -136,9 +144,52 @@ export const Analytics = () => {
   }, []);
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 800);
-    return () => clearTimeout(timer);
-  }, []);
+    const fetchData = () => {
+      setIsLoading(true);
+      setTimeout(() => {
+        const snaps = db.getAll<any>('analyticsSnapshots');
+        setSnapshots(snaps.slice(-30));
+        setCompetitors(db.getAll<any>('competitors'));
+        setIsLoading(false);
+      }, 600);
+    };
+    fetchData();
+  }, [dateRange]);
+
+  const togglePlatform = (p: string) => {
+    setActivePlatforms(prev => prev.includes(p) ? prev.filter(x => x !== p) : [...prev, p]);
+  };
+
+  const handleAddCompetitor = () => {
+    if (!newCompHandle) return;
+    const newComp = { 
+       id: `comp_${Math.random()}`, 
+       handle: newCompHandle.startsWith('@') ? newCompHandle : `@${newCompHandle}`,
+       name: newCompHandle.replace('@', ''),
+       followers: '12K',
+       engagement: '4.2%',
+       platform: 'Instagram',
+       photo: 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=300&h=300&fit=crop'
+    };
+    db.insert('competitors', newComp);
+    setCompetitors(prev => [...prev, newComp]);
+    setNewCompHandle("");
+    toast.success(`Competitor Added!`, { description: `Analyzing ${newComp.handle}...` });
+  };
+
+  const handleRemoveCompetitor = (id: string) => {
+    db.delete('competitors', id);
+    setCompetitors(prev => prev.filter(c => c.id !== id));
+    toast.info("Competitor Removed");
+  };
+
+  const handleExport = () => {
+    toast.promise(new Promise(res => setTimeout(res, 2000)), {
+      loading: 'Generating Branded Graphics...',
+      success: 'Report Exported (PDF)! Check your downloads.',
+      error: 'Export failed.'
+    });
+  };
 
   const renderOverview = () => (
     <motion.div variants={staggerContainer} initial="hidden" animate="show" className="space-y-[var(--grid-gap)]">
@@ -148,12 +199,57 @@ export const Analytics = () => {
             <h3 className="text-xl font-black tracking-tight uppercase">30-Day Follower Growth</h3>
             <p className="text-sm text-muted-foreground mt-1">Cross-platform momentum for {user?.name || 'Naveen'}</p>
           </div>
-          <div className="bg-emerald-500/10 text-emerald-500 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest flex items-center gap-2">
-            <TrendingUp className="w-4 h-4" /> +5,100 Total
+          <div className="flex items-center gap-3">
+             <div className="flex items-center gap-1 bg-white/5 p-1 rounded-xl border border-white/10">
+                {[
+                  { id: 'ig', color: '#ec4899', icon: Instagram },
+                  { id: 'yt', color: '#ef4444', icon: Youtube },
+                  { id: 'tt', color: '#a855f7', icon: Sparkles },
+                ].map(p => (
+                  <button 
+                     key={p.id}
+                     onClick={() => togglePlatform(p.id)}
+                     className={`p-2 rounded-lg transition-all ${activePlatforms.includes(p.id) ? 'bg-white/10' : 'opacity-20 hover:opacity-50'}`}
+                  >
+                     <p.icon className="w-3.5 h-3.5" style={{ color: p.color }} />
+                  </button>
+                ))}
+             </div>
+             <div className="bg-emerald-500/10 text-emerald-500 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest flex items-center gap-2">
+               <TrendingUp className="w-4 h-4" /> +5,100 Total
+             </div>
           </div>
         </div>
          <div className="h-[320px] w-full">
-            <GrowthChart data={performanceData} />
+            <ResponsiveContainer width="100%" height="100%">
+               <AreaChart data={snapshots}>
+                  <defs>
+                    <linearGradient id="colorIg" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#ec4899" stopOpacity={0.5}/>
+                      <stop offset="100%" stopColor="#ec4899" stopOpacity={0}/>
+                    </linearGradient>
+                    <linearGradient id="colorYt" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#ef4444" stopOpacity={0.5}/>
+                      <stop offset="100%" stopColor="#ef4444" stopOpacity={0}/>
+                    </linearGradient>
+                    <linearGradient id="colorTt" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#a855f7" stopOpacity={0.5}/>
+                      <stop offset="100%" stopColor="#a855f7" stopOpacity={0}/>
+                    </linearGradient>
+                     <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                        <feGaussianBlur stdDeviation="3" result="blur" />
+                        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                     </filter>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(255,255,255,0.03)" />
+                  <XAxis dataKey="date" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#64748b' }} />
+                  <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#64748b' }} />
+                  <Tooltip contentStyle={{ backgroundColor: '#0f172a', border: 'none', borderRadius: '12px' }} />
+                  {activePlatforms.includes('ig') && <Area type="monotone" dataKey="ig" stroke="#ec4899" strokeWidth={4} fill="url(#colorIg)" filter="url(#glow)" />}
+                  {activePlatforms.includes('yt') && <Area type="monotone" dataKey="yt" stroke="#ef4444" strokeWidth={4} fill="url(#colorYt)" filter="url(#glow)" />}
+                  {activePlatforms.includes('tt') && <Area type="monotone" dataKey="tt" stroke="#a855f7" strokeWidth={4} fill="url(#colorTt)" filter="url(#glow)" />}
+               </AreaChart>
+            </ResponsiveContainer>
          </div>
       </motion.div>
 
@@ -290,15 +386,40 @@ export const Analytics = () => {
 
   const renderCompetitor = () => (
     <motion.div variants={staggerContainer} initial="hidden" animate="show" className="space-y-6">
-       <div className="grid grid-cols-1 gap-6">
-          {[
-            { handle: "@fitbharat_ig", followers: "92K", eng: "3.1%", posts: "6x/week", content: "Mostly Reels", gap: "They never cover mental health + fitness crossover — this is a gap you can own" },
-            { handle: "@mumbaifit", followers: "28K", eng: "5.8%", posts: "4x/week", content: "Carousels", gap: "Their audience asks about home workouts repeatedly — no content on this yet" },
-          ].map((comp, i) => (
-            <motion.div key={i} variants={staggerItem} className="premium-card bg-card border border-border/40 rounded-[2.5rem] p-8 flex flex-col md:flex-row gap-8 relative overflow-hidden group">
+        <div className="flex flex-col md:flex-row gap-6 mb-8">
+           <div className="flex-1 relative">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <input 
+                type="text" 
+                placeholder="Enter competitor handle (e.g. @fitnees_pro)..."
+                value={newCompHandle}
+                onChange={(e) => setNewCompHandle(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleAddCompetitor()}
+                className="w-full h-14 bg-white/5 border border-white/10 rounded-2xl pl-12 pr-4 text-sm font-medium focus:outline-none focus:ring-1 focus:ring-primary"
+              />
+           </div>
+           <button 
+             onClick={handleAddCompetitor}
+             className="h-14 px-8 bg-primary text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:scale-105 transition-all shadow-xl shadow-primary/20 flex items-center justify-center gap-2"
+           >
+              <Plus className="w-4 h-4" /> Track Competitor
+           </button>
+        </div>
+
+        <div className="grid grid-cols-1 gap-6">
+          {competitors.map((comp, i) => (
+            <motion.div key={comp.id} variants={staggerItem} className="premium-card bg-card border border-border/40 rounded-[2.5rem] p-8 flex flex-col md:flex-row gap-8 relative overflow-hidden group">
+               <button 
+                 onClick={() => handleRemoveCompetitor(comp.id)}
+                 className="absolute top-6 right-6 p-2 bg-white/5 border border-white/10 rounded-xl text-muted-foreground hover:text-red-500 hover:bg-red-500/10 transition-all opacity-0 group-hover:opacity-100"
+               >
+                  <Plus className="w-4 h-4 rotate-45" />
+               </button>
                <div className="md:w-1/3 space-y-4">
                   <div className="flex items-center gap-4">
-                     <div className="w-14 h-14 rounded-full bg-gradient-to-tr from-primary to-purple-500 shrink-0" />
+                     <div className="w-14 h-14 rounded-full bg-primary/20 overflow-hidden border border-white/10 shrink-0">
+                        <img src={comp.photo} alt={comp.name} className="w-full h-full object-cover" />
+                     </div>
                      <div>
                         <h4 className="text-xl font-black">{comp.handle}</h4>
                         <span className="text-[10px] font-black uppercase text-muted-foreground tracking-[0.2em]">{comp.followers} Follows</span>
@@ -306,25 +427,62 @@ export const Analytics = () => {
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                      <div className="p-3 bg-white/5 rounded-2xl">
-                        <p className="text-xs font-black text-emerald-500">{comp.eng}</p>
+                        <p className="text-xs font-black text-emerald-500">{comp.engagement}</p>
                         <p className="text-[8px] font-black uppercase text-muted-foreground tracking-widest mt-0.5">Engagement</p>
                      </div>
                      <div className="p-3 bg-white/5 rounded-2xl">
-                        <p className="text-xs font-black">{comp.posts}</p>
+                        <p className="text-xs font-black">{comp.posts || '6x/week'}</p>
                         <p className="text-[8px] font-black uppercase text-muted-foreground tracking-widest mt-0.5">Post Freq</p>
                      </div>
                   </div>
                </div>
                <div className="flex-1 bg-primary/5 rounded-[2rem] p-8 border border-primary/10">
                   <h5 className="text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-3">AI Opportunity Gap</h5>
-                  <p className="text-md font-bold italic text-white/90 leading-relaxed">"{comp.gap}"</p>
-                  <button className="mt-6 h-10 px-6 rounded-xl bg-primary text-white text-[10px] font-black uppercase tracking-widest hover:scale-105 transition-all shadow-xl shadow-primary/20 flex items-center gap-2">
-                     <Zap className="w-4 h-4" /> Capitalize This Gap
+                  <p className="text-md font-bold italic text-white/90 leading-relaxed md:line-clamp-2">
+                     {comp.handle === '@fitbharat_ig' ? '"They never cover mental health + fitness crossover — this is a gap you can own"' : '"Their audience asks about home workouts repeatedly — no content on this yet"'}
+                  </p>
+                  <button 
+                    onClick={() => {
+                        setSelectedCompetitor(comp);
+                        setIsGapModalOpen(true);
+                    }}
+                    className="mt-6 h-10 px-6 rounded-xl bg-primary text-white text-[10px] font-black uppercase tracking-widest hover:scale-105 transition-all shadow-xl shadow-primary/20 flex items-center gap-2"
+                  >
+                     <Zap className="w-4 h-4" /> AI Intelligence Analysis
                   </button>
                </div>
             </motion.div>
           ))}
-       </div>
+        </div>
+
+        <BottomSheet isOpen={isGapModalOpen} onClose={() => setIsGapModalOpen(false)} title="AI Competitor Gap Analysis" height="auto">
+           <div className="p-8 space-y-8">
+              <div className="flex items-center gap-4 p-6 bg-primary/5 border border-primary/20 rounded-[2rem]">
+                 <div className="w-14 h-14 rounded-2xl bg-primary/20 flex items-center justify-center font-black text-primary">AI</div>
+                 <div>
+                    <h3 className="text-lg font-black uppercase italic">Deep Intelligence Report</h3>
+                    <p className="text-xs text-muted-foreground font-bold uppercase tracking-widest">Comparing your profile with {selectedCompetitor?.handle}</p>
+                 </div>
+              </div>
+              
+              <div className="space-y-6">
+                 {[
+                    { label: "Content Void", text: "Competitor focuses strictly on supplement reviews. Your audience value education. Own the 'How to Read Labels' niche." },
+                    { label: "Engagement Edge", text: "You reply to 40% more comments than them. This is building a tribal loyalty that they lack." },
+                    { label: "Video Optimization", text: "Their YouTube Shorts are high quality, but lack clear CTAs. Your hook structure is the winning factor." }
+                 ].map((insight, i) => (
+                    <div key={i} className="p-5 bg-white/5 border border-white/5 rounded-2xl space-y-2">
+                       <span className="text-[10px] font-black text-primary uppercase tracking-widest">{insight.label}</span>
+                       <p className="text-sm font-bold text-white/80 leading-relaxed">{insight.text}</p>
+                    </div>
+                 ))}
+              </div>
+
+              <button className="w-full py-5 bg-primary text-white rounded-[2rem] text-[11px] font-black uppercase tracking-widest shadow-2xl hover:scale-[1.02] transition-all">
+                 Generate Content Strategy to Beat {selectedCompetitor?.handle}
+              </button>
+           </div>
+        </BottomSheet>
     </motion.div>
   );
 
@@ -341,7 +499,14 @@ export const Analytics = () => {
                Impact <span className="text-primary italic">Intelligence</span>
             </h1>
           </div>
-            {!isMobile ? (
+          <div className="flex items-center gap-3">
+             <button 
+               onClick={handleExport}
+               className="px-5 py-3 h-12 bg-white text-black border border-white/10 rounded-2xl text-[11px] font-black uppercase tracking-widest flex items-center gap-2 active:scale-95 transition-all w-fit shadow-xl"
+             >
+                <Share2 className="w-4 h-4" /> Export Report
+             </button>
+             {!isMobile ? (
               <div className="flex items-center gap-2 bg-white/5 p-1 rounded-2xl border border-white/10 w-fit">
                 {['7D', '30D', '90D', 'ALL'].map((range) => (
                   <button 

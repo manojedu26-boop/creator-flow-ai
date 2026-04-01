@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import { 
   AreaChart, Area, XAxis, YAxis, CartesianGrid, 
-  Tooltip, ResponsiveContainer, LineChart, Line 
+  Tooltip, ResponsiveContainer 
 } from 'recharts';
 import { PageTransition, staggerContainer, staggerItem } from "../../components/shared/MotionComponents";
 import { useAuth } from "../../contexts/AuthContext";
@@ -53,28 +53,29 @@ const GrowthProjectionChart = memo(({ data }: { data: any[] }) => (
 
 export const Growth = () => {
   const { user } = useAuth();
-  const [completedActions, setCompletedActions] = useState<number[]>([1, 3]);
+  const [tasks, setTasks] = useState<any[]>([]);
   const [selectedCollab, setSelectedCollab] = useState<any>(null);
   const [showPitcher, setShowPitcher] = useState(false);
 
-  const toggleAction = (id: number) => {
-    const newCompleted = completedActions.includes(id)
-      ? completedActions.filter(a => a !== id)
-      : [...completedActions, id];
-    setCompletedActions(newCompleted);
+  useEffect(() => {
+    const data = db.getAll<any>('growthTasks');
+    setTasks(data);
+  }, []);
 
-    // Persist to tasks DB — mark as completed if it wasn't before
-    if (!completedActions.includes(id)) {
-      const taskId = `growth_task_${id}`;
-      const existingTask = db.getAll<any>('tasks').find((t: any) => t.id === taskId);
-      if (!existingTask) {
-        db.insert('tasks', { id: taskId, text: `Growth task ${id}`, category: 'Strategy', completed: true, time: '—' });
-      } else {
-        db.update('tasks', taskId, { completed: true } as any);
+  const toggleAction = (id: string) => {
+    const updatedTasks = tasks.map(t => t.id === id ? { ...t, completed: !t.completed } : t);
+    setTasks(updatedTasks);
+    
+    const task = updatedTasks.find(t => t.id === id);
+    if (task) {
+      db.update('growthTasks', id, { completed: task.completed } as any);
+      if (task.completed) {
+        toast.success("Task completed!", { description: "Your growth score just leveled up. 🚀" });
       }
-      toast.success("Great work! Strategy task completed. 🎯");
     }
   };
+
+  const completedCount = tasks.filter(t => t.completed).length;
 
   return (
     <PageTransition className="p-4 md:p-8 space-y-8 max-w-7xl mx-auto pb-24 lg:pb-8">
@@ -103,29 +104,24 @@ export const Growth = () => {
                </div>
 
                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {[
-                    { id: 1, day: 'Tue', action: 'Post "3 exercises for desk workers" Reel by 7PM' },
-                    { id: 2, day: 'Wed', action: 'Reply to 12 unanswered comments on HIIT post' },
-                    { id: 3, day: 'Thu', action: 'Draft captions for India-themed Fitness Carousel' },
-                    { id: 4, day: 'Sat', action: 'Film "What I eat in a day" YT Video' },
-                  ].map((a) => (
+                  {tasks.map((a) => (
                     <div 
                       key={a.id} 
                       onClick={() => toggleAction(a.id)}
                       className={`p-5 rounded-2xl border transition-all cursor-pointer flex items-center gap-4 ${
-                        completedActions.includes(a.id) 
+                        a.completed 
                         ? 'bg-primary/5 border-primary/30' 
                         : 'bg-white/5 border-white/5 hover:border-primary/40'
                       }`}
                     >
                        <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
-                         completedActions.includes(a.id) ? 'bg-primary border-primary' : 'border-white/20'
+                         a.completed ? 'bg-primary border-primary' : 'border-white/20'
                        }`}>
-                          {completedActions.includes(a.id) && <CheckCircle2 className="w-4 h-4 text-white" />}
+                          {a.completed && <CheckCircle2 className="w-4 h-4 text-white" />}
                        </div>
                        <div className="flex-1 min-w-0">
                           <span className="text-[9px] font-black uppercase text-muted-foreground block tracking-widest">{a.day} Task</span>
-                          <span className={`text-sm font-bold truncate block ${completedActions.includes(a.id) ? 'line-through opacity-50' : ''}`}>{a.action}</span>
+                          <span className={`text-sm font-bold truncate block ${a.completed ? 'line-through opacity-50' : ''}`}>{a.task}</span>
                        </div>
                     </div>
                   ))}
@@ -140,12 +136,12 @@ export const Growth = () => {
                        cx="96" cy="96" r="80" fill="none" stroke="#FF3CAC" strokeWidth="12" 
                        strokeDasharray={2 * Math.PI * 80}
                        initial={{ strokeDashoffset: 2 * Math.PI * 80 }}
-                       animate={{ strokeDashoffset: 2 * Math.PI * 80 * (1 - completedActions.length / 4) }}
+                       animate={{ strokeDashoffset: 2 * Math.PI * 80 * (1 - (tasks.length ? completedCount / tasks.length : 0)) }}
                        transition={{ duration: 1, delay: 0.5 }}
                      />
                   </svg>
                   <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-                     <span className="text-4xl font-black">{Math.round((completedActions.length / 4) * 100)}%</span>
+                     <span className="text-4xl font-black">{tasks.length ? Math.round((completedCount / tasks.length) * 100) : 0}%</span>
                      <span className="text-[9px] font-black uppercase text-muted-foreground tracking-widest">Done</span>
                   </div>
                </div>
@@ -215,6 +211,32 @@ export const Growth = () => {
             </div>
          </motion.div>
       </div>
+
+      <section className="space-y-6 mt-12">
+         <h3 className="text-2xl font-black uppercase tracking-tight flex items-center gap-3">
+            <Flame className="w-6 h-6 text-orange-500" /> Trend Radar
+         </h3>
+         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+               { trend: "#75Hard Challenge", platform: "TikTok", potential: "High", surge: "+120%" },
+               { trend: "POV: Morning Routine", platform: "Instagram", potential: "Medium", surge: "+45%" },
+               { trend: "No-Equipment HIIT", platform: "YouTube", potential: "High", surge: "+88%" },
+               { trend: "Wellness Travel", platform: "TikTok", potential: "Viral", surge: "+240%" },
+            ].map((t) => (
+               <div key={t.trend} className="bg-black/40 border border-white/5 p-6 rounded-[2rem] hover:border-primary/40 transition-all relative overflow-hidden group">
+                  <div className="flex justify-between items-start mb-4">
+                     <span className={`px-2 py-1 rounded-lg text-[8px] font-black uppercase tracking-widest ${t.platform === 'TikTok' ? 'bg-zinc-800 text-white' : 'bg-pink-500/10 text-pink-500'}`}>
+                        {t.platform}
+                     </span>
+                     <span className="text-emerald-500 text-[10px] font-black italic">{t.surge} Surge</span>
+                  </div>
+                  <h4 className="font-black text-lg mb-2">{t.trend}</h4>
+                  <p className="text-[10px] font-black text-muted-foreground mb-6 uppercase">Matching your {user?.niche} niche</p>
+                  <button className="w-full py-3 bg-white/5 rounded-xl text-[9px] font-black uppercase tracking-widest hover:bg-primary transition-all">Jump on This Trend</button>
+               </div>
+            ))}
+         </div>
+      </section>
 
       {selectedCollab && (
         <EmailComposer 
