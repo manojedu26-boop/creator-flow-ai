@@ -148,10 +148,19 @@
   /* Dynamic Sidebar Width variable fallback */
   :root {
     --sidebar-w: 80px; 
+    --header-h: 90px;
+    --bottom-nav-h: 0px;
+    --page-px: 2.5rem;
   }
 
-  /* Section 14: Mobile-First Overlays prevention */
+  /* Section 14: Mobile-First Overlays prevention & Layout recalibration */
   @media (max-width: 1024px) {
+    :root {
+      --sidebar-w: 0px;
+      --header-h: 70px;
+      --bottom-nav-h: 72px;
+      --page-px: 1rem;
+    }
     .dashboard-grid {
       @apply gap-4 px-4;
     }

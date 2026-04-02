@@ -224,7 +224,7 @@ const Onboarding = () => {
           </div>
         </div>
 
-        <div className="rounded-[3rem] bg-white border border-slate-100 p-10 md:p-14 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.05)] relative overflow-hidden group">
+        <div className="rounded-[2.5rem] md:rounded-[3rem] bg-white border border-slate-100 p-6 md:p-14 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.05)] relative overflow-hidden group">
           <div className="absolute top-0 right-0 p-12 opacity-5 group-hover:opacity-10 transition-opacity pointer-events-none">
              <Stars className="w-24 h-24 text-blue-600" />
           </div>
@@ -382,12 +382,12 @@ const Onboarding = () => {
                   
                   {nicheError && <p className="text-rose-500 text-[10px] font-black uppercase tracking-wider pl-1">{nicheError}</p>}
                   
-                  <div className="grid grid-cols-3 gap-4">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 md:gap-4">
                     {niches.map(n => (
                       <button
                         key={n.label}
                         onClick={() => toggleNiche(n.label)}
-                        className={`relative p-5 rounded-[2rem] border text-center transition-all group overflow-hidden active:scale-[0.95] ${
+                        className={`relative p-4 md:p-5 rounded-[1.5rem] md:rounded-[2rem] border text-center transition-all group overflow-hidden active:scale-[0.95] ${
                           selectedNiches.includes(n.label)
                             ? "border-blue-600 bg-blue-50 text-blue-600 shadow-xl shadow-blue-500/10"
                             : "border-slate-200 bg-slate-50/50 text-slate-400 hover:border-blue-600 hover:text-slate-950"
@@ -400,10 +400,10 @@ const Onboarding = () => {
                         </div>
                         
                         <div className="relative z-10 transition-transform group-hover:scale-110 duration-500">
-                          <div className={`w-10 h-10 rounded-xl mx-auto flex items-center justify-center mb-3 shadow-sm transition-colors ${selectedNiches.includes(n.label) ? "bg-blue-600 text-white" : "bg-white text-slate-400 group-hover:text-blue-600"}`}>
-                            <n.icon className="w-5 h-5" />
+                          <div className={`w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl mx-auto flex items-center justify-center mb-2 md:mb-3 shadow-sm transition-colors ${selectedNiches.includes(n.label) ? "bg-blue-600 text-white" : "bg-white text-slate-400 group-hover:text-blue-600"}`}>
+                            <n.icon className="w-4 h-4 md:w-5 md:h-5" />
                           </div>
-                          <div className="text-[10px] font-black uppercase tracking-[0.1em]">{n.label}</div>
+                          <div className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.1em]">{n.label}</div>
                         </div>
                       </button>
                     ))}
@@ -495,19 +495,19 @@ const Onboarding = () => {
           </AnimatePresence>
 
           {/* Navigation Controls */}
-          <div className="flex items-center justify-between mt-12">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6 md:gap-0 mt-12">
             {step > 1 && step < 5 ? (
               <button 
                 onClick={back} 
-                className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.3em] text-slate-300 hover:text-slate-950 transition-all group"
+                className="order-2 md:order-1 flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.3em] text-slate-300 hover:text-slate-950 transition-all group"
               >
                 <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" /> Re-Calibrate
               </button>
-            ) : <div />}
+            ) : <div className="order-2 md:order-1" />}
 
             <button
               onClick={next}
-              className="group h-16 px-12 rounded-[2rem] bg-slate-950 text-white font-black text-[11px] uppercase tracking-[0.3em] shadow-2xl shadow-slate-200 hover:bg-blue-600 hover:shadow-blue-500/20 active:scale-[0.95] transition-all flex items-center gap-4"
+              className="order-1 md:order-2 w-full md:w-auto group h-16 px-10 md:px-12 rounded-2xl md:rounded-[2rem] bg-slate-950 text-white font-black text-[10px] md:text-[11px] uppercase tracking-[0.2em] md:tracking-[0.3em] shadow-2xl shadow-slate-200 hover:bg-blue-600 hover:shadow-blue-500/20 active:scale-[0.95] transition-all flex items-center justify-center gap-4"
             >
               {step === 5 ? "Launch Command Centre" : "Initialize Next Phase"}
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />

@@ -31,7 +31,7 @@ export const MobileBottomNav = () => {
   const [isMoreOpen, setIsMoreOpen] = useState(false);
 
   return (
-    <div className="lg:hidden fixed bottom-0 left-0 right-0 z-[150] bg-white/90 backdrop-blur-xl border-t border-slate-100 safe-area-pb shadow-[0_-1px_10px_rgba(0,0,0,0.02)]">
+    <div className="lg:hidden fixed bottom-0 left-0 right-0 z-[5000] bg-white/90 backdrop-blur-xl border-t border-slate-100 safe-area-pb shadow-[0_-1px_10px_rgba(0,0,0,0.02)]">
       <div className="h-16 flex items-center justify-around px-2 relative">
         {mainNavItems.map((item) => {
           const isActive = location.pathname === item.href;

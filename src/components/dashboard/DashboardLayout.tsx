@@ -120,17 +120,16 @@ export const DashboardLayout = () => {
       
       {/* Main Content Wrapper */}
       <div 
-        className="flex-1 flex flex-col relative z-header w-full overflow-hidden transition-all duration-300"
-        style={{ paddingLeft: "var(--sidebar-w, 0px)" }}
+        className="flex-1 flex flex-col relative z-header w-full overflow-hidden transition-all duration-300 lg:pl-[var(--sidebar-w)]"
       >
         {/* Header - Always visible but height is variable via CSS */}
         <Header title={pageTitle} />
         
         {/* Zone C */}
-        <main className="flex-1 pt-[var(--header-h)] pb-[var(--bottom-nav-h)] relative bg-slate-50/30">
+        <main className="flex-1 pt-[var(--header-h)] pb-[calc(var(--bottom-nav-h)+2rem)] relative bg-slate-50/30">
           <PullToRefresh onRefresh={handleRefresh}>
             <IOSSwipeBack>
-              <div className="px-[var(--page-px)] py-8 no-scrollbar max-w-[1600px] mx-auto">
+              <div className="px-[var(--page-px)] py-8 no-scrollbar max-w-[1600px] mx-auto min-h-screen">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={location.pathname}

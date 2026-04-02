@@ -69,14 +69,17 @@ export const PullToRefresh: React.FC<PullToRefreshProps> = ({ onRefresh, childre
     const currentY = e.touches[0].pageY;
     const diff = currentY - startY.current;
 
-    if (diff > 0 && containerRef.current?.scrollTop === 0) {
-      // Resistance factor
-      const distance = Math.min(diff * 0.4, pullThreshold + 20);
-      setPullDistance(distance);
-      
-      // Prevent default to disable native pull-to-refresh
-      if (diff > 10) e.preventDefault();
-    }
+      if (diff > 10 && containerRef.current?.scrollTop === 0) {
+        // Resistance factor
+        const distance = Math.min(diff * 0.4, pullThreshold + 20);
+        setPullDistance(distance);
+        
+        // Only prevent default if we've actually pulled a significant amount
+        // ensuring standard taps and minor scrolls aren't hijacked
+        if (diff > 30) {
+          if (e.cancelable) e.preventDefault();
+        }
+      }
   };
 
   const handleTouchEnd = async () => {
@@ -211,17 +214,24 @@ export const IOSSwipeBack = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
   
   return (
-    <motion.div
-      drag="x"
-      dragConstraints={{ left: 0, right: 0 }}
-      onDragEnd={(_, info) => {
-        if (info.offset.x > 100) {
-          navigate(-1);
-        }
-      }}
-      className="h-full w-full"
-    >
-      {children}
-    </motion.div>
+    <div className="relative h-full w-full overflow-hidden">
+      {/* Edge Handle - Only this area intercepts swipes */}
+      <motion.div
+        drag="x"
+        dragConstraints={{ left: 0, right: 100 }}
+        dragElastic={0.05}
+        onDragEnd={(_, info) => {
+          if (info.offset.x > 80) {
+            navigate(-1);
+          }
+        }}
+        className="absolute top-0 left-0 bottom-0 w-8 z-[9999] bg-transparent touch-pan-y"
+        aria-hidden="true"
+      />
+      
+      <div className="h-full w-full">
+        {children}
+      </div>
+    </div>
   );
 };

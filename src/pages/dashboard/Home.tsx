@@ -109,57 +109,59 @@ export const Home = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ type: "spring", stiffness: 100 }}
-            className="text-4xl md:text-6xl font-black tracking-[0.02em] leading-none text-slate-950 uppercase"
+            className="text-2xl md:text-6xl font-black tracking-[0.02em] leading-none text-slate-950 uppercase"
           >
             Good morning, <br />
             <span className="text-blue-600 flex items-center gap-4">
-               {user?.firstName || 'Naveen'} <Stars className="w-12 h-12 md:w-20 md:h-20 animate-pulse text-slate-950" />
+               {user?.firstName || 'Naveen'} <Stars className="w-8 h-8 md:w-20 md:h-20 animate-pulse text-slate-950" />
             </span>
           </motion.h1>
-          <p className="text-slate-500 font-bold text-base md:text-xl max-w-2xl mt-2 leading-relaxed">
-            Your influence score generated a <span className="text-slate-950 font-black underline decoration-blue-600 decoration-4">11% spike</span>. <br />
+          <p className="text-slate-500 font-bold text-sm md:text-xl max-w-2xl mt-2 leading-relaxed">
+            Your influence score generated a <span className="text-slate-950 font-black underline decoration-blue-600 decoration-2 md:decoration-4">11% spike</span>. <br className="hidden md:block" />
             Prime transmission window: <span className="text-blue-600 font-black">19:00 IST</span>.
           </p>
         </div>
-        <div className="flex flex-wrap gap-4 relative z-20">
-          <button 
-            onClick={fetchData}
-            disabled={isLoading}
-            className="w-16 h-16 rounded-[2rem] bg-white border border-slate-200 hover:border-blue-600 hover:scale-105 transition-all flex items-center justify-center text-slate-400 hover:text-blue-600 shadow-xl shadow-slate-100 active:scale-95"
-          >
-            <RefreshIcon className={`w-6 h-6 ${isLoading ? 'animate-spin' : ''}`} />
-          </button>
-          <button className="h-16 px-10 rounded-[2rem] bg-white border border-slate-200 hover:border-blue-600 hover:scale-105 transition-all flex items-center justify-center gap-4 font-black text-[11px] uppercase tracking-[0.2em] text-slate-950 shadow-xl shadow-slate-100 group">
-            <Plus className="w-5 h-5 text-blue-600 transition-transform group-hover:rotate-90" /> Launch Brief
-          </button>
-          <button className="h-16 px-10 rounded-[2rem] bg-slate-950 text-white hover:bg-blue-600 hover:scale-105 transition-all flex items-center justify-center gap-4 font-black text-[11px] uppercase tracking-[0.2em] shadow-2xl shadow-blue-900/20 active:scale-95">
-            <Search className="w-5 h-5" /> Data Discovery
+        <div className="flex flex-col md:flex-row gap-4 relative z-20">
+          <div className="flex gap-4">
+            <button 
+              onClick={fetchData}
+              disabled={isLoading}
+              className="flex-1 md:w-16 h-14 md:h-16 rounded-2xl md:rounded-[2rem] bg-white border border-slate-200 hover:border-blue-600 hover:scale-105 transition-all flex items-center justify-center text-slate-400 hover:text-blue-600 shadow-xl shadow-slate-100 active:scale-95"
+            >
+              <RefreshIcon className={`w-5 h-5 md:w-6 md:h-6 ${isLoading ? 'animate-spin' : ''}`} />
+            </button>
+            <button className="flex-[3] md:flex-none h-14 md:h-16 md:px-10 rounded-2xl md:rounded-[2rem] bg-white border border-slate-200 hover:border-blue-600 hover:scale-105 transition-all flex items-center justify-center gap-3 md:gap-4 font-black text-[10px] md:text-[11px] uppercase tracking-[0.2em] text-slate-950 shadow-xl shadow-slate-100 group">
+              <Plus className="w-4 h-4 md:w-5 md:h-5 text-blue-600 transition-transform group-hover:rotate-90" /> Launch Brief
+            </button>
+          </div>
+          <button className="h-14 md:h-16 md:px-10 rounded-2xl md:rounded-[2rem] bg-slate-950 text-white hover:bg-blue-600 hover:scale-105 transition-all flex items-center justify-center gap-3 md:gap-4 font-black text-[10px] md:text-[11px] uppercase tracking-[0.2em] shadow-2xl shadow-blue-900/20 active:scale-95">
+            <Search className="w-4 h-4 md:w-5 md:h-5" /> Data Discovery
           </button>
         </div>
       </header>
 
       {/* KPI Stats Strip */}
-      <div className="grid grid-cols-2 lg:grid-cols-5 gap-8">
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 md:gap-8">
         {stats.map((stat, i) => (
           <motion.div
             key={stat.label}
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: i * 0.05, type: "spring" }}
-            className="group relative overflow-hidden rounded-[3rem] bg-white p-8 border border-slate-200 transition-all shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:shadow-blue-500/10"
+            className="group relative overflow-hidden rounded-3xl md:rounded-[3rem] bg-white p-5 md:p-8 border border-slate-200 transition-all shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:shadow-blue-500/10"
           >
-            <div className={cn("p-5 rounded-[1.5rem] w-fit mb-8 shadow-inner transition-transform group-hover:scale-110", stat.bg, stat.color)}>
-              <stat.icon className="w-6 h-6" />
+            <div className={cn("p-3 md:p-5 rounded-2xl md:rounded-[1.5rem] w-fit mb-4 md:mb-8 shadow-inner transition-transform group-hover:scale-110", stat.bg, stat.color)}>
+              <stat.icon className="w-5 h-5 md:w-6 md:h-6" />
             </div>
-            <div className="space-y-2">
-              <p className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-400">{stat.label}</p>
+            <div className="space-y-1 md:space-y-2">
+              <p className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.25em] text-slate-400">{stat.label}</p>
               <div className="flex items-end gap-2">
-                <h3 className="text-4xl font-black tracking-tighter text-slate-950 leading-none">
+                <h3 className="text-2xl md:text-4xl font-black tracking-tighter text-slate-950 leading-none">
                   <CountUp value={stat.value} prefix={stat.label === 'Est. Revenue' ? '₹ ' : ''} />
                 </h3>
               </div>
-              <div className={cn("inline-flex items-center gap-2 px-3 py-1 rounded-full text-[10px] font-black mt-4", stat.up ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-blue-50 text-blue-600 border border-blue-100')}>
-                {stat.up ? <TrendingUp className="w-3 h-3" /> : <ChevronRight className="w-3 h-3" />}
+              <div className={cn("inline-flex items-center gap-2 px-2 md:px-3 py-1 rounded-full text-[9px] md:text-[10px] font-black mt-2 md:mt-4", stat.up ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-blue-50 text-blue-600 border border-blue-100')}>
+                {stat.up ? <TrendingUp className="w-2.5 h-2.5 md:w-3 h-3" /> : <ChevronRight className="w-2.5 h-2.5 md:w-3 h-3" />}
                 {stat.delta}
               </div>
             </div>
@@ -171,26 +173,26 @@ export const Home = () => {
         {/* Main Content Area */}
         <div className="lg:col-span-2 space-y-12">
           {/* AI Action Plan */}
-          <div className="rounded-[4rem] bg-white border border-slate-100 overflow-hidden shadow-2xl shadow-slate-100/50 group">
-            <div className="p-12 border-b border-slate-50 flex items-center justify-between bg-slate-50/30">
-              <div className="space-y-4">
+          <div className="rounded-[2.5rem] md:rounded-[4rem] bg-white border border-slate-100 overflow-hidden shadow-2xl shadow-slate-100/50 group">
+            <div className="p-8 md:p-12 border-b border-slate-50 flex items-center justify-between bg-slate-50/30">
+              <div className="space-y-2 md:space-y-4">
                 <div className="flex items-center gap-3">
-                   <div className="w-10 h-10 rounded-2xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/30 animate-float">
-                      <Zap className="w-5 h-5 text-white fill-white" />
+                   <div className="w-8 h-8 md:w-10 md:h-10 rounded-xl md:rounded-2xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/30 animate-float">
+                      <Zap className="w-4 h-4 md:w-5 md:h-5 text-white fill-white" />
                    </div>
-                   <h3 className="text-3xl font-black tracking-tight text-slate-950 uppercase">
+                   <h3 className="text-xl md:text-3xl font-black tracking-tight text-slate-950 uppercase">
                     AI Strategic Plan
                    </h3>
                 </div>
-                <p className="text-[11px] font-black text-slate-400 tracking-[0.2em] uppercase pl-1">
+                <p className="text-[9px] md:text-[11px] font-black text-slate-400 tracking-[0.15em] md:tracking-[0.2em] uppercase pl-1">
                    Live Feed • Updated 2 mins ago
                 </p>
               </div>
-              <div className="bg-slate-950 text-white text-[10px] font-black px-6 py-3 rounded-full uppercase tracking-[0.2em] shadow-xl">
-                Ready: {completedCount}/{tasks.length}
+              <div className="bg-slate-950 text-white text-[9px] md:text-[10px] font-black px-4 md:px-6 py-2 md:py-3 rounded-full uppercase tracking-[0.15em] md:tracking-[0.2em] shadow-xl shrink-0">
+                {completedCount}/{tasks.length}
               </div>
             </div>
-            <div className="p-10 md:p-12 space-y-6">
+            <div className="p-6 md:p-12 space-y-4 md:space-y-6">
               {tasks.map((task, i) => (
                 <motion.div
                   key={task.id}
@@ -199,36 +201,33 @@ export const Home = () => {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: i * 0.05 }}
                   className={cn(
-                    "group flex items-center gap-8 p-8 rounded-[2.5rem] transition-all",
+                    "group flex items-center gap-4 md:gap-8 p-5 md:p-8 rounded-2xl md:rounded-[2.5rem] transition-all",
                     task.completed ? "bg-slate-50 border-transparent opacity-50" : "bg-white border border-slate-100 hover:border-blue-400 hover:shadow-xl hover:scale-[1.01]"
                   )}
                 >
                   <button
                     onClick={() => toggleTask(task.id)}
                     className={cn(
-                      "shrink-0 w-10 h-10 rounded-[1.2rem] border-2 flex items-center justify-center transition-all",
+                      "shrink-0 w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-[1.2rem] border-2 flex items-center justify-center transition-all",
                       task.completed ? "bg-blue-600 border-blue-600 shadow-lg shadow-blue-500/40" : "border-slate-200 hover:border-blue-600 bg-white"
                     )}
                   >
-                    {task.completed && <Check className="w-6 h-6 text-white stroke-[3]" />}
+                    {task.completed && <Check className="w-4 h-4 md:w-6 md:h-6 text-white stroke-[3]" />}
                   </button>
                   <div className="flex-1 min-w-0">
                     <p className={cn(
-                      "text-xl font-black tracking-tight text-slate-950",
+                      "text-base md:text-xl font-black tracking-tight text-slate-950",
                       task.completed && "line-through text-slate-400 opacity-60"
                     )}>
                       {task.text}
                     </p>
-                    <div className="flex items-center gap-6 mt-3">
-                      <span className="text-[10px] uppercase font-black tracking-[0.2em] text-blue-600">{task.category}</span>
-                      <span className="flex items-center gap-2 text-[10px] font-black uppercase text-slate-400 tracking-widest">
-                        <Clock className="w-3.5 h-3.5" /> {task.time}
+                    <div className="flex items-center gap-4 md:gap-6 mt-1 md:mt-3">
+                      <span className="text-[9px] md:text-[10px] uppercase font-black tracking-[0.2em] text-blue-600">{task.category}</span>
+                      <span className="flex items-center gap-2 text-[9px] md:text-[10px] font-black uppercase text-slate-400 tracking-widest text-ellipsis overflow-hidden">
+                        <Clock className="w-3 md:w-3.5 h-3 md:h-3.5" /> {task.time}
                       </span>
                     </div>
                   </div>
-                  <button className="w-12 h-12 rounded-[1.2rem] bg-slate-50 flex items-center justify-center text-slate-400 hover:bg-slate-950 hover:text-white transition-all opacity-0 group-hover:opacity-100 active:scale-90">
-                    <ArrowRight className="w-5 h-5" />
-                  </button>
                 </motion.div>
               ))}
             </div>
