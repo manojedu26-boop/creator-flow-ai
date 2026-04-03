@@ -94,8 +94,8 @@ export const Home = () => {
   }
 
   return (
-    <PageTransition className="space-y-12 pb-24 lg:pb-12 h-screen overflow-y-auto no-scrollbar px-2">
-      <header className="flex flex-col md:flex-row md:items-end justify-between gap-10 mt-2">
+    <PageTransition className="space-y-8 pb-24 lg:pb-12 h-screen overflow-y-auto no-scrollbar px-2">
+      <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 mt-0">
         <div className="space-y-3">
           <motion.div 
             initial={{ opacity: 0, x: -20 }}
@@ -148,7 +148,7 @@ export const Home = () => {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: i * 0.05, type: "spring" }}
-            className="group relative overflow-hidden rounded-3xl md:rounded-[3rem] bg-white p-5 md:p-8 border border-slate-200 transition-all shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:shadow-blue-500/10"
+            className="group relative overflow-hidden rounded-3xl md:rounded-[3rem] bg-white p-5 md:p-8 border border-slate-200 transition-all shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:shadow-blue-500/10 premium-card"
           >
             <div className={cn("p-3 md:p-5 rounded-2xl md:rounded-[1.5rem] w-fit mb-4 md:mb-8 shadow-inner transition-transform group-hover:scale-110", stat.bg, stat.color)}>
               <stat.icon className="w-5 h-5 md:w-6 md:h-6" />
@@ -173,7 +173,7 @@ export const Home = () => {
         {/* Main Content Area */}
         <div className="lg:col-span-2 space-y-12">
           {/* AI Action Plan */}
-          <div className="rounded-[2.5rem] md:rounded-[4rem] bg-white border border-slate-100 overflow-hidden shadow-2xl shadow-slate-100/50 group">
+          <div className="rounded-[2.5rem] md:rounded-[4rem] bg-white border border-slate-100 overflow-hidden shadow-2xl shadow-slate-100/50 group premium-card">
             <div className="p-8 md:p-12 border-b border-slate-50 flex items-center justify-between bg-slate-50/30">
               <div className="space-y-2 md:space-y-4">
                 <div className="flex items-center gap-3">

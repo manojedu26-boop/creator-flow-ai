@@ -236,7 +236,7 @@ export const Messages = () => {
 
   return (
     <PageTransition>
-      <div className="flex h-[calc(100vh-140px)] -mx-4 md:-mx-8 -my-6 overflow-hidden bg-slate-50 relative">
+      <div className="flex h-[calc(100vh-var(--header-h)-var(--bottom-nav-h)-2.5rem)] -mx-[var(--page-px)] -mt-4 overflow-hidden bg-slate-50 relative">
         <div className="absolute top-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-500/5 blur-[120px] rounded-full pointer-events-none" />
         <div className="absolute bottom-[-10%] left-[-10%] w-[30%] h-[30%] bg-indigo-500/5 blur-[100px] rounded-full pointer-events-none" />
 

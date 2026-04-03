@@ -123,6 +123,8 @@ export const Header = ({ title = "Dashboard" }: { title?: string }) => {
     return () => document.removeEventListener("mousedown", handler);
   }, [showNotifications, showUserDropdown]);
 
+  const [activePlatform, setActivePlatform] = useState("Global");
+
   return (
     <>
       <header className="sticky top-0 right-0 h-[var(--header-h)] bg-white/80 backdrop-blur-xl border-b border-slate-100 z-[100] flex items-center justify-between px-4 md:px-10 transition-all duration-300">
@@ -130,10 +132,11 @@ export const Header = ({ title = "Dashboard" }: { title?: string }) => {
           <h1 className="text-base md:text-xl font-black tracking-tight uppercase truncate max-w-[160px] md:max-w-none text-slate-900">{title}</h1>
 
           <div className="hidden xl:flex items-center bg-slate-50 shadow-inner rounded-2xl p-1 border border-slate-200/50">
-            {["Global", "Instagram", "YouTube", "TikTok"].map((platform, i) => (
+            {["Global", "Instagram", "YouTube", "TikTok"].map((platform) => (
               <button
                 key={platform}
-                className={`px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${i === 0 ? "bg-slate-900 text-white shadow-sm" : "text-slate-400 hover:text-slate-700"}`}
+                onClick={() => setActivePlatform(platform)}
+                className={`px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${activePlatform === platform ? "bg-slate-900 text-white shadow-sm" : "text-slate-400 hover:text-slate-700"}`}
               >
                 {platform}
               </button>

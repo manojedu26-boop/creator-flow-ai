@@ -129,14 +129,27 @@
     0 4px 6px -1px rgba(0, 0, 0, 0.02),
     0 2px 4px -1px rgba(0, 0, 0, 0.01),
     inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+    transform-style: preserve-3d;
+    perspective: 1000px;
   }
 
   .premium-card:hover {
     @apply -translate-y-2;
+    transform: translateY(-8px) rotateX(2deg) rotateY(1deg);
     box-shadow: 
-    0 20px 25px -5px rgba(0, 0, 0, 0.05),
-    0 10px 10px -5px rgba(0, 0, 0, 0.01);
-    border-color: rgba(37, 99, 235, 0.1);
+    0 20px 40px -10px rgba(0, 0, 0, 0.08),
+    0 10px 20px -5px rgba(0, 0, 0, 0.02);
+    border-color: rgba(37, 99, 235, 0.2);
+  }
+
+  .text-kinetic {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-blue-600 to-slate-900;
+    background-size: 200% auto;
+    animation: textShine 4s linear infinite;
+  }
+
+  @keyframes textShine {
+    to { background-position: 200% center; }
   }
 
   /* Structural Recalibration per User Feedback: Sidebar MUST be on top and clickable */
@@ -148,9 +161,12 @@
   /* Dynamic Sidebar Width variable fallback */
   :root {
     --sidebar-w: 80px; 
-    --header-h: 90px;
+    --header-h: 72px;
     --bottom-nav-h: 0px;
-    --page-px: 2.5rem;
+    --page-px: 2rem;
+    --grid-gap: 1.5rem;
+    --card-p: 2rem;
+    --section-mb: 2rem;
   }
 
   /* Section 14: Mobile-First Overlays prevention & Layout recalibration */
@@ -160,6 +176,9 @@
       --header-h: 70px;
       --bottom-nav-h: 72px;
       --page-px: 1rem;
+      --grid-gap: 1rem;
+      --card-p: 1.25rem;
+      --section-mb: 1.5rem;
     }
     .dashboard-grid {
       @apply gap-4 px-4;

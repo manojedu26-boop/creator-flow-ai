@@ -129,7 +129,7 @@ export const DashboardLayout = () => {
         <main className="flex-1 pt-[var(--header-h)] pb-[calc(var(--bottom-nav-h)+2rem)] relative bg-slate-50/30">
           <PullToRefresh onRefresh={handleRefresh}>
             <IOSSwipeBack>
-              <div className="px-[var(--page-px)] py-8 no-scrollbar max-w-[1600px] mx-auto min-h-screen">
+              <div className="px-[var(--page-px)] py-4 no-scrollbar max-w-[1600px] mx-auto min-h-screen">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={location.pathname}

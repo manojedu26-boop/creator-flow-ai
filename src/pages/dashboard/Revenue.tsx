@@ -105,7 +105,7 @@ export const Revenue = () => {
             <IndianRupee className="w-3.5 h-3.5" />
             Strategic Finance
           </div>
-          <h1 className="text-4xl md:text-5xl font-black tracking-tighter uppercase leading-[0.9] text-slate-900">
+          <h1 className="text-4xl md:text-5xl font-black tracking-tighter uppercase leading-[0.9] text-slate-900 text-kinetic">
              Revenue <span className="text-blue-600">Command</span>
           </h1>
         </div>

@@ -522,7 +522,7 @@ export const Analytics = () => {
               <BarChart3 className="w-3.5 h-3.5" />
               Intelligence Engine
             </div>
-            <h1 className="text-4xl md:text-5xl font-black tracking-tighter uppercase leading-[0.9] text-slate-900">
+            <h1 className="text-4xl md:text-5xl font-black tracking-tighter uppercase leading-[0.9] text-slate-900 text-kinetic">
                Impact <span className="text-blue-600">Analysis</span>
             </h1>
           </div>

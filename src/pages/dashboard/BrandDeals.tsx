@@ -192,7 +192,7 @@ export const BrandDeals = () => {
       {/* Search & Stats */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 mb-10">
         <div>
-          <h2 className="text-5xl font-black tracking-tighter uppercase leading-none text-slate-900">Brand <span className="text-blue-600">Partnerships</span></h2>
+          <h2 className="text-5xl font-black tracking-tighter uppercase leading-none text-slate-900 text-kinetic">Brand <span className="text-blue-600">Partnerships</span></h2>
           <div className="flex items-center gap-4 mt-4">
             <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Active Pipeline: <span className="text-slate-900">₹ 2,45,000</span></p>
             <div className="w-1.5 h-1.5 rounded-full bg-slate-200" />
@@ -291,7 +291,7 @@ export const BrandDeals = () => {
   );
 
   return (
-    <PageTransition className="p-4 md:p-12 space-y-12 max-w-[1700px] mx-auto pb-32">
+    <PageTransition className="space-y-[var(--grid-gap)] max-w-[1700px] mx-auto pb-32">
       <div className="flex items-center gap-10 border-b border-slate-100">
         <button onClick={() => setActiveTab('pipeline')} className={`pb-6 text-[11px] font-black uppercase tracking-[0.2em] relative transition-all ${activeTab === 'pipeline' ? 'text-blue-600' : 'text-slate-400 hover:text-slate-900'}`}>
           Deal Pipeline 
