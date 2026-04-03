@@ -107,20 +107,21 @@ const Login = () => {
           <p className="text-slate-500 font-bold text-lg">Initialize session to access your creator suite.</p>
         </div>
 
-        <div className="rounded-[3rem] bg-white border border-slate-100 p-10 md:p-12 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.05)] space-y-8 relative overflow-hidden group">
+        <div className="rounded-[2.5rem] md:rounded-[3rem] bg-white/80 backdrop-blur-2xl border border-slate-200/60 p-10 md:p-12 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.05)] space-y-8 relative overflow-hidden group">
           <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity pointer-events-none">
              <Stars className="w-20 h-20 text-blue-600" />
           </div>
 
-          {/* Google OAuth */}
+          {/* Google OAuth - Premium SDK Look */}
           <button
             type="button"
             onClick={handleGoogleOAuth}
             disabled={isLoading}
-            className="w-full h-16 rounded-2xl bg-white border border-slate-200 text-[11px] font-black uppercase tracking-[0.2em] text-slate-950 flex items-center justify-center gap-4 hover:bg-slate-50 transition-all active:scale-[0.98] disabled:opacity-50 shadow-sm"
+            className="w-full h-16 rounded-2xl bg-white border border-slate-200/80 text-[11px] font-black uppercase tracking-[0.2em] text-slate-950 flex items-center justify-center gap-4 hover:border-blue-500 hover:shadow-xl hover:shadow-blue-500/10 transition-all active:scale-[0.98] disabled:opacity-50 relative group/google overflow-hidden"
           >
-            <Chrome className="w-5 h-5 text-blue-500" />
-            Authorize via Google
+            <div className="absolute inset-0 bg-blue-50/0 group-hover/google:bg-blue-50/50 transition-colors" />
+            <Chrome className="w-5 h-5 text-blue-500 relative z-10 transition-transform group-hover/google:scale-110" />
+            <span className="relative z-10">Authorize via Google SDK</span>
           </button>
 
           <div className="flex items-center gap-4 text-[10px] font-black text-slate-300 uppercase tracking-[0.3em]">

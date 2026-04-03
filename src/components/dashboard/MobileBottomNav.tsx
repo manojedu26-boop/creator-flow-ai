@@ -39,7 +39,8 @@ export const MobileBottomNav = () => {
             <Link 
               key={item.href} 
               to={item.href}
-              className="relative flex flex-col items-center justify-center w-16 h-full transition-all active:scale-90"
+              onClick={() => setIsMoreOpen(false)}
+              className="relative flex flex-col items-center justify-center w-16 h-full transition-all active:scale-95"
             >
               {isActive && (
                 <motion.div 
@@ -93,7 +94,7 @@ export const MobileBottomNav = () => {
               </AnimatePresence>
             </button>
           </SheetTrigger>
-          <SheetContent side="bottom" className="h-[75vh] bg-white border-t border-slate-100 p-0 rounded-t-[2.5rem] overflow-hidden">
+          <SheetContent side="bottom" className="h-[80vh] bg-white border-t border-slate-100 p-0 rounded-t-[3rem] overflow-hidden shadow-2xl">
              <div className="flex flex-col h-full">
                 {/* Drag handle */}
                 <div className="w-12 h-1.5 bg-slate-100 rounded-full mx-auto mt-4 mb-8" />

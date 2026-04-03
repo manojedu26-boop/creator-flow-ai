@@ -107,14 +107,18 @@ const Onboarding = () => {
   const connectPlatform = (platform: string) => {
     if (connectedPlatforms[platform]?.connected) return;
     setConnectedPlatforms(prev => ({ ...prev, [platform]: { followers: "", connecting: true, connected: false } }));
+    
+    // Simulate high-fidelity sync sequence
     setTimeout(() => {
       const defaultFollowers: Record<string, string> = { Instagram: "48.2K", YouTube: "12.8K", TikTok: "31.5K" };
       setConnectedPlatforms(prev => ({
         ...prev,
         [platform]: { followers: defaultFollowers[platform] || "5K", connecting: false, connected: true }
       }));
-      toast.success(`${platform} Synced! ✅`, { description: `Analytics for ${defaultFollowers[platform] || "5K"} followers loaded.` });
-    }, 1800);
+      toast.success(`${platform} Engine Synced! 🚀`, { 
+        description: `Neural mapping for ${defaultFollowers[platform] || "5K"} nodes complete.` 
+      });
+    }, 2400); // Slightly longer for 'professional' feel
   };
 
   const toggleNiche = (n: string) => {
@@ -253,7 +257,7 @@ const Onboarding = () => {
                         value={creatorName}
                         onChange={e => { setCreatorName(e.target.value); if (step1Errors.name) setStep1Errors(p => { const n = { ...p }; delete n.name; return n; }); }}
                         placeholder="Naveen Kumar"
-                        className={`w-full h-16 rounded-2xl bg-slate-50 border px-6 text-sm font-bold text-slate-950 placeholder:text-slate-300 focus:outline-none focus:ring-2 transition-all ${step1Errors.name ? "border-rose-300 focus:ring-rose-500/10" : "border-slate-200 focus:ring-blue-600/10"}`}
+                        className={`w-full h-16 rounded-2xl bg-white border px-6 text-sm font-bold text-slate-950 placeholder:text-slate-300 focus:outline-none focus:ring-4 transition-all duration-300 ${step1Errors.name ? "border-rose-300 focus:ring-rose-500/10" : "border-slate-200 focus:border-blue-500/50 focus:ring-blue-500/5"}`}
                       />
                       {step1Errors.name && <p className="text-rose-500 text-[10px] font-black uppercase tracking-wider pl-1 mt-1">{step1Errors.name}</p>}
                     </div>
@@ -267,7 +271,7 @@ const Onboarding = () => {
                           value={handle}
                           onChange={e => { setHandle(e.target.value.replace("@", "").toLowerCase()); if (step1Errors.handle) setStep1Errors(p => { const n = { ...p }; delete n.handle; return n; }); }}
                           placeholder="naveen.creates"
-                          className={`w-full h-16 rounded-2xl bg-slate-50 border pl-14 pr-14 text-sm font-bold text-slate-950 placeholder:text-slate-300 focus:outline-none focus:ring-2 transition-all ${step1Errors.handle ? "border-rose-300 focus:ring-rose-500/10" : "border-slate-200 focus:ring-blue-600/10"}`}
+                          className={`w-full h-16 rounded-2xl bg-white border pl-14 pr-14 text-sm font-bold text-slate-950 placeholder:text-slate-300 focus:outline-none focus:ring-4 transition-all duration-300 ${step1Errors.handle ? "border-rose-300 focus:ring-rose-500/10" : "border-slate-200 focus:border-blue-500/50 focus:ring-blue-500/5"}`}
                         />
                         <div className="absolute right-6 top-1/2 -translate-y-1/2">
                           {handleStatus === "checking" && <Loader2 className="w-4 h-4 animate-spin text-slate-300" />}
@@ -329,33 +333,51 @@ const Onboarding = () => {
                       return (
                         <div
                           key={p.name}
-                          className={`p-6 rounded-[2rem] border transition-all ${connected ? "border-blue-600 bg-blue-50/30" : "border-slate-100 bg-white hover:bg-slate-50"}`}
+                          className={`p-6 rounded-[2rem] border transition-all duration-500 relative overflow-hidden group/card ${connected ? "border-blue-600/30 bg-blue-50/20 shadow-lg shadow-blue-500/5" : "border-slate-200/60 bg-white/50 hover:border-blue-400 hover:bg-white"}`}
                         >
-                          <div className="flex items-center justify-between">
+                          {/* Syncing Progress Bar Overlay */}
+                          {connecting && (
+                            <motion.div 
+                              className="absolute bottom-0 left-0 h-1 bg-blue-600"
+                              initial={{ width: 0 }}
+                              animate={{ width: "100%" }}
+                              transition={{ duration: 2.4, ease: "easeInOut" }}
+                            />
+                          )}
+
+                          <div className="flex items-center justify-between relative z-10">
                             <div className="flex items-center gap-5">
-                              <div className={`w-14 h-14 rounded-2xl flex items-center justify-center border ${p.border} ${p.bg}`}>
-                                <p.icon className={`w-6 h-6 ${p.color}`} />
+                              <div className={`w-14 h-14 rounded-2xl flex items-center justify-center border transition-all duration-500 ${connected ? "border-blue-400 bg-blue-600" : `border-slate-100 ${p.bg}`}`}>
+                                <p.icon className={`w-6 h-6 transition-colors duration-500 ${connected ? "text-white" : p.color}`} />
                               </div>
                               <div>
                                 <p className="font-black text-sm text-slate-950 uppercase tracking-tight">{p.name}</p>
                                 <p className="text-[10px] text-slate-400 font-black uppercase tracking-widest">{p.desc}</p>
                                 {connected && (
-                                  <p className="text-[10px] text-blue-600 font-black uppercase tracking-[0.2em] mt-1 flex items-center gap-1">
+                                  <motion.p 
+                                    initial={{ opacity: 0, x: -10 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    className="text-[10px] text-blue-600 font-black uppercase tracking-[0.2em] mt-1 flex items-center gap-1"
+                                  >
                                     <CheckCircle2 className="w-3 h-3" /> {state.followers} Data Nodes Synced
-                                  </p>
+                                  </motion.p>
                                 )}
                               </div>
                             </div>
                             <button
                               onClick={() => connectPlatform(p.name)}
                               disabled={connecting || connected}
-                              className={`h-12 px-6 rounded-xl font-black uppercase tracking-[0.2em] text-[10px] transition-all flex items-center gap-2 ${
+                              className={`h-12 px-6 rounded-xl font-black uppercase tracking-[0.2em] text-[10px] transition-all flex items-center gap-2 group-active:scale-95 ${
                                 connected
                                   ? "bg-slate-950 text-white border-none cursor-default"
-                                  : "bg-white border border-slate-200 text-slate-950 hover:border-blue-600 hover:text-blue-600"
+                                  : "bg-white border border-slate-200 text-slate-950 hover:border-blue-600 hover:text-blue-600 shadow-sm"
                               }`}
                             >
-                              {connecting ? "Syncing..." : connected ? "Synced" : "Deploy Sync"}
+                              {connecting ? (
+                                <span className="flex items-center gap-2">
+                                  <Loader2 className="w-3 h-3 animate-spin" /> MAPPING...
+                                </span>
+                              ) : connected ? "SYNCED" : "DEPLOY SYNC"}
                             </button>
                           </div>
                         </div>
@@ -387,23 +409,34 @@ const Onboarding = () => {
                       <button
                         key={n.label}
                         onClick={() => toggleNiche(n.label)}
-                        className={`relative p-4 md:p-5 rounded-[1.5rem] md:rounded-[2rem] border text-center transition-all group overflow-hidden active:scale-[0.95] ${
+                        className={`relative p-4 md:p-5 rounded-[1.5rem] md:rounded-[2rem] border text-center transition-all duration-500 group overflow-hidden active:scale-[0.95] ${
                           selectedNiches.includes(n.label)
-                            ? "border-blue-600 bg-blue-50 text-blue-600 shadow-xl shadow-blue-500/10"
-                            : "border-slate-200 bg-slate-50/50 text-slate-400 hover:border-blue-600 hover:text-slate-950"
+                            ? "border-blue-500 bg-blue-50/30 text-blue-600 shadow-xl shadow-blue-500/10 scale-[1.02] z-20"
+                            : "border-slate-200/60 bg-slate-50/30 text-slate-400 hover:border-blue-400 hover:bg-white hover:shadow-lg hover:shadow-slate-200/50"
                         }`}
                       >
-                        {/* Hover Background Image */}
-                        <div className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity">
-                          <img src={n.image} alt={n.label} className="w-full h-full object-cover scale-110 group-hover:scale-100 transition-transform duration-700" />
-                          <div className="absolute inset-0 bg-white/60" />
+                        {/* High-Fidelity Image Overlay */}
+                        <div className={`absolute inset-0 transition-opacity duration-700 ${selectedNiches.includes(n.label) ? "opacity-20" : "opacity-0 group-hover:opacity-10"}`}>
+                          <img src={n.image} alt={n.label} className="w-full h-full object-cover scale-110 group-hover:scale-100 transition-transform duration-1000" />
+                          <div className="absolute inset-0 bg-gradient-to-t from-white/80 via-transparent to-transparent" />
                         </div>
                         
-                        <div className="relative z-10 transition-transform group-hover:scale-110 duration-500">
-                          <div className={`w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl mx-auto flex items-center justify-center mb-2 md:mb-3 shadow-sm transition-colors ${selectedNiches.includes(n.label) ? "bg-blue-600 text-white" : "bg-white text-slate-400 group-hover:text-blue-600"}`}>
-                            <n.icon className="w-4 h-4 md:w-5 md:h-5" />
+                        <div className="relative z-10 transition-transform duration-500 group-hover:scale-110">
+                          <div className={`w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl mx-auto flex items-center justify-center mb-3 md:mb-4 shadow-sm transition-all duration-500 ${selectedNiches.includes(n.label) ? "bg-blue-600 text-white shadow-lg shadow-blue-500/40 rotate-3" : "bg-white text-slate-400 group-hover:text-blue-500 group-hover:shadow-md"}`}>
+                            <n.icon className="w-5 h-5 md:w-6 md:h-6" />
                           </div>
-                          <div className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.1em]">{n.label}</div>
+                          <div className="text-[10px] md:text-[11px] font-black uppercase tracking-widest">{n.label}</div>
+                          
+                          {selectedNiches.includes(n.label) && (
+                            <motion.div 
+                              layoutId={`selected-niche-${n.label}`}
+                              className="absolute -top-1 -right-1 w-5 h-5 bg-blue-600 rounded-full flex items-center justify-center shadow-lg border-2 border-white"
+                              initial={{ scale: 0 }}
+                              animate={{ scale: 1 }}
+                            >
+                              <Check className="w-3 h-3 text-white stroke-[4]" />
+                            </motion.div>
+                          )}
                         </div>
                       </button>
                     ))}
