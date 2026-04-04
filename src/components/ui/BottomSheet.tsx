@@ -44,7 +44,7 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="absolute inset-0 bg-black/60 backdrop-blur-[8px]"
+            className="absolute inset-0 bg-black/60 backdrop-blur-[8px] lg:left-[var(--sidebar-w)]"
           />
           
           <motion.div
@@ -64,7 +64,7 @@ export const BottomSheet: React.FC<BottomSheetProps> = ({
                 y.set(0);
               }
             }}
-            className={`absolute bottom-0 left-0 right-0 bg-background border-t border-white/10 rounded-t-[2rem] shadow-2xl flex flex-col`}
+            className={`absolute bottom-0 left-0 right-0 lg:left-[var(--sidebar-w)] bg-background border-t border-white/10 rounded-t-[2rem] shadow-2xl flex flex-col`}
           >
             <div className="flex-shrink-0 w-full flex flex-col items-center pt-4 pb-2 z-10 bg-background rounded-t-[2rem] cursor-grab active:cursor-grabbing">
               <div className="w-8 h-1 rounded-full bg-white/20 mb-4" />

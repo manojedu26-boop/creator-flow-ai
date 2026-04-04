@@ -293,24 +293,28 @@ const Onboarding = () => {
 
                 {/* STEP 2: NICHES */}
                 {currentStep === 2 && (
-                   <div className="w-full h-full flex flex-col h-full overflow-hidden">
-                      <div className="text-center space-y-2 mb-10 shrink-0">
-                        <h2 className="text-4xl font-black uppercase tracking-tighter text-slate-950">Intelligence Scope</h2>
-                        <p className="text-xs font-black uppercase tracking-widest text-slate-400">Map your specialized creative domain (Select up to 3).</p>
+                   <div className="w-full max-w-4xl flex flex-col items-center">
+                      <div className="text-center space-y-3 mb-12 shrink-0">
+                        <h2 className="text-5xl font-black uppercase tracking-tighter text-slate-950">Specialist Domain</h2>
+                        <p className="text-sm font-black uppercase tracking-[0.2em] text-slate-400">Calibrate your creative focus (Select up to 3).</p>
                       </div>
 
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-1 overflow-y-auto no-scrollbar pb-10">
+                      <div className="grid grid-cols-2 lg:grid-cols-3 gap-5 w-full">
                          {niches.map(n => (
                            <button
                               key={n.label}
                               onClick={() => toggleNiche(n.label)}
-                              className={`p-8 rounded-[2.5rem] border text-center transition-all duration-300 relative overflow-hidden group active:scale-95 ${selectedNiches.includes(n.label) ? "border-blue-600 bg-white shadow-xl shadow-blue-500/10 ring-1 ring-blue-600" : "border-slate-100 bg-slate-50 hover:bg-white hover:border-blue-200"}`}
+                              className={`p-10 rounded-[3rem] border transition-all duration-500 relative overflow-hidden group active:scale-95 ${selectedNiches.includes(n.label) ? "border-blue-600 bg-white shadow-2xl shadow-blue-500/10 ring-1 ring-blue-600" : "border-slate-100 bg-slate-50/50 backdrop-blur-sm hover:bg-white hover:border-blue-200"}`}
                            >
-                              <div className={`w-14 h-14 rounded-[1.8rem] mx-auto flex items-center justify-center mb-5 transition-all ${selectedNiches.includes(n.label) ? "bg-blue-600 text-white shadow-lg" : "bg-white border border-slate-100 text-slate-300"}`}>
-                                 <n.icon className="w-7 h-7" />
+                              <div className={`w-20 h-20 rounded-[2rem] mx-auto flex items-center justify-center mb-6 transition-all duration-500 ${selectedNiches.includes(n.label) ? "bg-blue-600 text-white shadow-xl scale-110" : "bg-white border border-slate-100 text-slate-300 group-hover:scale-105"}`}>
+                                 <n.icon className="w-10 h-10" />
                               </div>
-                              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-950 leading-none">{n.label}</p>
-                              {selectedNiches.includes(n.label) && <Check className="absolute top-6 right-6 w-4 h-4 text-blue-600" />}
+                              <p className="text-[11px] font-black uppercase tracking-[0.3em] text-slate-950 leading-none">{n.label}</p>
+                              {selectedNiches.includes(n.label) && (
+                                <div className="absolute top-8 right-8 w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center shadow-lg transform scale-110">
+                                   <Check className="w-4 h-4" />
+                                </div>
+                              )}
                            </button>
                          ))}
                       </div>
