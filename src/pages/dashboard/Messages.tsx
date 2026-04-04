@@ -236,7 +236,7 @@ export const Messages = () => {
 
   return (
     <PageTransition>
-      <div className="flex h-[calc(100vh-var(--header-h)-var(--bottom-nav-h)-2.5rem)] -mx-[var(--page-px)] -mt-4 overflow-hidden bg-slate-50 relative">
+      <div className="flex h-[calc(100vh-var(--header-h)-var(--bottom-nav-h)-2.5rem)] -mx-[var(--page-px)] -mt-4 overflow-hidden bg-white relative">
         <div className="absolute top-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-500/5 blur-[120px] rounded-full pointer-events-none" />
         <div className="absolute bottom-[-10%] left-[-10%] w-[30%] h-[30%] bg-indigo-500/5 blur-[100px] rounded-full pointer-events-none" />
 
@@ -244,11 +244,11 @@ export const Messages = () => {
           "w-full lg:w-[400px] border-r border-slate-200 flex flex-col h-full bg-white z-10 shrink-0 shadow-sm transition-all",
           isMobileChatOpen ? "hidden lg:flex" : "flex"
         )}>
-          <div className="p-6 md:p-8 space-y-6 border-b border-slate-100">
+          <div className="p-6 md:p-8 space-y-6 border-b border-slate-50 bg-white">
             <div className="flex items-center justify-between">
               <h2 className="text-2xl font-black uppercase tracking-tighter text-slate-900 flex items-center gap-3">
-                Inbox
-                <span className="px-3 py-1 rounded-full bg-blue-50 text-blue-600 text-[9px] font-black border border-blue-100 uppercase tracking-widest">Live Sync</span>
+                Signal <span className="text-blue-600">Sync</span>
+                <span className="px-3 py-1 rounded-full bg-blue-50 text-blue-600 text-[8px] font-black border border-blue-100 uppercase tracking-widest">Live Network</span>
               </h2>
               <div className="w-10 h-10 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-400 hover:text-blue-600 hover:border-blue-200 transition-all cursor-pointer shadow-sm">
                 <Filter className="w-4 h-4" />
@@ -258,23 +258,23 @@ export const Messages = () => {
             <div className="relative">
               <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
               <input
-                placeholder="Find creator or brand..."
+                placeholder="Query network or branding..."
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
-                className="w-full h-14 bg-slate-50 border border-slate-100 rounded-[1.5rem] pl-12 pr-4 text-sm font-bold focus:outline-none focus:ring-1 focus:ring-blue-600 focus:bg-white transition-all shadow-inner placeholder:text-slate-400"
+                className="w-full h-14 bg-slate-50 border border-slate-50 rounded-[1.5rem] pl-12 pr-4 text-xs font-black uppercase tracking-tight focus:outline-none focus:ring-1 focus:ring-blue-600 focus:bg-white transition-all shadow-inner placeholder:text-slate-400"
               />
             </div>
 
-            <div className="flex gap-1.5 bg-slate-50 p-1.5 rounded-[1.5rem] border border-slate-100 shadow-inner">
+            <div className="flex gap-1 bg-slate-50 p-1.5 rounded-[1.5rem] border border-slate-100 shadow-inner">
               {(["brands", "dms", "comments"] as Tab[]).map(t => (
                 <button
                   key={t}
                   onClick={() => setActiveTab(t)}
-                  className={`flex-1 py-3 rounded-2xl text-[9px] font-black uppercase tracking-[0.15em] transition-all ${
+                  className={`flex-1 py-3 rounded-2xl text-[8px] font-black uppercase tracking-[0.15em] transition-all ${
                     activeTab === t ? "bg-slate-900 text-white shadow-xl" : "text-slate-400 hover:text-slate-900"
                   }`}
                 >
-                  {t === "dms" ? "Network" : t === "brands" ? "Brands" : "Audience"}
+                  {t === "dms" ? "Creator" : t === "brands" ? "Corporate" : "Audience"}
                 </button>
               ))}
             </div>
@@ -436,15 +436,18 @@ export const Messages = () => {
                     </div>
                     <div className={cn("max-w-[75%] space-y-2 flex flex-col", msg.from === "me" ? "items-end" : "items-start")}>
                       <div className={cn(
-                        "px-7 py-4 rounded-[2rem] text-[15px] leading-relaxed font-semibold shadow-sm transition-all",
+                        "px-7 py-5 rounded-[2.5rem] text-[15px] leading-relaxed font-bold shadow-sm transition-all relative overflow-hidden group/bubble",
                         msg.from === "me"
                           ? "bg-blue-600 text-white rounded-br-none shadow-blue-500/10"
-                          : "bg-white border border-slate-200 text-slate-800 rounded-bl-none"
+                          : "bg-white border border-slate-100 text-slate-800 rounded-bl-none"
                       )}>
+                        {msg.from === "me" && (
+                          <div className="absolute top-0 right-0 w-24 h-24 bg-white/5 blur-[20px] rounded-full pointer-events-none" />
+                        )}
                         {msg.text}
                       </div>
-                      <div className={cn("flex items-center gap-2 px-2", msg.from === "me" ? "flex-row-reverse" : "")}>
-                        <span className="text-[10px] font-black uppercase text-slate-400 tracking-widest">{msg.time}</span>
+                      <div className={cn("flex items-center gap-2 px-4", msg.from === "me" ? "flex-row-reverse" : "")}>
+                        <span className="text-[9px] font-black uppercase text-slate-400 tracking-[0.2em]">{msg.time}</span>
                         {msg.from === "me" && msg.status && (
                           <span className="text-[10px]">
                             {msg.status === "sending" && <Loader2 className="w-3.5 h-3.5 animate-spin text-slate-300" />}
@@ -468,14 +471,14 @@ export const Messages = () => {
               )}>
                 <input
                   ref={inputRef}
-                  placeholder={isAiGenerating ? "AI is processing your optimal response..." : "Type your message... (Shift + Enter for new line)"}
+                  placeholder={isAiGenerating ? "AI is processing optimal strategy response..." : "Type strategy message..."}
                   value={replyText}
                   onChange={e => setReplyText(e.target.value)}
                   onKeyDown={e => e.key === "Enter" && !e.shiftKey && handleSend()}
                   disabled={isAiGenerating}
-                  className="flex-1 bg-transparent focus:outline-none text-sm font-bold text-slate-900 placeholder:text-slate-400 disabled:opacity-50"
+                  className="flex-1 bg-transparent focus:outline-none text-[13px] font-black text-slate-900 placeholder:text-slate-400 disabled:opacity-50 tracking-tight"
                 />
-                <div className="flex items-center gap-5 text-slate-400 border-l border-slate-200 pl-5 ml-2">
+                <div className="flex items-center gap-5 text-slate-300 border-l border-slate-100 pl-5 ml-2">
                   <Paperclip className="hidden sm:block w-5 h-5 hover:text-blue-600 transition-colors cursor-pointer" />
                   <Smile className="w-5 h-5 hover:text-blue-600 transition-colors cursor-pointer" />
                 </div>
@@ -483,7 +486,7 @@ export const Messages = () => {
               <button
                 onClick={handleSend}
                 disabled={!replyText.trim() || isAiGenerating}
-                className="w-16 h-16 bg-slate-900 text-white rounded-3xl shadow-xl shadow-slate-500/10 hover:bg-blue-600 transition-all flex items-center justify-center group disabled:opacity-40 shrink-0 active:scale-95"
+                className="w-16 h-16 bg-slate-900 text-white rounded-3xl shadow-xl shadow-slate-200 hover:bg-blue-600 transition-all flex items-center justify-center group disabled:opacity-40 shrink-0 active:scale-95"
               >
                 <Send className="w-6 h-6 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
               </button>

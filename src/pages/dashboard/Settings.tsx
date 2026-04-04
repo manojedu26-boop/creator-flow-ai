@@ -51,11 +51,11 @@ export const Settings = () => {
       <div className="max-w-6xl mx-auto space-y-10 pb-24">
         {/* Header Section */}
         <div className="flex flex-col gap-2">
-            <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.3em] text-blue-600 mb-1">
-               System Configuration
+            <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.4em] text-blue-600 mb-2">
+               System Architecture v4.0
             </div>
-            <h1 className="text-4xl md:text-5xl font-black tracking-tighter uppercase text-slate-900 leading-none">
-              Control <span className="text-blue-600">Center</span>
+            <h1 className="text-4xl md:text-6xl font-black tracking-tighter uppercase text-slate-900 leading-none">
+              Control <span className="text-blue-600">Core</span>
             </h1>
         </div>
 
@@ -110,18 +110,18 @@ export const Settings = () => {
                             {user?.photo ? (
                               <img src={user.photo} alt={user.name} className="w-full h-full object-cover" />
                             ) : (
-                              user?.name[0]
+                              user?.name?.[0] || 'C'
                             )}
                          </div>
-                         <button className="absolute -bottom-2 -right-2 p-3.5 bg-blue-600 text-white rounded-2xl shadow-xl hover:bg-slate-900 transition-all active:scale-90 border-4 border-white">
-                            <Camera className="w-5 h-5" />
+                         <button className="absolute -bottom-2 -right-2 p-3 bg-blue-600 text-white rounded-2xl shadow-xl hover:bg-slate-900 transition-all active:scale-90 border-4 border-white">
+                            <Camera className="w-4 h-4" />
                          </button>
                       </div>
-                      <div className="flex-1 text-center md:text-left space-y-2">
+                      <div className="flex-1 text-center md:text-left space-y-3">
                          <h3 className="text-3xl font-black tracking-tighter text-slate-900 uppercase leading-none">{user?.name}</h3>
-                         <p className="text-sm font-bold text-slate-400">@{user?.handle?.replace('@', '')}</p>
-                         <div className="inline-flex px-4 py-1.5 rounded-full bg-blue-50 text-blue-600 border border-blue-100 text-[10px] font-black uppercase tracking-[0.2em]">
-                            Verified {user?.niche} Authority
+                         <p className="text-[11px] font-black text-slate-400 uppercase tracking-widest">Digital Identifier: @{user?.handle?.replace('@', '')}</p>
+                         <div className="inline-flex px-4 py-1.5 rounded-full bg-blue-50 text-blue-600 border border-blue-100 text-[9px] font-black uppercase tracking-[0.2em]">
+                            Verified {user?.niche} Expert
                          </div>
                       </div>
                     </div>
@@ -133,8 +133,8 @@ export const Settings = () => {
                         { label: "Creator Handle", icon: Sparkles, key: "handle", prefix: "@" },
                         { label: "Domain Focus", icon: Activity, key: "niche", type: "select", options: ["Fitness", "Lifestyle", "Beauty", "Tech", "Food", "Travel", "Finance", "Gaming", "Fashion", "Other"] }
                       ].map(field => (
-                        <div key={field.key} className="space-y-4">
-                          <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 px-2">{field.label}</label>
+                        <div key={field.key} className="space-y-3">
+                          <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 px-2">{field.label}</label>
                           <div className="relative group/input">
                             {field.icon && <field.icon className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300 group-focus-within/input:text-blue-600 transition-colors" />}
                             {field.prefix && <span className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300 font-black group-focus-within/input:text-blue-600 transition-colors">{field.prefix}</span>}
@@ -319,19 +319,21 @@ export const Settings = () => {
                      
                      <div className="flex flex-col md:flex-row items-center justify-between relative z-10 gap-8">
                         <div className="text-center md:text-left">
-                           <p className="text-[10px] font-black uppercase text-blue-400 tracking-[0.4em] mb-4">Subscription Matrix</p>
-                           <h3 className="text-5xl font-black text-white tracking-tighter uppercase leading-none">CreatorForge <span className="text-blue-500">Pro</span></h3>
+                           <p className="text-[10px] font-black uppercase text-blue-400 tracking-[0.5em] mb-4">Account Tier Status</p>
+                           <h3 className="text-5xl font-black text-white tracking-tighter uppercase leading-none italic italic-bold">CreatorForge <span className="text-blue-500 underline decoration-4 underline-offset-8">PRO</span></h3>
                         </div>
                         <div className="text-center md:text-right">
-                           <p className="text-4xl font-black text-white tracking-tight">$29<span className="text-sm font-bold text-white/40 uppercase">/month</span></p>
-                           <p className="text-[10px] font-black text-white/30 uppercase tracking-widest mt-2">Next Cycle: April 22, 2026</p>
+                           <p className="text-5xl font-black text-white tracking-tight leading-none">$29<span className="text-[10px] font-black text-white/30 uppercase tracking-widest ml-2">/per billing cycle</span></p>
+                           <p className="text-[10px] font-black text-blue-500 uppercase tracking-[0.2em] mt-4 flex items-center justify-center md:justify-end gap-2">
+                             <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" /> Next Cycle: April 22, 2026
+                           </p>
                         </div>
                      </div>
                      
                      <div className="flex flex-col sm:flex-row gap-4 mt-12 relative z-10">
-                        <button className="flex-1 h-16 rounded-[1.5rem] bg-blue-600 text-white font-black uppercase tracking-[0.3em] text-[11px] shadow-2xl shadow-blue-500/20 hover:bg-blue-700 hover:scale-[1.02] transition-all">Sychronize Plan</button>
-                        <button className="px-10 h-16 rounded-[1.5rem] bg-white/5 border border-white/10 text-white font-black uppercase tracking-[0.3em] text-[11px] flex items-center justify-center gap-3 hover:bg-white/10 transition-all">
-                           <Receipt className="w-5 h-5 text-blue-400" /> Archive
+                        <button className="flex-1 h-16 rounded-[1.5rem] bg-blue-600 text-white font-black uppercase tracking-[0.4em] text-[10px] shadow-2xl shadow-blue-500/40 hover:bg-blue-700 hover:scale-[1.02] transition-all">Sychronize Matrix</button>
+                        <button className="px-10 h-16 rounded-[1.5rem] bg-white/5 border border-white/10 text-white font-black uppercase tracking-[0.4em] text-[10px] flex items-center justify-center gap-3 hover:bg-white/10 transition-all">
+                           <Receipt className="w-5 h-5 text-blue-400" /> Ledger Archive
                         </button>
                      </div>
                   </div>
