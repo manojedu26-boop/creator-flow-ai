@@ -111,15 +111,16 @@ const Hero = () => {
             {/* Visual Stream Mockup */}
             <div className="mt-8 grid grid-cols-3 gap-6 opacity-40 grayscale group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700">
                <div className="h-48 rounded-[2rem] bg-slate-100 overflow-hidden relative">
-                  <img src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=600&auto=format&fit=crop" className="w-full h-full object-cover" />
+                  <img src="https://images.unsplash.com/photo-1611224923853-80b023f02d71?q=80&w=600&auto=format&fit=crop" className="w-full h-full object-cover" alt="Instagram" />
+                  <div className="absolute inset-0 bg-pink-500/10" />
+               </div>
+               <div className="h-48 rounded-[2rem] bg-slate-100 overflow-hidden relative">
+                  <img src="https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?q=80&w=600&auto=format&fit=crop" className="w-full h-full object-cover" alt="YouTube" />
+                  <div className="absolute inset-0 bg-red-600/10" />
+               </div>
+               <div className="h-48 rounded-[2rem] bg-slate-100 overflow-hidden relative">
+                  <img src="https://images.unsplash.com/photo-1611162618263-afc29ed16982?q=80&w=600&auto=format&fit=crop" className="w-full h-full object-cover" alt="Facebook" />
                   <div className="absolute inset-0 bg-blue-600/10" />
-               </div>
-               <div className="h-48 rounded-[2rem] bg-slate-100 overflow-hidden relative">
-                  <img src="https://images.unsplash.com/photo-1611162616305-c69b3fa7fbe0?q=80&w=600&auto=format&fit=crop" className="w-full h-full object-cover" />
-               </div>
-               <div className="h-48 rounded-[2rem] bg-slate-100 overflow-hidden relative">
-                  <img src="https://images.unsplash.com/photo-1611162618071-b39a2ec05525?q=80&w=600&auto=format&fit=crop" className="w-full h-full object-cover" />
-                  <div className="absolute inset-0 bg-slate-950/10" />
                </div>
             </div>
           </div>

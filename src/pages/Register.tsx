@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
-import { Sparkles, ArrowLeft, Mail, Lock, User, ChevronRight, Eye, EyeOff, Chrome, Briefcase, Zap, Stars } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Sparkles, ArrowLeft, Mail, Lock, User, ChevronRight, Eye, EyeOff, Chrome, Briefcase, Zap, Stars, CheckCircle2, Search, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "@/components/ui/sonner";
 import { useAuth } from "../contexts/AuthContext";
@@ -25,7 +25,10 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [view, setView] = useState<"options" | "email">("options");
+  const [showGooglePicker, setShowGooglePicker] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [selectedGoogleAccount, setSelectedGoogleAccount] = useState<null | number>(null);
 
   const strength = getPasswordStrength(password);
 
@@ -78,8 +81,83 @@ const Register = () => {
     setTimeout(() => navigate("/onboarding"), 1100);
   };
 
+  const googleAccounts = [
+    { name: "Naveen Kumar", email: "naveen.k@gmail.com", image: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=100&h=100&fit=crop" },
+    { name: "Creator Lab", email: "lab@creatorforge.ai", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop" },
+  ];
+
+  const handleGoogleSelect = (index: number) => {
+    setSelectedGoogleAccount(index);
+    setTimeout(() => {
+      setShowGooglePicker(false);
+      register(googleAccounts[index].name, googleAccounts[index].email);
+      toast.success("Identity Verified via Google", { description: `Welcome back, ${googleAccounts[index].name.split(' ')[0]}.` });
+      navigate("/onboarding");
+    }, 1200);
+  };
+
   return (
     <div className="min-h-screen bg-white flex items-center justify-center px-6 relative overflow-hidden font-sans py-20">
+      {/* Google Picker Modal Mockup */}
+      <AnimatePresence>
+        {showGooglePicker && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center px-6">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowGooglePicker(false)}
+              className="absolute inset-0 bg-slate-950/40 backdrop-blur-md" 
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="relative w-full max-w-[400px] bg-white rounded-[2.5rem] shadow-2xl overflow-hidden"
+            >
+              <div className="p-8 border-b border-slate-100 flex items-center justify-between">
+                <div>
+                  <h3 className="text-xl font-black text-slate-950">Choose an account</h3>
+                  <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mt-1">to continue to CreatorForge</p>
+                </div>
+                <button onClick={() => setShowGooglePicker(false)} className="w-10 h-10 rounded-full hover:bg-slate-100 flex items-center justify-center transition-colors">
+                  <X className="w-5 h-5 text-slate-400" />
+                </button>
+              </div>
+              <div className="p-4 space-y-2">
+                {googleAccounts.map((acc, i) => (
+                  <button
+                    key={acc.email}
+                    onClick={() => handleGoogleSelect(i)}
+                    disabled={selectedGoogleAccount !== null}
+                    className="w-full flex items-center gap-4 p-4 rounded-2xl hover:bg-slate-50 transition-all text-left relative group"
+                  >
+                    <img src={acc.image} className="w-10 h-10 rounded-full bg-slate-200 object-cover" />
+                    <div className="flex-1">
+                      <p className="text-sm font-bold text-slate-950">{acc.name}</p>
+                      <p className="text-xs text-slate-500">{acc.email}</p>
+                    </div>
+                    {selectedGoogleAccount === i ? (
+                      <div className="w-5 h-5 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+                    ) : (
+                      <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-blue-600 transition-colors" />
+                    )}
+                  </button>
+                ))}
+                <button className="w-full flex items-center gap-4 p-4 rounded-2xl hover:bg-slate-50 transition-all text-left">
+                  <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center">
+                    <User className="w-5 h-5 text-slate-400" />
+                  </div>
+                  <span className="text-sm font-bold text-slate-950">Use another account</span>
+                </button>
+              </div>
+              <div className="p-8 bg-slate-50 border-t border-slate-100 text-[10px] text-slate-400 leading-relaxed font-bold">
+                To continue, Google will share your name, email address, language preference, and profile picture with CreatorForge.
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
       {/* High-Fidelity Ambient Background */}
       <div className="absolute top-0 left-0 w-full h-full pointer-events-none -z-10">
         <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-blue-50 rounded-full blur-[120px] opacity-40 animate-pulse" />
@@ -105,154 +183,211 @@ const Register = () => {
           <p className="text-slate-500 font-bold text-lg">Join 5,000+ creators scaling their empire.</p>
         </div>
 
-        <div className="rounded-[2.5rem] md:rounded-[3rem] bg-white/80 backdrop-blur-2xl border border-slate-200/60 p-10 md:p-12 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.05)] space-y-8 relative overflow-hidden group">
-          <div className="absolute top-0 left-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity pointer-events-none">
-             <Stars className="w-20 h-20 text-blue-600" />
-          </div>
+        <AnimatePresence mode="wait">
+          {view === "options" ? (
+            <motion.div
+              key="options"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              className="rounded-[2.5rem] md:rounded-[3rem] bg-white/80 backdrop-blur-2xl border border-slate-200/60 p-10 md:p-12 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.05)] space-y-6 relative overflow-hidden group"
+            >
+              <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity pointer-events-none">
+                 <Stars className="w-20 h-20 text-blue-600" />
+              </div>
 
-          {/* Google OAuth - Premium SDK Look */}
-          <button
-            type="button"
-            onClick={() => {
-              toast.info("Google Sign-Up", { description: "Connecting to Google... (simulated)" });
-              setTimeout(() => { register("Google User", "googleuser@gmail.com"); navigate("/onboarding"); }, 1500);
-            }}
-            className="w-full h-16 rounded-2xl bg-white border border-slate-200/80 text-[11px] font-black uppercase tracking-[0.2em] text-slate-950 flex items-center justify-center gap-4 hover:border-blue-500 hover:shadow-xl hover:shadow-blue-500/10 transition-all active:scale-[0.98] disabled:opacity-50 relative group/google overflow-hidden"
-          >
-            <div className="absolute inset-0 bg-blue-50/0 group-hover/google:bg-blue-50/50 transition-colors" />
-            <Chrome className="w-5 h-5 text-blue-500 relative z-10 transition-transform group-hover/google:scale-110" />
-            <span className="relative z-10">Deploy Account via Google SDK</span>
-          </button>
+              <div className="mb-8">
+                <h2 className="text-2xl font-black uppercase tracking-tight text-slate-950 mb-2">Initialize Hub</h2>
+                <p className="text-slate-500 font-bold text-sm">Select your preferred authentication node.</p>
+              </div>
 
-          <div className="flex items-center gap-4 text-[10px] font-black text-slate-300 uppercase tracking-[0.3em]">
-            <div className="h-px flex-1 bg-slate-100" />
-            DIRECT REGISTRATION
-            <div className="h-px flex-1 bg-slate-100" />
-          </div>
-
-          {/* Account Type */}
-          <div className="space-y-3">
-            <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 ml-1">Operative Role</label>
-            <div className="grid grid-cols-2 gap-4">
-              {(["Creator", "Brand"] as const).map(t => (
+              <div className="space-y-4">
+                {/* Google OAuth Option */}
                 <button
-                  key={t}
                   type="button"
-                  onClick={() => setAccountType(t)}
-                  className={`h-14 rounded-2xl border text-[11px] font-black uppercase tracking-[0.2em] flex items-center justify-center gap-3 transition-all ${accountType === t ? "bg-slate-950 border-slate-950 text-white shadow-xl shadow-slate-200 scale-[1.02]" : "bg-slate-50 border-slate-200 text-slate-400 hover:border-blue-300 hover:text-slate-950"}`}
+                  onClick={() => setShowGooglePicker(true)}
+                  className="w-full h-24 rounded-3xl bg-white border border-slate-200/80 p-6 flex items-center gap-6 hover:border-blue-500 hover:shadow-xl hover:shadow-blue-500/10 transition-all active:scale-[0.98] group/opt overflow-hidden relative"
                 >
-                  {t === "Creator" ? <Sparkles className="w-4 h-4" /> : <Briefcase className="w-4 h-4" />}
-                  {t}
+                  <div className="absolute inset-0 bg-blue-50/0 group-hover/opt:bg-blue-50/50 transition-colors" />
+                  <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100 group-hover/opt:bg-white group-hover/opt:border-blue-200 transition-all relative z-10">
+                    <Chrome className="w-6 h-6 text-blue-500 group-hover/opt:scale-110 transition-transform" />
+                  </div>
+                  <div className="text-left relative z-10 flex-1">
+                    <p className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-950 mb-1">Sync with Google Intelligence</p>
+                    <p className="text-[10px] text-slate-400 font-bold">Fastest deployment • Zero config</p>
+                  </div>
+                  <ChevronRight className="w-5 h-5 text-slate-300 group-hover/opt:translate-x-1 group-hover/opt:text-blue-600 transition-all relative z-10" />
                 </button>
-              ))}
-            </div>
-          </div>
 
-          <form onSubmit={handleRegister} className="space-y-6" noValidate>
-            {/* Full Name */}
-            <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 ml-1">Full Identity</label>
-              <div className="relative">
-                <User className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 transition-colors" />
-                <input
-                  type="text"
-                  value={name}
-                  onChange={e => { setName(e.target.value); if (errors.name) setErrors(p => { const n = { ...p }; delete n.name; return n; }); }}
-                  onBlur={() => handleBlur("name", name)}
-                  placeholder="Operative Name"
-                  className={`w-full h-16 rounded-2xl bg-slate-50 border pl-14 pr-6 text-sm font-bold text-slate-950 placeholder:text-slate-300 focus:outline-none focus:ring-2 transition-all ${errors.name ? "border-rose-300 focus:ring-rose-500/10" : "border-slate-200 focus:ring-blue-600/10"}`}
-                />
-              </div>
-              {errors.name && <p className="text-rose-500 text-[10px] font-black uppercase tracking-wider pl-1 mt-1">{errors.name}</p>}
-            </div>
-
-            {/* Email */}
-            <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 ml-1">Intelligence Link (Email)</label>
-              <div className="relative">
-                <Mail className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 transition-colors" />
-                <input
-                  type="email"
-                  value={email}
-                  onChange={e => { setEmail(e.target.value); if (errors.email) setErrors(p => { const n = { ...p }; delete n.email; return n; }); }}
-                  onBlur={() => handleBlur("email", email)}
-                  placeholder="contact@domain.com"
-                  className={`w-full h-16 rounded-2xl bg-slate-50 border pl-14 pr-6 text-sm font-bold text-slate-950 placeholder:text-slate-300 focus:outline-none focus:ring-2 transition-all ${errors.email ? "border-rose-300 focus:ring-rose-500/10" : "border-slate-200 focus:ring-blue-600/10"}`}
-                />
-              </div>
-              {errors.email && <p className="text-rose-500 text-[10px] font-black uppercase tracking-wider pl-1 mt-1">{errors.email}</p>}
-            </div>
-
-            {/* Password */}
-            <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 ml-1">Security Protocol (Password)</label>
-              <div className="relative">
-                <Lock className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 transition-colors" />
-                <input
-                  type={showPassword ? "text" : "password"}
-                  value={password}
-                  onChange={e => { setPassword(e.target.value); if (errors.password) setErrors(p => { const n = { ...p }; delete n.password; return n; }); }}
-                  onBlur={() => handleBlur("password", password)}
-                  placeholder="Min. 8 characters"
-                  className={`w-full h-16 rounded-2xl bg-slate-50 border pl-14 pr-14 text-sm font-bold text-slate-950 placeholder:text-slate-300 focus:outline-none focus:ring-2 transition-all ${errors.password ? "border-rose-300 focus:ring-rose-500/10" : "border-slate-200 focus:ring-blue-600/10"}`}
-                />
-                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-400 hover:text-blue-600 transition-colors">
-                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                {/* Email Option */}
+                <button
+                  type="button"
+                  onClick={() => setView("email")}
+                  className="w-full h-24 rounded-3xl bg-white border border-slate-200/80 p-6 flex items-center gap-6 hover:border-slate-950 hover:shadow-xl hover:shadow-slate-200 transition-all active:scale-[0.98] group/opt overflow-hidden relative"
+                >
+                  <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100 group-hover/opt:bg-slate-950 group-hover/opt:border-slate-950 transition-all relative z-10">
+                    <Mail className="w-6 h-6 text-slate-400 group-hover/opt:text-white group-hover/opt:scale-110 transition-all" />
+                  </div>
+                  <div className="text-left relative z-10 flex-1">
+                    <p className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-950 mb-1">Initialize via Direct Email</p>
+                    <p className="text-[10px] text-slate-400 font-bold">Standard secure protocol</p>
+                  </div>
+                  <ChevronRight className="w-5 h-5 text-slate-300 group-hover/opt:translate-x-1 group-hover/opt:text-slate-950 transition-all relative z-10" />
                 </button>
               </div>
-              {/* Strength indicator */}
-              {password.length > 0 && (
-                <div className="space-y-2 px-1">
-                  <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
-                    <motion.div
-                      className={`h-full rounded-full ${(strength as any).barColor}`}
-                      initial={{ width: 0 }}
-                      animate={{ width: strength.width }}
-                      transition={{ duration: 0.3 }}
+
+              <div className="pt-8 text-center">
+                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-300">
+                  Secured by CreatorForge Quantum Guard
+                </p>
+              </div>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="email"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              className="rounded-[2.5rem] md:rounded-[3rem] bg-white/80 backdrop-blur-2xl border border-slate-200/60 p-10 md:p-12 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.05)] space-y-8 relative overflow-hidden group"
+            >
+              <button 
+                onClick={() => setView("options")}
+                className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-slate-950 transition-colors mb-4"
+              >
+                <ArrowLeft className="w-3.5 h-3.5" /> Switch Auth Protocol
+              </button>
+
+              <div className="absolute top-0 left-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity pointer-events-none">
+                 <Stars className="w-20 h-20 text-blue-600" />
+              </div>
+
+              {/* Account Type */}
+              <div className="space-y-3">
+                <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 ml-1">Operative Role</label>
+                <div className="grid grid-cols-2 gap-4">
+                  {(["Creator", "Brand"] as const).map(t => (
+                    <button
+                      key={t}
+                      type="button"
+                      onClick={() => setAccountType(t)}
+                      className={`h-14 rounded-2xl border text-[11px] font-black uppercase tracking-[0.2em] flex items-center justify-center gap-3 transition-all ${accountType === t ? "bg-slate-950 border-slate-950 text-white shadow-xl shadow-slate-200 scale-[1.02]" : "bg-slate-50 border-slate-200 text-slate-400 hover:border-blue-300 hover:text-slate-950"}`}
+                    >
+                      {t === "Creator" ? <Sparkles className="w-4 h-4" /> : <Briefcase className="w-4 h-4" />}
+                      {t}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <form onSubmit={handleRegister} className="space-y-6" noValidate>
+                {/* Full Name */}
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 ml-1">Full Identity</label>
+                  <div className="relative">
+                    <User className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 transition-colors" />
+                    <input
+                      type="text"
+                      value={name}
+                      onChange={e => { setName(e.target.value); if (errors.name) setErrors(p => { const n = { ...p }; delete n.name; return n; }); }}
+                      onBlur={() => handleBlur("name", name)}
+                      placeholder="Operative Name"
+                      className={`w-full h-16 rounded-2xl bg-slate-50 border pl-14 pr-6 text-sm font-bold text-slate-950 placeholder:text-slate-300 focus:outline-none focus:ring-2 transition-all ${errors.name ? "border-rose-300 focus:ring-rose-500/10" : "border-slate-200 focus:ring-blue-600/10"}`}
                     />
                   </div>
-                  <p className={`text-[9px] font-black uppercase tracking-[0.2em] ${strength.color}`}>{strength.label} Strength Detected</p>
+                  {errors.name && <p className="text-rose-500 text-[10px] font-black uppercase tracking-wider pl-1 mt-1">{errors.name}</p>}
                 </div>
-              )}
-              {errors.password && <p className="text-rose-500 text-[10px] font-black uppercase tracking-wider pl-1 mt-1">{errors.password}</p>}
-            </div>
 
-            {/* Confirm Password */}
-            <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 ml-1">Verify Protocol</label>
-              <div className="relative">
-                <Lock className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-                <input
-                  type={showConfirm ? "text" : "password"}
-                  value={confirmPassword}
-                  onChange={e => { setConfirmPassword(e.target.value); if (errors.confirmPassword) setErrors(p => { const n = { ...p }; delete n.confirmPassword; return n; }); }}
-                  onBlur={() => handleBlur("confirmPassword", confirmPassword)}
-                  placeholder="Repeat protocol"
-                  className={`w-full h-16 rounded-2xl bg-slate-50 border pl-14 pr-14 text-sm font-bold text-slate-950 placeholder:text-slate-300 focus:outline-none focus:ring-2 transition-all ${errors.confirmPassword ? "border-rose-300 focus:ring-rose-500/10" : "border-slate-200 focus:ring-blue-600/10"}`}
-                />
-                <button type="button" onClick={() => setShowConfirm(!showConfirm)} className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-400 hover:text-blue-600 transition-colors">
-                  {showConfirm ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                {/* Email */}
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 ml-1">Intelligence Link (Email)</label>
+                  <div className="relative">
+                    <Mail className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 transition-colors" />
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={e => { setEmail(e.target.value); if (errors.email) setErrors(p => { const n = { ...p }; delete n.email; return n; }); }}
+                      onBlur={() => handleBlur("email", email)}
+                      placeholder="contact@domain.com"
+                      className={`w-full h-16 rounded-2xl bg-slate-50 border pl-14 pr-6 text-sm font-bold text-slate-950 placeholder:text-slate-300 focus:outline-none focus:ring-2 transition-all ${errors.email ? "border-rose-300 focus:ring-rose-500/10" : "border-slate-200 focus:ring-blue-600/10"}`}
+                    />
+                  </div>
+                  {errors.email && <p className="text-rose-500 text-[10px] font-black uppercase tracking-wider pl-1 mt-1">{errors.email}</p>}
+                </div>
+
+                {/* Password */}
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 ml-1">Security Protocol (Password)</label>
+                  <div className="relative">
+                    <Lock className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 transition-colors" />
+                    <input
+                      type={showPassword ? "text" : "password"}
+                      value={password}
+                      onChange={e => { setPassword(e.target.value); if (errors.password) setErrors(p => { const n = { ...p }; delete n.password; return n; }); }}
+                      onBlur={() => handleBlur("password", password)}
+                      placeholder="Min. 8 characters"
+                      className={`w-full h-16 rounded-2xl bg-slate-50 border pl-14 pr-14 text-sm font-bold text-slate-950 placeholder:text-slate-300 focus:outline-none focus:ring-2 transition-all ${errors.password ? "border-rose-300 focus:ring-rose-500/10" : "border-slate-200 focus:ring-blue-600/10"}`}
+                    />
+                    <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-400 hover:text-blue-600 transition-colors">
+                      {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                    </button>
+                  </div>
+                  {/* Strength indicator */}
+                  {password.length > 0 && (
+                    <div className="space-y-2 px-1">
+                      <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+                        <motion.div
+                          className={`h-full rounded-full ${(strength as any).barColor}`}
+                          initial={{ width: 0 }}
+                          animate={{ width: strength.width }}
+                          transition={{ duration: 0.3 }}
+                        />
+                      </div>
+                      <p className={`text-[9px] font-black uppercase tracking-[0.2em] ${strength.color}`}>{strength.label} Strength Detected</p>
+                    </div>
+                  )}
+                  {errors.password && <p className="text-rose-500 text-[10px] font-black uppercase tracking-wider pl-1 mt-1">{errors.password}</p>}
+                </div>
+
+                {/* Confirm Password */}
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 ml-1">Verify Protocol</label>
+                  <div className="relative">
+                    <Lock className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                    <input
+                      type={showConfirm ? "text" : "password"}
+                      value={confirmPassword}
+                      onChange={e => { setConfirmPassword(e.target.value); if (errors.confirmPassword) setErrors(p => { const n = { ...p }; delete n.confirmPassword; return n; }); }}
+                      onBlur={() => handleBlur("confirmPassword", confirmPassword)}
+                      placeholder="Repeat protocol"
+                      className={`w-full h-16 rounded-2xl bg-slate-50 border pl-14 pr-14 text-sm font-bold text-slate-950 placeholder:text-slate-300 focus:outline-none focus:ring-2 transition-all ${errors.confirmPassword ? "border-rose-300 focus:ring-rose-500/10" : "border-slate-200 focus:ring-blue-600/10"}`}
+                    />
+                    <button type="button" onClick={() => setShowConfirm(!showConfirm)} className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-400 hover:text-blue-600 transition-colors">
+                      {showConfirm ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                    </button>
+                  </div>
+                  {errors.confirmPassword && <p className="text-rose-500 text-[10px] font-black uppercase tracking-wider pl-1 mt-1">{errors.confirmPassword}</p>}
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="w-full h-16 mt-6 rounded-2xl bg-slate-950 text-white font-black uppercase tracking-[0.3em] text-[11px] shadow-2xl shadow-slate-200 hover:bg-blue-600 hover:shadow-blue-500/20 active:scale-[0.98] transition-all flex items-center justify-center gap-3 disabled:opacity-70"
+                >
+                  {isLoading ? (
+                    <><div className="w-5 h-5 border-[3px] border-white/20 border-t-white rounded-full animate-spin" /> Finalizing account...</>
+                  ) : (<>Establish Identity <ChevronRight className="w-4 h-4" /></>)}
                 </button>
-              </div>
-              {errors.confirmPassword && <p className="text-rose-500 text-[10px] font-black uppercase tracking-wider pl-1 mt-1">{errors.confirmPassword}</p>}
-            </div>
+              </form>
 
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="w-full h-16 mt-6 rounded-2xl bg-slate-950 text-white font-black uppercase tracking-[0.3em] text-[11px] shadow-2xl shadow-slate-200 hover:bg-blue-600 hover:shadow-blue-500/20 active:scale-[0.98] transition-all flex items-center justify-center gap-3 disabled:opacity-70"
-            >
-              {isLoading ? (
-                <><div className="w-5 h-5 border-[3px] border-white/20 border-t-white rounded-full animate-spin" /> Finalizing account...</>
-              ) : (<>Establish Identity <ChevronRight className="w-4 h-4" /></>)}
-            </button>
-          </form>
-
-          <p className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400 text-center pt-4">
-            Existing operative?{" "}
-            <button onClick={() => navigate("/login")} className="text-blue-600 hover:underline">Re-Initialize Session</button>
-          </p>
-        </div>
+              <p className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400 text-center pt-4">
+                Existing operative?{" "}
+                <button onClick={() => navigate("/login")} className="text-blue-600 hover:underline">Re-Initialize Session</button>
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.div>
     </div>
   );
