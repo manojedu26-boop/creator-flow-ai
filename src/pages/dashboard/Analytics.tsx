@@ -192,7 +192,7 @@ export const Analytics = () => {
       <motion.div variants={staggerItem} className="premium-card bg-white border border-slate-200 rounded-[2.5rem] shadow-sm relative overflow-hidden group">
         <div className="absolute inset-0 bg-mesh-primary opacity-40 group-hover:opacity-60 transition-opacity duration-700 pointer-events-none" />
         
-        <div className="relative z-10 p-[var(--card-p)] space-y-8">
+        <div className="relative z-10 p-[var(--card-p)] space-y-4 md:space-y-6">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div>
               <div className="flex items-center gap-2 mb-2">
@@ -235,8 +235,9 @@ export const Analytics = () => {
             </div>
           </div>
 
-          <div className="h-[340px] w-full -mx-4">
-             <GrowthChart data={snapshots} />
+          <div className="h-[280px] md:h-[320px] w-full rounded-2xl bg-slate-50/50 border border-slate-50 overflow-hidden relative group/chart">
+              <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-white to-transparent opacity-50" />
+              <GrowthChart data={snapshots} />
           </div>
           
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pb-4">

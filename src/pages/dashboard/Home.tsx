@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { 
   ChevronRight, Zap, Network,
   TrendingUp, Search, 
@@ -56,6 +56,9 @@ export const Home = () => {
     { platform: 'TikTok', followers: '31,500', growth: '+492 this week', engagement: '5.1%', status: 'Healthy', color: 'bg-slate-900' },
   ];
 
+  const [isBriefOpen, setIsBriefOpen] = useState(false);
+  const [isDiscoveryOpen, setIsDiscoveryOpen] = useState(false);
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -94,7 +97,74 @@ export const Home = () => {
   }
 
   return (
-    <PageTransition className="space-y-8 pb-24 lg:pb-12 h-screen overflow-y-auto no-scrollbar px-2">
+    <PageTransition className="space-y-8 pb-24 lg:pb-12 h-screen overflow-y-auto no-scrollbar px-2 relative">
+      {/* Modals & Overlays */}
+      <AnimatePresence>
+        {isBriefOpen && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+             <motion.div 
+               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+               onClick={() => setIsBriefOpen(false)}
+               className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" 
+             />
+             <motion.div 
+               initial={{ scale: 0.9, opacity: 0, y: 20 }} animate={{ scale: 1, opacity: 1, y: 0 }} exit={{ scale: 0.9, opacity: 0, y: 20 }}
+               className="relative w-full max-w-2xl bg-white rounded-[3rem] shadow-2xl overflow-hidden border border-slate-100"
+             >
+                <div className="p-8 md:p-12 space-y-8">
+                   <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                         <div className="w-12 h-12 rounded-2xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
+                            <Plus className="w-6 h-6 text-white" />
+                         </div>
+                         <h2 className="text-xl md:text-2xl font-black uppercase tracking-tight text-slate-950">Creator Launch Brief</h2>
+                      </div>
+                      <button onClick={() => setIsBriefOpen(false)} className="text-[10px] font-black uppercase tracking-widest text-slate-300 hover:text-slate-950 transition-colors">Close</button>
+                   </div>
+                   <div className="space-y-6">
+                      <div className="p-8 rounded-[2rem] bg-slate-50 border border-slate-100 space-y-4">
+                         <p className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-600">Active Campaign Phase</p>
+                         <h3 className="text-xl font-black text-slate-950 uppercase">Creator Warroom v2.4</h3>
+                         <div className="flex flex-col sm:flex-row gap-4">
+                            <button className="flex-1 h-12 rounded-xl bg-white border border-slate-200 text-[10px] font-black uppercase tracking-widest text-slate-950 hover:border-blue-600 transition-all">Schedule Content</button>
+                            <button className="flex-1 h-12 rounded-xl bg-slate-950 text-white text-[10px] font-black uppercase tracking-widest hover:bg-blue-600 transition-all">Generate Strategy</button>
+                         </div>
+                      </div>
+                   </div>
+                </div>
+             </motion.div>
+          </div>
+        )}
+
+        {isDiscoveryOpen && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+             <motion.div 
+               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+               onClick={() => setIsDiscoveryOpen(false)}
+               className="absolute inset-0 bg-slate-950/80 backdrop-blur-md" 
+             />
+             <motion.div 
+               initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.95, opacity: 0 }}
+               className="relative w-full max-w-4xl bg-white rounded-[4rem] shadow-2xl overflow-hidden"
+             >
+                <div className="p-8 md:p-16 space-y-12">
+                   <div className="space-y-4 text-center">
+                      <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tight text-slate-950">Neural Discovery Engine</h2>
+                      <p className="text-slate-400 font-bold uppercase tracking-[0.2em] text-xs">Accessing global creator intelligence</p>
+                   </div>
+                   <div className="relative">
+                      <Search className="absolute left-8 top-1/2 -translate-y-1/2 w-6 h-6 text-slate-300" />
+                      <input 
+                        type="text" 
+                        placeholder="Search trends or competitors..." 
+                        className="w-full h-20 rounded-[2rem] bg-slate-50 border border-slate-100 pl-20 pr-8 text-lg font-black text-slate-950 focus:outline-none focus:ring-4 focus:ring-blue-600/5 transition-all"
+                      />
+                   </div>
+                </div>
+             </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 mt-0">
         <div className="space-y-3">
           <motion.div 
@@ -130,40 +200,47 @@ export const Home = () => {
             >
               <RefreshIcon className={`w-5 h-5 md:w-6 md:h-6 ${isLoading ? 'animate-spin' : ''}`} />
             </button>
-            <button className="flex-[3] md:flex-none h-14 md:h-16 md:px-10 rounded-2xl md:rounded-[2rem] bg-white border border-slate-200 hover:border-blue-600 hover:scale-105 transition-all flex items-center justify-center gap-3 md:gap-4 font-black text-[10px] md:text-[11px] uppercase tracking-[0.2em] text-slate-950 shadow-xl shadow-slate-100 group">
+            <button 
+              onClick={() => setIsBriefOpen(true)}
+              className="flex-[3] md:flex-none h-14 md:h-16 md:px-10 rounded-2xl md:rounded-[2rem] bg-white border border-slate-200 hover:border-blue-600 hover:scale-105 transition-all flex items-center justify-center gap-3 md:gap-4 font-black text-[10px] md:text-[11px] uppercase tracking-[0.2em] text-slate-950 shadow-xl shadow-slate-100 group">
               <Plus className="w-4 h-4 md:w-5 md:h-5 text-blue-600 transition-transform group-hover:rotate-90" /> Launch Brief
             </button>
           </div>
-          <button className="h-14 md:h-16 md:px-10 rounded-2xl md:rounded-[2rem] bg-slate-950 text-white hover:bg-blue-600 hover:scale-105 transition-all flex items-center justify-center gap-3 md:gap-4 font-black text-[10px] md:text-[11px] uppercase tracking-[0.2em] shadow-2xl shadow-blue-900/20 active:scale-95">
+          <button 
+            onClick={() => setIsDiscoveryOpen(true)}
+            className="h-14 md:h-16 md:px-10 rounded-2xl md:rounded-[2rem] bg-slate-950 text-white hover:bg-blue-600 hover:scale-105 transition-all flex items-center justify-center gap-3 md:gap-4 font-black text-[10px] md:text-[11px] uppercase tracking-[0.2em] shadow-2xl shadow-blue-900/20 active:scale-95">
             <Search className="w-4 h-4 md:w-5 md:h-5" /> Data Discovery
           </button>
         </div>
       </header>
 
       {/* KPI Stats Strip */}
-      <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 md:gap-8">
+      {/* KPI Stats Strip — Perfect Alignment */}
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 md:gap-8 items-stretch">
         {stats.map((stat, i) => (
           <motion.div
             key={stat.label}
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: i * 0.05, type: "spring" }}
-            className="group relative overflow-hidden rounded-3xl md:rounded-[3rem] bg-white p-5 md:p-8 border border-slate-200 transition-all shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:shadow-blue-500/10 premium-card"
+            className="group relative overflow-hidden rounded-3xl md:rounded-[3rem] bg-white p-5 md:p-8 border border-slate-200 transition-all shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:shadow-blue-500/10 premium-card flex flex-col justify-between h-full min-h-[160px] md:min-h-[240px]"
           >
-            <div className={cn("p-3 md:p-5 rounded-2xl md:rounded-[1.5rem] w-fit mb-4 md:mb-8 shadow-inner transition-transform group-hover:scale-110", stat.bg, stat.color)}>
-              <stat.icon className="w-5 h-5 md:w-6 md:h-6" />
+            <div>
+              <div className={cn("p-3 md:p-5 rounded-2xl md:rounded-[1.5rem] w-fit mb-4 md:mb-8 shadow-inner transition-transform group-hover:scale-110", stat.bg, stat.color)}>
+                <stat.icon className="w-5 h-5 md:w-6 md:h-6" />
+              </div>
+              <div className="space-y-1 md:space-y-2">
+                <p className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.25em] text-slate-400">{stat.label}</p>
+                <div className="flex items-end gap-2">
+                  <h3 className="text-xl md:text-2xl lg:text-3xl font-black tracking-tighter text-slate-950 leading-none">
+                    <CountUp value={stat.value} prefix={stat.label === 'Est. Revenue' ? '₹ ' : ''} />
+                  </h3>
+                </div>
+              </div>
             </div>
-            <div className="space-y-1 md:space-y-2">
-              <p className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.25em] text-slate-400">{stat.label}</p>
-              <div className="flex items-end gap-2">
-                <h3 className="text-2xl md:text-4xl font-black tracking-tighter text-slate-950 leading-none">
-                  <CountUp value={stat.value} prefix={stat.label === 'Est. Revenue' ? '₹ ' : ''} />
-                </h3>
-              </div>
-              <div className={cn("inline-flex items-center gap-2 px-2 md:px-3 py-1 rounded-full text-[9px] md:text-[10px] font-black mt-2 md:mt-4", stat.up ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-blue-50 text-blue-600 border border-blue-100')}>
-                {stat.up ? <TrendingUp className="w-2.5 h-2.5 md:w-3 h-3" /> : <ChevronRight className="w-2.5 h-2.5 md:w-3 h-3" />}
-                {stat.delta}
-              </div>
+            <div className={cn("inline-flex items-center gap-2 px-2 md:px-3 py-1 rounded-full text-[9px] md:text-[10px] font-black mt-2 md:mt-4 w-fit shrink-0", stat.up ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-blue-50 text-blue-600 border border-blue-100')}>
+              {stat.up ? <TrendingUp className="w-2.5 h-2.5 md:w-3 h-3" /> : <ChevronRight className="w-2.5 h-2.5 md:w-3 h-3" />}
+              {stat.delta}
             </div>
           </motion.div>
         ))}
@@ -386,7 +463,14 @@ export const Home = () => {
                 ))}
              </div>
              
-             <button className="w-full mt-12 h-16 rounded-[2rem] bg-slate-950 text-white hover:bg-blue-600 hover:scale-[1.02] transition-all font-black text-[11px] uppercase tracking-[0.3em] shadow-2xl shadow-blue-900/20 active:scale-95">
+             <button 
+               onClick={() => {
+                 toast.success("Opening Management Console...", {
+                   description: "Calibrating financial intelligence for Q4..."
+                 });
+               }}
+               className="w-full mt-12 h-16 rounded-[2rem] bg-slate-950 text-white hover:bg-blue-600 hover:scale-[1.02] transition-all font-black text-[11px] uppercase tracking-[0.3em] shadow-2xl shadow-blue-900/20 active:scale-95"
+             >
                 Manage Economy
              </button>
           </div>

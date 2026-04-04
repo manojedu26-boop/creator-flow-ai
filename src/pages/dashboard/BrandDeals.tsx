@@ -4,7 +4,7 @@ import {
   Search, Filter, Plus, MoreVertical, Calendar, 
   DollarSign, Briefcase, MessageSquare, FileText, 
   Phone, AlertCircle, ChevronRight, ChevronDown, X, Sparkles,
-  Instagram, Youtube, Twitter, CheckCircle2,
+  Instagram, Youtube, Twitter, Facebook, CheckCircle2,
   Zap, Trash2, Mail, Download, History, ArrowRight
 } from "lucide-react";
 import { PageTransition } from "../../components/shared/MotionComponents";
@@ -142,10 +142,18 @@ export const BrandDeals = () => {
         </div>
         <div className="flex-1 min-w-0">
           <h4 className="font-black text-sm truncate uppercase tracking-tight text-slate-900">{deal.brand}</h4>
-          <div className="flex items-center gap-2 mt-1.5 overflow-x-auto no-scrollbar">
-            {deal.platforms.map(p => (
-              <span key={p} className="text-[8px] font-black px-2 py-0.5 rounded-lg bg-blue-50 text-blue-600 border border-blue-100 uppercase shrink-0">{p}</span>
-            ))}
+          <div className="flex items-center gap-2 mt-2">
+            {deal.platforms.map(p => {
+              const platform = p.toLowerCase();
+              return (
+                <div key={p} className="flex items-center justify-center w-6 h-6 rounded-lg bg-slate-50 border border-slate-100">
+                  {platform === 'instagram' || platform === 'ig' ? <Instagram className="w-3.5 h-3.5 text-pink-600" /> :
+                   platform === 'youtube' || platform === 'yt' ? <Youtube className="w-3.5 h-3.5 text-red-600" /> :
+                   platform === 'facebook' || platform === 'fb' ? <Facebook className="w-3.5 h-3.5 text-blue-600" /> :
+                   <Sparkles className="w-3.5 h-3.5 text-slate-400" />}
+                </div>
+              );
+            })}
           </div>
         </div>
         <button className="opacity-0 group-hover:opacity-100 p-2 hover:bg-slate-50 rounded-xl transition-all">
