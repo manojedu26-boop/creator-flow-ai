@@ -74,7 +74,7 @@ const GrowthChart = memo(({ data }: { data: any[] }) => (
       </defs>
       <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
       <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#64748b', fontWeight: '700' }} dy={10} />
-      <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#64748b', fontWeight: '700' }} />
+      <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#64748b', fontWeight: '700' }} domain={['auto', 'auto']} />
       <Tooltip 
         contentStyle={{ 
           backgroundColor: '#ffffff', 
@@ -143,7 +143,18 @@ export const Analytics = () => {
     const fetchData = () => {
       setIsLoading(true);
       setTimeout(() => {
-        const snaps = db.getAll<any>('analyticsSnapshots');
+        let snaps = db.getAll<any>('analyticsSnapshots');
+        if (snaps.length < 5) {
+          snaps = [
+            { name: "Day 1", ig: 45000, yt: 12000, tt: 29000 },
+            { name: "Day 5", ig: 45800, yt: 12200, tt: 29500 },
+            { name: "Day 10", ig: 46200, yt: 12350, tt: 30100 },
+            { name: "Day 15", ig: 47100, yt: 12500, tt: 31000 },
+            { name: "Day 20", ig: 47900, yt: 12650, tt: 31400 },
+            { name: "Day 25", ig: 48500, yt: 12800, tt: 32000 },
+            { name: "Day 30", ig: 49200, yt: 12900, tt: 32500 }
+          ];
+        }
         setSnapshots(snaps.slice(-30));
         setCompetitors(db.getAll<any>('competitors'));
         setIsLoading(false);
@@ -235,7 +246,7 @@ export const Analytics = () => {
             </div>
           </div>
 
-          <div className="h-[280px] md:h-[320px] w-full rounded-2xl bg-slate-50/50 border border-slate-50 overflow-hidden relative group/chart">
+          <div className="h-[200px] md:h-[240px] w-full rounded-2xl bg-slate-50/50 border border-slate-50 overflow-hidden relative group/chart">
               <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-white to-transparent opacity-50" />
               <GrowthChart data={snapshots} />
           </div>

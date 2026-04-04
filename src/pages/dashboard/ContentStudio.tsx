@@ -28,12 +28,12 @@ interface HistoryItem { id: string; type: string; text: string; date: string; pl
 // ── Tool Definitions ─────────────────────────────────────────────────────────
 const tools = [
   { id: "caption", icon: PenTool, label: "Caption Writer" },
-  { id: "script", icon: Video, label: "Script Generator" },
   { id: "hook", icon: Zap, label: "Hook Generator" },
   { id: "hashtag", icon: Hash, label: "Hashtag Engine" },
   { id: "audio", icon: Music, label: "Trending Audio" },
-  { id: "pitch", icon: Mail, label: "Brand Pitch Writer" },
+  { id: "script", icon: Video, label: "Script Generator" },
   { id: "reel", icon: Lightbulb, label: "Reel & Short Ideas" },
+  { id: "pitch", icon: Mail, label: "Brand Pitch Writer" },
   { id: "carousel", icon: Grid, label: "Carousel Builder" },
   { id: "thumbnail", icon: Layout, label: "Thumbnail Concept" },
   { id: "bio", icon: UserCircle, label: "Bio Optimizer" },
@@ -95,6 +95,35 @@ const SEED_SCRIPT = (): ScriptSection[] => [
   { act: "🎯 CTA", text: "Save this post if you're ready to be in that 1%. Drop a comment — what's your biggest block right now?", editing: false },
 ];
 
+const SEED_PITCH = (): string => `Hi [Brand Manager Name],
+
+I've been following [Brand Name]'s recent campaigns, and I love how you're leaning into [Specific Aesthetic/Value]. 
+
+With [My Follower Count] focused followers in the [My Niche] space, I've managed a [My Engagement Rate]% engagement rate this quarter. I'd love to propose a [Specific Content Format, e.g., 3-part Reel series] showcasing [Brand Product] integrated into my [Daily Routine/Content Category].
+
+Attached is my Media Kit. Let's discuss how we can drive [Specific Goal, e.g., brand awareness/conversions] for your upcoming launch.
+
+Best,
+[My Name]`;
+
+const SEED_REEL_IDEAS = (niche: string): any[] => [
+  { title: "The 3-Second Rule", concept: `Show 3 quick ${niche} mistakes in the first 3 seconds to trigger the 'wait, do I do that?' response.`, audio: "Trending: 'In This Shirt'" },
+  { title: "Day In The Life (POV)", concept: `Fast-cut POV of your ${niche} workflow. Use text overlays to explain the 'invisible work' nobody sees.`, audio: "Trending: 'Lofi Beats'" },
+  { title: "The Transformation Archive", concept: `Looping transition from 1 year ago vs. today. The hook: 'I almost quit at month 3.'`, audio: "Trending: 'Success Mantra'" },
+];
+
+const SEED_CAROUSEL = (topic: string): any[] => [
+  { slide: 1, title: "The Hook", content: `Why your ${topic || 'content'} isn't converting (and the 5-min fix).` },
+  { slide: 2, title: "The Problem", content: "Most people focus on quantity, but the algorithm craves 'Retention-Value Density'." },
+  { slide: 3, title: "The Solution", content: "Apply the '1-Post, 3-Wins' framework to every piece of static content." },
+  { slide: 4, title: "The CTA", content: "Save this for your next design session. Link in bio for the full template." },
+];
+
+const SEED_BIO = (niche: string): any[] => [
+  { platform: "SEO / Growth", text: `📍 Helping [Target Audience] master ${niche}\n📈 [Stat, e.g., 100K+] community builders\n🔗 Free [Lead Magnet] below!` },
+  { platform: "Creative / Minimal", text: `Narrating the ${niche} era.\nDigital Architect. [Location].\nNew series every Tuesday.` },
+];
+
 // ── Main Component ────────────────────────────────────────────────────────────
 export const ContentStudio = () => {
   const { user } = useAuth();
@@ -132,6 +161,20 @@ export const ContentStudio = () => {
 
   // Hook form state
   const [hookTopic, setHookTopic] = useState("");
+
+  // Other tool states
+  const [pitchResult, setPitchResult] = useState<string | null>(null);
+  const [reelIdeas, setReelIdeas] = useState<any[] | null>(null);
+  const [carouselSlides, setCarouselSlides] = useState<any[] | null>(null);
+  const [bioVariations, setBioVariations] = useState<any[] | null>(null);
+  const [thumbnailConcept, setThumbnailConcept] = useState<string | null>(null);
+
+  // Additional form states
+  const [brandName, setBrandName] = useState("");
+  const [pitchGoal, setPitchGoal] = useState("Long-term Partnership");
+  const [reelTopic, setReelTopic] = useState("");
+  const [carouselTopic, setCarouselTopic] = useState("");
+  const [bioNiche, setBioNiche] = useState("");
 
   // Hashtag form state
   const [hashtagInput, setHashtagInput] = useState("");
@@ -505,6 +548,198 @@ export const ContentStudio = () => {
     </div>
   );
 
+  const renderPitchWriter = () => (
+    <div className="space-y-10">
+      <div>
+        <h2 className="text-3xl font-black tracking-tight text-slate-900 uppercase">Brand <span className="text-blue-600">Pitcher</span></h2>
+        <p className="text-slate-400 text-[11px] font-black uppercase tracking-widest mt-2">Professional collaboration scripts to secure high-ticket deals</p>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-slate-50 p-8 rounded-[2.5rem] shadow-inner border border-slate-200/50">
+        <div className="space-y-3">
+          <label className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400">Target Brand Name</label>
+          <input placeholder="e.g. Nike, Adobe, Myntra..." value={brandName} onChange={e => setBrandName(e.target.value)} className="w-full h-14 bg-white border border-slate-200 rounded-2xl px-6 text-sm font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-100 shadow-sm" />
+        </div>
+        <div className="space-y-3">
+          <label className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400">Collaboration Goal</label>
+          <select value={pitchGoal} onChange={e => setPitchGoal(e.target.value)} className="w-full h-14 px-5 bg-white border border-slate-200 rounded-2xl text-[12px] font-black uppercase tracking-widest focus:outline-none text-slate-900 shadow-sm">
+            {["Long-term Partnership", "One-off Campaign", "Product Affiliate", "Event Invite"].map(g => <option key={g}>{g}</option>)}
+          </select>
+        </div>
+        <div className="md:col-span-2">
+          <button onClick={() => runGenerate(() => { setPitchResult(SEED_PITCH()); toast.success("Professional pitch locked!"); })} disabled={isGenerating} className="w-full py-5 bg-slate-900 text-white rounded-[2rem] font-black uppercase tracking-[0.2em] hover:bg-blue-600 transition-all flex items-center justify-center gap-3 shadow-xl shadow-blue-500/10">
+            {isGenerating ? <><Loader2 className="w-5 h-5 animate-spin" /> <span className="text-[11px] font-black tracking-widest">{thinkingMsg}</span></> : <><Mail className="w-5 h-5 text-blue-400" /> Draft Collaboration Email</>}
+          </button>
+        </div>
+      </div>
+      {pitchResult && !isGenerating && (
+        <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} className="space-y-6">
+          <div className="bg-white border border-slate-200 rounded-[2.5rem] p-10 shadow-sm relative group overflow-hidden">
+             <div className="absolute top-0 right-0 p-8 text-blue-600/5 group-hover:text-blue-600/10 transition-colors pointer-events-none">
+                <Mail className="w-24 h-24" />
+             </div>
+             <pre className="text-sm font-medium text-slate-700 whitespace-pre-wrap leading-relaxed font-sans">{pitchResult.replace(/\[Brand Name\]/g, brandName || "[Brand Name]")}</pre>
+             <div className="mt-10 flex gap-4">
+                <button onClick={() => handleCopy(pitchResult.replace(/\[Brand Name\]/g, brandName || "[Brand Name]"))} className="h-12 px-8 bg-slate-900 text-white rounded-xl text-[11px] font-black uppercase tracking-widest hover:bg-blue-600 transition-all flex items-center gap-3">
+                   <Copy className="w-4 h-4" /> Copy Email
+                </button>
+                <button onClick={() => saveToLibrary(pitchResult, "pitch")} className="h-12 px-8 bg-white border border-slate-200 text-slate-600 rounded-xl text-[11px] font-black uppercase tracking-widest hover:bg-slate-50 transition-all">
+                   Save to Vault
+                </button>
+             </div>
+          </div>
+        </motion.div>
+      )}
+    </div>
+  );
+
+  const renderReelIdeas = () => (
+    <div className="space-y-10">
+      <div>
+        <h2 className="text-3xl font-black tracking-tight text-slate-900 uppercase">Viral <span className="text-blue-600">Concepts</span></h2>
+        <p className="text-slate-400 text-[11px] font-black uppercase tracking-widest mt-2">Short-form storyboarding for maximum engagement spikes</p>
+      </div>
+      <div className="flex gap-4 bg-slate-50 border border-slate-200 p-4 rounded-[2.5rem] shadow-inner">
+        <input placeholder="Aesthetic / Theme (e.g. Gritty morning routine)..." value={reelTopic} onChange={e => setReelTopic(e.target.value)} className="flex-1 h-14 bg-transparent border-none px-6 text-sm font-bold text-slate-900 focus:outline-none" />
+        <button onClick={() => runGenerate(() => { setReelIdeas(SEED_REEL_IDEAS(niche)); toast.success("3 Production-Ready Concepts!"); })} disabled={isGenerating} className="h-14 px-8 bg-slate-900 text-white rounded-2xl font-black uppercase tracking-widest hover:bg-blue-600 transition-all shadow-xl shadow-blue-500/10">
+           Synthesize Concepts
+        </button>
+      </div>
+      {reelIdeas && !isGenerating && (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+           {reelIdeas.map((idea, i) => (
+             <motion.div key={i} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }} className="bg-white border border-slate-100 p-8 rounded-[2.5rem] space-y-6 hover:shadow-lg hover:border-blue-200 transition-all group">
+                <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600">
+                   <Lightbulb className="w-6 h-6" />
+                </div>
+                <h4 className="text-lg font-black text-slate-900 uppercase tracking-tighter leading-tight">{idea.title}</h4>
+                <p className="text-sm text-slate-500 font-medium leading-relaxed">{idea.concept}</p>
+                <div className="pt-4 border-t border-slate-50 flex flex-col gap-2">
+                   <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Recommended Sound</span>
+                   <span className="text-[10px] font-black uppercase tracking-widest text-blue-600 flex items-center gap-2"><Music className="w-3 h-3" /> {idea.audio}</span>
+                </div>
+                <button onClick={() => { setActiveTool("script"); setScriptTopic(idea.title); toast.info(`Starting script for: ${idea.title}`); }} className="w-full h-11 bg-slate-50 border border-slate-100 text-[10px] font-black uppercase rounded-xl hover:bg-blue-600 hover:text-white transition-all opacity-0 group-hover:opacity-100">
+                   Draft Script →
+                </button>
+             </motion.div>
+           ))}
+        </div>
+      )}
+    </div>
+  );
+
+  const renderCarouselBuilder = () => (
+    <div className="space-y-10">
+      <div>
+        <h2 className="text-3xl font-black tracking-tight text-slate-900 uppercase">Slide <span className="text-blue-600">Architect</span></h2>
+        <p className="text-slate-400 text-[11px] font-black uppercase tracking-widest mt-2">Educational carousels designed for 'Saves' and 'Shares'</p>
+      </div>
+      <div className="flex gap-4 bg-slate-50 border border-slate-200 p-4 rounded-[2.5rem] shadow-inner">
+        <input placeholder="Educational Topic (e.g. 5 steps to viral growth)..." value={carouselTopic} onChange={e => setCarouselTopic(e.target.value)} className="flex-1 h-14 bg-transparent border-none px-6 text-sm font-bold text-slate-900 focus:outline-none" />
+        <button onClick={() => runGenerate(() => { setCarouselSlides(SEED_CAROUSEL(carouselTopic)); toast.success("4-Slide Framework Generated!"); })} disabled={isGenerating} className="h-14 px-8 bg-slate-900 text-white rounded-2xl font-black uppercase tracking-widest hover:bg-blue-600 transition-all shadow-xl shadow-blue-500/10">
+           Build Sequence
+        </button>
+      </div>
+      {carouselSlides && !isGenerating && (
+        <div className="space-y-6">
+           <div className="flex overflow-x-auto gap-6 pb-6 no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
+              {carouselSlides.map((slide, i) => (
+                <motion.div key={i} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.1 }} className="min-w-[280px] w-[320px] bg-white border border-slate-100 rounded-[2.5rem] p-8 shadow-sm flex flex-col gap-6 group hover:border-blue-400 transition-all">
+                   <div className="flex items-center justify-between">
+                      <span className="w-10 h-10 rounded-full bg-slate-900 text-white flex items-center justify-center font-black text-xs">0{slide.slide}</span>
+                      <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">{slide.title}</span>
+                   </div>
+                   <div className="flex-1 flex items-center justify-center text-center p-4 bg-slate-50 rounded-2xl border border-slate-100 group-hover:bg-blue-50/50 group-hover:border-blue-100 transition-colors">
+                      <p className="text-lg font-black text-slate-900 uppercase tracking-tighter leading-tight">{slide.content}</p>
+                   </div>
+                   <div className="space-y-2">
+                      <div className="h-1 w-full bg-slate-100 rounded-full overflow-hidden">
+                         <div className="h-full bg-blue-600" style={{ width: `${(slide.slide/4) * 100}%` }} />
+                      </div>
+                      <p className="text-[9px] font-black text-slate-400 text-right uppercase tracking-[0.2em]">{slide.slide} / 4</p>
+                   </div>
+                </motion.div>
+              ))}
+           </div>
+           <button onClick={() => { handleCopy(carouselSlides.map(s => `Slide ${s.slide}: ${s.content}`).join("\n\n")); }} className="w-full h-14 bg-slate-900 text-white rounded-2xl font-black uppercase tracking-widest hover:bg-blue-600 transition-all shadow-xl shadow-blue-500/10">
+              Copy Full Slide Stack
+           </button>
+        </div>
+      )}
+    </div>
+  );
+
+  const renderThumbnailConcept = () => (
+    <div className="space-y-10">
+      <div>
+        <h2 className="text-3xl font-black tracking-tight text-slate-900 uppercase">Visual <span className="text-blue-600">Hooks</span></h2>
+        <p className="text-slate-400 text-[11px] font-black uppercase tracking-widest mt-2">Thumbnail composition and text-overlay strategies</p>
+      </div>
+      <div className="bg-slate-50 border border-slate-200 p-8 rounded-[2.5rem] flex flex-col items-center gap-8 shadow-inner">
+         <div className="w-16 h-16 rounded-full bg-blue-600 flex items-center justify-center text-white shadow-xl shadow-blue-500/20">
+            <Layout className="w-8 h-8" />
+         </div>
+         <div className="text-center space-y-2">
+            <h3 className="text-xl font-black text-slate-900 uppercase tracking-tighter">Strategic Packaging</h3>
+            <p className="text-sm font-medium text-slate-400 max-w-sm mx-auto leading-relaxed">Let AI analyze your topic and synthesize a high-CTR visual composition.</p>
+         </div>
+         <button onClick={() => runGenerate(() => { setThumbnailConcept(`BACKGROUND: Blurred high-energy gym studio with deep blue and orange neon light accents.\nSUBJECT: Center mid-shot, holding a 'Result' chart with a look of genuine surprise.\nOVERLAY TEXT: 'THE 5-MIN GLITCH' in bold, white uppercase with a slight shadow.\nSUB-OVERLAY: '(92% Fail This)' in smaller, yellow circular badge at bottom-right.\nCOMPOSITION: Rule of thirds. Focus on the facial expression + the 'Result' chart.`); toast.success("Visual Strategy Synthesized!"); })} disabled={isGenerating} className="w-full md:w-fit px-12 py-5 bg-slate-900 text-white rounded-[2rem] font-black uppercase tracking-[0.2em] hover:bg-blue-600 transition-all shadow-xl shadow-blue-500/10 active:scale-95">
+            Initialize Packaging Analysis
+         </button>
+      </div>
+      {thumbnailConcept && !isGenerating && (
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white border border-slate-200 rounded-[2.5rem] p-10 flex flex-col md:flex-row gap-10 shadow-sm group">
+           <div className="w-full md:w-[300px] h-[170px] bg-slate-950 rounded-3xl border border-slate-900 flex items-center justify-center relative overflow-hidden shrink-0">
+               <Sparkles className="w-12 h-12 text-blue-900 opacity-20" />
+               <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 to-transparent pointer-events-none" />
+               <div className="absolute top-4 left-4 bg-white/10 backdrop-blur-md border border-white/10 px-3 py-1.5 rounded-lg text-[10px] text-white font-black uppercase tracking-widest group-hover:bg-blue-600 transition-all">Visual Preview Pending</div>
+           </div>
+           <div className="flex-1 space-y-6">
+              <div className="flex items-center gap-3">
+                 <span className="w-2 h-2 rounded-full bg-blue-600" />
+                 <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Composition Directive</span>
+              </div>
+              <pre className="text-sm font-bold text-slate-700 whitespace-pre-wrap leading-relaxed font-sans">{thumbnailConcept}</pre>
+              <button onClick={() => handleCopy(thumbnailConcept)} className="h-11 px-6 bg-slate-50 border border-slate-200 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-blue-50 hover:text-blue-600 transition-all">
+                 Secure Directive
+              </button>
+           </div>
+        </motion.div>
+      )}
+    </div>
+  );
+
+  const renderBioOptimizer = () => (
+    <div className="space-y-10">
+      <div>
+        <h2 className="text-3xl font-black tracking-tight text-slate-900 uppercase">Profile <span className="text-blue-600">Oracle</span></h2>
+        <p className="text-slate-400 text-[11px] font-black uppercase tracking-widest mt-2">SEO-optimized bio variations for multi-platform conversion</p>
+      </div>
+      <div className="flex gap-4 bg-slate-50 border border-slate-200 p-4 rounded-[2.5rem] shadow-inner">
+        <input placeholder="Current Niche / Goal (e.g. Minimalist Home Fitness)..." value={bioNiche} onChange={e => setBioNiche(e.target.value)} className="flex-1 h-14 bg-transparent border-none px-6 text-sm font-bold text-slate-900 focus:outline-none" />
+        <button onClick={() => runGenerate(() => { setBioVariations(SEED_BIO(bioNiche)); toast.success("Bio Variations Calibrated!"); })} disabled={isGenerating} className="h-14 px-8 bg-slate-900 text-white rounded-2xl font-black uppercase tracking-widest hover:bg-blue-600 transition-all shadow-xl shadow-blue-500/10">
+           Optimize Profile
+        </button>
+      </div>
+      {bioVariations && !isGenerating && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+           {bioVariations.map((v, i) => (
+             <motion.div key={i} initial={{ opacity: 0, x: i % 2 === 0 ? -10 : 10 }} animate={{ opacity: 1, x: 0 }} className="bg-white border border-slate-100 p-8 rounded-[2.5rem] space-y-6 hover:border-blue-200 transition-all group shadow-sm">
+                <div className="flex items-center justify-between mb-4">
+                   <span className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-600">{v.platform}</span>
+                   <button onClick={() => handleCopy(v.text)} className="p-2.5 bg-slate-50 border border-slate-100 rounded-xl text-slate-400 hover:text-blue-600 transition-all shadow-sm">
+                      <Copy className="w-4 h-4" />
+                   </button>
+                </div>
+                <div className="p-6 bg-slate-50 rounded-2xl border border-slate-100 whitespace-pre-wrap text-[13px] font-bold text-slate-700 leading-relaxed font-sans shadow-inner group-hover:bg-blue-50/50 transition-colors">
+                   {v.text}
+                </div>
+             </motion.div>
+           ))}
+        </div>
+      )}
+    </div>
+  );
+
   const renderComingSoon = (toolId: ToolType) => (
     <div className="flex flex-col items-center justify-center h-[500px] text-center border-2 border-dashed border-white/10 rounded-3xl">
       <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
@@ -522,6 +757,11 @@ export const ContentStudio = () => {
       case "hook": return renderHookGenerator();
       case "hashtag": return <HashtagEnginePanel niche={niche} />;
       case "audio": return <TrendingAudioPanel onUseForReel={() => { setActiveTool("script"); toast.info("Cinematic Scripting Engine activated!"); }} />;
+      case "pitch": return renderPitchWriter();
+      case "reel": return renderReelIdeas();
+      case "carousel": return renderCarouselBuilder();
+      case "thumbnail": return renderThumbnailConcept();
+      case "bio": return renderBioOptimizer();
       default: return renderComingSoon(activeTool);
     }
   };
