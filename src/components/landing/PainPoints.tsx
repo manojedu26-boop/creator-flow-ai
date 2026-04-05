@@ -1,11 +1,15 @@
 import { motion } from "framer-motion";
-import { TrendingDown, Clock, DollarSign, BarChart3, Users, FileText, Megaphone, HelpCircle, XCircle, AlertCircle, Stars, Zap } from "lucide-react";
+import { TrendingDown, Clock, DollarSign, BarChart3, Users, FileText, Megaphone, HelpCircle, XCircle, AlertCircle, Stars, Zap, Handshake, Shield, Activity } from "lucide-react";
 
 const painPoints = [
   { icon: TrendingDown, title: "Inconsistent Growth", desc: "Follower count stuck? No idea what's working?" },
   { icon: Clock, title: "Planning Fatigue", desc: "Spending hours on content ideas and captions?" },
   { icon: DollarSign, title: "Revenue Leakage", desc: "Undercharging brands because you don't know your worth?" },
   { icon: BarChart3, title: "Data Overwhelm", desc: "Too many platforms, too many numbers to track?" },
+  { icon: Handshake, title: "Brand Friction", desc: "Managing pitches and contracts manually is a bottleneck." },
+  { icon: Shield, title: "Legal Blindspots", desc: "Are your contracts protecting your intellectual property?" },
+  { icon: Activity, title: "Content Burnout", desc: "Running out of ideas? Let the neural core suggest viral moves." },
+  { icon: Users, title: "Audience Silos", desc: "Your fans are scattered. We unify them into a single node." },
 ];
 
 const container = {
@@ -33,11 +37,11 @@ const PainPoints = () => (
         <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-[0.4em] text-blue-400 mb-10 shadow-2xl">
            <AlertCircle className="w-4 h-4" /> Systemic Bottlenecks
         </div>
-        <h2 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-[0.8] mb-10 text-white uppercase">
+        <h2 className="text-5xl md:text-7xl font-black tracking-tighter leading-[0.85] mb-10 text-white uppercase">
           The Creator <br />
           <span className="text-blue-500 font-black italic">Ceiling.</span>
         </h2>
-        <p className="text-slate-400 font-medium text-xl md:text-3xl max-w-3xl mx-auto leading-relaxed">
+        <p className="text-slate-400 font-medium text-lg md:text-2xl max-w-3xl mx-auto leading-relaxed">
           Most creators fail because they manually manage chaos. Intelligence is the only way through the noise.
         </p>
       </motion.div>

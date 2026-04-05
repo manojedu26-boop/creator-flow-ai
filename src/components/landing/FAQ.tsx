@@ -11,61 +11,65 @@ const faqs = [
   { q: "Do you publish directly to platform hubs?", a: "Where platform APIs permit high-fidelity direct publishing (Instagram and YouTube), yes. For TikTok, we prepare your content and provide precise timing notifications for manual execution." },
 ];
 
-const FAQ = () => (
-  <section className="py-32 md:py-48 px-6 bg-white relative overflow-hidden" id="faq">
-    <div className="absolute bottom-0 left-0 w-[30%] h-[30%] bg-blue-50/20 blur-[100px] rounded-full -z-10" />
-    
-    <div className="container max-w-4xl relative z-10">
-      <motion.div
-        className="text-center mb-24"
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-      >
-        <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-slate-50 border border-slate-100 text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 mb-8 shadow-sm">
-           <HelpCircle className="w-3.5 h-3.5" /> Operations Support
-        </div>
-        <h2 className="text-5xl md:text-8xl font-black tracking-tighter leading-none mb-8 text-slate-950 uppercase">
-          Intelligence <br />
-          <span className="text-blue-600 font-black">Support.</span>
-        </h2>
-        <p className="text-slate-500 font-bold text-lg md:text-2xl max-w-2xl mx-auto leading-relaxed">
-          Critical answers for your high-performance creator ecosystem.
-        </p>
-      </motion.div>
+const FAQ = () => {
+  return (
+    <section className="py-32 md:py-64 px-6 bg-slate-950 relative overflow-hidden" id="faq">
+      {/* Background Detail */}
+      <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-blue-500/10 to-transparent" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-600/5 blur-[120px] rounded-full pointer-events-none" />
+      
+      <div className="container max-w-4xl relative z-10">
+        <motion.div
+          className="text-center mb-32"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-[0.4em] text-blue-400 mb-10 shadow-2xl">
+             <HelpCircle className="w-4 h-4" /> Operations Support
+          </div>
+          <h2 className="text-5xl md:text-7xl font-black tracking-tighter leading-[0.85] mb-10 text-white uppercase">
+            Intelligence <br />
+            <span className="text-blue-500 font-black italic">Support.</span>
+          </h2>
+          <p className="text-slate-400 font-medium text-lg md:text-2xl max-w-2xl mx-auto leading-relaxed">
+            Critical answers for your high-performance creator ecosystem.
+          </p>
+        </motion.div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-        className="bg-slate-50/50 rounded-[3rem] p-8 md:p-12 border border-slate-100"
-      >
-        <Accordion type="single" collapsible className="space-y-4">
-          {faqs.map((faq, i) => (
-            <AccordionItem 
-              key={i} 
-              value={`faq-${i}`} 
-              className="rounded-[2rem] bg-white border border-slate-100 px-8 py-2 transition-all hover:border-blue-600 group"
-            >
-              <AccordionTrigger className="text-left font-black uppercase text-slate-950 tracking-tight hover:no-underline py-6">
-                <span className="flex items-center gap-4">
-                   <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600 font-black text-xs group-hover:bg-blue-600 group-hover:text-white transition-all">
-                      {i + 1}
-                   </div>
-                   {faq.q}
-                </span>
-              </AccordionTrigger>
-              <AccordionContent className="text-slate-500 font-bold text-[15px] leading-relaxed pb-8 pt-2 max-w-2xl border-t border-slate-50 mt-2">
-                {faq.a}
-              </AccordionContent>
-            </AccordionItem>
-          ))}
-        </Accordion>
-      </motion.div>
-    </div>
-  </section>
-);
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+          className="bg-slate-900/30 rounded-[3.5rem] p-8 md:p-14 border border-white/5 backdrop-blur-3xl shadow-2xl"
+        >
+          <Accordion type="single" collapsible className="space-y-6">
+            {faqs.map((faq, i) => (
+              <AccordionItem 
+                key={i} 
+                value={`faq-${i}`} 
+                className="rounded-[2.5rem] bg-white/5 border border-white/5 px-10 py-3 transition-all hover:border-blue-500/30 group overflow-hidden"
+              >
+                <AccordionTrigger className="text-left font-black uppercase text-white text-lg tracking-tight hover:no-underline py-8 md:py-10">
+                  <span className="flex items-center gap-6">
+                     <div className="w-10 h-10 rounded-xl bg-blue-600/10 flex items-center justify-center text-blue-400 font-extrabold text-sm group-hover:bg-blue-600 group-hover:text-white transition-all shadow-xl">
+                        {i + 1}
+                     </div>
+                     <span className="group-hover:text-blue-400 transition-colors">{faq.q}</span>
+                  </span>
+                </AccordionTrigger>
+                <AccordionContent className="text-slate-400 font-medium text-lg leading-relaxed pb-12 pt-4 max-w-2xl border-t border-white/5 mt-4 group-hover:text-slate-300 transition-colors">
+                  {faq.a}
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </motion.div>
+      </div>
+    </section>
+  );
+};
 
 export default FAQ;

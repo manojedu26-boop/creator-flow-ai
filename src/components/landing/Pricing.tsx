@@ -54,11 +54,11 @@ const Pricing = () => {
           <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-[0.4em] text-blue-400 mb-10 shadow-2xl">
              <Stars className="w-4 h-4" /> Investment Tiers
           </div>
-          <h2 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-[0.8] mb-10 text-white uppercase">
+          <h2 className="text-5xl md:text-7xl font-black tracking-tighter leading-[0.85] mb-10 text-white uppercase">
             Forge Your <br />
             <span className="text-blue-500 font-black italic">Legacy</span>
           </h2>
-          <p className="text-slate-400 font-medium text-xl md:text-3xl max-w-2xl mx-auto leading-relaxed">
+          <p className="text-slate-400 font-medium text-lg md:text-2xl max-w-2xl mx-auto leading-relaxed">
             Elite-tier intelligence for every phase of your creator evolution.
           </p>
         </motion.div>

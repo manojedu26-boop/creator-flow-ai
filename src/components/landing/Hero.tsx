@@ -13,7 +13,7 @@ const NeuralCore = () => {
   }, []);
 
   return (
-    <div className="relative w-full h-[400px] md:h-[600px] bg-slate-950/40 backdrop-blur-3xl rounded-[4rem] border border-white/5 overflow-hidden shadow-2xl group">
+    <div className="relative w-full h-[400px] md:h-[500px] bg-slate-950/40 backdrop-blur-3xl rounded-[4rem] border border-white/5 overflow-hidden shadow-2xl group">
       {/* Dynamic Grid Background */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:32px_32px]" />
       
@@ -112,7 +112,7 @@ const Hero = () => {
         </motion.div>
 
         <motion.h1
-          className="text-8xl md:text-9xl lg:text-[11rem] font-black tracking-tighter leading-[0.75] mb-12 text-white uppercase"
+          className="text-6xl md:text-8xl font-black tracking-tighter leading-[0.85] mb-12 text-white uppercase"
           initial={{ opacity: 0, scale: 0.9, y: 40 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
@@ -124,7 +124,7 @@ const Hero = () => {
         </motion.h1>
 
         <motion.p
-          className="text-xl md:text-3xl text-slate-400 max-w-4xl mx-auto mb-16 font-medium leading-relaxed italic"
+          className="text-lg md:text-2xl text-slate-400 max-w-4xl mx-auto mb-16 font-medium leading-relaxed italic"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
@@ -133,7 +133,7 @@ const Hero = () => {
         </motion.p>
 
         <motion.div
-          className="flex flex-col sm:flex-row items-center justify-center gap-8 mb-32"
+          className="flex flex-col sm:flex-row items-center justify-center gap-8 mb-16"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}

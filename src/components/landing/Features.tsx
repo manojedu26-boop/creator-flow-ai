@@ -38,17 +38,17 @@ const Features = () => (
         <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-blue-600/10 border border-blue-500/20 text-[10px] font-black uppercase tracking-[0.4em] text-blue-400 mb-10">
            <Sparkles className="w-4 h-4" /> The Intelligence Stack
         </div>
-        <h2 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-[0.8] mb-10 text-white uppercase">
+        <h2 className="text-5xl md:text-7xl font-black tracking-tighter leading-[0.85] mb-10 text-white uppercase">
           Elite <br />
-          <span className="text-blue-500">Architecture.</span>
+          <span className="text-blue-500 font-black italic">Architecture.</span>
         </h2>
-        <p className="text-slate-400 font-medium text-xl md:text-3xl max-w-2xl mx-auto leading-relaxed">
+        <p className="text-slate-400 font-medium text-lg md:text-2xl max-w-2xl mx-auto leading-relaxed">
           The most powerful workspace ever forged for professional creators. Pure technical edge.
         </p>
       </motion.div>
 
       <motion.div
-        className="grid grid-cols-1 md:grid-cols-3 gap-6"
+        className="grid grid-cols-1 md:grid-cols-6 gap-6"
         variants={container}
         initial="hidden"
         whileInView="show"
@@ -58,8 +58,8 @@ const Features = () => (
           <motion.div
             key={f.title}
             variants={item}
-            className={`group relative rounded-[3rem] bg-slate-900/40 backdrop-blur-3xl p-12 border border-white/5 flex flex-col transition-all cursor-default hover:border-blue-500/30 overflow-hidden ${
-              f.size === 'lg' ? 'md:col-span-2' : ''
+            className={`group relative rounded-[3rem] bg-slate-900/40 backdrop-blur-3xl p-10 border border-white/5 flex flex-col transition-all cursor-default hover:border-blue-500/30 overflow-hidden h-full ${
+              f.size === 'lg' ? 'md:col-span-4' : f.size === 'md' ? 'md:col-span-3' : 'md:col-span-2'
             }`}
           >
             <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
