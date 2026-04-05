@@ -10,6 +10,7 @@ import { AuthProvider } from "./contexts/AuthContext.tsx";
 import { ProtectedRoute } from "./components/shared/ProtectedRoute.tsx";
 import { ThemeProvider } from "next-themes";
 import { PulseProvider } from "./contexts/PulseContext.tsx";
+import { ExploreProvider } from "./contexts/ExploreContext.tsx";
 
 // Lazy-loaded components
 const Index = lazy(() => import("./pages/Index.tsx"));
@@ -24,6 +25,7 @@ const PublicMediaKit = lazy(() => import("./pages/PublicMediaKit.tsx"));
 const DashboardLayout = lazy(() => import("./components/dashboard/DashboardLayout.tsx").then(m => ({ default: m.DashboardLayout })));
 const DashboardHome = lazy(() => import("./pages/dashboard/Home.tsx").then(m => ({ default: m.Home })));
 const PulseFeed = lazy(() => import("./pages/dashboard/PulseFeed.tsx").then(m => ({ default: m.PulseFeed })));
+const Explore = lazy(() => import("./pages/dashboard/Explore.tsx").then(m => ({ default: m.Explore })));
 const Analytics = lazy(() => import("./pages/dashboard/Analytics.tsx").then(m => ({ default: m.Analytics })));
 const BrandDeals = lazy(() => import("./pages/dashboard/BrandDeals.tsx").then(m => ({ default: m.BrandDeals })));
 const ContentStudio = lazy(() => import("./pages/dashboard/ContentStudio.tsx").then(m => ({ default: m.ContentStudio })));
@@ -74,8 +76,9 @@ const App = () => {
           ) : (
             <AuthProvider>
               <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
-            <PulseProvider>
-              <BrowserRouter key="app">
+                <ExploreProvider>
+                  <PulseProvider>
+                    <BrowserRouter key="app">
                   <Suspense fallback={<PageLoader />}>
                     <Routes>
                       {/* Public Routes */}
@@ -91,6 +94,7 @@ const App = () => {
                       <Route element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
                         <Route path="/dashboard" element={<DashboardHome />} />
                         <Route path="/pulse" element={<PulseFeed />} />
+                        <Route path="/explore" element={<Explore />} />
                         <Route path="/analytics" element={<Analytics />} />
                         <Route path="/deals" element={<BrandDeals />} />
                         <Route path="/studio" element={<ContentStudio />} />
@@ -122,6 +126,7 @@ const App = () => {
                   </Suspense>
                 </BrowserRouter>
               </PulseProvider>
+              </ExploreProvider>
               </ThemeProvider>
             </AuthProvider>
           )}
