@@ -9,6 +9,7 @@ import { Intro } from "./components/shared/Intro.tsx";
 import { AuthProvider } from "./contexts/AuthContext.tsx";
 import { ProtectedRoute } from "./components/shared/ProtectedRoute.tsx";
 import { ThemeProvider } from "next-themes";
+import { PulseProvider } from "./contexts/PulseContext.tsx";
 
 // Lazy-loaded components
 const Index = lazy(() => import("./pages/Index.tsx"));
@@ -72,7 +73,8 @@ const App = () => {
           ) : (
             <AuthProvider>
               <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
-                <BrowserRouter key="app">
+            <PulseProvider>
+              <BrowserRouter key="app">
                   <Suspense fallback={<PageLoader />}>
                     <Routes>
                       {/* Public Routes */}
@@ -117,6 +119,7 @@ const App = () => {
                     </Routes>
                   </Suspense>
                 </BrowserRouter>
+              </PulseProvider>
               </ThemeProvider>
             </AuthProvider>
           )}

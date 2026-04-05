@@ -11,6 +11,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import { toast } from "../../components/ui/sonner";
 import { BottomSheet } from "../../components/ui/BottomSheet";
+import { PulseStrip } from "../../components/pulse/PulseStrip";
 
 interface Post {
   id: number;
@@ -109,7 +110,8 @@ export const Network = () => {
 
       {/* CENTRE PANE — FEED */}
       <div className="flex-1 overflow-y-auto bg-muted/5 p-8 no-scrollbar scroll-smooth">
-         <div className="max-w-2xl mx-auto space-y-6">
+         <div className="max-w-2xl mx-auto space-y-8">
+            <PulseStrip sticky />
             {/* AI assisted composer */}
             <div className="bg-card border border-border/40 rounded-[2rem] p-6 shadow-xl relative group">
                <div className="flex gap-4">

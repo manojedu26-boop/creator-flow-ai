@@ -166,6 +166,48 @@
 
   .no-scrollbar::-webkit-scrollbar { display: none; }
   .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+  /* PULSE RE-ANIMATIONS */
+  @keyframes pulse-ring {
+    0%, 100% {
+      opacity: 1;
+      transform: scale(1);
+      box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.4);
+    }
+    50% {
+      opacity: 0.8;
+      transform: scale(1.03);
+      box-shadow: 0 0 20px 2px rgba(79, 70, 229, 0.2);
+    }
+  }
+
+  .animate-pulse-ring {
+    animation: pulse-ring 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  .pulse-unread {
+    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+    padding: 3px;
+  }
+
+  .pulse-brand {
+    background: linear-gradient(to right, #fbbf24, #d97706);
+    padding: 3px;
+  }
+
+  .pulse-read {
+    background: #e2e8f0;
+    padding: 2px;
+  }
+
+  /* STORY VIEWER PROGRESS */
+  .story-progress-container {
+    @apply h-1 flex-1 bg-white/20 rounded-full overflow-hidden;
+  }
+
+  .story-progress-fill {
+    @apply h-full bg-white transition-all duration-100 ease-linear;
+  }
 }
 
 /* NPROGRESS GLOBAL BAR STYLING */

@@ -15,6 +15,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { db } from "../../lib/db";
 import { cn } from "../../lib/utils";
 import confetti from "canvas-confetti";
+import { PulseStrip } from "../../components/pulse/PulseStrip";
 
 const SystemStatus = () => (
   <div className="flex items-center gap-3 px-5 py-2.5 bg-emerald-50/30 border border-emerald-100/50 rounded-full shadow-sm backdrop-blur-md animate-in fade-in slide-in-from-top-4 duration-1000">
@@ -268,6 +269,8 @@ export const Home = () => {
           </button>
         </Magnetic>
       </div>
+
+      <PulseStrip className="px-2" sticky />
 
       {/* KPI Stats — Ambient Layering */}
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-6 md:gap-10 items-stretch px-2">
