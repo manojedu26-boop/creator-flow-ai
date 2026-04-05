@@ -126,7 +126,7 @@ const Onboarding = () => {
         onboarded: true,
         niche: selectedNiches[0]
       });
-      navigate("/dashboard");
+      navigate("/pulse");
     }, 3000);
   };
 

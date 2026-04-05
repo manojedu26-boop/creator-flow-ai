@@ -23,6 +23,7 @@ const PublicMediaKit = lazy(() => import("./pages/PublicMediaKit.tsx"));
 
 const DashboardLayout = lazy(() => import("./components/dashboard/DashboardLayout.tsx").then(m => ({ default: m.DashboardLayout })));
 const DashboardHome = lazy(() => import("./pages/dashboard/Home.tsx").then(m => ({ default: m.Home })));
+const PulseFeed = lazy(() => import("./pages/dashboard/PulseFeed.tsx").then(m => ({ default: m.PulseFeed })));
 const Analytics = lazy(() => import("./pages/dashboard/Analytics.tsx").then(m => ({ default: m.Analytics })));
 const BrandDeals = lazy(() => import("./pages/dashboard/BrandDeals.tsx").then(m => ({ default: m.BrandDeals })));
 const ContentStudio = lazy(() => import("./pages/dashboard/ContentStudio.tsx").then(m => ({ default: m.ContentStudio })));
@@ -89,6 +90,7 @@ const App = () => {
                       {/* Post-Login CreatorForge Architecture */}
                       <Route element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
                         <Route path="/dashboard" element={<DashboardHome />} />
+                        <Route path="/pulse" element={<PulseFeed />} />
                         <Route path="/analytics" element={<Analytics />} />
                         <Route path="/deals" element={<BrandDeals />} />
                         <Route path="/studio" element={<ContentStudio />} />

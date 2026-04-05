@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { 
   Home, BarChart3, Sparkles, Calendar, User, 
   Menu, Briefcase, Settings, LogOut, ChevronRight,
-  Target, Globe, Wallet, Shield
+  Target, Globe, Wallet, Shield, Activity
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -12,6 +12,7 @@ import { useAuth } from "../../contexts/AuthContext";
 
 const mainNavItems = [
   { icon: Home, label: "Home", href: "/dashboard" },
+  { icon: Activity, label: "Pulse", href: "/pulse" },
   { icon: BarChart3, label: "Analytics", href: "/analytics" },
   { icon: Sparkles, label: "Studio", href: "/studio" },
   { icon: Calendar, label: "Calendar", href: "/calendar" },

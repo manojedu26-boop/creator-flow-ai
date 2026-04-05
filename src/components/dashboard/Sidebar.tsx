@@ -6,7 +6,7 @@ import {
   TrendingUp, Globe, DollarSign, ShieldCheck, Palette,
   MessageSquare, Bell, Settings, Sparkles,
   LogOut, Instagram, Youtube, Play, User, RefreshCcw,
-  ChevronRight
+  ChevronRight, Activity
 } from "lucide-react";
 import { useAuth } from "../../contexts/AuthContext";
 import { db } from "../../lib/db";
@@ -15,6 +15,7 @@ import { cn } from "../../lib/utils";
 
 export const navItems = [
   { icon: Home,         label: "Home",              href: "/dashboard" },
+  { icon: Activity,     label: "Pulse",             href: "/pulse", badge: "🔴" },
   { icon: BarChart3,    label: "Analytics",         href: "/analytics" },
   { icon: Handshake,    label: "Brand Deals",       href: "/deals" },
   { icon: BrainCircuit, label: "AI Studio",         href: "/studio" },

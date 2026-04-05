@@ -15,6 +15,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { db } from "../../lib/db";
 import { cn } from "../../lib/utils";
 import confetti from "canvas-confetti";
+import { PulseWidget } from "../../components/pulse/PulseWidget";
 import { PulseStrip } from "../../components/pulse/PulseStrip";
 
 const SystemStatus = () => (
@@ -459,6 +460,8 @@ export const Home = () => {
               </div>
             </div>
           </div>
+
+          <PulseWidget />
 
           {/* Platform Health Section */}
           <div className="rounded-[4rem] bg-white border border-slate-100 p-12 shadow-2xl shadow-slate-100/50">
