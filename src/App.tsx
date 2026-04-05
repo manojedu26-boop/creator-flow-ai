@@ -71,7 +71,7 @@ const App = () => {
             <Intro key="intro" onComplete={() => setShowIntro(false)} />
           ) : (
             <AuthProvider>
-              <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
+              <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
                 <BrowserRouter key="app">
                   <Suspense fallback={<PageLoader />}>
                     <Routes>

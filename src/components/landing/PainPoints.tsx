@@ -1,52 +1,49 @@
 import { motion } from "framer-motion";
-import { TrendingDown, Clock, DollarSign, BarChart3, Users, FileText, Megaphone, HelpCircle, XCircle, AlertCircle, Stars } from "lucide-react";
+import { TrendingDown, Clock, DollarSign, BarChart3, Users, FileText, Megaphone, HelpCircle, XCircle, AlertCircle, Stars, Zap } from "lucide-react";
 
 const painPoints = [
   { icon: TrendingDown, title: "Inconsistent Growth", desc: "Follower count stuck? No idea what's working?" },
   { icon: Clock, title: "Planning Fatigue", desc: "Spending hours on content ideas and captions?" },
   { icon: DollarSign, title: "Revenue Leakage", desc: "Undercharging brands because you don't know your worth?" },
   { icon: BarChart3, title: "Data Overwhelm", desc: "Too many platforms, too many numbers to track?" },
-  { icon: Users, title: "Collab Friction", desc: "Struggling to find the right partners for growth?" },
-  { icon: FileText, title: "Static Media Kits", desc: "Still sending outdated PDFs to high-tier brands?" },
-  { icon: Megaphone, title: "Pitch Anxiety", desc: "Template emails getting ignored by top agencies?" },
-  { icon: HelpCircle, title: "Posting Blinds", desc: "No predictive strategy for your next 30 days?" },
 ];
 
 const container = {
   hidden: {},
-  show: { transition: { staggerChildren: 0.05 } },
+  show: { transition: { staggerChildren: 0.1 } },
 };
 
 const item = {
-  hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] as any } },
+  hidden: { opacity: 0, scale: 0.95, y: 30 },
+  show: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] as any } },
 };
 
 const PainPoints = () => (
-  <section className="py-32 md:py-48 px-6 bg-slate-50 relative overflow-hidden">
-    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-600 via-slate-950 to-blue-600 opacity-10" />
+  <section className="py-32 md:py-64 px-6 bg-slate-950 relative overflow-hidden">
+    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[1px] bg-gradient-to-r from-transparent via-blue-500/20 to-transparent" />
+    
     <div className="container max-w-7xl relative z-10">
       <motion.div
-        className="text-center mb-32"
+        className="text-center mb-40"
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
       >
-        <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white border border-slate-200 text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 mb-8 shadow-sm">
-           <AlertCircle className="w-3.5 h-3.5" /> Market Challenges
+        <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-[0.4em] text-blue-400 mb-10 shadow-2xl">
+           <AlertCircle className="w-4 h-4" /> Systemic Bottlenecks
         </div>
-        <h2 className="text-5xl md:text-8xl font-black tracking-tighter leading-none mb-8 text-slate-950 uppercase">
-          Every Creator Hits <br />
-          These <span className="text-blue-600 font-black">Walls.</span>
+        <h2 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-[0.8] mb-10 text-white uppercase">
+          The Creator <br />
+          <span className="text-blue-500 font-black italic">Ceiling.</span>
         </h2>
-        <p className="text-slate-500 font-bold text-lg md:text-2xl max-w-2xl mx-auto leading-relaxed">
-          Stop struggling with the manual grind. CreatorForge AI provides the technical edge to break through.
+        <p className="text-slate-400 font-medium text-xl md:text-3xl max-w-3xl mx-auto leading-relaxed">
+          Most creators fail because they manually manage chaos. Intelligence is the only way through the noise.
         </p>
       </motion.div>
 
       <motion.div
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8"
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
         variants={container}
         initial="hidden"
         whileInView="show"
@@ -56,21 +53,28 @@ const PainPoints = () => (
           <motion.div
             key={p.title}
             variants={item}
-            className="group rounded-[2.5rem] bg-white p-8 border border-slate-100 transition-all hover:bg-slate-950 hover:border-slate-950 cursor-default"
+            className="group relative rounded-[3.5rem] bg-slate-900/40 backdrop-blur-3xl p-10 border border-white/5 transition-all hover:border-blue-500/30 cursor-default overflow-hidden"
           >
-            <div className="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center mb-6 transition-transform group-hover:scale-110 group-hover:bg-blue-600 group-hover:text-white">
-              <p.icon className="w-6 h-6 text-blue-600 group-hover:text-white transition-colors" />
-            </div>
-            <h3 className="text-xl font-black mb-3 text-slate-950 uppercase tracking-tight group-hover:text-white">{p.title}</h3>
-            <p className="text-sm text-slate-500 font-bold leading-relaxed group-hover:text-slate-400">{p.desc}</p>
+            <div className="absolute inset-0 bg-blue-600/5 opacity-0 group-hover:opacity-100 transition-opacity" />
             
-            <div className="mt-8 pt-8 border-t border-slate-50 group-hover:border-white/10 flex items-center gap-2 text-[9px] font-black uppercase tracking-widest text-slate-300 group-hover:text-blue-600">
-               Critical Pain Point <XCircle className="w-3 h-3" />
+            <div className="relative z-10">
+               <div className="w-16 h-16 rounded-[1.5rem] bg-white/5 flex items-center justify-center mb-8 transition-transform group-hover:scale-110 group-hover:bg-blue-600 group-hover:text-white group-hover:shadow-[0_10px_30px_rgba(37,99,235,0.3)]">
+                 <p.icon className="w-7 h-7 text-blue-400 group-hover:text-white transition-colors" />
+               </div>
+               <h3 className="text-2xl font-black mb-4 text-white uppercase tracking-tight leading-none">{p.title}</h3>
+               <p className="text-lg text-slate-500 font-medium leading-relaxed mb-10">{p.desc}</p>
+               
+               <div className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.3em] text-blue-500/60 transition-colors group-hover:text-blue-400">
+                  <XCircle className="w-3.5 h-3.5" /> High Criticality
+               </div>
             </div>
           </motion.div>
         ))}
       </motion.div>
     </div>
+
+    {/* Ambient Glow */}
+    <div className="absolute bottom-[-10%] left-1/2 -translate-x-1/2 w-[60%] h-64 bg-blue-600/5 blur-[120px] rounded-full pointer-events-none" />
   </section>
 );
 

@@ -16,20 +16,20 @@ const Navbar = () => {
 
   return (
     <motion.nav
-      className="fixed top-0 left-0 right-0 z-header bg-white/80 backdrop-blur-xl border-b border-slate-100 shadow-sm transition-all"
+      className="fixed top-0 left-0 right-0 z-header bg-slate-950/60 backdrop-blur-2xl border-b border-white/5 shadow-2xl transition-all"
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
     >
-      <div className="container max-w-[1440px] flex items-center justify-between h-[var(--header-h)] px-6 md:px-12">
+      <div className="container max-w-[1440px] flex items-center justify-between h-[var(--header-h)] px-6 md:px-12 text-white">
         <div 
           className="flex items-center gap-3 font-black text-2xl tracking-tighter cursor-pointer group" 
           onClick={() => navigate("/")}
         >
-          <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/20 group-hover:scale-110 transition-transform">
-             <Sparkles className="w-5 h-5 text-white" />
+          <div className="w-11 h-11 rounded-xl bg-blue-600 flex items-center justify-center shadow-[0_0_20px_rgba(37,99,235,0.3)] group-hover:scale-110 transition-transform">
+             <Sparkles className="w-5 h-5 text-white fill-white/20" />
           </div>
-          <span className="text-slate-950 uppercase">CREATORFORGE<span className="text-blue-600">AI</span></span>
+          <span className="text-white uppercase tracking-tighter">CREATORFORGE<span className="text-blue-500">AI</span></span>
         </div>
 
         {/* Desktop Nav */}
@@ -38,43 +38,43 @@ const Navbar = () => {
             <a 
               key={link.label} 
               href={link.href} 
-              className="text-[11px] font-black text-slate-400 hover:text-slate-950 transition-colors uppercase tracking-[0.3em]"
+              className="text-[10px] font-black text-slate-400 hover:text-white transition-colors uppercase tracking-[0.4em]"
             >
               {link.label}
             </a>
           ))}
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-6">
           <button
             onClick={() => navigate("/login")}
-            className="hidden xs:flex h-12 items-center justify-center px-6 text-[11px] font-black uppercase tracking-[0.2em] text-slate-950 hover:text-blue-600 transition-all active:scale-95"
+            className="hidden xs:flex h-12 items-center justify-center px-6 text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 hover:text-white transition-all active:scale-95"
           >
-            Log In
+            Terminal Access
           </button>
 
           <button
             onClick={() => navigate("/register")}
-            className="hidden sm:flex h-12 items-center justify-center rounded-2xl bg-slate-950 px-8 text-[11px] font-black uppercase tracking-[0.2em] text-white shadow-xl shadow-slate-200 hover:bg-blue-600 hover:shadow-blue-500/20 transition-all active:scale-95"
+            className="hidden sm:flex h-14 items-center justify-center rounded-2xl bg-blue-600 px-10 text-[10px] font-black uppercase tracking-[0.3em] text-white shadow-[0_10px_30px_rgba(37,99,235,0.2)] hover:bg-blue-500 transition-all active:scale-95"
           >
-            Get Started
+            Initiate Forge
           </button>
 
           {/* Mobile Menu Trigger */}
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
-              <button className="md:hidden w-12 h-12 flex items-center justify-center rounded-2xl bg-slate-50 border border-slate-100 shadow-sm active:scale-95">
-                <Menu className="w-5 h-5 text-slate-950" />
+              <button className="md:hidden w-12 h-12 flex items-center justify-center rounded-2xl bg-white/5 border border-white/10 active:scale-95">
+                <Menu className="w-5 h-5 text-white" />
               </button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-full sm:w-[400px] bg-white border-l border-slate-100 p-0">
+            <SheetContent side="right" className="w-full sm:w-[400px] bg-slate-950 border-l border-white/5 p-0">
                <div className="flex flex-col h-full">
-                  <div className="p-8 border-b border-slate-50">
+                  <div className="p-8 border-b border-white/5 bg-slate-900/50">
                     <div className="flex items-center gap-3 font-black text-2xl tracking-tighter">
-                      <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
+                      <div className="w-11 h-11 rounded-xl bg-blue-600 flex items-center justify-center shadow-lg">
                         <Sparkles className="w-5 h-5 text-white" />
                       </div>
-                      <span className="text-slate-950 uppercase">CREATORFORGE<span className="text-blue-600">AI</span></span>
+                      <span className="text-white uppercase tracking-tighter">CREATORFORGE<span className="text-blue-500">AI</span></span>
                     </div>
                   </div>
                   <nav className="flex-1 px-8 py-12 space-y-10">
@@ -83,29 +83,29 @@ const Navbar = () => {
                         key={link.label} 
                         href={link.href} 
                         onClick={() => setIsOpen(false)}
-                        className="block text-3xl font-black uppercase tracking-tight text-slate-400 hover:text-slate-950 transition-all"
+                        className="block text-4xl font-black uppercase tracking-tighter text-slate-500 hover:text-white transition-all"
                       >
                         {link.label}
                       </a>
                     ))}
-                    <div className="h-px bg-slate-100" />
-                    <div className="space-y-4">
+                    <div className="h-px bg-white/5" />
+                    <div className="space-y-6 pt-10">
                       <button 
                         onClick={() => { navigate("/login"); setIsOpen(false); }}
-                        className="w-full h-16 rounded-[2rem] bg-slate-50 border border-slate-100 text-[11px] font-black uppercase tracking-[0.2em] text-slate-950 flex items-center justify-center gap-2"
+                        className="w-full h-18 rounded-[2rem] bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-[0.4em] text-white flex items-center justify-center gap-2"
                       >
-                        Log In
+                        Terminal Access
                       </button>
                       <button 
                         onClick={() => { navigate("/register"); setIsOpen(false); }}
-                        className="w-full h-16 rounded-[2rem] bg-slate-950 text-white text-[11px] font-black uppercase tracking-[0.2em] flex items-center justify-center gap-3 shadow-2xl shadow-slate-200"
+                        className="w-full h-18 rounded-[2rem] bg-blue-600 text-white text-[10px] font-black uppercase tracking-[0.4em] flex items-center justify-center gap-3 shadow-2xl"
                       >
-                        Get Started <ArrowRight className="w-5 h-5" />
+                        Initiate Forge <ArrowRight className="w-5 h-5" />
                       </button>
                     </div>
                   </nav>
-                  <div className="p-8 text-center text-[10px] text-slate-400 font-black uppercase tracking-[0.3em] border-t border-slate-50">
-                    © 2026 CreatorForge AI • v3.1
+                  <div className="p-8 text-center text-[10px] text-slate-600 font-black uppercase tracking-[0.4em] border-t border-white/5">
+                    Forge AI Terminal • ALPHA v4.2
                   </div>
                </div>
             </SheetContent>

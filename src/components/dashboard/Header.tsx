@@ -341,35 +341,35 @@ export const Header = ({ title = "Dashboard", onSearch }: { title?: string; onSe
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
               transition={{ type: "spring", damping: 30, stiffness: 350 }}
-              className="fixed bottom-0 left-0 right-0 z-[160] bg-zinc-950 border-t border-white/10 rounded-t-[2rem] max-h-[90vh] flex flex-col"
+              className="fixed bottom-0 left-0 right-0 z-[160] bg-white border-t border-slate-200 rounded-t-[3rem] max-h-[90vh] flex flex-col shadow-[0_-20px_50px_rgba(0,0,0,0.1)]"
             >
               {/* Handle */}
-              <div className="w-8 h-1 rounded-full bg-zinc-700 mx-auto mt-3 mb-2 shrink-0" />
+              <div className="w-10 h-1.5 rounded-full bg-slate-200 mx-auto mt-4 mb-2 shrink-0" />
 
               {/* Header */}
-              <div className="flex items-center justify-between px-6 py-3 border-b border-white/5 shrink-0">
+              <div className="flex items-center justify-between px-8 py-4 border-b border-slate-50 shrink-0">
                 <div>
-                  <h3 className="font-black text-base uppercase tracking-tight">Notifications</h3>
-                  {unreadCount > 0 && <p className="text-[10px] text-zinc-500 font-bold">{unreadCount} unread</p>}
+                  <h3 className="font-black text-xl uppercase tracking-tighter text-slate-900">Notifications</h3>
+                  {unreadCount > 0 && <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest">{unreadCount} unread</p>}
                 </div>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-4">
                   {unreadCount > 0 && (
-                    <button onClick={markAllRead} className="text-[10px] font-black uppercase tracking-widest text-primary">
+                    <button onClick={markAllRead} className="text-[10px] font-black uppercase tracking-widest text-blue-600 px-4 py-2 bg-blue-50 rounded-xl">
                       Mark all read
                     </button>
                   )}
-                  <button onClick={() => setShowNotifications(false)} className="p-1 text-zinc-500">
-                    <X className="w-5 h-5" />
+                  <button onClick={() => setShowNotifications(false)} className="p-2 text-slate-400 hover:text-slate-900 transition-colors">
+                    <X className="w-6 h-6" />
                   </button>
                 </div>
               </div>
 
               {/* List */}
-              <div className="flex-1 overflow-y-auto no-scrollbar">
+              <div className="flex-1 overflow-y-auto no-scrollbar pb-10">
                 {notifications.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center py-16 gap-3 text-zinc-600">
-                    <Bell className="w-10 h-10 opacity-30" />
-                    <p className="text-[11px] font-black uppercase tracking-widest">All caught up!</p>
+                  <div className="flex flex-col items-center justify-center py-20 gap-4 text-slate-200">
+                    <Bell className="w-16 h-16 opacity-30 text-slate-300" />
+                    <p className="text-[11px] font-black uppercase tracking-widest text-slate-400">All systems nominal</p>
                   </div>
                 ) : (
                   notifications.map(notif => {
@@ -379,17 +379,17 @@ export const Header = ({ title = "Dashboard", onSearch }: { title?: string; onSe
                       <div
                         key={notif.id}
                         onClick={() => markAsRead(notif)}
-                        className={`flex items-start gap-4 px-5 py-4 border-b border-white/[0.04] cursor-pointer transition-all active:bg-white/5 ${notif.read ? "opacity-60" : ""}`}
+                        className={`flex items-start gap-5 px-8 py-5 border-b border-slate-50 cursor-pointer transition-all active:bg-slate-50 ${notif.read ? "opacity-60" : ""}`}
                       >
-                        <div className={`w-10 h-10 rounded-2xl border flex items-center justify-center shrink-0 ${config.bg}`}>
-                          <Icon className={`w-4.5 h-4.5 ${config.color}`} />
+                        <div className={`w-12 h-12 rounded-[1.25rem] border flex items-center justify-center shrink-0 ${config.bg}`}>
+                          <Icon className={`w-5 h-5 ${config.color}`} />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-[13px] font-black text-white">{notif.title}</p>
-                          <p className="text-[12px] text-zinc-400 leading-relaxed mt-0.5">{notif.body}</p>
-                          <p className="text-[10px] text-zinc-600 font-black uppercase tracking-widest mt-1.5">{notif.time}</p>
+                          <p className="text-[14px] font-black text-slate-900 uppercase tracking-tight">{notif.title}</p>
+                          <p className="text-[13px] text-slate-500 font-medium leading-relaxed mt-1">{notif.body}</p>
+                          <p className="text-[10px] text-slate-400 font-black uppercase tracking-[0.2em] mt-3">{notif.time}</p>
                         </div>
-                        {!notif.read && <div className="w-2 h-2 rounded-full bg-primary mt-2 shrink-0" />}
+                        {!notif.read && <div className="w-2.5 h-2.5 rounded-full bg-blue-600 mt-2 shrink-0 shadow-sm shadow-blue-500/50" />}
                       </div>
                     );
                   })
@@ -397,12 +397,12 @@ export const Header = ({ title = "Dashboard", onSearch }: { title?: string; onSe
               </div>
 
               {/* View All */}
-              <div className="p-4 border-t border-white/5 shrink-0">
+              <div className="p-6 border-t border-slate-50 shrink-0">
                 <button
                   onClick={() => { setShowNotifications(false); navigate("/notifications"); }}
-                  className="w-full h-12 rounded-2xl bg-white/5 border border-white/10 text-[11px] font-black uppercase tracking-widest hover:bg-white/10 transition-all"
+                  className="w-full h-16 rounded-[2rem] bg-slate-950 text-white text-[11px] font-black uppercase tracking-[0.3em] hover:bg-blue-600 transition-all shadow-xl shadow-slate-200"
                 >
-                  View All Notifications
+                  View All Intelligence
                 </button>
               </div>
             </motion.div>
