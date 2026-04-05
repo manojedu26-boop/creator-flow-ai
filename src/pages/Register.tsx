@@ -97,7 +97,7 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center px-6 relative overflow-hidden font-sans py-20">
+    <>
       {/* Google Picker Modal Mockup */}
       <AnimatePresence>
         {showGooglePicker && (
@@ -113,15 +113,15 @@ const Register = () => {
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative w-full max-w-[400px] bg-white rounded-[2.5rem] shadow-2xl overflow-hidden"
+              className="relative w-full max-w-[400px] bg-slate-900 border border-white/5 rounded-[2.5rem] shadow-2xl overflow-hidden"
             >
-              <div className="p-8 border-b border-slate-100 flex items-center justify-between">
+              <div className="p-8 border-b border-white/5 flex items-center justify-between">
                 <div>
-                  <h3 className="text-xl font-black text-slate-950">Choose an account</h3>
-                  <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mt-1">to continue to CreatorForge</p>
+                   <h3 className="text-xl font-black text-white">Select Identity Node</h3>
+                   <p className="text-[10px] font-black uppercase tracking-widest text-slate-500 mt-1">to authorize CreatorForge access</p>
                 </div>
-                <button onClick={() => setShowGooglePicker(false)} className="w-10 h-10 rounded-full hover:bg-slate-100 flex items-center justify-center transition-colors">
-                  <X className="w-5 h-5 text-slate-400" />
+                <button onClick={() => setShowGooglePicker(false)} className="w-10 h-10 rounded-full hover:bg-white/5 flex items-center justify-center transition-colors">
+                  <X className="w-5 h-5 text-slate-500" />
                 </button>
               </div>
               <div className="p-4 space-y-2">
@@ -130,38 +130,39 @@ const Register = () => {
                     key={acc.email}
                     onClick={() => handleGoogleSelect(i)}
                     disabled={selectedGoogleAccount !== null}
-                    className="w-full flex items-center gap-4 p-4 rounded-2xl hover:bg-slate-50 transition-all text-left relative group"
+                    className="w-full flex items-center gap-4 p-4 rounded-2xl hover:bg-white/5 transition-all text-left relative group"
                   >
-                    <img src={acc.image} className="w-10 h-10 rounded-full bg-slate-200 object-cover" />
+                    <img src={acc.image} className="w-10 h-10 rounded-full bg-slate-800 object-cover border border-white/5" />
                     <div className="flex-1">
-                      <p className="text-sm font-bold text-slate-950">{acc.name}</p>
+                      <p className="text-sm font-bold text-white">{acc.name}</p>
                       <p className="text-xs text-slate-500">{acc.email}</p>
                     </div>
                     {selectedGoogleAccount === i ? (
-                      <div className="w-5 h-5 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
+                      <div className="w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
                     ) : (
-                      <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-blue-600 transition-colors" />
+                      <ChevronRight className="w-4 h-4 text-slate-600 group-hover:text-blue-500 transition-colors" />
                     )}
                   </button>
                 ))}
-                <button className="w-full flex items-center gap-4 p-4 rounded-2xl hover:bg-slate-50 transition-all text-left">
-                  <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center">
-                    <User className="w-5 h-5 text-slate-400" />
+                <button className="w-full flex items-center gap-4 p-4 rounded-2xl hover:bg-white/5 transition-all text-left">
+                  <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/5">
+                    <User className="w-5 h-5 text-slate-500" />
                   </div>
-                  <span className="text-sm font-bold text-slate-950">Use another account</span>
+                  <span className="text-sm font-bold text-white">Use another account</span>
                 </button>
               </div>
-              <div className="p-8 bg-slate-50 border-t border-slate-100 text-[10px] text-slate-400 leading-relaxed font-bold">
-                To continue, Google will share your name, email address, language preference, and profile picture with CreatorForge.
+              <div className="p-8 bg-black/20 border-t border-white/5 text-[10px] text-slate-500 leading-relaxed font-bold">
+                Verification required: Google will share your identity metadata with the CreatorForge security cluster.
               </div>
             </motion.div>
           </div>
         )}
       </AnimatePresence>
+    <div className="min-h-screen bg-slate-950 flex items-center justify-center px-6 relative overflow-hidden font-sans py-20 text-white">
       {/* High-Fidelity Ambient Background */}
       <div className="absolute top-0 left-0 w-full h-full pointer-events-none -z-10">
-        <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-blue-50 rounded-full blur-[120px] opacity-40 animate-pulse" />
-        <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-slate-50 rounded-full blur-[100px] opacity-50" />
+        <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-blue-600/10 rounded-full blur-[120px] animate-pulse" />
+        <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-indigo-600/10 rounded-full blur-[100px]" />
       </div>
 
       <motion.div
@@ -174,13 +175,13 @@ const Register = () => {
         </button>
 
         <div className="flex flex-col gap-4 mb-12">
-          <div className="flex items-center gap-3 font-black text-3xl tracking-tighter uppercase text-slate-950">
+          <div className="flex items-center gap-3 font-black text-3xl tracking-tighter uppercase text-white">
             <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
                <Sparkles className="w-5 h-5 text-white" />
             </div>
             <span>CreatorForge<span className="text-blue-600">AI</span></span>
           </div>
-          <p className="text-slate-500 font-bold text-lg">Join 5,000+ creators scaling their empire.</p>
+          <p className="text-slate-400 font-bold text-lg">Join 5,000+ operatives scaling their empire.</p>
         </div>
 
         <AnimatePresence mode="wait">
@@ -207,39 +208,38 @@ const Register = () => {
                 <button
                   type="button"
                   onClick={() => setShowGooglePicker(true)}
-                  className="w-full h-24 rounded-3xl bg-white border border-slate-200/80 p-6 flex items-center gap-6 hover:border-blue-500 hover:shadow-xl hover:shadow-blue-500/10 transition-all active:scale-[0.98] group/opt overflow-hidden relative"
+                  className="w-full h-24 rounded-3xl bg-white/5 border border-white/10 p-6 flex items-center gap-6 hover:border-blue-500 hover:bg-white/10 transition-all active:scale-[0.98] group/opt overflow-hidden relative"
                 >
-                  <div className="absolute inset-0 bg-blue-50/0 group-hover/opt:bg-blue-50/50 transition-colors" />
-                  <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100 group-hover/opt:bg-white group-hover/opt:border-blue-200 transition-all relative z-10">
+                  <div className="absolute inset-0 bg-blue-600/0 group-hover/opt:bg-blue-600/5 transition-colors" />
+                  <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 group-hover/opt:bg-white group-hover/opt:border-blue-200 transition-all relative z-10">
                     <Chrome className="w-6 h-6 text-blue-500 group-hover/opt:scale-110 transition-transform" />
                   </div>
                   <div className="text-left relative z-10 flex-1">
-                    <p className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-950 mb-1">Sync with Google Intelligence</p>
-                    <p className="text-[10px] text-slate-400 font-bold">Fastest deployment • Zero config</p>
+                    <p className="text-[11px] font-black uppercase tracking-[0.2em] text-white mb-1">Sync with Google Intelligence cluster</p>
+                    <p className="text-[10px] text-slate-500 font-bold">Accelerated deployment • Zero configuration</p>
                   </div>
-                  <ChevronRight className="w-5 h-5 text-slate-300 group-hover/opt:translate-x-1 group-hover/opt:text-blue-600 transition-all relative z-10" />
+                  <ChevronRight className="w-5 h-5 text-slate-600 group-hover/opt:translate-x-1 group-hover/opt:text-blue-500 transition-all relative z-10" />
                 </button>
 
                 {/* Email Option */}
                 <button
                   type="button"
                   onClick={() => setView("email")}
-                  className="w-full h-24 rounded-3xl bg-white border border-slate-200/80 p-6 flex items-center gap-6 hover:border-slate-950 hover:shadow-xl hover:shadow-slate-200 transition-all active:scale-[0.98] group/opt overflow-hidden relative"
+                  className="w-full h-24 rounded-3xl bg-white/5 border border-white/10 p-6 flex items-center gap-6 hover:border-white/20 hover:bg-white/10 transition-all active:scale-[0.98] group/opt overflow-hidden relative"
                 >
-                  <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center border border-slate-100 group-hover/opt:bg-slate-950 group-hover/opt:border-slate-950 transition-all relative z-10">
-                    <Mail className="w-6 h-6 text-slate-400 group-hover/opt:text-white group-hover/opt:scale-110 transition-all" />
+                  <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 group-hover/opt:bg-white group-hover/opt:text-slate-950 group-hover/opt:scale-110 transition-all relative z-10">
+                    <Mail className="w-6 h-6 text-slate-500 group-hover/opt:text-slate-950 transition-all" />
                   </div>
                   <div className="text-left relative z-10 flex-1">
-                    <p className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-950 mb-1">Initialize via Direct Email</p>
-                    <p className="text-[10px] text-slate-400 font-bold">Standard secure protocol</p>
+                    <p className="text-[11px] font-black uppercase tracking-[0.2em] text-white mb-1">Establish Neural Link via Email</p>
+                    <p className="text-[10px] text-slate-500 font-bold">Standard secure encryption protocol</p>
                   </div>
-                  <ChevronRight className="w-5 h-5 text-slate-300 group-hover/opt:translate-x-1 group-hover/opt:text-slate-950 transition-all relative z-10" />
+                  <ChevronRight className="w-5 h-5 text-slate-600 group-hover/opt:translate-x-1 group-hover/opt:text-white transition-all relative z-10" />
                 </button>
               </div>
-
               <div className="pt-8 text-center">
-                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-300">
-                  Secured by CreatorForge Quantum Guard
+                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-600">
+                  Secured by CreatorForge Quantum Guard Protocol
                 </p>
               </div>
             </motion.div>
@@ -250,50 +250,48 @@ const Register = () => {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-              className="rounded-[2.5rem] md:rounded-[3rem] bg-white/80 backdrop-blur-2xl border border-slate-200/60 p-10 md:p-12 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.05)] space-y-8 relative overflow-hidden group"
+              className="rounded-[2.5rem] md:rounded-[3rem] bg-slate-900/50 backdrop-blur-2xl border border-white/5 p-10 md:p-12 shadow-2xl space-y-8 relative overflow-hidden group"
             >
               <button 
                 onClick={() => setView("options")}
-                className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-slate-950 transition-colors mb-4"
+                className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-white transition-colors mb-4"
               >
                 <ArrowLeft className="w-3.5 h-3.5" /> Switch Auth Protocol
               </button>
-
               <div className="absolute top-0 left-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity pointer-events-none">
                  <Stars className="w-20 h-20 text-blue-600" />
               </div>
 
               {/* Account Type */}
               <div className="space-y-3">
-                <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 ml-1">Operative Role</label>
+                <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 ml-1">Operative Designation</label>
                 <div className="grid grid-cols-2 gap-4">
                   {(["Creator", "Brand"] as const).map(t => (
                     <button
                       key={t}
                       type="button"
-                      onClick={() => setAccountType(t)}
-                      className={`h-14 rounded-2xl border text-[11px] font-black uppercase tracking-[0.2em] flex items-center justify-center gap-3 transition-all ${accountType === t ? "bg-slate-950 border-slate-950 text-white shadow-xl shadow-slate-200 scale-[1.02]" : "bg-slate-50 border-slate-200 text-slate-400 hover:border-blue-300 hover:text-slate-950"}`}
+                      onClick={() => setAccountType(t as any)}
+                      className={`h-14 rounded-2xl border text-[11px] font-black uppercase tracking-[0.2em] flex items-center justify-center gap-3 transition-all ${accountType === t ? "bg-blue-600 border-blue-600 text-white shadow-xl shadow-blue-500/20 scale-[1.02]" : "bg-white/5 border-white/10 text-slate-500 hover:border-blue-500 hover:text-white"}`}
                     >
                       {t === "Creator" ? <Sparkles className="w-4 h-4" /> : <Briefcase className="w-4 h-4" />}
-                      {t}
+                      {t === "Creator" ? "Intelligence Node" : "Corporate Entity"}
                     </button>
                   ))}
                 </div>
               </div>
 
               <form onSubmit={handleRegister} className="space-y-6" noValidate>
-                {/* Full Name */}
                 <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 ml-1">Full Identity</label>
+                  <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 ml-1">Full Identity (Legal Name)</label>
                   <div className="relative">
-                    <User className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 transition-colors" />
+                    <User className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 transition-colors" />
                     <input
                       type="text"
                       value={name}
                       onChange={e => { setName(e.target.value); if (errors.name) setErrors(p => { const n = { ...p }; delete n.name; return n; }); }}
                       onBlur={() => handleBlur("name", name)}
                       placeholder="Operative Name"
-                      className={`w-full h-16 rounded-2xl bg-slate-50 border pl-14 pr-6 text-sm font-bold text-slate-950 placeholder:text-slate-300 focus:outline-none focus:ring-2 transition-all ${errors.name ? "border-rose-300 focus:ring-rose-500/10" : "border-slate-200 focus:ring-blue-600/10"}`}
+                      className={`w-full h-16 rounded-2xl bg-white/5 border pl-14 pr-6 text-sm font-bold text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 transition-all ${errors.name ? "border-rose-500/50 focus:ring-rose-500/10" : "border-white/10 focus:ring-blue-500/20"}`}
                     />
                   </div>
                   {errors.name && <p className="text-rose-500 text-[10px] font-black uppercase tracking-wider pl-1 mt-1">{errors.name}</p>}
@@ -301,42 +299,41 @@ const Register = () => {
 
                 {/* Email */}
                 <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 ml-1">Intelligence Link (Email)</label>
+                  <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 ml-1">Primary Intelligence Link (Email)</label>
                   <div className="relative">
-                    <Mail className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 transition-colors" />
+                    <Mail className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 transition-colors" />
                     <input
                       type="email"
                       value={email}
                       onChange={e => { setEmail(e.target.value); if (errors.email) setErrors(p => { const n = { ...p }; delete n.email; return n; }); }}
                       onBlur={() => handleBlur("email", email)}
-                      placeholder="contact@domain.com"
-                      className={`w-full h-16 rounded-2xl bg-slate-50 border pl-14 pr-6 text-sm font-bold text-slate-950 placeholder:text-slate-300 focus:outline-none focus:ring-2 transition-all ${errors.email ? "border-rose-300 focus:ring-rose-500/10" : "border-slate-200 focus:ring-blue-600/10"}`}
+                      placeholder="contact@forge.ai"
+                      className={`w-full h-16 rounded-2xl bg-white/5 border pl-14 pr-6 text-sm font-bold text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 transition-all ${errors.email ? "border-rose-500/50 focus:ring-rose-500/10" : "border-white/10 focus:ring-blue-500/20"}`}
                     />
                   </div>
                   {errors.email && <p className="text-rose-500 text-[10px] font-black uppercase tracking-wider pl-1 mt-1">{errors.email}</p>}
                 </div>
 
-                {/* Password */}
                 <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 ml-1">Security Protocol (Password)</label>
+                  <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 ml-1">Security Protocol (Password)</label>
                   <div className="relative">
-                    <Lock className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 transition-colors" />
+                    <Lock className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 transition-colors" />
                     <input
                       type={showPassword ? "text" : "password"}
                       value={password}
                       onChange={e => { setPassword(e.target.value); if (errors.password) setErrors(p => { const n = { ...p }; delete n.password; return n; }); }}
                       onBlur={() => handleBlur("password", password)}
                       placeholder="Min. 8 characters"
-                      className={`w-full h-16 rounded-2xl bg-slate-50 border pl-14 pr-14 text-sm font-bold text-slate-950 placeholder:text-slate-300 focus:outline-none focus:ring-2 transition-all ${errors.password ? "border-rose-300 focus:ring-rose-500/10" : "border-slate-200 focus:ring-blue-600/10"}`}
+                      className={`w-full h-16 rounded-2xl bg-white/5 border pl-14 pr-14 text-sm font-bold text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 transition-all ${errors.password ? "border-rose-500/50 focus:ring-rose-500/10" : "border-white/10 focus:ring-blue-500/20"}`}
                     />
-                    <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-400 hover:text-blue-600 transition-colors">
+                    <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white transition-colors">
                       {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                     </button>
                   </div>
                   {/* Strength indicator */}
                   {password.length > 0 && (
                     <div className="space-y-2 px-1">
-                      <div className="h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+                      <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
                         <motion.div
                           className={`h-full rounded-full ${(strength as any).barColor}`}
                           initial={{ width: 0 }}
@@ -344,26 +341,25 @@ const Register = () => {
                           transition={{ duration: 0.3 }}
                         />
                       </div>
-                      <p className={`text-[9px] font-black uppercase tracking-[0.2em] ${strength.color}`}>{strength.label} Strength Detected</p>
+                      <p className={`text-[9px] font-black uppercase tracking-[0.2em] ${strength.color}`}>{strength.label} Verification Level</p>
                     </div>
                   )}
                   {errors.password && <p className="text-rose-500 text-[10px] font-black uppercase tracking-wider pl-1 mt-1">{errors.password}</p>}
                 </div>
 
-                {/* Confirm Password */}
                 <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 ml-1">Verify Protocol</label>
+                  <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 ml-1">Verify Protocol</label>
                   <div className="relative">
-                    <Lock className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                    <Lock className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
                     <input
                       type={showConfirm ? "text" : "password"}
                       value={confirmPassword}
                       onChange={e => { setConfirmPassword(e.target.value); if (errors.confirmPassword) setErrors(p => { const n = { ...p }; delete n.confirmPassword; return n; }); }}
                       onBlur={() => handleBlur("confirmPassword", confirmPassword)}
                       placeholder="Repeat protocol"
-                      className={`w-full h-16 rounded-2xl bg-slate-50 border pl-14 pr-14 text-sm font-bold text-slate-950 placeholder:text-slate-300 focus:outline-none focus:ring-2 transition-all ${errors.confirmPassword ? "border-rose-300 focus:ring-rose-500/10" : "border-slate-200 focus:ring-blue-600/10"}`}
+                      className={`w-full h-16 rounded-2xl bg-white/5 border pl-14 pr-14 text-sm font-bold text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 transition-all ${errors.confirmPassword ? "border-rose-500/50 focus:ring-rose-500/10" : "border-white/10 focus:ring-blue-500/20"}`}
                     />
-                    <button type="button" onClick={() => setShowConfirm(!showConfirm)} className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-400 hover:text-blue-600 transition-colors">
+                    <button type="button" onClick={() => setShowConfirm(!showConfirm)} className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white transition-colors">
                       {showConfirm ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                     </button>
                   </div>
@@ -373,23 +369,24 @@ const Register = () => {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full h-16 mt-6 rounded-2xl bg-slate-950 text-white font-black uppercase tracking-[0.3em] text-[11px] shadow-2xl shadow-slate-200 hover:bg-blue-600 hover:shadow-blue-500/20 active:scale-[0.98] transition-all flex items-center justify-center gap-3 disabled:opacity-70"
+                  className="w-full h-16 mt-6 rounded-2xl bg-blue-600 text-white font-black uppercase tracking-[0.3em] text-[11px] shadow-2xl shadow-blue-500/20 hover:bg-blue-700 active:scale-[0.98] transition-all flex items-center justify-center gap-3 disabled:opacity-70"
                 >
                   {isLoading ? (
-                    <><div className="w-5 h-5 border-[3px] border-white/20 border-t-white rounded-full animate-spin" /> Finalizing account...</>
+                    <><div className="w-5 h-5 border-[3px] border-white/20 border-t-white rounded-full animate-spin" /> Authorizing account cluster...</>
                   ) : (<>Establish Identity <ChevronRight className="w-4 h-4" /></>)}
                 </button>
               </form>
 
-              <p className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400 text-center pt-4">
+              <p className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-500 text-center pt-4">
                 Existing operative?{" "}
-                <button onClick={() => navigate("/login")} className="text-blue-600 hover:underline">Re-Initialize Session</button>
+                <button onClick={() => navigate("/login")} className="text-blue-500 hover:text-blue-400 hover:underline">Re-Initialize Session</button>
               </p>
             </motion.div>
           )}
         </AnimatePresence>
       </motion.div>
-    </div>
+      </div>
+    </>
   );
 };
 

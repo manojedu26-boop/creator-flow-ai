@@ -80,11 +80,11 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center px-6 relative overflow-hidden font-sans">
+    <div className="min-h-screen bg-slate-950 flex items-center justify-center px-6 relative overflow-hidden font-sans">
       {/* High-Fidelity Ambient Background */}
       <div className="absolute top-0 left-0 w-full h-full pointer-events-none -z-10">
-        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-50 rounded-full blur-[120px] opacity-40 animate-pulse" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-slate-50 rounded-full blur-[100px] opacity-50" />
+        <div className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-blue-600/10 rounded-full blur-[120px] animate-pulse" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-indigo-600/10 rounded-full blur-[100px]" />
       </div>
 
       <motion.div
@@ -98,16 +98,16 @@ const Login = () => {
         </button>
 
         <div className="flex flex-col gap-4 mb-12">
-          <div className="flex items-center gap-3 font-black text-3xl tracking-tighter uppercase text-slate-950">
+          <div className="flex items-center gap-3 font-black text-3xl tracking-tighter uppercase text-white">
             <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
                <Sparkles className="w-5 h-5 text-white" />
             </div>
             <span>CreatorForge<span className="text-blue-600">AI</span></span>
           </div>
-          <p className="text-slate-500 font-bold text-lg">Initialize session to access your creator suite.</p>
+          <p className="text-slate-400 font-bold text-lg">Authorize Identity Node to access your creator suite.</p>
         </div>
 
-        <div className="rounded-[2.5rem] md:rounded-[3rem] bg-white/80 backdrop-blur-2xl border border-slate-200/60 p-10 md:p-12 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.05)] space-y-8 relative overflow-hidden group">
+        <div className="rounded-[2.5rem] md:rounded-[3rem] bg-slate-900/50 backdrop-blur-2xl border border-white/5 p-10 md:p-12 shadow-2xl space-y-8 relative overflow-hidden group">
           <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity pointer-events-none">
              <Stars className="w-20 h-20 text-blue-600" />
           </div>
@@ -117,17 +117,17 @@ const Login = () => {
             type="button"
             onClick={handleGoogleOAuth}
             disabled={isLoading}
-            className="w-full h-16 rounded-2xl bg-white border border-slate-200/80 text-[11px] font-black uppercase tracking-[0.2em] text-slate-950 flex items-center justify-center gap-4 hover:border-blue-500 hover:shadow-xl hover:shadow-blue-500/10 transition-all active:scale-[0.98] disabled:opacity-50 relative group/google overflow-hidden"
+            className="w-full h-16 rounded-2xl bg-white/5 border border-white/10 text-[11px] font-black uppercase tracking-[0.2em] text-white flex items-center justify-center gap-4 hover:border-blue-500 hover:bg-white/10 transition-all active:scale-[0.98] disabled:opacity-50 relative group/google overflow-hidden"
           >
-            <div className="absolute inset-0 bg-blue-50/0 group-hover/google:bg-blue-50/50 transition-colors" />
+            <div className="absolute inset-0 bg-blue-600/0 group-hover/google:bg-blue-600/5 transition-colors" />
             <Chrome className="w-5 h-5 text-blue-500 relative z-10 transition-transform group-hover/google:scale-110" />
-            <span className="relative z-10">Authorize via Google SDK</span>
+            <span className="relative z-10">Vault Sync via Google Intelligence</span>
           </button>
 
-          <div className="flex items-center gap-4 text-[10px] font-black text-slate-300 uppercase tracking-[0.3em]">
-            <div className="h-px flex-1 bg-slate-100" />
+          <div className="flex items-center gap-4 text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">
+            <div className="h-px flex-1 bg-white/5" />
             SECURE ACCESS
-            <div className="h-px flex-1 bg-slate-100" />
+            <div className="h-px flex-1 bg-white/5" />
           </div>
 
           <form onSubmit={handleLogin} className="space-y-6" noValidate>
@@ -142,17 +142,17 @@ const Login = () => {
             )}
 
             <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 ml-1">Email Identity</label>
+              <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 ml-1">Neural Link (Email)</label>
               <div className="relative">
-                <Mail className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-blue-600 transition-colors" />
+                <Mail className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 group-focus-within:text-blue-500 transition-colors" />
                 <input
                   type="email"
                   inputMode="email"
                   value={email}
                   onChange={e => { setEmail(e.target.value); if (errors.email) setErrors(p => ({ ...p, email: "" })); }}
                   onBlur={handleBlurEmail}
-                  placeholder="name@domain.com"
-                  className={`w-full h-16 rounded-2xl bg-slate-50 border pl-14 pr-6 text-sm font-bold text-slate-950 placeholder:text-slate-300 focus:outline-none focus:ring-2 transition-all ${errors.email ? "border-rose-300 focus:ring-rose-500/10" : "border-slate-200 focus:ring-blue-600/10"}`}
+                  placeholder="operative@forge.ai"
+                  className={`w-full h-16 rounded-2xl bg-white/5 border pl-14 pr-6 text-sm font-bold text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 transition-all ${errors.email ? "border-rose-500/50 focus:ring-rose-500/10" : "border-white/10 focus:ring-blue-500/20"}`}
                 />
               </div>
               {errors.email && <p className="text-rose-500 text-[10px] font-black uppercase tracking-wider pl-1 mt-1">{errors.email}</p>}
@@ -160,20 +160,20 @@ const Login = () => {
 
             <div className="space-y-2">
               <div className="flex items-center justify-between ml-1">
-                <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Access Key</label>
-                <Link to="/forgot-password" title="Reset your password" className="text-[10px] font-black uppercase tracking-widest text-blue-600 hover:underline">Reset Key?</Link>
+                <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500">Security Protocol (Password)</label>
+                <Link to="/forgot-password" title="Reset your password" className="text-[10px] font-black uppercase tracking-widest text-blue-600 hover:text-blue-500 hover:underline">Reset Key?</Link>
               </div>
               <div className="relative">
-                <Lock className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                <Lock className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
                 <input
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={e => { setPassword(e.target.value); if (errors.password) setErrors(p => ({ ...p, password: "" })); }}
                   onBlur={handleBlurPassword}
                   placeholder="••••••••"
-                  className={`w-full h-16 rounded-2xl bg-slate-50 border pl-14 pr-14 text-sm font-bold text-slate-950 placeholder:text-slate-300 focus:outline-none focus:ring-2 transition-all ${errors.password ? "border-rose-300 focus:ring-rose-500/10" : "border-slate-200 focus:ring-blue-600/10"}`}
+                  className={`w-full h-16 rounded-2xl bg-white/5 border pl-14 pr-14 text-sm font-bold text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 transition-all ${errors.password ? "border-rose-500/50 focus:ring-rose-500/10" : "border-white/10 focus:ring-blue-500/20"}`}
                 />
-                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-400 hover:text-blue-600 transition-colors">
+                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-6 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white transition-colors">
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
               </div>
@@ -185,30 +185,30 @@ const Login = () => {
               <label className="flex items-center gap-3 cursor-pointer group">
                 <div
                   onClick={() => setRememberMe(!rememberMe)}
-                  className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all ${rememberMe ? "bg-blue-600 border-blue-600" : "bg-slate-50 border-slate-200 group-hover:border-blue-600"}`}
+                  className={`w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all ${rememberMe ? "bg-blue-600 border-blue-600" : "bg-white/5 border-white/10 group-hover:border-blue-500"}`}
                 >
                   {rememberMe && <Check className="w-4 h-4 text-white stroke-[4]" />}
                 </div>
-                <span className="text-[11px] font-black uppercase tracking-widest text-slate-400 group-hover:text-slate-950">Persist Session</span>
+                <span className="text-[11px] font-black uppercase tracking-widest text-slate-500 group-hover:text-white">Persist Session</span>
               </label>
             </div>
 
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full h-16 mt-4 rounded-2xl bg-slate-950 text-white font-black uppercase tracking-[0.3em] text-[11px] shadow-2xl shadow-slate-200 hover:bg-blue-600 hover:shadow-blue-500/20 active:scale-[0.98] transition-all flex items-center justify-center gap-3 disabled:opacity-70"
+              className="w-full h-16 mt-4 rounded-2xl bg-blue-600 text-white font-black uppercase tracking-[0.3em] text-[11px] shadow-2xl shadow-blue-500/20 hover:bg-blue-700 active:scale-[0.98] transition-all flex items-center justify-center gap-3 disabled:opacity-70"
             >
               {isLoading ? (
                 <><div className="w-5 h-5 border-[3px] border-white/20 border-t-white rounded-full animate-spin" /> Authorizing...</>
               ) : (
-                <>Sign In <Zap className="w-3.5 h-3.5 fill-white" /></>
+                <>Authorize Identity <Zap className="w-3.5 h-3.5 fill-white" /></>
               )}
             </button>
           </form>
 
-          <p className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400 text-center pt-4">
+          <p className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-500 text-center pt-4">
             New operative?{" "}
-            <button onClick={() => navigate("/register")} className="text-blue-600 hover:underline">Establish Account</button>
+            <button onClick={() => navigate("/register")} className="text-blue-500 hover:text-blue-400 hover:underline">Establish Account</button>
           </p>
         </div>
       </motion.div>
