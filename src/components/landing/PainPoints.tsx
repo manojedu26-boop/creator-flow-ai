@@ -23,12 +23,12 @@ const item = {
 };
 
 const PainPoints = () => (
-  <section className="py-32 md:py-64 px-6 bg-slate-950 relative overflow-hidden">
+  <section className="py-24 md:py-32 px-6 bg-slate-950 relative overflow-hidden">
     <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[1px] bg-gradient-to-r from-transparent via-blue-500/20 to-transparent" />
     
     <div className="container max-w-7xl relative z-10">
       <motion.div
-        className="text-center mb-40"
+        className="text-center mb-24"
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}

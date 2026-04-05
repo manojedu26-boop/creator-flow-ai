@@ -29,22 +29,25 @@ const NeuralCore = () => {
               <div className="absolute inset-0 bg-gradient-to-tr from-blue-600/20 to-transparent" />
               <Brain className="w-12 h-12 text-blue-500 animate-pulse" />
            </div>
-           {/* Electrons/Nodes */}
-           {[...Array(6)].map((_, i) => (
+           {/* Enhanced Neural Nodes */}
+           {[...Array(12)].map((_, i) => (
              <motion.div
                key={i}
                animate={{ 
                  rotate: 360,
-                 scale: [1, 1.2, 1]
+                 scale: [1, 1.2, 1],
+                 opacity: [0.2, 0.5, 0.2]
                }}
                transition={{ 
-                 rotate: { duration: 10 + i * 2, repeat: Infinity, ease: "linear" },
-                 scale: { duration: 2, repeat: Infinity, delay: i * 0.3 }
+                 rotate: { duration: 15 + i * 2, repeat: Infinity, ease: "linear" },
+                 scale: { duration: 3, repeat: Infinity, delay: i * 0.4 },
+                 opacity: { duration: 3, repeat: Infinity, delay: i * 0.4 }
                }}
-               className="absolute top-1/2 left-1/2 w-2 h-2 bg-blue-400 rounded-full blur-[2px]"
+               className="absolute top-1/2 left-1/2 w-1 h-1 bg-blue-400 rounded-full"
                style={{ 
-                 transformOrigin: `${60 + i * 15}px`,
-                 opacity: 0.4 + (i * 0.1)
+                 transformOrigin: `${80 + (i % 4) * 25}px`,
+                 marginLeft: "-0.25rem",
+                 marginTop: "-0.25rem"
                }}
              />
            ))}
@@ -75,6 +78,31 @@ const NeuralCore = () => {
         ))}
       </div>
 
+      {/* Alpha Telemetry Logs (Fills the space) */}
+      <div className="absolute bottom-12 left-12 w-64 p-6 bg-white/5 backdrop-blur-md border border-white/10 rounded-[2rem] hidden lg:block">
+         <p className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-500 mb-4 flex items-center gap-2">
+            <Zap className="w-3 h-3" /> Alpha_Logs
+         </p>
+         <div className="space-y-3">
+            {[
+              "Neural cluster synchronized",
+              "Protocol L-9 active",
+              "Core temperature: 24°C",
+              "Trend detection operational"
+            ].map((log, i) => (
+              <motion.div 
+                key={i}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: [0, 1, 0.5] }}
+                transition={{ duration: 4, repeat: Infinity, delay: i * 1 }}
+                className="text-[9px] font-mono text-slate-400 uppercase tracking-wider"
+              >
+                {">"} {log}
+              </motion.div>
+            ))}
+         </div>
+      </div>
+
       <div className="absolute bottom-12 right-12 text-right">
          <p className="text-[10px] font-black uppercase tracking-[0.4em] text-blue-500/60 mb-2">Alpha Terminal v4.2</p>
          <div className="flex items-center justify-end gap-2">
@@ -92,7 +120,7 @@ const Hero = () => {
   const [showVideo, setShowVideo] = useState(false);
   
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-slate-950 px-6 pt-32 pb-20">
+    <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-slate-950 px-6 pt-32 pb-12">
       {/* Midnight Obsidian Ambient Effects */}
       <div className="absolute inset-0 pointer-events-none -z-10">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:60px_60px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />

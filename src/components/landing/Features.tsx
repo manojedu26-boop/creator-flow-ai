@@ -24,7 +24,7 @@ const item = {
 };
 
 const Features = () => (
-  <section className="py-32 md:py-64 relative overflow-hidden bg-slate-950">
+  <section className="py-24 md:py-32 relative overflow-hidden bg-slate-950">
     <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(37,99,235,0.05),transparent)]" />
     
     <div className="container max-w-7xl relative z-10 px-6">
@@ -48,7 +48,7 @@ const Features = () => (
       </motion.div>
 
       <motion.div
-        className="grid grid-cols-1 md:grid-cols-6 gap-6"
+        className="grid grid-cols-1 md:grid-cols-3 gap-8"
         variants={container}
         initial="hidden"
         whileInView="show"
@@ -58,9 +58,7 @@ const Features = () => (
           <motion.div
             key={f.title}
             variants={item}
-            className={`group relative rounded-[3rem] bg-slate-900/40 backdrop-blur-3xl p-10 border border-white/5 flex flex-col transition-all cursor-default hover:border-blue-500/30 overflow-hidden h-full ${
-              f.size === 'lg' ? 'md:col-span-4' : f.size === 'md' ? 'md:col-span-3' : 'md:col-span-2'
-            }`}
+            className="group relative rounded-[3rem] bg-slate-900/40 backdrop-blur-3xl p-10 border border-white/5 flex flex-col transition-all duration-500 cursor-default hover:border-blue-500/50 hover:-translate-y-4 hover:shadow-[0_40px_80px_-15px_rgba(37,99,235,0.2)] overflow-hidden h-full"
           >
             <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             
