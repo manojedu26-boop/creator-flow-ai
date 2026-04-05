@@ -178,7 +178,7 @@ export const DashboardLayout = () => {
       </div>
       
       <div 
-        className="flex-1 flex flex-col relative z-header w-full overflow-hidden transition-all duration-300 lg:pl-[var(--sidebar-w)]"
+        className="flex-1 flex flex-col relative z-header w-full overflow-hidden transition-[padding] duration-400 ease-[cubic-bezier(0.175,0.885,0.32,1.275)] lg:pl-[var(--sidebar-w)]"
       >
         <Header title={pageTitle} onSearch={() => setIsCommandPaletteOpen(true)} />
         

@@ -11,6 +11,7 @@ import {
 import { useAuth } from "../../contexts/AuthContext";
 import { db } from "../../lib/db";
 import { toast } from "@/components/ui/sonner";
+import { cn } from "../../lib/utils";
 
 export const navItems = [
   { icon: Home,         label: "Home",              href: "/dashboard" },
@@ -94,7 +95,7 @@ export const Sidebar = () => {
 
   return (
     <motion.div
-      className="fixed left-0 top-0 bottom-0 z-sidebar bg-white border-r border-slate-100 hidden lg:flex flex-col shadow-[1px_0_10px_rgba(0,0,0,0.02)] overflow-visible"
+      className="fixed left-0 top-0 bottom-0 z-sidebar bg-white border-r border-slate-100 hidden lg:flex flex-col shadow-[1px_0_10px_rgba(0,0,0,0.02)] overflow-hidden"
       animate={{ width: expanded ? 280 : 80 }}
       transition={springTransition}
       onMouseEnter={() => setIsHoverExpanded(true)}
@@ -102,7 +103,10 @@ export const Sidebar = () => {
     >
       {/* Logo + Pin Toggle */}
       <div
-        className="flex items-center h-[var(--header-h)] px-6 gap-3 cursor-pointer border-b border-slate-50 relative shrink-0 group"
+        className={cn(
+          "flex items-center h-[var(--header-h)] cursor-pointer border-b border-slate-50 relative shrink-0 group transition-all duration-300",
+          expanded ? "px-6 gap-4" : "justify-center px-0 gap-0"
+        )}
         onClick={toggleSidebar}
       >
         <div className="relative shrink-0 w-8 h-8 flex items-center justify-center bg-blue-600 rounded-xl shadow-lg shadow-blue-500/20">
@@ -113,13 +117,13 @@ export const Sidebar = () => {
             className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-white" 
           />
         </div>
-        <AnimatePresence>
+        <AnimatePresence mode="wait">
           {expanded && (
             <motion.div
-              className="flex flex-col"
+              className="flex flex-col absolute left-20"
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -10 }}
+              exit={{ opacity: 0, x: -10, transition: { duration: 0.1 } }}
             >
               <span className="font-black tracking-tighter text-lg uppercase text-slate-950">
                 CreatorForge<span className="text-blue-600">AI</span>
@@ -141,9 +145,11 @@ export const Sidebar = () => {
             <Link
               key={item.label}
               to={item.href}
-              className={`flex items-center gap-4 px-4 py-3.5 rounded-2xl relative transition-all group ${
+              className={cn(
+                "flex items-center rounded-2xl relative transition-all group py-3.5",
+                expanded ? "px-4 gap-4" : "justify-center px-0 gap-0",
                 isActive ? "bg-slate-950 text-white shadow-xl shadow-slate-200" : "text-slate-400 hover:bg-slate-50 hover:text-slate-900"
-              }`}
+              )}
               title={!expanded ? item.label : undefined}
             >
               {isActive && (
@@ -163,13 +169,13 @@ export const Sidebar = () => {
                 )}
               </div>
 
-              <AnimatePresence>
+              <AnimatePresence mode="wait">
                 {expanded && (
                   <motion.span
-                    className="font-black text-[11px] uppercase tracking-widest whitespace-nowrap flex-1"
+                    className="font-black text-[11px] uppercase tracking-widest whitespace-nowrap"
                     initial={{ opacity: 0, x: -5 }}
                     animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -5 }}
+                    exit={{ opacity: 0, x: -5, transition: { duration: 0.1 } }}
                   >
                     {item.label}
                   </motion.span>
@@ -229,7 +235,10 @@ export const Sidebar = () => {
 
         <button
           onClick={() => setShowUserMenu(prev => !prev)}
-          className="w-full flex items-center gap-3 p-2 rounded-2xl bg-white border border-slate-200 hover:bg-slate-50 transition-all group shadow-sm"
+          className={cn(
+            "w-full flex items-center p-2 rounded-2xl bg-white border border-slate-200 hover:bg-slate-50 transition-all group shadow-sm",
+            expanded ? "gap-3" : "justify-center"
+          )}
         >
           <div className="w-9 h-9 shrink-0 relative">
             {user?.photo ? (

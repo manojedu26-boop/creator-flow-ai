@@ -127,7 +127,7 @@ export const Header = ({ title = "Dashboard", onSearch }: { title?: string; onSe
 
   return (
     <>
-      <header className="sticky top-0 right-0 h-[var(--header-h)] bg-white/80 backdrop-blur-xl border-b border-slate-100 z-[100] flex items-center justify-between px-4 md:px-10 transition-all duration-300">
+      <header className="sticky top-0 right-0 h-[var(--header-h)] bg-white/80 backdrop-blur-xl border-b border-slate-100 z-[100] flex items-center justify-between px-4 md:px-10 transition-all duration-400 ease-[cubic-bezier(0.175,0.885,0.32,1.275)]">
         <div className="flex items-center gap-8">
           <h1 className="text-base md:text-xl font-black tracking-tight uppercase truncate max-w-[160px] md:max-w-none text-slate-900">{title}</h1>
         </div>
