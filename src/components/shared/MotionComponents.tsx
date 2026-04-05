@@ -1,6 +1,7 @@
 import { motion, AnimatePresence, useSpring, useTransform, Variants } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, ReactNode, MouseEvent } from "react";
 import { Sparkles } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 // Section 14.1: Page transitions
 export const PageTransition = ({ children, className = "" }: { children: React.ReactNode, className?: string }) => (
@@ -119,3 +120,46 @@ export const staggerItem: Variants = {
     }
   }
 };
+
+// Section 14.20: Magnetic Interaction Wrapper
+export const Magnetic = ({ children, strength = 0.5 }: { children: ReactNode, strength?: number }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const x = useSpring(0, { stiffness: 150, damping: 15, mass: 0.1 });
+  const y = useSpring(0, { stiffness: 150, damping: 15, mass: 0.1 });
+
+  const handleMouseMove = (e: MouseEvent) => {
+    if (!ref.current) return;
+    const { clientX, clientY } = e;
+    const { left, top, width, height } = ref.current.getBoundingClientRect();
+    const centerX = left + width / 2;
+    const centerY = top + height / 2;
+    x.set((clientX - centerX) * strength);
+    y.set((clientY - centerY) * strength);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+
+  return (
+    <motion.div
+      ref={ref}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{ x, y }}
+    >
+      {children}
+    </motion.div>
+  );
+};
+
+// Section 14.21: Magnetic Pulse (Glow effect)
+export const MagneticPulse = ({ children, color = "bg-blue-600" }: { children: ReactNode, color?: string }) => (
+  <div className="relative group">
+    <div className={cn("absolute inset-0 opacity-0 group-hover:opacity-20 blur-2xl rounded-full transition-all duration-500 scale-150 group-hover:animate-pulse", color)} />
+    <Magnetic strength={0.3}>
+       {children}
+    </Magnetic>
+  </div>
+);

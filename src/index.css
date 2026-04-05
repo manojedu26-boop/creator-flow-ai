@@ -6,58 +6,62 @@
 
 @layer base {
   :root {
+    /* Base Colors - Professional Slate & Ink Palette */
     --background: 0 0% 100%;
-    --foreground: 222 47% 11%;
+    --foreground: 222 47% 4%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
+    --card-foreground: 222 47% 4%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
+    --popover-foreground: 222 47% 4%;
 
-    --primary: 221 83% 53%; /* Action Blue */
+    /* Action Colors - Premium Action Indigo */
+    --primary: 226 70% 55.5%; 
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 222 47% 11.2%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
 
-    --muted: 210 40% 96%;
+    --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 210 40% 96%;
-    --accent-foreground: 222 47% 11.2%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 221 83% 53%;
+    --ring: 226 70% 55.5%;
 
-    --radius: 2.5rem; /* Standardized High-Fidelity Radius */
+    --radius: 2rem; 
 
+    /* Custom Tokens */
     --gold: 42 90% 61%;
-    --gold-foreground: 0 0% 0%;
-
-    --glass: 0 0% 100%;
-    --glass-border: 214.3 31.8% 91.4%;
-
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 222 47% 11.2%;
-    --sidebar-primary: 221 83% 53%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 210 40% 96%;
-    --sidebar-accent-foreground: 222 47% 11.2%;
-    --sidebar-border: 214.3 31.8% 91.4%;
-    --sidebar-ring: 221 83% 53%;
+    --glass: 255 255% 255% / 0.7;
+    --glass-border: 255 255% 255% / 0.1;
     
-    --charcoal: 222 47% 6%; /* Deep Charcoal for WOW depth */
+    /* Layout Variables */
+    --sidebar-w: 300px; 
+    --sidebar-collapsed-w: 96px;
+    --header-h: 80px;
+    --page-px: 3rem;
+
+    /* Ambient Shadow System (Multi-layered) */
+    --shadow-elevated-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-elevated-md: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+    --shadow-elevated-lg: 0 20px 25px -5px rgb(0 0 0 / 0.03), 0 8px 10px -6px rgb(0 0 0 / 0.03);
+    --shadow-floating: 0 30px 60px -12px rgb(0 0 0 / 0.12), 0 18px 36px -18px rgb(0 0 0 / 0.15);
+    --shadow-glass: inset 0 1px 1px 0 rgb(255 255 255 / 0.2);
+    --shadow-premium: 0 0 0 1px rgba(0,0,0,0.03), 0 2px 4px rgba(0,0,0,0.02), 0 10px 20px rgba(0,0,0,0.04);
   }
 
   .dark {
-    --background: 222 47% 11%;
+    --background: 222 47% 4%; /* Deepest Charcoal */
     --foreground: 210 40% 98%;
-    --card: 222 47% 11%;
+    --card: 222 47% 8%;
     --card-foreground: 210 40% 98%;
     --popover: 222 47% 11%;
     --popover-foreground: 210 40% 98%;
@@ -65,14 +69,14 @@
     --primary-foreground: 222.2 47.4% 11.2%;
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
+    --muted: 222 47% 11%;
     --muted-foreground: 215 20.2% 65.1%;
     --accent: 217.2 32.6% 17.5%;
     --accent-foreground: 210 40% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
+    --border: 222 47% 15%;
+    --input: 222 47% 15%;
     --ring: 212.7 26.8% 83.9%;
   }
 }
@@ -83,17 +87,25 @@
   }
 
   body {
-    @apply bg-background text-foreground antialiased;
+    @apply bg-background text-foreground antialiased selection:bg-primary selection:text-white;
     font-family: 'Inter', system-ui, sans-serif;
   }
 
+  /* FLUID TYPOGRAPHY SCALE (Clamp-based) */
+  h1 { font-size: clamp(2.5rem, 8vw, 6rem); }
+  h2 { font-size: clamp(1.75rem, 5vw, 3.5rem); }
+  h3 { font-size: clamp(1.25rem, 3vw, 2rem); }
+  
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Outfit', sans-serif;
-    @apply font-black tracking-tighter uppercase;
-    /* Removed global italic per user feedback */
+    @apply font-black tracking-tighter uppercase leading-[0.9] md:leading-[0.85];
   }
 
-  /* Section 7: Mobile Input Zoom Prevention */
+  /* Tokenized Metadata Tags */
+  .meta-tag {
+    @apply text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] leading-none;
+  }
+
   @media (max-width: 767px) {
     input, textarea, select {
       font-size: 16px !important;
@@ -102,48 +114,36 @@
 }
 
 @layer utilities {
-  .text-gradient-primary {
-    @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, hsl(221 83% 53%), hsl(262 83% 58%));
-  }
+  /* ADVANCED DEPTH EFFECTS */
+  .shadow-elevated-sm { box-shadow: var(--shadow-elevated-sm); }
+  .shadow-elevated-md { box-shadow: var(--shadow-elevated-md); }
+  .shadow-elevated-lg { box-shadow: var(--shadow-elevated-lg); }
+  .shadow-floating { box-shadow: var(--shadow-floating); }
 
   .bg-glass {
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.04);
+    @apply bg-white/60 backdrop-blur-3xl saturate-150 border-white/40;
+    box-shadow: var(--shadow-glass), var(--shadow-elevated-md);
   }
 
   .bg-mesh-primary {
     background: 
-    radial-gradient(at 0% 0%, hsla(221, 83%, 53%, 0.03) 0px, transparent 50%),
-    radial-gradient(at 100% 0%, hsla(199, 89%, 48%, 0.03) 0px, transparent 50%);
-    background-color: #ffffff;
+    radial-gradient(at 0% 0%, hsla(226, 70%, 55%, 0.04) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, hsla(226, 70%, 55%, 0.04) 0px, transparent 50%);
+    @apply bg-background;
   }
 
   .premium-card {
-    @apply transition-all duration-500 ease-out;
-    background: #ffffff;
-    border: 1px solid rgba(0, 0, 0, 0.03);
-    box-shadow: 
-    0 4px 6px -1px rgba(0, 0, 0, 0.02),
-    0 2px 4px -1px rgba(0, 0, 0, 0.01),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.5);
-    transform-style: preserve-3d;
-    perspective: 1000px;
+    @apply transition-all duration-500 ease-out border border-slate-100 bg-white;
+    box-shadow: var(--shadow-premium);
   }
 
   .premium-card:hover {
-    @apply -translate-y-2;
-    transform: translateY(-8px) rotateX(2deg) rotateY(1deg);
-    box-shadow: 
-    0 20px 40px -10px rgba(0, 0, 0, 0.08),
-    0 10px 20px -5px rgba(0, 0, 0, 0.02);
-    border-color: rgba(37, 99, 235, 0.2);
+    @apply -translate-y-2 border-primary/20;
+    box-shadow: var(--shadow-floating);
   }
 
   .text-kinetic {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-blue-600 to-slate-900;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-primary to-slate-900;
     background-size: 200% auto;
     animation: textShine 4s linear infinite;
   }
@@ -152,38 +152,30 @@
     to { background-position: 200% center; }
   }
 
-  /* Structural Recalibration per User Feedback: Sidebar MUST be on top and clickable */
+  /* Z-INDEX RE-CALIBRATION */
+  .z-route-bar { z-index: 10000; }
   .z-header { z-index: 1000; }
   .z-sidebar { z-index: 2000; }
   .z-modal { z-index: 5000; }
-  .z-popover { z-index: 3000; }
+  .z-command { z-index: 6000; }
 
-  /* Dynamic Sidebar Width variable fallback */
-  :root {
-    --sidebar-w: 80px; 
-    --header-h: 72px;
-    --bottom-nav-h: 0px;
-    --page-px: 2rem;
-    --grid-gap: 1.5rem;
-    --card-p: 2rem;
-    --section-mb: 2rem;
+  /* MOUSE-FOLLOW / MAGNETIC UTILITIES */
+  .magnetic-trigger {
+    transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
   }
 
-  /* Section 14: Mobile-First Overlays prevention & Layout recalibration */
-  @media (max-width: 1024px) {
-    :root {
-      --sidebar-w: 0px;
-      --header-h: 70px;
-      --bottom-nav-h: 72px;
-      --page-px: 1rem;
-      --grid-gap: 1rem;
-      --card-p: 1.25rem;
-      --section-mb: 1.5rem;
-    }
-    .dashboard-grid {
-      @apply gap-4 px-4;
-    }
-  }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+}
+
+/* NPROGRESS GLOBAL BAR STYLING */
+#nprogress { pointer-events: none; }
+#nprogress .bar {
+  background: hsl(var(--primary));
+  position: fixed;
+  z-index: 10001;
+  top: 0; left: 0;
+  width: 100%; height: 2px;
 }
 
 @keyframes shimmer {
@@ -206,7 +198,6 @@
   animation: shimmer 1.5s infinite linear;
 }
 
-/* WOW Factor Animations */
 @keyframes float {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-10px); }

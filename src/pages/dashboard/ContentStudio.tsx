@@ -145,6 +145,120 @@ export const ContentStudio = () => {
   const [hashtags, setHashtags] = useState<HashtagItem[] | null>(null);
   const [audioList, setAudioList] = useState<AudioItem[]>(SEED_AUDIO());
   const [audioLoading, setAudioLoading] = useState(false);
+  const [generationProgress, setGenerationProgress] = useState(0);
+  const [generationPhase, setGenerationPhase] = useState("");
+
+  const ThinkingOverlay = ({ progress, phase }: { progress: number, phase: string }) => {
+    return (
+      <div className="fixed inset-0 z-[200] flex items-center justify-center p-6">
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="absolute inset-0 bg-slate-950/80 backdrop-blur-2xl"
+        />
+        
+        {/* Ambient Neural Grid */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-20">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(79,70,229,0.1),transparent_70%)]" />
+          {[...Array(20)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute w-1 h-1 bg-indigo-500 rounded-full"
+              initial={{ 
+                x: Math.random() * window.innerWidth, 
+                y: Math.random() * window.innerHeight,
+                opacity: Math.random() * 0.5 
+              }}
+              animate={{
+                y: [null, Math.random() * -100, Math.random() * -200],
+                opacity: [0, 1, 0]
+              }}
+              transition={{
+                duration: 2 + Math.random() * 3,
+                repeat: Infinity,
+                delay: Math.random() * 2
+              }}
+            />
+          ))}
+        </div>
+
+        <motion.div 
+          initial={{ scale: 0.95, opacity: 0, y: 40 }}
+          animate={{ scale: 1, opacity: 1, y: 0 }}
+          exit={{ scale: 0.95, opacity: 0, y: 40 }}
+          transition={{ type: "spring", damping: 25, stiffness: 200 }}
+          className="relative w-full max-w-xl bg-white rounded-[4rem] p-16 shadow-premium border border-white/20 text-center space-y-12 overflow-hidden"
+        >
+          <div className="relative z-10 space-y-10">
+            <div className="relative w-40 h-40 mx-auto">
+              {/* Outer Ring */}
+              <svg className="w-full h-full rotate-[-90deg]">
+                <circle
+                  cx="80" cy="80" r="74"
+                  fill="none" stroke="#f1f5f9" strokeWidth="4"
+                />
+                <motion.circle
+                  cx="80" cy="80" r="74"
+                  fill="none" stroke="#4f46e5" strokeWidth="4"
+                  strokeDasharray="464.9"
+                  animate={{ strokeDashoffset: 464.9 - (464.9 * progress / 100) }}
+                  transition={{ duration: 0.5, ease: "linear" }}
+                  strokeLinecap="round"
+                />
+              </svg>
+              {/* Pulsing Core */}
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="relative w-20 h-20">
+                  <motion.div 
+                    animate={{ scale: [1, 1.2, 1], opacity: [0.2, 0.4, 0.2] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                    className="absolute inset-0 bg-indigo-600 rounded-full blur-2xl" 
+                  />
+                  <div className="relative w-full h-full bg-white border border-indigo-100 rounded-[2rem] flex items-center justify-center shadow-lg">
+                    <Sparkles className="w-10 h-10 text-indigo-600" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <div className="flex items-center justify-center gap-3">
+                <span className="px-3 py-1 bg-indigo-50 border border-indigo-100/50 rounded-full text-[9px] font-black uppercase tracking-[0.2em] text-indigo-600">Phase {Math.ceil(progress / 25)}</span>
+                <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest">•</span>
+                <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">{progress}% Complete</span>
+              </div>
+              <h3 className="text-3xl font-black text-slate-950 uppercase tracking-tighter leading-none">Neural Synthesis</h3>
+              <div className="h-6 overflow-hidden relative">
+                <AnimatePresence mode="wait">
+                  <motion.p 
+                    key={phase}
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    exit={{ y: -20, opacity: 0 }}
+                    className="text-[12px] font-black uppercase tracking-[0.3em] text-indigo-600"
+                  >
+                    {phase}
+                  </motion.p>
+                </AnimatePresence>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4 pt-4">
+              <div className="p-4 bg-slate-50 border border-slate-100 rounded-2xl text-left">
+                <p className="text-[8px] font-black uppercase tracking-widest text-slate-400 mb-1">Source Nodes</p>
+                <p className="text-[11px] font-bold text-slate-900 uppercase">Synchronised</p>
+              </div>
+              <div className="p-4 bg-slate-50 border border-slate-100 rounded-2xl text-left">
+                <p className="text-[8px] font-black uppercase tracking-widest text-slate-400 mb-1">Brand Voice</p>
+                <p className="text-[11px] font-bold text-slate-900 uppercase">Calibrated</p>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    );
+  };
 
   // Caption form state
   const [captionTopic, setCaptionTopic] = useState("");
@@ -190,10 +304,26 @@ export const ContentStudio = () => {
 
   const runGenerate = useCallback(async (onDone: () => void) => {
     setIsGenerating(true);
-    let i = 0;
-    const iv = setInterval(() => { setThinkingMsg(THINKING_MESSAGES[i++ % THINKING_MESSAGES.length]); }, 700);
-    await new Promise(r => setTimeout(r, 2200 + Math.random() * 600));
-    clearInterval(iv);
+    setGenerationProgress(0);
+    
+    const phases = [
+      { p: "Analyzing Niche Context", start: 0, end: 25 },
+      { p: "Calibrating Brand Voice", start: 25, end: 50 },
+      { p: "Synthesizing Neural Directives", start: 50, end: 75 },
+      { p: "Finalizing Output Precision", start: 75, end: 100 }
+    ];
+
+    for (const phase of phases) {
+      setGenerationPhase(phase.p);
+      const steps = 10;
+      const stepSize = (phase.end - phase.start) / steps;
+      for (let i = 1; i <= steps; i++) {
+        setGenerationProgress(phase.start + (i * stepSize));
+        await new Promise(r => setTimeout(r, 100 + Math.random() * 150));
+      }
+    }
+
+    await new Promise(r => setTimeout(r, 600));
     setIsGenerating(false);
     onDone();
   }, []);
@@ -828,6 +958,14 @@ export const ContentStudio = () => {
 
   return (
     <PageTransition>
+      <AnimatePresence>
+        {isGenerating && (
+          <ThinkingOverlay 
+            progress={Math.round(generationProgress)} 
+            phase={generationPhase} 
+          />
+        )}
+      </AnimatePresence>
       <div className="h-[calc(100vh-160px)] -mx-8 -my-6 flex overflow-hidden">
         {/* LEFT TOOL PANEL */}
         <div className="w-[300px] border-r border-slate-200 bg-slate-50 overflow-y-auto no-scrollbar pt-10 shrink-0 relative z-20">
@@ -880,7 +1018,7 @@ export const ContentStudio = () => {
               </div>
               <div className="flex-1 overflow-y-auto no-scrollbar">
                 <div className="p-6 flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-black text-[12px]">{user?.firstName?.[0]}</div>
+                  <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-black text-[12px]">{user?.name?.[0] || user?.firstName?.[0]}</div>
                   <span className="text-xs font-black uppercase tracking-widest text-slate-900">{user?.handle || "@creator"}</span>
                 </div>
                 <div className="aspect-square bg-slate-50 border-y border-slate-100 flex items-center justify-center">

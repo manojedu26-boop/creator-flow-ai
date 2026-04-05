@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { Outlet, useLocation, Link } from "react-router-dom";
+import { Outlet, useLocation, Link, useNavigate } from "react-router-dom";
 import { Sidebar, navItems } from "./Sidebar";
 import { Header } from "./Header";
 import { motion, AnimatePresence } from "framer-motion";
-import { MessageSquare, X, Sparkles, Menu, Briefcase, Settings, LogOut, WifiOff } from "lucide-react";
+import { MessageSquare, X, Sparkles, Menu, Briefcase, Settings, LogOut, WifiOff, ChevronRight, Home } from "lucide-react";
 import { FloatingAiChat } from "./FloatingAiChat";
 import { MobileBottomNav } from "./MobileBottomNav";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -11,6 +11,8 @@ import { useAuth } from "../../contexts/AuthContext";
 import { Toaster, toast } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { db } from "../../lib/db";
+import { CommandPalette } from "./CommandPalette";
+import { cn } from "../../lib/utils";
 
 const getPageTitle = (pathname: string) => {
   switch (pathname) {
@@ -31,15 +33,76 @@ const getPageTitle = (pathname: string) => {
   }
 };
 
+const getBreadcrumbs = (pathname: string) => {
+  const parts = pathname.split('/').filter(p => p);
+  const crumbs = [{ label: 'Home', path: '/dashboard' }];
+  
+  let currentPath = '';
+  parts.forEach((part, i) => {
+    currentPath += `/${part}`;
+    if (part === 'dashboard') return;
+    crumbs.push({
+      label: part.charAt(0).toUpperCase() + part.slice(1).replace('-', ' '),
+      path: currentPath
+    });
+  });
+  
+  return crumbs;
+};
+
 import { PullToRefresh, IOSSwipeBack } from "../shared/MobileInteractions";
 
 export const DashboardLayout = () => {
   const { user, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
   const [isOffline, setIsOffline] = useState(!navigator.onLine);
   const [showOfflineBanner, setShowOfflineBanner] = useState(true);
+  const [isNavigating, setIsNavigating] = useState(false);
+  
+  const navigate = useNavigate();
   const location = useLocation();
   const pageTitle = getPageTitle(location.pathname);
+  const breadcrumbs = getBreadcrumbs(location.pathname);
+
+  // Global Keyboard Shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // CMD+K or Quick Search
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        setIsCommandPaletteOpen(prev => !prev);
+      }
+
+      // Quick Nav (Only if not typing in an input)
+      if (document.activeElement?.tagName === "INPUT" || document.activeElement?.tagName === "TEXTAREA") return;
+
+      if (e.key.toLowerCase() === "g") {
+        const nextKeyHandler = (nextE: KeyboardEvent) => {
+          const key = nextE.key.toLowerCase();
+          if (key === "d") navigate("/dashboard");
+          if (key === "a") navigate("/analytics");
+          if (key === "s") navigate("/studio");
+          if (key === "b") navigate("/deals");
+          if (key === "c") navigate("/calendar");
+          window.removeEventListener("keydown", nextKeyHandler);
+        };
+        window.addEventListener("keydown", nextKeyHandler, { once: true });
+        // Auto-cleanup if no second key pressed
+        setTimeout(() => window.removeEventListener("keydown", nextKeyHandler), 1000);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [navigate]);
+
+  // Simulated NProgress Effect
+  useEffect(() => {
+    setIsNavigating(true);
+    const timer = setTimeout(() => setIsNavigating(false), 600);
+    return () => clearTimeout(timer);
+  }, [location.pathname]);
 
   useEffect(() => {
     const handleOnline = () => setIsOffline(false);
@@ -58,30 +121,20 @@ export const DashboardLayout = () => {
   }, []);
 
   const handleRefresh = async () => {
-    // Simulate data fetch
     await new Promise(resolve => setTimeout(resolve, 1500));
   };
 
-  // Rule #9: Smart notification job — runs every 30s in dev (simulates 30-min real job)
   useEffect(() => {
     const smartNotifJob = () => {
       const jobs = [
         {
-          check: () => Math.random() < 0.3, // Simulate deal deadline within 48h
-          notif: () => ({ id: `not_poll_deal_${Date.now()}`, title: 'Deal Deadline Alert', body: 'MuscleBlaze campaign deadline is in 24 hours. Submit your content now.', type: 'warning', time: 'Just now', read: false, link: '/deals' })
+          check: () => Math.random() < 0.3,
+          notif: () => ({ id: `not_poll_deal_${Date.now()}`, title: 'Deal Deadline Alert', body: 'MuscleBlaze campaign deadline is in 24 hours.', type: 'warning', time: 'Just now', read: false, link: '/deals' })
         },
         {
-          check: () => Math.random() < 0.25, // Trending post
-          notif: () => ({ id: `not_poll_trend_${Date.now()}`, title: 'Post Going Viral 🔥', body: 'Your latest Reel hit 2x your average reach in the first hour.', type: 'trending', time: 'Just now', read: false, link: '/analytics' })
+          check: () => Math.random() < 0.25,
+          notif: () => ({ id: `not_poll_trend_${Date.now()}`, title: 'Post Going Viral 🔥', body: 'Your latest Reel hit 2x your average reach.', type: 'trending', time: 'Just now', read: false, link: '/analytics' })
         },
-        {
-          check: () => Math.random() < 0.2,  // New message
-          notif: () => ({ id: `not_poll_msg_${Date.now()}`, title: 'New Message', body: 'A brand manager sent you a new collaboration inquiry.', type: 'message', time: 'Just now', read: false, link: '/messages' })
-        },
-        {
-          check: () => Math.random() < 0.15, // Posting gap
-          notif: () => ({ id: `not_poll_gap_${Date.now()}`, title: 'Content Gap Detected', body: 'No post scheduled for the next 3 days. Your engagement drops 40% without consistent posting.', type: 'reminder', time: 'Just now', read: false, link: '/calendar' })
-        }
       ];
 
       const triggered = jobs.find(j => j.check());
@@ -89,13 +142,7 @@ export const DashboardLayout = () => {
 
       const newNotif = triggered.notif();
       db.insert('notifications', newNotif);
-
       toast.info(newNotif.title, { description: newNotif.body });
-
-      // OS push
-      if (typeof Notification !== 'undefined' && Notification.permission === 'granted') {
-        new Notification(newNotif.title, { body: newNotif.body, icon: '/favicon.ico' });
-      }
     };
 
     const pollInterval = setInterval(smartNotifJob, 30000);
@@ -111,32 +158,72 @@ export const DashboardLayout = () => {
   }, [user]);
 
   return (
-    <div className="min-h-screen bg-white text-slate-900 flex flex-col lg:flex-row overflow-hidden font-sans">
+    <div className="min-h-screen bg-background text-foreground flex flex-col lg:flex-row overflow-hidden font-sans">
       
-      {/* Desktop Sidebar (Left Zone) */}
+      {/* Global Route Bar Simulation */}
+      <AnimatePresence>
+        {isNavigating && (
+          <motion.div 
+            initial={{ width: 0, opacity: 1 }}
+            animate={{ width: "100%", opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.6, ease: "easeInOut" }}
+            className="fixed top-0 left-0 h-[2px] bg-primary z-route-bar shadow-[0_0_10px_rgba(37,99,235,0.5)]"
+          />
+        )}
+      </AnimatePresence>
+
       <div className="hidden lg:block">
         <Sidebar />
       </div>
       
-      {/* Main Content Wrapper */}
       <div 
         className="flex-1 flex flex-col relative z-header w-full overflow-hidden transition-all duration-300 lg:pl-[var(--sidebar-w)]"
       >
-        {/* Header - Always visible but height is variable via CSS */}
-        <Header title={pageTitle} />
+        <Header title={pageTitle} onSearch={() => setIsCommandPaletteOpen(true)} />
         
-        {/* Zone C */}
-        <main className="flex-1 pt-[var(--header-h)] pb-[calc(var(--bottom-nav-h)+2rem)] relative bg-slate-50/30">
+        <main className="flex-1 pt-[var(--header-h)] pb-[calc(var(--bottom-nav-h)+2rem)] relative bg-mesh-primary">
           <PullToRefresh onRefresh={handleRefresh}>
             <IOSSwipeBack>
-              <div className="px-[var(--page-px)] py-4 no-scrollbar max-w-[1600px] mx-auto min-h-screen">
+              <div className="px-[var(--page-px)] py-6 no-scrollbar max-w-[1400px] mx-auto min-h-screen space-y-6">
+                
+                {/* DYNAMIC BREADCRUMBS */}
+                {/* DYNAMIC BREADCRUMBS */}
+                <motion.nav 
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  className="flex items-center gap-3 mb-6 px-1"
+                >
+                  <Link to="/dashboard" className="p-2 -ml-2 rounded-xl hover:bg-slate-50 transition-colors group">
+                    <Home className="w-4 h-4 text-slate-400 group-hover:text-blue-600 transition-colors" />
+                  </Link>
+                  {breadcrumbs.length > 1 && <ChevronRight className="w-3.5 h-3.5 text-slate-300 shrink-0" />}
+                  
+                  {breadcrumbs.slice(1).map((crumb, i) => (
+                    <div key={crumb.path} className="flex items-center gap-3">
+                      <Link 
+                        to={crumb.path}
+                        className={cn(
+                          "px-3 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all",
+                          i === breadcrumbs.length - 2 
+                            ? "bg-blue-50 text-blue-600 border border-blue-100" 
+                            : "text-slate-400 hover:text-slate-900 hover:bg-slate-50"
+                        )}
+                      >
+                        {crumb.label}
+                      </Link>
+                      {i < breadcrumbs.length - 2 && <ChevronRight className="w-3.5 h-3.5 text-slate-300 shrink-0" />}
+                    </div>
+                  ))}
+                </motion.nav>
+
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={location.pathname}
-                    initial={{ opacity: 0, scale: 0.98 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 1.02 }}
-                    transition={{ duration: 0.2, ease: "easeOut" }}
+                    initial={{ opacity: 0, y: 10, filter: "blur(10px)" }}
+                    animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                    exit={{ opacity: 0, y: -10, filter: "blur(10px)" }}
+                    transition={{ duration: 0.3, ease: [0.23, 1, 0.32, 1] }}
                   >
                     <Outlet />
                   </motion.div>
@@ -146,20 +233,19 @@ export const DashboardLayout = () => {
           </PullToRefresh>
         </main>
       </div>
-
+      <CommandPalette isOpen={isCommandPaletteOpen} onClose={() => setIsCommandPaletteOpen(false)} />
       <FloatingAiChat />
       <MobileBottomNav />
 
-      {/* ERROR STATE: OFFLINE BANNER (Section 5) */}
       <AnimatePresence>
         {isOffline && showOfflineBanner && (
           <motion.div 
             initial={{ y: -100 }} animate={{ y: 0 }} exit={{ y: -100 }}
-            className="fixed top-0 left-0 right-0 z-[1000] bg-amber-500 text-black py-4 px-8 flex items-center justify-between shadow-2xl font-black text-[10px] uppercase tracking-widest"
+            className="fixed top-0 left-0 right-0 z-[1000] bg-amber-500 text-black py-4 px-8 flex items-center justify-between shadow-floating font-black text-[10px] uppercase tracking-widest"
           >
             <div className="flex items-center gap-4">
               <WifiOff className="w-5 h-5" />
-              You're offline. Some features may be unavailable.
+              Intelligence Node Offline
             </div>
             <button onClick={() => setShowOfflineBanner(false)} className="p-2 hover:bg-black/10 rounded-full transition-all">
               <X className="w-4 h-4" />
@@ -167,9 +253,6 @@ export const DashboardLayout = () => {
           </motion.div>
         )}
       </AnimatePresence>
-      <TooltipProvider>
-        <Toaster />
-      </TooltipProvider>
     </div>
   );
 };

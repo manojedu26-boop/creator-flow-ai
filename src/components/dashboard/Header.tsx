@@ -3,7 +3,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   Bell, Search, ChevronDown, X, CheckCheck,
   Sparkles, DollarSign, TrendingUp, AlertTriangle,
-  MessageSquare, Users, Clock, Zap, Globe, Sun, Moon
+  MessageSquare, Users, Clock, Zap, Globe, Sun, Moon,
+  Command as CommandIcon
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useAuth } from "../../contexts/AuthContext";
@@ -52,11 +53,10 @@ const sendPush = (title: string, body: string) => {
   }
 };
 
-export const Header = ({ title = "Dashboard" }: { title?: string }) => {
+export const Header = ({ title = "Dashboard", onSearch }: { title?: string; onSearch?: () => void }) => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [showNotifications, setShowNotifications] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
@@ -134,17 +134,22 @@ export const Header = ({ title = "Dashboard" }: { title?: string }) => {
 
         <div className="flex items-center gap-3 md:gap-6">
           {/* Desktop Search */}
-          <div className="relative hidden md:block">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-            <input
-              type="text"
-              placeholder="Search insights..."
-              className="h-11 w-64 bg-slate-50 border border-slate-200 rounded-2xl pl-12 pr-4 text-[11px] font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-100 transition-all shadow-inner"
-            />
+          <div className="relative hidden lg:block group/search">
+            <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within/search:text-blue-600 transition-colors" />
+            <div 
+              onClick={onSearch}
+              className="h-14 w-80 bg-slate-50 border border-slate-200 rounded-[1.25rem] pl-14 pr-6 flex items-center justify-between cursor-pointer hover:border-blue-300 hover:bg-white hover:shadow-premium transition-all group"
+            >
+              <span className="text-[12px] font-bold text-slate-400 group-hover:text-slate-600 transition-colors">Search for anything...</span>
+              <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-white border border-slate-200 rounded-xl shadow-sm">
+                <CommandIcon className="w-3 h-3 text-slate-400" />
+                <span className="text-[10px] font-black tracking-widest text-slate-400">K</span>
+              </div>
+            </div>
           </div>
 
           {/* Mobile Search */}
-          <button onClick={() => setIsSearchOpen(true)} className="md:hidden p-2 text-slate-400 hover:text-slate-900 transition-colors">
+          <button onClick={onSearch} className="lg:hidden p-3 bg-slate-50 border border-slate-100 rounded-2xl text-slate-400 hover:text-slate-900 transition-colors">
             <Search className="w-5 h-5" />
           </button>
 
@@ -405,7 +410,6 @@ export const Header = ({ title = "Dashboard" }: { title?: string }) => {
         )}
       </AnimatePresence>
 
-      <SearchOverlay isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </>
   );
 };

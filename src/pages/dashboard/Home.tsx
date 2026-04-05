@@ -3,9 +3,9 @@ import {
   ChevronRight, Zap, Network,
   TrendingUp, Search, 
   ArrowRight, Users, MousePointer2, MessageSquare, Wallet, Briefcase, 
-  Check, Play, Clock, Plus, RefreshCcw as RefreshIcon, Stars
+  Check, Play, Clock, Plus, RefreshCcw as RefreshIcon, Stars, Sparkles, ChevronDown
 } from "lucide-react";
-import { PageTransition, CountUp } from "../../components/shared/MotionComponents";
+import { PageTransition, CountUp, Magnetic, MagneticPulse } from "../../components/shared/MotionComponents";
 import { 
   SkeletonCard, SkeletonHeader 
 } from "../../components/shared/Skeleton";
@@ -14,6 +14,17 @@ import { toast } from "../../components/ui/sonner";
 import { useAuth } from "../../contexts/AuthContext";
 import { db } from "../../lib/db";
 import { cn } from "../../lib/utils";
+import confetti from "canvas-confetti";
+
+const SystemStatus = () => (
+  <div className="flex items-center gap-3 px-5 py-2.5 bg-emerald-50/30 border border-emerald-100/50 rounded-full shadow-sm backdrop-blur-md animate-in fade-in slide-in-from-top-4 duration-1000">
+    <div className="relative w-2.5 h-2.5">
+      <div className="absolute inset-0 bg-emerald-500 rounded-full animate-ping opacity-20" />
+      <div className="relative w-full h-full bg-emerald-500 rounded-full shadow-[0_0_12px_rgba(16,185,129,0.4)]" />
+    </div>
+    <span className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-600/80">Engine Synchronised</span>
+  </div>
+);
 
 export const Home = () => {
   const { user } = useAuth();
@@ -39,11 +50,11 @@ export const Home = () => {
       }, 0);
 
       setStats([
-        { label: 'Total Reach', value: 384200, delta: '+14.3%', up: true, icon: Users, color: 'text-blue-600', bg: 'bg-blue-50' },
-        { label: 'Follower Growth', value: 892, delta: '+6.1%', up: true, icon: MousePointer2, color: 'text-slate-900', bg: 'bg-slate-100' },
-        { label: 'Engagement Rate', value: 4.8, delta: '+0.4%', up: true, icon: MessageSquare, color: 'text-blue-600', bg: 'bg-blue-50' },
-        { label: 'Est. Revenue', value: totalRevenue, delta: '₹', up: true, icon: Wallet, color: 'text-emerald-600', bg: 'bg-emerald-50' },
-        { label: 'Active Brand Deals', value: dbDeals.length, delta: 'View Hub', up: true, icon: Briefcase, color: 'text-amber-600', bg: 'bg-amber-50' },
+        { label: 'Total Reach', value: 384200, delta: '+14.3%', up: true, icon: Users, color: 'text-indigo-600', bg: 'bg-indigo-50' },
+        { label: 'Growth Hub', value: 892, delta: '+6.1%', up: true, icon: TrendingUp, color: 'text-slate-900', bg: 'bg-slate-100' },
+        { label: 'Engagement', value: 4.8, delta: '+0.4%', up: true, icon: MessageSquare, color: 'text-indigo-600', bg: 'bg-indigo-50' },
+        { label: 'Revenue', value: totalRevenue, delta: '₹', up: true, icon: Wallet, color: 'text-emerald-600', bg: 'bg-emerald-50' },
+        { label: 'Active Pipeline', value: dbDeals.length, delta: '3 New', up: true, icon: Briefcase, color: 'text-amber-600', bg: 'bg-amber-50' },
       ]);
 
       setIsLoading(false);
@@ -73,9 +84,23 @@ export const Home = () => {
       return t;
     });
     setTasks(updatedTasks);
+
     const task = tasks.find(t => t.id === id);
-    if (!task?.completed) {
-      toast.success("Task completed! Keep it up. 🚀");
+    if (task && !task.completed) {
+      toast.success("Intelligence Node Cleared 🚀");
+      
+      const newCompletedCount = updatedTasks.filter(t => t.completed).length;
+      if (newCompletedCount === tasks.length && tasks.length > 0) {
+        confetti({
+          particleCount: 150,
+          spread: 70,
+          origin: { y: 0.6 },
+          colors: ['#4f46e5', '#6366f1', '#818cf8', '#a5b4fc']
+        });
+        toast.success("Strategic Sequence Complete 🔥", {
+          description: "Your engine is operating at maximum efficiency."
+        });
+      }
     }
   };
 
@@ -83,51 +108,46 @@ export const Home = () => {
 
   if (isLoading) {
     return (
-      <div className="p-8 space-y-8">
+      <div className="p-8 space-y-12">
         <SkeletonHeader />
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-          {[1,2,3,4,5].map(i => <SkeletonCard key={i} />)}
-        </div>
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <SkeletonCard className="lg:col-span-2 h-[400px]" />
-          <SkeletonCard className="h-[400px]" />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+          {[1,2,3,4,5].map(i => <SkeletonCard key={i} className="h-64 rounded-[3rem]" />)}
         </div>
       </div>
     );
   }
 
   return (
-    <PageTransition className="space-y-8 pb-24 lg:pb-12 h-screen overflow-y-auto no-scrollbar px-2 relative">
-      {/* Modals & Overlays */}
+    <PageTransition className="space-y-12 pb-24 lg:pb-12 h-screen overflow-y-auto no-scrollbar px-2 relative">
       <AnimatePresence>
         {isBriefOpen && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
              <motion.div 
                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                onClick={() => setIsBriefOpen(false)}
-               className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" 
+               className="absolute inset-0 bg-slate-950/60 backdrop-blur-md" 
              />
              <motion.div 
-               initial={{ scale: 0.9, opacity: 0, y: 20 }} animate={{ scale: 1, opacity: 1, y: 0 }} exit={{ scale: 0.9, opacity: 0, y: 20 }}
-               className="relative w-full max-w-2xl bg-white rounded-[3rem] shadow-2xl overflow-hidden border border-slate-100"
+               initial={{ scale: 0.95, opacity: 0, y: 30 }} animate={{ scale: 1, opacity: 1, y: 0 }} exit={{ scale: 0.95, opacity: 0, y: 30 }}
+               className="relative w-full max-w-2xl bg-white rounded-[4rem] shadow-floating overflow-hidden border border-slate-100"
              >
-                <div className="p-8 md:p-12 space-y-8">
+                <div className="p-12 md:p-16 space-y-10">
                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-4">
-                         <div className="w-12 h-12 rounded-2xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
-                            <Plus className="w-6 h-6 text-white" />
+                      <div className="flex items-center gap-6">
+                         <div className="w-14 h-14 rounded-2xl bg-indigo-600 flex items-center justify-center shadow-2xl shadow-indigo-500/30">
+                            <Plus className="w-7 h-7 text-white stroke-[3]" />
                          </div>
-                         <h2 className="text-xl md:text-2xl font-black uppercase tracking-tight text-slate-950">Creator Launch Brief</h2>
+                         <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tight text-slate-950">Mission Brief</h2>
                       </div>
-                      <button onClick={() => setIsBriefOpen(false)} className="text-[10px] font-black uppercase tracking-widest text-slate-300 hover:text-slate-950 transition-colors">Close</button>
+                      <button onClick={() => setIsBriefOpen(false)} className="text-[11px] font-black uppercase tracking-[0.3em] text-slate-300 hover:text-slate-950 transition-colors">Abort</button>
                    </div>
-                   <div className="space-y-6">
-                      <div className="p-8 rounded-[2rem] bg-slate-50 border border-slate-100 space-y-4">
-                         <p className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-600">Active Campaign Phase</p>
-                         <h3 className="text-xl font-black text-slate-950 uppercase">Creator Warroom v2.4</h3>
-                         <div className="flex flex-col sm:flex-row gap-4">
-                            <button className="flex-1 h-12 rounded-xl bg-white border border-slate-200 text-[10px] font-black uppercase tracking-widest text-slate-950 hover:border-blue-600 transition-all">Schedule Content</button>
-                            <button className="flex-1 h-12 rounded-xl bg-slate-950 text-white text-[10px] font-black uppercase tracking-widest hover:bg-blue-600 transition-all">Generate Strategy</button>
+                   <div className="space-y-8">
+                      <div className="p-10 rounded-[3rem] bg-slate-50 border border-slate-100 space-y-6">
+                         <p className="text-[10px] font-black uppercase tracking-[0.4em] text-indigo-600">Initialising Campaign Node</p>
+                         <h3 className="text-2xl font-black text-slate-950 uppercase leading-none">Creator Warroom v2.4</h3>
+                         <div className="flex flex-col sm:flex-row gap-5">
+                            <button className="flex-1 h-14 rounded-2xl bg-white border border-slate-200 text-[11px] font-black uppercase tracking-widest text-slate-950 hover:border-indigo-600 transition-all">Archive Data</button>
+                            <button className="flex-1 h-14 rounded-2xl bg-slate-950 text-white text-[11px] font-black uppercase tracking-widest hover:bg-indigo-600 transition-all">Launch Sequence</button>
                          </div>
                       </div>
                    </div>
@@ -141,23 +161,26 @@ export const Home = () => {
              <motion.div 
                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                onClick={() => setIsDiscoveryOpen(false)}
-               className="absolute inset-0 bg-slate-950/80 backdrop-blur-md" 
+               className="absolute inset-0 bg-slate-950/90 backdrop-blur-2xl" 
              />
              <motion.div 
-               initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.95, opacity: 0 }}
-               className="relative w-full max-w-4xl bg-white rounded-[4rem] shadow-2xl overflow-hidden"
+               initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }}
+               className="relative w-full max-w-4xl bg-white rounded-[5rem] shadow-floating overflow-hidden"
              >
-                <div className="p-8 md:p-16 space-y-12">
-                   <div className="space-y-4 text-center">
-                      <h2 className="text-3xl md:text-4xl font-black uppercase tracking-tight text-slate-950">Neural Discovery Engine</h2>
-                      <p className="text-slate-400 font-bold uppercase tracking-[0.2em] text-xs">Accessing global creator intelligence</p>
+                <div className="p-16 md:p-24 space-y-16">
+                   <div className="space-y-6 text-center">
+                      <div className="w-20 h-20 bg-indigo-50 border border-indigo-100 rounded-[2rem] flex items-center justify-center mx-auto mb-8 animate-float">
+                        <Search className="w-8 h-8 text-indigo-600" />
+                      </div>
+                      <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tight text-slate-950">Global Intelligence</h2>
+                      <p className="text-slate-400 font-bold uppercase tracking-[0.3em] text-xs">Accessing neural creator nodes across the planet</p>
                    </div>
                    <div className="relative">
-                      <Search className="absolute left-8 top-1/2 -translate-y-1/2 w-6 h-6 text-slate-300" />
+                      <Search className="absolute left-10 top-1/2 -translate-y-1/2 w-7 h-7 text-slate-300" />
                       <input 
                         type="text" 
-                        placeholder="Search trends or competitors..." 
-                        className="w-full h-20 rounded-[2rem] bg-slate-50 border border-slate-100 pl-20 pr-8 text-lg font-black text-slate-950 focus:outline-none focus:ring-4 focus:ring-blue-600/5 transition-all"
+                        placeholder="Search for trends, creators, or metrics..." 
+                        className="w-full h-24 rounded-[3rem] bg-slate-50 border border-slate-100 pl-24 pr-12 text-xl font-black text-slate-950 placeholder:text-slate-200 focus:outline-none focus:ring-8 focus:ring-indigo-600/5 transition-all"
                       />
                    </div>
                 </div>
@@ -165,111 +188,145 @@ export const Home = () => {
           </div>
         )}
       </AnimatePresence>
-      <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 mt-0">
-        <div className="space-y-3">
+
+      {/* Hero Section — System Readiness */}
+      <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-12 px-2 mt-8">
+        <div className="space-y-8">
           <motion.div 
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.4em] text-blue-600 bg-blue-50 w-fit px-4 py-2 rounded-full border border-blue-100 shadow-sm"
+            className="flex items-center gap-4"
           >
-            <Zap className="w-3 h-3 fill-current shadow-blue-500" />
-            System Operational
+            <div className="px-4 py-2 bg-indigo-50 border border-indigo-100/50 rounded-full">
+              <span className="text-[11px] font-black uppercase tracking-[0.3em] text-indigo-600">Command Centre v4.0</span>
+            </div>
+            <SystemStatus />
           </motion.div>
-          <motion.h1 
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ type: "spring", stiffness: 100 }}
-            className="text-2xl md:text-6xl font-black tracking-[0.02em] leading-none text-slate-950 uppercase"
-          >
-            Good morning, <br />
-            <span className="text-blue-600 flex items-center gap-4">
-               {user?.firstName || 'Naveen'} <Stars className="w-8 h-8 md:w-20 md:h-20 animate-pulse text-slate-950" />
-            </span>
-          </motion.h1>
-          <p className="text-slate-500 font-bold text-sm md:text-xl max-w-2xl mt-2 leading-relaxed">
-            Your influence score generated a <span className="text-slate-950 font-black underline decoration-blue-600 decoration-2 md:decoration-4">11% spike</span>. <br className="hidden md:block" />
-            Prime transmission window: <span className="text-blue-600 font-black">19:00 IST</span>.
-          </p>
-        </div>
-        <div className="flex flex-col md:flex-row gap-4 relative z-20">
-          <div className="flex gap-4">
-            <button 
-              onClick={fetchData}
-              disabled={isLoading}
-              className="flex-1 md:w-16 h-14 md:h-16 rounded-2xl md:rounded-[2rem] bg-white border border-slate-200 hover:border-blue-600 hover:scale-105 transition-all flex items-center justify-center text-slate-400 hover:text-blue-600 shadow-xl shadow-slate-100 active:scale-95"
+          
+          <div className="space-y-2">
+            <motion.h1 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-5xl md:text-8xl font-black tracking-tighter text-slate-950 uppercase leading-[0.8] mb-4"
             >
-              <RefreshIcon className={`w-5 h-5 md:w-6 md:h-6 ${isLoading ? 'animate-spin' : ''}`} />
-            </button>
+              Intelligence <br />
+              <span className="text-indigo-600 inline-flex items-center gap-6">
+                Operational <Sparkles className="w-12 h-12 md:w-20 md:h-20 text-slate-200 fill-slate-200 animate-pulse" />
+              </span>
+            </motion.h1>
+            <p className="text-slate-400 font-bold max-w-3xl text-sm md:text-lg uppercase tracking-[0.15em] leading-relaxed">
+              Welcome back, <span className="text-slate-900">{user?.firstName || 'Commander'}</span>. All neural nodes are active. <br />
+              <span className="text-indigo-600">Projected impact score +14% for the upcoming cycle.</span>
+            </p>
+          </div>
+        </div>
+        
+        <div className="flex items-center gap-4">
+          <MagneticPulse color="bg-indigo-600">
             <button 
               onClick={() => setIsBriefOpen(true)}
-              className="flex-[3] md:flex-none h-14 md:h-16 md:px-10 rounded-2xl md:rounded-[2rem] bg-white border border-slate-200 hover:border-blue-600 hover:scale-105 transition-all flex items-center justify-center gap-3 md:gap-4 font-black text-[10px] md:text-[11px] uppercase tracking-[0.2em] text-slate-950 shadow-xl shadow-slate-100 group">
-              <Plus className="w-4 h-4 md:w-5 md:h-5 text-blue-600 transition-transform group-hover:rotate-90" /> Launch Brief
+              className="h-20 px-12 bg-indigo-600 text-white rounded-3xl flex items-center gap-6 shadow-floating hover:shadow-indigo-500/20 transition-all group active:scale-95"
+            >
+              <div className="p-2 bg-white/20 rounded-xl group-hover:rotate-90 transition-transform duration-500">
+                <Plus className="w-5 h-5 text-white stroke-[4]" />
+              </div>
+              <span className="text-[12px] font-black uppercase tracking-[0.3em]">Initialise Mission</span>
             </button>
-          </div>
+          </MagneticPulse>
+        </div>
+      </div>
+
+      {/* Global Actions Bar — Depth Layer */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 px-2">
+        <Magnetic strength={0.1}>
+          <button 
+            onClick={fetchData}
+            disabled={isLoading}
+            className="w-full h-20 rounded-[2.5rem] bg-white border border-slate-100 hover:border-indigo-600 hover:bg-slate-50 transition-all flex items-center justify-center gap-4 text-slate-400 hover:text-indigo-600 shadow-premium active:scale-98 group"
+          >
+            <RefreshIcon className={cn("w-6 h-6", isLoading ? "animate-spin" : "group-hover:rotate-180 transition-transform duration-700")} />
+            <span className="text-[11px] font-black uppercase tracking-[0.3em]">Re-sync Intelligence</span>
+          </button>
+        </Magnetic>
+
+        <Magnetic strength={0.1}>
           <button 
             onClick={() => setIsDiscoveryOpen(true)}
-            className="h-14 md:h-16 md:px-10 rounded-2xl md:rounded-[2rem] bg-slate-950 text-white hover:bg-blue-600 hover:scale-105 transition-all flex items-center justify-center gap-3 md:gap-4 font-black text-[10px] md:text-[11px] uppercase tracking-[0.2em] shadow-2xl shadow-blue-900/20 active:scale-95">
-            <Search className="w-4 h-4 md:w-5 md:h-5" /> Data Discovery
-          </button>
-        </div>
-      </header>
-
-      {/* KPI Stats Strip */}
-      {/* KPI Stats Strip — Perfect Alignment */}
-      <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 md:gap-8 items-stretch">
-        {stats.map((stat, i) => (
-          <motion.div
-            key={stat.label}
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: i * 0.05, type: "spring" }}
-            className="group relative overflow-hidden rounded-3xl md:rounded-[3rem] bg-white p-5 md:p-8 border border-slate-200 transition-all shadow-xl shadow-slate-200/50 hover:shadow-2xl hover:shadow-blue-500/10 premium-card flex flex-col justify-between h-full min-h-[160px] md:min-h-[240px]"
+            className="w-full h-20 rounded-[2.5rem] bg-white border border-slate-100 hover:border-indigo-600 transition-all flex items-center justify-center gap-4 font-black text-[11px] uppercase tracking-[0.3em] text-slate-900 shadow-premium group"
           >
-            <div>
-              <div className={cn("p-3 md:p-5 rounded-2xl md:rounded-[1.5rem] w-fit mb-4 md:mb-8 shadow-inner transition-transform group-hover:scale-110", stat.bg, stat.color)}>
-                <stat.icon className="w-5 h-5 md:w-6 md:h-6" />
+            <Search className="w-6 h-6 text-indigo-600 group-hover:scale-110 transition-transform" /> 
+            Data Discovery Hub
+          </button>
+        </Magnetic>
+
+        <Magnetic strength={0.1}>
+          <button 
+            className="w-full h-20 rounded-[2.5rem] bg-slate-950 text-white hover:bg-indigo-600 transition-all flex items-center justify-center gap-4 font-black text-[11px] uppercase tracking-[0.3em] shadow-floating-blue active:scale-98 group"
+          >
+            <Zap className="w-6 h-6 text-emerald-400 fill-emerald-400 group-hover:animate-bounce" /> 
+            Universal Dashboard
+          </button>
+        </Magnetic>
+      </div>
+
+      {/* KPI Stats — Ambient Layering */}
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-6 md:gap-10 items-stretch px-2">
+        {stats.map((stat, i) => (
+          <Magnetic key={stat.label} strength={0.2}>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: i * 0.05, type: "spring", damping: 15 }}
+              className="group relative overflow-hidden rounded-[4rem] bg-white p-8 md:p-10 border border-slate-100 transition-all shadow-premium hover:shadow-floating premium-card flex flex-col justify-between h-full min-h-[180px] md:min-h-[280px]"
+            >
+              <div className="absolute top-0 right-0 p-8 opacity-5">
+                <stat.icon className="w-32 h-32" />
               </div>
-              <div className="space-y-1 md:space-y-2">
-                <p className="text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.25em] text-slate-400">{stat.label}</p>
-                <div className="flex items-end gap-2">
-                  <h3 className="text-xl md:text-2xl lg:text-3xl font-black tracking-tighter text-slate-950 leading-none">
-                    <CountUp value={stat.value} prefix={stat.label === 'Est. Revenue' ? '₹ ' : ''} />
+
+              <div className="relative z-10">
+                <div className={cn("p-5 rounded-[2rem] w-fit mb-8 shadow-sm transition-all group-hover:scale-110 group-hover:shadow-lg", stat.bg, stat.color)}>
+                  <stat.icon className="w-7 h-7" />
+                </div>
+                <div className="space-y-2">
+                  <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 group-hover:text-indigo-600 transition-colors">{stat.label}</p>
+                  <h3 className="text-3xl md:text-5xl font-black tracking-tight text-slate-950 leading-none">
+                    <CountUp value={stat.value} prefix={stat.label === 'Revenue' ? '₹ ' : ''} />
                   </h3>
                 </div>
               </div>
-            </div>
-            <div className={cn("inline-flex items-center gap-2 px-2 md:px-3 py-1 rounded-full text-[9px] md:text-[10px] font-black mt-2 md:mt-4 w-fit shrink-0", stat.up ? 'bg-emerald-50 text-emerald-600 border border-emerald-100' : 'bg-blue-50 text-blue-600 border border-blue-100')}>
-              {stat.up ? <TrendingUp className="w-2.5 h-2.5 md:w-3 h-3" /> : <ChevronRight className="w-2.5 h-2.5 md:w-3 h-3" />}
-              {stat.delta}
-            </div>
-          </motion.div>
+              <div className={cn("relative z-10 inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[10px] font-black mt-6 w-fit shrink-0 border", stat.up ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-indigo-50 text-indigo-600 border-indigo-100')}>
+                {stat.up ? <TrendingUp className="w-3.5 h-3.5" /> : <ChevronRight className="w-3.5 h-3.5" />}
+                {stat.delta}
+              </div>
+            </motion.div>
+          </Magnetic>
         ))}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
         {/* Main Content Area */}
         <div className="lg:col-span-2 space-y-12">
-          {/* AI Action Plan */}
-          <div className="rounded-[2.5rem] md:rounded-[4rem] bg-white border border-slate-100 overflow-hidden shadow-2xl shadow-slate-100/50 group premium-card">
-            <div className="p-8 md:p-12 border-b border-slate-50 flex items-center justify-between bg-slate-50/30">
-              <div className="space-y-2 md:space-y-4">
-                <div className="flex items-center gap-3">
-                   <div className="w-8 h-8 md:w-10 md:h-10 rounded-xl md:rounded-2xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/30 animate-float">
-                      <Zap className="w-4 h-4 md:w-5 md:h-5 text-white fill-white" />
+          {/* AI Strategic Intelligence Deck */}
+          <div className="rounded-[4rem] bg-white border border-slate-100 overflow-hidden shadow-premium premium-card">
+            <div className="p-12 border-b border-slate-50 flex items-center justify-between bg-slate-50/20">
+              <div className="space-y-4">
+                <div className="flex items-center gap-4">
+                   <div className="w-12 h-12 rounded-2xl bg-indigo-600 flex items-center justify-center shadow-2xl shadow-indigo-500/20">
+                      <Zap className="w-6 h-6 text-white fill-white" />
                    </div>
-                   <h3 className="text-xl md:text-3xl font-black tracking-tight text-slate-950 uppercase">
-                    AI Strategic Plan
+                   <h3 className="text-3xl font-black tracking-tight text-slate-950 uppercase leading-none">
+                    Strategic Intelligence
                    </h3>
                 </div>
-                <p className="text-[9px] md:text-[11px] font-black text-slate-400 tracking-[0.15em] md:tracking-[0.2em] uppercase pl-1">
-                   Live Feed • Updated 2 mins ago
+                <p className="text-[10px] font-black text-slate-400 tracking-[0.3em] uppercase pl-16">
+                   Neural Feed • Synchronised {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </p>
               </div>
-              <div className="bg-slate-950 text-white text-[9px] md:text-[10px] font-black px-4 md:px-6 py-2 md:py-3 rounded-full uppercase tracking-[0.15em] md:tracking-[0.2em] shadow-xl shrink-0">
-                {completedCount}/{tasks.length}
+              <div className="bg-slate-950 text-white text-[11px] font-black px-8 py-4 rounded-[1.5rem] uppercase tracking-[0.2em] shadow-floating shrink-0">
+                Sequence: {completedCount}/{tasks.length}
               </div>
             </div>
-            <div className="p-6 md:p-12 space-y-4 md:space-y-6">
+            <div className="p-12 space-y-6">
               {tasks.map((task, i) => (
                 <motion.div
                   key={task.id}
@@ -278,30 +335,34 @@ export const Home = () => {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: i * 0.05 }}
                   className={cn(
-                    "group flex items-center gap-4 md:gap-8 p-5 md:p-8 rounded-2xl md:rounded-[2.5rem] transition-all",
-                    task.completed ? "bg-slate-50 border-transparent opacity-50" : "bg-white border border-slate-100 hover:border-blue-400 hover:shadow-xl hover:scale-[1.01]"
+                    "group flex items-center gap-10 p-10 rounded-[3rem] transition-all relative overflow-hidden",
+                    task.completed 
+                      ? "bg-slate-50/50 border-transparent opacity-60" 
+                      : "bg-white border border-slate-100 hover:border-indigo-600 hover:shadow-premium hover:-translate-y-1"
                   )}
                 >
                   <button
                     onClick={() => toggleTask(task.id)}
                     className={cn(
-                      "shrink-0 w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-[1.2rem] border-2 flex items-center justify-center transition-all",
-                      task.completed ? "bg-blue-600 border-blue-600 shadow-lg shadow-blue-500/40" : "border-slate-200 hover:border-blue-600 bg-white"
+                      "shrink-0 w-12 h-12 rounded-[1.25rem] border-2 flex items-center justify-center transition-all",
+                      task.completed 
+                        ? "bg-emerald-500 border-emerald-500 shadow-lg shadow-emerald-500/30" 
+                        : "border-slate-200 hover:border-indigo-600 bg-white"
                     )}
                   >
-                    {task.completed && <Check className="w-4 h-4 md:w-6 md:h-6 text-white stroke-[3]" />}
+                    {task.completed && <Check className="w-6 h-6 text-white stroke-[4]" />}
                   </button>
                   <div className="flex-1 min-w-0">
                     <p className={cn(
-                      "text-base md:text-xl font-black tracking-tight text-slate-950",
-                      task.completed && "line-through text-slate-400 opacity-60"
+                      "text-2xl font-black tracking-tight text-slate-950",
+                      task.completed && "line-through text-slate-400"
                     )}>
                       {task.text}
                     </p>
-                    <div className="flex items-center gap-4 md:gap-6 mt-1 md:mt-3">
-                      <span className="text-[9px] md:text-[10px] uppercase font-black tracking-[0.2em] text-blue-600">{task.category}</span>
-                      <span className="flex items-center gap-2 text-[9px] md:text-[10px] font-black uppercase text-slate-400 tracking-widest text-ellipsis overflow-hidden">
-                        <Clock className="w-3 md:w-3.5 h-3 md:h-3.5" /> {task.time}
+                    <div className="flex items-center gap-8 mt-4">
+                      <span className="text-[10px] font-black uppercase tracking-[0.3em] text-indigo-600">{task.category}</span>
+                      <span className="flex items-center gap-2 text-[10px] font-black uppercase text-slate-400 tracking-[0.2em]">
+                        <Clock className="w-3.5 h-3.5" /> {task.time}
                       </span>
                     </div>
                   </div>

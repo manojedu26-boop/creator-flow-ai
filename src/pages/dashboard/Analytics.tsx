@@ -55,6 +55,36 @@ const heatmapData = [
 
 const tabs = ["Overview", "Audience", "Content Performance", "Competitor Intel"];
 
+const CustomTooltip = ({ active, payload, label }: any) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-white/60 backdrop-blur-2xl border border-white/40 p-5 rounded-[2rem] shadow-premium min-w-[180px] animate-in fade-in zoom-in duration-300 ring-1 ring-slate-950/5">
+        <div className="flex items-center justify-between mb-4">
+           <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">{label}</p>
+           <Zap className="w-3 h-3 text-indigo-600 fill-indigo-600/20" />
+        </div>
+        <div className="space-y-3">
+          {payload.map((item: any, idx: number) => (
+            <div key={idx} className="flex items-center justify-between gap-6">
+              <div className="flex items-center gap-2.5">
+                <div className="w-2 h-2 rounded-full shadow-sm" style={{ backgroundColor: item.color }} />
+                <span className="text-[11px] font-bold text-slate-600 uppercase tracking-tight">{item.name}</span>
+              </div>
+              <span className="text-[12px] font-black text-slate-950 tabular-nums">
+                {item.value.toLocaleString()}
+              </span>
+            </div>
+          ))}
+        </div>
+        <div className="mt-4 pt-3 border-t border-slate-100/50">
+           <p className="text-[8px] font-black uppercase tracking-[0.3em] text-indigo-600/60">Neural Analytics v4.0</p>
+        </div>
+      </div>
+    );
+  }
+  return null;
+};
+
 const GrowthChart = memo(({ data }: { data: any[] }) => (
   <ResponsiveContainer width="100%" height="100%">
     <AreaChart data={data}>
@@ -73,21 +103,36 @@ const GrowthChart = memo(({ data }: { data: any[] }) => (
         </linearGradient>
       </defs>
       <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-      <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#64748b', fontWeight: '700' }} dy={10} />
-      <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#64748b', fontWeight: '700' }} domain={['auto', 'auto']} />
-      <Tooltip 
-        contentStyle={{ 
-          backgroundColor: '#ffffff', 
-          border: '1px solid #e2e8f0', 
-          borderRadius: '12px', 
-          fontSize: '11px', 
-          fontWeight: '700',
-          boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)'
-        }}
+      <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#94a3b8', fontWeight: '800' }} dy={12} />
+      <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#94a3b8', fontWeight: '800' }} domain={['auto', 'auto']} dx={-10} />
+      <Tooltip content={<CustomTooltip />} cursor={{ stroke: '#e2e8f0', strokeWidth: 1, strokeDasharray: '4 4' }} />
+      <Area 
+        type="monotone" 
+        dataKey="ig" 
+        stroke="#ec4899" 
+        strokeWidth={3} 
+        fill="url(#colorIg)" 
+        name="Instagram" 
+        activeDot={{ r: 6, strokeWidth: 0, fill: '#ec4899' }}
       />
-      <Area type="monotone" dataKey="ig" stroke="#ec4899" strokeWidth={3} fill="url(#colorIg)" name="Instagram" />
-      <Area type="monotone" dataKey="yt" stroke="#ef4444" strokeWidth={3} fill="url(#colorYt)" name="YouTube" />
-      <Area type="monotone" dataKey="tt" stroke="#a855f7" strokeWidth={3} fill="url(#colorTt)" name="TikTok" />
+      <Area 
+        type="monotone" 
+        dataKey="yt" 
+        stroke="#ef4444" 
+        strokeWidth={3} 
+        fill="url(#colorYt)" 
+        name="YouTube" 
+        activeDot={{ r: 6, strokeWidth: 0, fill: '#ef4444' }}
+      />
+      <Area 
+        type="monotone" 
+        dataKey="tt" 
+        stroke="#a855f7" 
+        strokeWidth={3} 
+        fill="url(#colorTt)" 
+        name="TikTok" 
+        activeDot={{ r: 6, strokeWidth: 0, fill: '#a855f7' }}
+      />
     </AreaChart>
   </ResponsiveContainer>
 ));
@@ -96,10 +141,18 @@ const EngagementChart = memo(({ data }: { data: any[] }) => (
   <ResponsiveContainer width="100%" height="100%">
     <LineChart data={data}>
       <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-      <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#64748b' }} dy={10} />
-      <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#64748b' }} />
-      <Tooltip contentStyle={{ backgroundColor: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '12px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)' }} />
-      <Line type="monotone" dataKey="rate" stroke="#2563eb" strokeWidth={3} dot={{ r: 4, fill: '#2563eb', strokeWidth: 2, stroke: '#fff' }} name="Engagement Rate (%)" />
+      <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#94a3b8', fontWeight: '800' }} dy={12} />
+      <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#94a3b8', fontWeight: '800' }} />
+      <Tooltip content={<CustomTooltip />} cursor={{ stroke: '#e2e8f0', strokeWidth: 1, strokeDasharray: '4 4' }} />
+      <Line 
+        type="monotone" 
+        dataKey="rate" 
+        stroke="#2563eb" 
+        strokeWidth={3} 
+        dot={{ r: 4, fill: '#fff', strokeWidth: 2, stroke: '#2563eb' }} 
+        activeDot={{ r: 6, strokeWidth: 0, fill: '#2563eb' }}
+        name="Engagement Rate (%)" 
+      />
     </LineChart>
   </ResponsiveContainer>
 ));
