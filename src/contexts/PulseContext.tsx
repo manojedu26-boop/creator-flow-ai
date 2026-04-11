@@ -36,20 +36,67 @@ export interface PulseFeedItem {
   isNew?: boolean;
 }
 
+export interface PulseScore {
+  score: number;
+  tier: 'Seedling' | 'Growing' | 'Electric' | 'On Fire' | 'Diamond' | 'ICON';
+  breakdown: {
+    consistency: number;
+    engagement: number;
+    growth: number;
+    activity: number;
+    deals: number;
+    network: number;
+  };
+}
+
+export interface CollabRoom {
+  id: string;
+  partnerName: string;
+  partnerAvatar: string;
+  status: 'ACTIVE' | 'PENDING' | 'COMPLETED';
+  lastActive: string;
+  unreadCount: number;
+}
+
 interface PulseContextType {
   stories: PulseStory[];
   feedItems: PulseFeedItem[];
   unreadStoriesCount: number;
   newFeedItemsCount: number;
+  pulseScore: PulseScore;
+  collabRooms: CollabRoom[];
   markAsRead: (storyId: string) => void;
   addStory: (story: Omit<PulseStory, 'id' | 'isRead' | 'timestamp'>) => void;
   clearNewFeedItems: () => void;
   votePoll: (itemId: string, optionIndex: number) => void;
+  updateScore: (newScore: number) => void;
 }
 
 const PulseContext = createContext<PulseContextType | undefined>(undefined);
 
+const getTier = (score: number) => {
+  if (score < 200) return 'Seedling';
+  if (score < 400) return 'Growing';
+  if (score < 600) return 'Electric';
+  if (score < 800) return 'On Fire';
+  if (score < 950) return 'Diamond';
+  return 'ICON';
+};
+
 const MOCK_STORIES: PulseStory[] = [
+  {
+    id: '0',
+    creatorId: 'me',
+    creatorName: 'Your Story',
+    creatorHandle: 'me',
+    creatorPhoto: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Me',
+    platform: 'IG',
+    niche: 'Lifestyle',
+    type: 'BTS',
+    content: { message: 'Add to your story' },
+    timestamp: Date.now(),
+    isRead: true,
+  },
   {
     id: '1',
     creatorId: 'c1',
@@ -60,7 +107,7 @@ const MOCK_STORIES: PulseStory[] = [
     niche: 'Lifestyle',
     type: 'WIN',
     content: { milestone: '50K', message: 'Hit 50K today 🔥' },
-    timestamp: Date.now() - 1000 * 60 * 60,
+    timestamp: Date.now() - 1000 * 60 * 15,
     isRead: false,
   },
   {
@@ -73,9 +120,62 @@ const MOCK_STORIES: PulseStory[] = [
     niche: 'Tech',
     type: 'BTS',
     content: { message: 'Setting up for the big review!' },
-    timestamp: Date.now() - 1000 * 60 * 60 * 2,
+    timestamp: Date.now() - 1000 * 60 * 45,
     isRead: false,
     isTrending: true,
+  },
+  {
+    id: '3',
+    creatorId: 'c3',
+    creatorName: 'Marcus Go',
+    creatorHandle: 'marcusgo',
+    creatorPhoto: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Marcus',
+    platform: 'TikTok',
+    niche: 'Fitness',
+    type: 'TREND',
+    content: { message: 'New morning routine check' },
+    timestamp: Date.now() - 1000 * 60 * 120,
+    isRead: false,
+  },
+  {
+    id: '4',
+    creatorId: 'c4',
+    creatorName: 'Zoe Venture',
+    creatorHandle: 'zoeventure',
+    creatorPhoto: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Zoe',
+    platform: 'IG',
+    niche: 'Travel',
+    type: 'BTS',
+    content: { message: 'Bali is calling...' },
+    timestamp: Date.now() - 1000 * 60 * 180,
+    isRead: true,
+  },
+  {
+    id: '5',
+    creatorId: 'c5',
+    creatorName: 'Tech Titan',
+    creatorHandle: 'techtitan',
+    creatorPhoto: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Titan',
+    platform: 'YT',
+    niche: 'Gaming',
+    type: 'POLL',
+    content: { message: 'Next setup tour?' },
+    timestamp: Date.now() - 1000 * 60 * 240,
+    isRead: true,
+    isBrand: true,
+  },
+  {
+    id: '6',
+    creatorId: 'c6',
+    creatorName: 'Chef Rahul',
+    creatorHandle: 'chefrahul',
+    creatorPhoto: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Rahul',
+    platform: 'IG',
+    niche: 'Food',
+    type: 'BTS',
+    content: { message: 'Secret masala revealed' },
+    timestamp: Date.now() - 1000 * 60 * 300,
+    isRead: false,
   },
 ];
 
@@ -155,11 +255,19 @@ export const PulseProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [stories, setStories] = useState<PulseStory[]>(MOCK_STORIES);
   const [feedItems, setFeedItems] = useState<PulseFeedItem[]>(MOCK_FEED);
   const [newItemsCount, setNewItemsCount] = useState(0);
+  const [pulseScore, setPulseScore] = useState<PulseScore>({
+    score: 842,
+    tier: 'Diamond',
+    breakdown: { consistency: 92, engagement: 88, growth: 76, activity: 95, deals: 82, network: 85 }
+  });
+  const [collabRooms, setCollabRooms] = useState<CollabRoom[]>([
+    { id: 'cr1', partnerName: '@yogawithpriya', partnerAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Priya', status: 'ACTIVE', lastActive: '12m ago', unreadCount: 2 },
+    { id: 'cr2', partnerName: '@fit_marcus', partnerAvatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Marcus', status: 'PENDING', lastActive: '2d ago', unreadCount: 0 }
+  ]);
 
   // Auto-refresh logic (every 60s)
   useEffect(() => {
     const interval = setInterval(() => {
-      // Logic to inject a new mock item periodically to keep it "alive"
       const types: FeedItemType[] = ['TRENDING_POST', 'COLLAB_MATCH', 'PERFORMANCE_FLASH', 'INDUSTRY_INSIGHT'];
       const randomType = types[Math.floor(Math.random() * types.length)];
       
@@ -202,12 +310,19 @@ export const PulseProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       if (item.id === itemId && item.type === 'COMMUNITY_POLL') {
         const newOptions = [...item.content.options];
         newOptions[optionIndex].votes += 1;
-        // Simplified percentage recalc
         const total = newOptions.reduce((acc, opt) => acc + opt.votes, 0);
         newOptions.forEach(opt => opt.percentage = Math.round((opt.votes / total) * 100));
         return { ...item, content: { ...item.content, options: newOptions, hasVoted: true } };
       }
       return item;
+    }));
+  };
+
+  const updateScore = (newScore: number) => {
+    setPulseScore(prev => ({
+      ...prev,
+      score: newScore,
+      tier: getTier(newScore)
     }));
   };
 
@@ -219,10 +334,13 @@ export const PulseProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       feedItems, 
       unreadStoriesCount, 
       newFeedItemsCount: newItemsCount,
+      pulseScore,
+      collabRooms,
       markAsRead, 
       addStory,
       clearNewFeedItems,
-      votePoll
+      votePoll,
+      updateScore
     }}>
       {children}
     </PulseContext.Provider>

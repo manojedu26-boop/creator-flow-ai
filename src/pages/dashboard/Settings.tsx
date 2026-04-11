@@ -5,7 +5,8 @@ import {
   Bell, CreditCard, Save, Camera, 
   Instagram, Youtube, Sparkles, Plus, X,
   ChevronRight, Laptop, Moon, Sun, Monitor,
-  ShieldCheck, Lock, Activity, Receipt, RefreshCcw
+  ShieldCheck, Lock, Activity, Receipt, RefreshCcw,
+  Briefcase, Target, Users
 } from "lucide-react";
 import { PageTransition } from "../../components/shared/MotionComponents";
 import { useAuth, User as UserType } from "../../contexts/AuthContext";
@@ -282,14 +283,18 @@ export const Settings = () => {
               )}
 
               {activeTab === "Notifications" && (
-                <motion.div key="notifications" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-8">
+                <motion.div key="notifications" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-12">
                   <div className="bg-white border border-slate-100 rounded-[3.5rem] p-10 md:p-14 shadow-sm">
-                     <h3 className="text-2xl font-black tracking-tighter uppercase text-slate-900 mb-10">Dispatch Prefs</h3>
+                     <h3 className="text-2xl font-black tracking-tighter uppercase text-slate-900 mb-10 flex items-center gap-4">
+                        <Bell className="w-8 h-8 text-blue-600" />
+                        Dispatch Architecture
+                     </h3>
                      <div className="space-y-4">
                         {[
-                          { label: 'High-Value Deal Alerts', desc: 'Real-time synchronization for contract opportunities.', icon: Sparkles },
-                          { label: 'Strategic Growth Recap', desc: 'Weekly AI-curated performance audit and roadmap.', icon: Activity },
-                          { label: 'Compliance Sync', desc: 'Verification alerts for platform API credentials.', icon: RefreshCcw }
+                          { label: 'Trends & Niche Intelligence', desc: 'Real-time synchronization for what is blowing up.', icon: Activity },
+                          { label: 'Brand Opportunities', desc: 'Alerts for briefs that match your authority score.', icon: Briefcase },
+                          { label: 'Milestone Alerts', desc: 'Celebratory notifications for revenue and growth goals.', icon: Target },
+                          { label: 'Collab Matches', desc: 'Instant pings when high-alignment creators are ready.', icon: Users }
                         ].map((item, i) => (
                           <div key={i} className="flex items-center justify-between p-8 rounded-[2rem] bg-slate-50/50 border border-slate-100 hover:bg-white hover:border-blue-200 transition-all">
                              <div className="flex items-center gap-6">
@@ -306,6 +311,29 @@ export const Settings = () => {
                              </div>
                           </div>
                         ))}
+                     </div>
+                  </div>
+
+                  <div className="bg-white border border-slate-100 rounded-[3.5rem] p-10 md:p-14 shadow-sm">
+                     <h3 className="text-2xl font-black tracking-tighter uppercase text-slate-900 mb-10">Pulse Delivery Engine</h3>
+                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div className="space-y-4">
+                           <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 px-2">Delivery Timing</label>
+                           <select className="w-full h-16 bg-slate-50 border border-slate-100 rounded-3xl px-8 text-sm font-bold text-slate-900 focus:outline-none focus:ring-1 focus:ring-blue-600 focus:bg-white appearance-none cursor-pointer shadow-inner">
+                              <option>AI-Optimized (Best time for me)</option>
+                              <option>Fixed: 8:00 AM (Morning Sync)</option>
+                              <option>Fixed: 1:00 PM (Mid-day Pulse)</option>
+                              <option>Fixed: 11:00 PM (Night Recap)</option>
+                           </select>
+                        </div>
+                        <div className="space-y-4">
+                           <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 px-2">Global Frequency</label>
+                           <select className="w-full h-16 bg-slate-50 border border-slate-100 rounded-3xl px-8 text-sm font-bold text-slate-900 focus:outline-none focus:ring-1 focus:ring-blue-600 focus:bg-white appearance-none cursor-pointer shadow-inner">
+                              <option>Daily Strategic Pulse</option>
+                              <option>Every 2 Days (Minimalist)</option>
+                              <option>Weekly Intelligence Digest</option>
+                           </select>
+                        </div>
                      </div>
                   </div>
                 </motion.div>

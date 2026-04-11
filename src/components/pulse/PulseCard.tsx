@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  TrendingUp, Trophy, Zap, 
-  Target, Handshake, Sparkles, 
-  Globe, BarChart3, Clock, 
-  Instagram, Youtube, Play, 
-  Check, ArrowRight, MessageSquare, 
-  ChevronRight, Megaphone, Info
+  Heart, MessageSquare, Send, Bookmark, MoreHorizontal,
+  TrendingUp, Trophy, Zap, Target, Handshake, Sparkles, 
+  Globe, BarChart3, Clock, Check, ArrowRight, Info, Play, 
+  Circle, Volume2, VolumeX
 } from 'lucide-react';
 import { PulseFeedItem, usePulse } from '@/contexts/PulseContext';
 import { cn } from '@/lib/utils';
@@ -21,395 +19,315 @@ interface PulseCardProps {
 export const PulseCard: React.FC<PulseCardProps> = ({ item, isWidget = false }) => {
   const { votePoll } = usePulse();
   const [hasVoted, setHasVoted] = useState(item.content.hasVoted);
+  const [isLiked, setIsLiked] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     if (item.type === 'CREATOR_WIN' && !isWidget) {
       setTimeout(() => {
         confetti({
-          particleCount: 80,
-          spread: 100,
-          origin: { y: 0.8 },
-          colors: ['#4f46e5', '#6366f1', '#f59e0b']
+          particleCount: 100,
+          spread: 70,
+          origin: { y: 0.6 },
+          colors: ['#4f46e5', '#ec4899', '#f59e0b']
         });
       }, 500);
     }
   }, [item.type, isWidget]);
 
-  const renderCardContent = () => {
+  // Video Autoplay Observer
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && videoRef.current) {
+            videoRef.current.play().catch(() => {});
+          } else if (videoRef.current) {
+            videoRef.current.pause();
+          }
+        });
+      },
+      { threshold: 0.6 }
+    );
+
+    if (videoRef.current) observer.observe(videoRef.current);
+    return () => observer.disconnect();
+  }, []);
+
+  const handleLike = () => {
+    setIsLiked(!isLiked);
+    if (!isLiked) toast.success("Algorithm Fed! 🔥");
+  };
+
+  const renderHeader = () => (
+    <div className="flex items-center justify-between px-4 py-3 md:px-6 md:py-4">
+      <div className="flex items-center gap-3">
+        <div className="relative p-[2px] rounded-full bg-gradient-to-tr from-rose-500 to-indigo-600">
+           <div className="w-8 h-8 md:w-10 md:h-10 rounded-full border-2 border-white overflow-hidden bg-slate-100">
+              <img 
+                src={item.content.creatorAvatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${item.content.creatorHandle || 'System'}`} 
+                className="w-full h-full object-cover" 
+                alt="Avatar" 
+              />
+           </div>
+        </div>
+        <div className="flex flex-col -space-y-0.5">
+           <h4 className="text-[13px] md:text-[14px] font-black text-slate-900 tracking-tight flex items-center gap-1.5">
+             {item.content.creatorHandle || 'Platform Intelligence'}
+             {item.type === 'BRAND_OPPORTUNITY' && <Check className="w-3.5 h-3.5 fill-blue-500 text-white p-0.5 rounded-full" />}
+           </h4>
+           <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{item.content.niche || 'Global Node'} • 2m</span>
+        </div>
+      </div>
+      <button className="text-slate-400 hover:text-slate-600 transition-colors">
+        <MoreHorizontal className="w-5 h-5" />
+      </button>
+    </div>
+  );
+
+  const renderActions = () => (
+    <div className="flex items-center justify-between px-4 py-2 md:px-6 md:py-3">
+      <div className="flex items-center gap-5">
+        <button onClick={handleLike} className={cn("transition-transform active:scale-125", isLiked ? "text-rose-500" : "text-slate-900 hover:text-slate-400")}>
+          <Heart className={cn("w-6 h-6 md:w-7 md:h-7", isLiked && "fill-current")} />
+        </button>
+        <button className="text-slate-900 hover:text-slate-400 transition-colors">
+          <MessageSquare className="w-6 h-6 md:w-7 md:h-7" />
+        </button>
+        <button className="text-slate-900 hover:text-slate-400 transition-colors">
+          <Send className="w-6 h-6 md:w-7 md:h-7" />
+        </button>
+      </div>
+      <button onClick={() => setIsSaved(!isSaved)} className={cn("transition-colors", isSaved ? "text-amber-500" : "text-slate-900 hover:text-slate-400")}>
+        <Bookmark className={cn("w-6 h-6 md:w-7 md:h-7", isSaved && "fill-current")} />
+      </button>
+    </div>
+  );
+
+  const renderContent = () => {
     switch (item.type) {
       case 'TRENDING_POST':
         return (
-          <div className="space-y-6">
-            <div className="flex items-center justify-between">
-               <div className="flex items-center gap-3">
-                 {item.content.platform === 'Instagram' ? <Instagram className="w-5 h-5 text-pink-500" /> : <Play className="w-5 h-5 text-slate-950" />}
-                 <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">Niche: {item.content.niche}</span>
-               </div>
-               {item.isNew && <span className="w-2 h-2 bg-rose-500 rounded-full animate-pulse" />}
-            </div>
-            <h4 className="text-xl md:text-2xl font-black text-slate-950 leading-tight uppercase tracking-tight">
-              {item.content.message}
-            </h4>
-            <div className="relative group overflow-hidden rounded-[2.5rem] bg-slate-950 aspect-[16/9]">
-               <img src={item.content.thumbnail} className="w-full h-full object-cover opacity-40 blur-sm group-hover:blur-none group-hover:scale-110 transition-all duration-700" alt="Thumb" />
-               <div className="absolute inset-0 flex items-center justify-center">
-                  <Play className="w-12 h-12 text-white fill-white opacity-20 group-hover:opacity-100 transition-opacity" />
-               </div>
-               <div className="absolute top-4 right-4 px-3 py-1 bg-white/10 backdrop-blur-md rounded-full border border-white/20 text-[10px] font-black text-white uppercase tracking-widest">
-                  Live Velocity
-               </div>
-            </div>
-            <div className="flex items-center justify-between py-4 border-y border-slate-50">
-               <div>
-                  <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">Reach Growing</p>
-                  <p className="text-lg font-black text-emerald-600">{item.content.growth}</p>
-               </div>
-               <div className="text-right">
-                  <p className="text-[9px] font-black uppercase tracking-widest text-slate-400">Format</p>
-                  <p className="text-lg font-black text-slate-950">{item.content.format}</p>
-               </div>
-            </div>
-            <div className="p-6 rounded-2xl bg-indigo-50 border border-indigo-100/50 space-y-2">
-               <p className="text-[9px] font-black uppercase text-indigo-400 tracking-widest">Hook Detection AI</p>
-               <p className="text-sm font-bold text-slate-700 italic">{item.content.hook}</p>
-            </div>
-            {!isWidget && (
-              <button 
-                onClick={() => toast.success("Script Hub Calibrated 🚀")}
-                className="w-full h-16 rounded-[1.5rem] bg-slate-950 text-white font-black text-[11px] uppercase tracking-[0.3em] flex items-center justify-center gap-4 hover:bg-indigo-600 transition-all active:scale-95 group shadow-floating-blue"
-              >
-                Jump on this trend <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </button>
-            )}
-          </div>
-        );
-
-      case 'CREATOR_WIN':
-        return (
-          <div className="space-y-8">
-            <div className="flex items-center gap-6">
-              <div className="relative w-16 h-16 shrink-0">
-                <img src={item.content.creatorAvatar} className="w-full h-full rounded-[1.5rem] object-cover ring-4 ring-indigo-50" alt="Av" />
-                <div className="absolute -top-2 -right-2 bg-amber-400 p-1.5 rounded-full shadow-lg">
-                  <Trophy className="w-3.5 h-3.5 text-white" />
+          <div className="space-y-4">
+             <div className="relative aspect-square md:aspect-[4/5] bg-slate-950 overflow-hidden group">
+                <img 
+                  src={item.content.thumbnail} 
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" 
+                  alt="Trend Hero" 
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-8">
+                   <p className="text-white text-lg font-black uppercase tracking-tighter mb-2 italic">Creator Forge AI detection active</p>
+                   <p className="text-white/60 text-xs font-bold uppercase tracking-widest">{item.content.growth} velocity spike</p>
                 </div>
-              </div>
-              <div>
-                <h4 className="text-lg font-black text-slate-950 uppercase tracking-tight">{item.content.creatorHandle}</h4>
-                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">2 min ago • Milestone Node</p>
-              </div>
-            </div>
-            <div className="p-10 rounded-[3rem] bg-gradient-to-br from-indigo-50 to-white border border-indigo-100 relative overflow-hidden group">
-               <div className="absolute -bottom-10 -right-10 opacity-5 group-hover:scale-150 transition-transform duration-700">
-                  <Zap className="w-40 h-40 text-indigo-600" />
-               </div>
-               <p className="text-[11px] font-black uppercase text-indigo-600 tracking-[0.4em] mb-4">Strategic Accomplishment</p>
-               <p className="text-3xl font-black text-slate-950 leading-tight uppercase tracking-tighter mb-4">{item.content.message}</p>
-            </div>
-            {!isWidget && (
-              <div className="flex gap-4">
-                <button className="flex-1 h-14 bg-indigo-50 text-indigo-600 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-2 hover:bg-indigo-100 transition-all">
-                  🔥 Congrats!
-                </button>
-                <button className="flex-1 h-14 bg-slate-950 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-2 hover:bg-slate-800 transition-all">
-                  🤝 Collab?
-                </button>
-              </div>
-            )}
-          </div>
-        );
-
-      case 'LIVE_TREND':
-        return (
-          <div className="space-y-6">
-             <div className="flex items-center justify-between">
-                <div className="px-5 py-2.5 bg-rose-50 text-rose-500 rounded-full border border-rose-100 flex items-center gap-3">
-                   <div className="w-2 h-2 bg-rose-500 rounded-full animate-ping" />
-                   <span className="text-[10px] font-black uppercase tracking-[0.3em]">Live Trend Detection</span>
-                </div>
-                <Play className="w-6 h-6 text-slate-950" />
-             </div>
-             <div className="space-y-2">
-                <h4 className="text-3xl font-black text-slate-950 leading-tight uppercase tracking-tighter">
-                  "{item.content.trendName}" trending in {item.content.niche}
-                </h4>
-             </div>
-             <div className="grid grid-cols-2 gap-4">
-                <div className="p-6 rounded-3xl bg-slate-50 border border-slate-100">
-                   <p className="text-[9px] font-black uppercase text-slate-400 tracking-widest mb-1">Velocity</p>
-                   <p className="text-lg font-black text-slate-950">📈 {item.content.velocity.split(' creators')[0]}</p>
-                </div>
-                <div className="p-6 rounded-3xl bg-indigo-50 border border-indigo-100/50">
-                   <p className="text-[9px] font-black uppercase text-indigo-400 tracking-widest mb-1">Peak Prediction</p>
-                   <p className="text-lg font-black text-indigo-600">{item.content.peakPredicted}</p>
+                {/* Format Badge */}
+                <div className="absolute top-4 right-4 px-3 py-1 bg-white/10 backdrop-blur-md rounded-full border border-white/20 text-[10px] font-black text-white uppercase tracking-widest">
+                  Live {item.content.format}
                 </div>
              </div>
-             <div className="flex items-center gap-3 pt-4 border-t border-slate-50">
-                <div className="flex -space-x-3">
-                   {[1,2,3,4,5].map(i => (
-                     <div key={i} className="w-10 h-10 rounded-full border-2 border-white bg-slate-200 overflow-hidden shadow-sm">
-                        <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=P${i}`} alt="P" />
-                     </div>
-                   ))}
-                </div>
-                <p className="text-[11px] font-black text-slate-400 uppercase tracking-widest">+{item.content.participantCount} creators on it</p>
-             </div>
-             {!isWidget && (
-               <button className="w-full h-18 rounded-[2rem] bg-indigo-600 text-white font-black text-[11px] uppercase tracking-[0.3em] shadow-floating-blue flex items-center justify-center gap-4 hover:bg-indigo-700 transition-all active:scale-95 group">
-                  Create content for this <Sparkles className="w-5 h-5 group-hover:rotate-12 transition-transform" />
-               </button>
-             )}
-          </div>
-        );
-
-      case 'BRAND_OPPORTUNITY':
-        return (
-          <div className="space-y-8">
-            <div className="flex items-center justify-between">
-               <div className="p-3 bg-amber-50 rounded-2xl border border-amber-100 flex items-center gap-3">
-                 <Megaphone className="w-5 h-5 text-amber-600" />
-                 <span className="text-[10px] font-black uppercase tracking-[0.3em] text-amber-600">Brand Casting Node</span>
-               </div>
-               <div className="w-10 h-10 rounded-full bg-amber-400 flex items-center justify-center p-2 shadow-lg shadow-amber-400/20 ring-4 ring-amber-50">
-                 <Sparkles className="w-full h-full text-white" />
-               </div>
-            </div>
-            <div className="flex items-center gap-6">
-              <div className="w-20 h-20 rounded-[2.5rem] bg-white border border-slate-100 p-1 flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
-                <img src={item.content.brandLogo} className="w-14 h-14 rounded-2xl bg-white" alt="Brand" />
-              </div>
-              <div className="space-y-1">
-                 <h4 className="text-2xl font-black text-slate-950 uppercase tracking-tighter">{item.content.brandName}</h4>
-                 <p className="text-xs font-bold text-slate-400">{item.content.description}</p>
-              </div>
-            </div>
-            <div className="bg-slate-950 rounded-[2.5rem] p-10 space-y-8 relative overflow-hidden">
-               <div className="absolute top-0 right-0 p-8 opacity-10">
-                  <Megaphone className="w-32 h-32 text-amber-400 rotate-12" />
-               </div>
-               <div className="space-y-2 relative z-10">
-                  <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40">Guaranteed Budget</p>
-                  <p className="text-4xl font-black text-amber-400">{item.content.budget.split(' – ')[0]}</p>
-               </div>
-               <div className="flex items-center gap-10 relative z-10">
-                  <div>
-                    <p className="text-[9px] font-black uppercase text-white/40 tracking-widest mb-1">Deliverables</p>
-                    <p className="text-sm font-black text-white">{item.content.deliverables}</p>
-                  </div>
-                  <div className="text-right ml-auto">
-                    <p className="text-[9px] font-black uppercase text-white/40 tracking-widest mb-1">Spots Left</p>
-                    <p className="text-sm font-black text-amber-400">{item.content.spotsLeft} of {item.content.totalSpots}</p>
-                  </div>
-               </div>
-            </div>
-            {!isWidget && (
-              <button 
-                onClick={() => toast.success("Opening Deal Pipeline...")}
-                className="w-full h-20 rounded-[2.5rem] bg-amber-500 text-black font-black text-[12px] uppercase tracking-[0.3em] shadow-lg shadow-amber-500/20 flex items-center justify-center gap-4 hover:bg-amber-600 transition-all active:scale-95 group"
-              >
-                Apply for Casting <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
-              </button>
-            )}
-          </div>
-        );
-
-      case 'COLLAB_MATCH':
-        return (
-          <div className="space-y-8">
-             <div className="flex items-center justify-between">
-                <div className="px-5 py-2.5 bg-indigo-50 text-indigo-600 rounded-full border border-indigo-100 flex items-center gap-3">
-                   <Sparkles className="w-4 h-4 animate-pulse" />
-                   <span className="text-[10px] font-black uppercase tracking-[0.3em]">AI Strategic Match</span>
-                </div>
-                <div className="text-indigo-600 font-black text-lg">{item.content.compatibility}%</div>
-             </div>
-             <div className="flex flex-col items-center justify-center py-10 relative">
-                <div className="flex -space-x-12">
-                   <div className="w-32 h-32 rounded-[2.5rem] bg-indigo-50 p-2 shadow-2xl relative z-10">
-                      <img src={'https://api.dicebear.com/7.x/avataaars/svg?seed=Priya'} className="w-full h-full rounded-[2.2rem] object-cover ring-8 ring-white" alt="M1" />
-                   </div>
-                   <div className="w-32 h-32 rounded-[2.5rem] bg-indigo-50 p-2 shadow-2xl relative z-0">
-                      <img src={'https://api.dicebear.com/7.x/avataaars/svg?seed=Me'} className="w-full h-full rounded-[2.2rem] object-cover ring-8 ring-white opacity-40 group-hover:opacity-100 transition-opacity" alt="M2" />
-                   </div>
-                </div>
-                <div className="mt-8 text-center space-y-2">
-                   <h4 className="text-2xl font-black text-slate-950 uppercase tracking-tighter">{item.content.creatorName} posted a collab</h4>
-                   <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">{item.content.message}</p>
-                </div>
-             </div>
-             <div className="p-8 bg-slate-50 rounded-[2.5rem] border border-slate-100 flex justify-between items-center h-20">
-                <div className="flex flex-col">
-                   <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Audience Overlap</span>
-                   <span className="text-lg font-black text-indigo-600">{item.content.overlap}% Match</span>
-                </div>
-                <div className="text-right flex flex-col">
-                   <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Active</span>
-                   <span className="text-lg font-black text-slate-950">{item.content.lastActive}</span>
-                </div>
-             </div>
-             {!isWidget && (
-               <div className="grid grid-cols-2 gap-4">
-                  <button className="h-16 px-8 rounded-[1.5rem] bg-white border border-slate-200 text-slate-950 font-black text-[10px] uppercase tracking-[0.2em] hover:bg-slate-50 transition-all flex items-center justify-center">View Profile</button>
-                  <button onClick={() => toast.success("Collab Request Synchronised 🤝")} className="h-16 px-8 rounded-[1.5rem] bg-indigo-600 text-white font-black text-[10px] uppercase tracking-[0.2em] shadow-floating-blue flex items-center justify-center hover:bg-indigo-700 transition-all">Send Request</button>
-               </div>
-             )}
-          </div>
-        );
-
-      case 'PERFORMANCE_FLASH':
-        return (
-          <div className="space-y-8 bg-slate-950 rounded-[3.5rem] p-12 overflow-hidden relative group">
-             <div className="absolute top-0 right-0 p-12 opacity-10">
-                <TrendingUp className="w-48 h-48 text-emerald-400" />
-             </div>
-             <div className="relative z-10 space-y-6">
-                <div className="flex items-center gap-4">
-                   <div className="w-12 h-12 rounded-2xl bg-emerald-500 flex items-center justify-center shadow-lg shadow-emerald-500/20 group-hover:scale-110 transition-transform">
-                      <Zap className="w-6 h-6 text-white fill-white" />
-                   </div>
-                   <span className="text-[11px] font-black text-emerald-400 uppercase tracking-[0.3em]">Growth Engine Alert</span>
-                </div>
-                <h4 className="text-3xl md:text-4xl font-black text-white leading-none uppercase tracking-tighter">
-                   Your post is <span className="text-emerald-400 border-b-4 border-emerald-400/30">blowing up</span> 🚀
-                </h4>
-                <div className="p-8 rounded-[2rem] bg-white/5 border border-white/10 backdrop-blur-md space-y-2">
-                   <p className="text-[12px] font-black text-white/40 uppercase tracking-widest">{item.content.message}</p>
-                </div>
-                <div className="grid grid-cols-2 gap-8 py-4 border-y border-white/5">
+             {renderActions()}
+             <div className="px-4 md:px-6 pb-6 space-y-3">
+                <p className="text-sm">
+                   <span className="font-black mr-2">{item.content.creatorHandle || 'Platform'}</span>
+                   <span className="text-slate-700 leading-relaxed tracking-tight">{item.content.message}</span>
+                </p>
+                <div className="p-4 rounded-2xl bg-indigo-50/50 border border-indigo-100/30 flex items-start gap-3">
+                   <Sparkles className="w-4 h-4 text-indigo-600 shrink-0 mt-0.5" />
                    <div>
-                      <p className="text-[10px] font-black uppercase text-white/30 tracking-widest mb-1">Current Reach</p>
-                      <p className="text-4xl font-black text-white">{item.content.reach}</p>
-                   </div>
-                   <div>
-                      <p className="text-[10px] font-black uppercase text-white/30 tracking-widest mb-1">Multiplier</p>
-                      <p className="text-4xl font-black text-emerald-400">{item.content.multiplier}x</p>
+                      <p className="text-[10px] font-black uppercase text-indigo-400 tracking-widest mb-0.5 italic">Hook AI Extraction</p>
+                      <p className="text-[13px] font-bold text-slate-600 leading-snug">"{item.content.hook}"</p>
                    </div>
                 </div>
                 {!isWidget && (
-                  <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                     <button className="flex-1 h-16 bg-white rounded-3xl text-slate-950 font-black text-[10px] uppercase tracking-[0.2em] shadow-xl active:scale-95 transition-all">View Stats</button>
-                     <button className="flex-1 h-16 bg-emerald-500 rounded-3xl text-white font-black text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-emerald-500/20 active:scale-95 transition-all">Create Follow-up</button>
-                  </div>
+                  <button className="w-full h-14 rounded-2xl bg-slate-950 text-white font-black text-[11px] uppercase tracking-[0.2em] hover:bg-indigo-600 transition-all shadow-xl shadow-indigo-500/10">
+                     Deploy high-growth variant 🚀
+                  </button>
                 )}
              </div>
           </div>
         );
 
-      case 'INDUSTRY_INSIGHT':
+      case 'CREATOR_WIN':
         return (
-          <div className="space-y-6">
-             <div className="flex items-center justify-between">
-                <div className="px-5 py-2.5 bg-indigo-50 text-indigo-600 rounded-full border border-indigo-100 flex items-center gap-3">
-                   <Info className="w-4 h-4" />
-                   <span className="text-[10px] font-black uppercase tracking-[0.3em]">Niche Intelligence</span>
+          <div className="space-y-4">
+             <div className="aspect-square flex items-center justify-center bg-gradient-to-br from-indigo-600 to-rose-500 p-12 text-center text-white relative overflow-hidden">
+                <div className="absolute inset-0 opacity-10 blur-3xl">
+                   <Zap className="w-full h-full" />
                 </div>
-                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">{item.content.niche} Ecosystem</span>
+                <div className="relative z-10 space-y-6">
+                   <div className="w-24 h-24 bg-white/10 backdrop-blur-xl border border-white/20 rounded-[2.5rem] mx-auto flex items-center justify-center p-6 shadow-2xl">
+                      <Trophy className="w-full h-full text-white animate-bounce" />
+                   </div>
+                   <div className="space-y-2">
+                      <p className="text-[12px] font-black uppercase tracking-[0.4em] text-white/60">Milestone Reached</p>
+                      <h4 className="text-4xl md:text-5xl font-black uppercase tracking-tighter leading-none italic">{item.content.milestone || 'Big Win'}</h4>
+                   </div>
+                </div>
              </div>
-             <p className="text-2xl font-black text-slate-950 leading-tight uppercase tracking-tight">
-               {item.content.insight}
-             </p>
-             <div className="p-10 rounded-[3rem] bg-indigo-950 text-white relative overflow-hidden shadow-2xl">
-                <div className="absolute top-0 right-0 p-8 opacity-10">
-                   <Target className="w-32 h-32 text-indigo-400" />
+             {renderActions()}
+             <div className="px-4 md:px-6 pb-6">
+                <p className="text-sm">
+                   <span className="font-black mr-2">{item.content.creatorHandle}</span>
+                   <span className="text-slate-700 leading-relaxed tracking-tight">{item.content.message}</span>
+                </p>
+                <div className="mt-4 flex gap-3">
+                   <button className="flex-1 h-12 bg-indigo-50 text-indigo-600 rounded-xl font-black text-xs uppercase tracking-widest">🔥 Congratulate</button>
+                   <button className="flex-1 h-12 bg-slate-50 text-slate-400 rounded-xl font-black text-xs uppercase tracking-widest">Collab Node</button>
                 </div>
-                <p className="text-[11px] font-black uppercase text-white/30 tracking-[0.4em] mb-4">Strategic Optimisation</p>
-                <div className="flex items-end gap-6 mb-8">
-                   <p className="text-5xl font-black text-indigo-400 leading-none">2.4x</p>
-                   <p className="text-xs font-bold text-white/60 uppercase tracking-widest pb-1 underline decoration-indigo-400 decoration-2">More Effectiveness Predicted</p>
+             </div>
+          </div>
+        );
+
+      case 'PERFORMANCE_FLASH':
+        return (
+          <div className="space-y-4">
+             <div className="aspect-square bg-slate-950 p-10 flex flex-col justify-between text-white relative overflow-hidden group">
+                <div className="absolute top-0 right-0 p-12 opacity-10 group-hover:scale-150 transition-transform duration-1000">
+                   <TrendingUp className="w-48 h-48 text-emerald-400" />
                 </div>
-                <button 
-                  onClick={() => toast.success("Scheduling Node Updated 🕒")}
-                  className="w-full h-18 bg-white rounded-3xl text-indigo-950 font-black text-[11px] uppercase tracking-[0.3em] flex items-center justify-center gap-4 hover:bg-slate-100 transition-all active:scale-95 group"
-                >
-                  Reschedule next post <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
-                </button>
+                <div className="relative z-10 space-y-4">
+                   <div className="px-4 py-2 bg-emerald-500/20 backdrop-blur-md border border-emerald-500/30 rounded-full w-fit">
+                      <span className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-400">Growth Engine Sync</span>
+                   </div>
+                   <h4 className="text-4xl font-black uppercase tracking-tighter italic leading-none">Your reach is <br/> exploding 🚀</h4>
+                </div>
+                <div className="relative z-10 grid grid-cols-2 gap-8 py-8 border-y border-white/10">
+                   <div>
+                      <p className="text-[10px] font-black uppercase text-white/30 tracking-widest mb-1 leading-none">Current Reach</p>
+                      <p className="text-4xl font-black text-white">{item.content.reach}</p>
+                   </div>
+                   <div>
+                      <p className="text-[10px] font-black uppercase text-white/30 tracking-widest mb-1 leading-none">Multiplier</p>
+                      <p className="text-4xl font-black text-emerald-400">{item.content.multiplier}x</p>
+                   </div>
+                </div>
+             </div>
+             {renderActions()}
+             <div className="px-4 md:px-6 pb-6">
+                <p className="text-sm">
+                   <span className="font-black mr-2">CreatorForge AI</span>
+                   <span className="text-slate-700 leading-relaxed tracking-tight">{item.content.message}</span>
+                </p>
+                <div className="mt-4 flex gap-3">
+                   <button className="flex-1 h-12 bg-emerald-50 text-emerald-600 rounded-xl font-black text-xs uppercase tracking-widest">View Heatmap</button>
+                   <button className="flex-1 h-12 bg-slate-950 text-white rounded-xl font-black text-xs uppercase tracking-widest">Optimise Post</button>
+                </div>
+             </div>
+          </div>
+        );
+
+      case 'BRAND_OPPORTUNITY':
+        return (
+          <div className="space-y-4">
+             <div className="aspect-square bg-amber-400 p-12 flex flex-col justify-between relative group overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-br from-amber-400 to-amber-500" />
+                <div className="absolute -bottom-10 -right-10 opacity-20 transform rotate-12 group-hover:scale-110 transition-transform">
+                   <Handshake className="w-64 h-64 text-white" />
+                </div>
+                <div className="relative z-10 space-y-6">
+                   <div className="w-20 h-20 bg-white rounded-[2.5rem] p-4 shadow-2xl flex items-center justify-center">
+                      <img src={item.content.brandLogo} className="w-full h-full object-contain" alt="Brand" />
+                   </div>
+                   <div className="space-y-2">
+                      <h4 className="text-4xl font-black text-slate-950 uppercase tracking-tighter leading-tight italic">{item.content.brandName} Casting Node</h4>
+                      <p className="text-xs font-bold text-slate-900/60 uppercase tracking-widest italic">{item.content.budget} Budget</p>
+                   </div>
+                </div>
+                <div className="relative z-10 px-8 py-5 bg-white/20 backdrop-blur-xl border border-white/30 rounded-[2rem]">
+                   <div className="flex justify-between items-center">
+                      <div>
+                        <p className="text-[10px] font-black uppercase text-slate-900/40 tracking-widest mb-1 leading-none">Spots Remaining</p>
+                        <p className="text-2xl font-black text-slate-950 italic">{item.content.spotsLeft} Left</p>
+                      </div>
+                      <Globe className="w-8 h-8 text-slate-900/40" />
+                   </div>
+                </div>
+             </div>
+             {renderActions()}
+             <div className="px-4 md:px-6 pb-6">
+                <p className="text-sm">
+                   <span className="font-black mr-2">{item.content.brandName}</span>
+                   <span className="text-slate-700 leading-relaxed tracking-tight">{item.content.description}</span>
+                </p>
+                <button className="w-full h-14 mt-4 bg-slate-950 text-white rounded-2xl font-black text-[11px] uppercase tracking-[0.3em] shadow-2xl active:scale-95 transition-all">Apply for Casting Node</button>
              </div>
           </div>
         );
 
       case 'COMMUNITY_POLL':
         return (
-          <motion.div layout className="space-y-8">
-             <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                   <div className="w-12 h-12 rounded-2xl bg-primary flex items-center justify-center shadow-lg">
-                      <BarChart3 className="w-6 h-6 text-white" />
-                   </div>
-                   <div>
-                      <h4 className="text-lg font-black text-slate-950 uppercase tracking-tight">Community Pulse</h4>
-                      <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">{item.content.voters.toLocaleString()} Creators Voting</p>
-                   </div>
+          <div className="space-y-4">
+             <div className="aspect-square bg-slate-50 p-10 flex flex-col justify-center space-y-8 border-y border-slate-100">
+                <div className="space-y-2 text-center">
+                   <p className="text-[10px] font-black uppercase text-indigo-600 tracking-[0.4em]">Creator Intelligence Node</p>
+                   <h4 className="text-3xl font-black uppercase tracking-tighter leading-tight italic">{item.content.question}</h4>
                 </div>
-                {hasVoted && <div className="px-4 py-2 bg-emerald-50 text-emerald-600 rounded-full text-[10px] font-black uppercase tracking-widest border border-emerald-100 flex items-center gap-2 animate-in fade-in zoom-in"><Check className="w-3.5 h-3.5" /> Synchronised</div>}
+                <div className="space-y-3">
+                   {item.content.options.map((opt: any, idx: number) => (
+                      <button 
+                         key={idx}
+                         disabled={hasVoted}
+                         onClick={() => {
+                            votePoll(item.id, idx);
+                            setHasVoted(true);
+                            toast.success("Intelligence Synchronised 📊");
+                         }}
+                         className={cn(
+                            "w-full h-16 rounded-2xl border relative overflow-hidden transition-all active:scale-95",
+                            hasVoted ? "bg-white border-transparent" : "bg-white border-slate-200 hover:border-indigo-600"
+                         )}
+                      >
+                         {hasVoted && (
+                            <motion.div 
+                               initial={{ width: 0 }}
+                               animate={{ width: `${opt.percentage}%` }}
+                               className="absolute inset-y-0 left-0 bg-indigo-600/10"
+                            />
+                         )}
+                         <div className="relative z-10 px-8 flex justify-between items-center h-full">
+                            <span className="text-xs font-black uppercase tracking-widest text-slate-900">{opt.label}</span>
+                            {hasVoted && <span className="text-xl font-black text-indigo-600 italic">{opt.percentage}%</span>}
+                         </div>
+                      </button>
+                   ))}
+                </div>
              </div>
-             <p className="text-3xl font-black text-slate-950 uppercase tracking-tighter leading-tight">{item.content.question}</p>
-             <div className="space-y-4">
-                {item.content.options.map((opt: any, idx: number) => (
-                  <button 
-                    key={idx}
-                    disabled={hasVoted}
-                    onClick={() => {
-                        votePoll(item.id, idx);
-                        setHasVoted(true);
-                        toast.success("Intelligence Recorded 📊");
-                    }}
-                    className={cn(
-                      "w-full h-20 rounded-[2rem] border relative overflow-hidden transition-all group active:scale-[0.98]",
-                      hasVoted ? "border-slate-100 bg-slate-50 cursor-default" : "border-slate-100 bg-white hover:border-indigo-600 hover:shadow-premium"
-                    )}
-                  >
-                     <AnimatePresence>
-                        {hasVoted && (
-                          <motion.div 
-                            initial={{ width: 0 }}
-                            animate={{ width: `${opt.percentage}%` }}
-                            transition={{ duration: 1, ease: 'circOut' }}
-                            className="absolute inset-y-0 left-0 bg-indigo-600/10"
-                          />
-                        )}
-                     </AnimatePresence>
-                     <div className="relative z-10 px-10 flex items-center justify-between h-full">
-                        <span className={cn(
-                          "text-[12px] font-black uppercase tracking-[0.2em] transition-all",
-                          hasVoted ? "text-slate-950" : "text-slate-400 group-hover:text-indigo-600"
-                        )}>{opt.label}</span>
-                        {hasVoted && (
-                          <motion.span 
-                            initial={{ opacity: 0, x: 10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            className="text-2xl font-black text-indigo-600"
-                          >
-                            {opt.percentage}%
-                          </motion.span>
-                        )}
-                     </div>
-                  </button>
-                ))}
+             {renderActions()}
+             <div className="px-4 md:px-6 pb-6">
+                <p className="text-sm">
+                   <span className="font-black mr-2">Platform Poll</span>
+                   <span className="text-slate-700 leading-relaxed tracking-tight">Contributing your intelligence helps the network grow. {item.content.voters.toLocaleString()} nodes already synced.</span>
+                </p>
              </div>
-             {!hasVoted && <p className="text-[10px] font-black text-slate-400 text-center uppercase tracking-[0.4em]">Vote to see real-time intelligence</p>}
-          </motion.div>
+          </div>
         );
 
       default:
-        return null;
+        return (
+           <div className="p-12 text-center space-y-4">
+              <Zap className="w-12 h-12 text-indigo-600 mx-auto" />
+              <p className="text-lg font-black uppercase tracking-tighter">{item.type.replace('_', ' ')}</p>
+           </div>
+        );
     }
   };
 
   return (
     <motion.div
       layout
-      initial={{ opacity: 0, y: 50, scale: 0.95 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
+      initial={{ opacity: 0, y: 50 }}
+      animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.95 }}
-      whileHover={!isWidget ? { y: -10, transition: { duration: 0.3 } } : {}}
       className={cn(
-        "rounded-[4rem] group transition-all duration-500",
+        "bg-white transition-all duration-300",
         isWidget 
-          ? "bg-white p-8 border border-slate-100" 
-          : "bg-white p-12 border border-slate-100 shadow-premium hover:shadow-floating-indigo cursor-pointer"
+          ? "rounded-3xl border border-slate-100 shadow-sm" 
+          : "rounded-[2.5rem] md:rounded-[3rem] border border-slate-200/60 shadow-xl overflow-hidden mb-12"
       )}
     >
-      {renderCardContent()}
+      {renderHeader()}
+      {renderContent()}
     </motion.div>
   );
 };

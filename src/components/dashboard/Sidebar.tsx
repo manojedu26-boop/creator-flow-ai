@@ -21,14 +21,13 @@ export const navItems = [
   { icon: Handshake,    label: "Brand Deals",       href: "/deals" },
   { icon: BrainCircuit, label: "AI Studio",         href: "/studio" },
   { icon: Calendar,     label: "Calendar",          href: "/calendar" },
-  { icon: TrendingUp,   label: "Growth Strategy",   href: "/growth" },
-  { icon: Globe,        label: "Creator Network",   href: "/network" },
+  { icon: TrendingUp,   label: "Growth",            href: "/growth" },
+  { icon: Globe,        label: "Network",           href: "/network" },
   { icon: DollarSign,   label: "Revenue",           href: "/revenue" },
-  { icon: ShieldCheck,  label: "Contract Shield",   href: "/contracts" },
+  { icon: ShieldCheck,  label: "Contracts",         href: "/contracts" },
   { icon: Palette,      label: "Media Kit",         href: "/mediakit" },
   { icon: MessageSquare,label: "Messages",          href: "/messages" },
   { icon: Bell,         label: "Notifications",     href: "/notifications" },
-  { icon: Settings,     label: "Settings",          href: "/settings" },
 ];
 
 const springTransition: any = { type: "spring", stiffness: 400, damping: 40, mass: 1 };

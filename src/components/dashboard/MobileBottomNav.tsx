@@ -12,17 +12,16 @@ import { useAuth } from "../../contexts/AuthContext";
 
 const mainNavItems = [
   { icon: Home, label: "Home", href: "/dashboard" },
-  { icon: Activity, label: "Pulse", href: "/pulse" },
   { icon: Compass, label: "Explore", href: "/explore" },
-  { icon: BarChart3, label: "Analytics", href: "/analytics" },
+  { icon: Activity, label: "Pulse", href: "/pulse" },
   { icon: Sparkles, label: "Studio", href: "/studio" },
 ];
 
 const secondaryNavItems = [
   { icon: Briefcase, label: "Brand Deals", href: "/deals" },
   { icon: Globe, label: "Network", href: "/network" },
-  { icon: Wallet, label: "Monetisation", href: "/revenue" },
-  { icon: Shield, label: "Contract Shield", href: "/contracts" },
+  { icon: Wallet, label: "Revenue", href: "/revenue" },
+  { icon: Shield, label: "Contracts", href: "/contracts" },
   { icon: Settings, label: "Settings", href: "/settings" },
 ];
 

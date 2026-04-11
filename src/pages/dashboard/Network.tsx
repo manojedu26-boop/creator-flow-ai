@@ -11,7 +11,10 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import { toast } from "../../components/ui/sonner";
 import { BottomSheet } from "../../components/ui/BottomSheet";
-import { PulseStrip } from "../../components/pulse/PulseStrip";
+import { StoryBar } from "../../components/stories/StoryBar";
+import { StoryViewer } from "../../components/stories/StoryViewer";
+import { Creator } from "../../types/stories";
+import { MOCK_CREATORS } from "../../data/mockStories";
 
 interface Post {
   id: number;
@@ -40,6 +43,8 @@ export const Network = () => {
   const [connections, setConnections] = useState<Record<number, string>>({});
   const [showApplyModal, setShowApplyModal] = useState(false);
   const [selectedCasting, setSelectedCasting] = useState<any>(null);
+  const [activeStoryCreator, setActiveStoryCreator] = useState<Creator | null>(null);
+  const [creators] = useState<Creator[]>(MOCK_CREATORS);
 
   const handleLike = (id: number) => {
     setPosts(prev => prev.map(p => {
@@ -111,7 +116,7 @@ export const Network = () => {
       {/* CENTRE PANE — FEED */}
       <div className="flex-1 overflow-y-auto bg-muted/5 p-8 no-scrollbar scroll-smooth">
          <div className="max-w-2xl mx-auto space-y-8">
-            <PulseStrip sticky />
+            <StoryBar onStoryClick={(c) => setActiveStoryCreator(c)} className="mb-4" />
             {/* AI assisted composer */}
             <div className="bg-card border border-border/40 rounded-[2rem] p-6 shadow-xl relative group">
                <div className="flex gap-4">
@@ -339,6 +344,25 @@ export const Network = () => {
             </button>
          </div>
       </BottomSheet>
+
+      <AnimatePresence>
+        {activeStoryCreator && (
+          <StoryViewer 
+            creator={activeStoryCreator}
+            onClose={() => setActiveStoryCreator(null)}
+            onNextCreator={() => {
+              const idx = creators.findIndex(c => c.id === activeStoryCreator?.id);
+              if (idx < creators.length - 1) setActiveStoryCreator(creators[idx + 1]);
+              else setActiveStoryCreator(null);
+            }}
+            onPrevCreator={() => {
+              const idx = creators.findIndex(c => c.id === activeStoryCreator?.id);
+              if (idx > 0) setActiveStoryCreator(creators[idx - 1]);
+              else setActiveStoryCreator(null);
+            }}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 };

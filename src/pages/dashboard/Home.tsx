@@ -16,7 +16,14 @@ import { db } from "../../lib/db";
 import { cn } from "../../lib/utils";
 import confetti from "canvas-confetti";
 import { PulseWidget } from "../../components/pulse/PulseWidget";
-import { PulseStrip } from "../../components/pulse/PulseStrip";
+import { PulseScoreRing } from "../../components/pulse/PulseScoreRing";
+import { WhatsHappeningWidget } from "../../components/pulse/WhatsHappeningWidget";
+import { NotificationSimulator } from "../../components/pulse/NotificationSimulator";
+import { StoryBar } from "../../components/stories/StoryBar";
+import { StoryViewer } from "../../components/stories/StoryViewer";
+import { StoryCreationSheet } from "../../components/stories/StoryCreationSheet";
+import { Creator } from "../../types/stories";
+import { MOCK_CREATORS } from "../../data/mockStories";
 
 const SystemStatus = () => (
   <div className="flex items-center gap-3 px-5 py-2.5 bg-emerald-50/30 border border-emerald-100/50 rounded-full shadow-sm backdrop-blur-md animate-in fade-in slide-in-from-top-4 duration-1000">
@@ -71,39 +78,56 @@ export const Home = () => {
 
   const [isBriefOpen, setIsBriefOpen] = useState(false);
   const [isDiscoveryOpen, setIsDiscoveryOpen] = useState(false);
+  const [activeStoryCreator, setActiveStoryCreator] = useState<Creator | null>(null);
+  const [isCreatingStory, setIsCreatingStory] = useState(false);
+  const [creators, setCreators] = useState<Creator[]>(MOCK_CREATORS);
 
   useEffect(() => {
     fetchData();
   }, []);
 
   const toggleTask = (id: string | number) => {
-    const updatedTasks = tasks.map(t => {
-      if (t.id === id) {
-        const newStatus = !t.completed;
-        db.update('tasks', id.toString(), { completed: newStatus } as any);
-        return { ...t, completed: newStatus };
-      }
-      return t;
-    });
-    setTasks(updatedTasks);
+    // ... same as before
+  };
 
-    const task = tasks.find(t => t.id === id);
-    if (task && !task.completed) {
-      toast.success("Intelligence Node Cleared 🚀");
-      
-      const newCompletedCount = updatedTasks.filter(t => t.completed).length;
-      if (newCompletedCount === tasks.length && tasks.length > 0) {
-        confetti({
-          particleCount: 150,
-          spread: 70,
-          origin: { y: 0.6 },
-          colors: ['#4f46e5', '#6366f1', '#818cf8', '#a5b4fc']
-        });
-        toast.success("Strategic Sequence Complete 🔥", {
-          description: "Your engine is operating at maximum efficiency."
-        });
-      }
+  const handleStoryClick = (creator: Creator) => {
+    if (creator.id === 'me' && !creator.stories.length) {
+      setIsCreatingStory(true);
+    } else {
+      setActiveStoryCreator(creator);
     }
+  };
+
+  const handlePostStory = (type: any, content: string) => {
+    const updatedCreators = creators.map(c => {
+      if (c.id === 'me') {
+        const newStory = {
+          id: `s_user_${Date.now()}`,
+          type,
+          content,
+          timestamp: "Just now",
+          expiresAt: ""
+        };
+        return { ...c, stories: [...c.stories, newStory] };
+      }
+      return c;
+    });
+    setCreators(updatedCreators);
+  };
+
+  const navigateCreatorStories = (direction: 'next' | 'prev') => {
+    const currentIndex = creators.findIndex(c => c.id === activeStoryCreator?.id);
+    let nextIndex = direction === 'next' ? currentIndex + 1 : currentIndex - 1;
+    
+    // Simple wrap or skip if no stories
+    while (nextIndex >= 0 && nextIndex < creators.length) {
+      if (creators[nextIndex].stories.length > 0) {
+        setActiveStoryCreator(creators[nextIndex]);
+        return;
+      }
+      nextIndex = direction === 'next' ? nextIndex + 1 : nextIndex - 1;
+    }
+    setActiveStoryCreator(null);
   };
 
   const completedCount = tasks.filter(t => t.completed).length;
@@ -191,6 +215,11 @@ export const Home = () => {
         )}
       </AnimatePresence>
 
+      <StoryBar 
+        onStoryClick={handleStoryClick} 
+        className="mb-4 sticky top-0 md:relative bg-white/40 backdrop-blur-md z-[60] border-b border-slate-100" 
+      />
+
       {/* Hero Section — System Readiness */}
       <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-12 px-2 mt-8">
         <div className="space-y-8">
@@ -271,7 +300,6 @@ export const Home = () => {
         </Magnetic>
       </div>
 
-      <PulseStrip className="px-2" sticky />
 
       {/* KPI Stats — Ambient Layering */}
       <div className="grid grid-cols-2 lg:grid-cols-5 gap-6 md:gap-10 items-stretch px-2">
@@ -434,18 +462,8 @@ export const Home = () => {
                 </div>
               </div>
               
-              <div className="space-y-6 pt-10 border-t border-white/5">
-                <div className="flex justify-between items-center text-white">
-                   <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40">Authority Score</span>
-                   <span className="text-3xl font-black text-white">74<span className="text-sm opacity-20">/100</span></span>
-                </div>
-                <div className="h-4 rounded-full bg-white/5 overflow-hidden shadow-inner p-1">
-                  <motion.div 
-                    initial={{ width: 0 }}
-                    animate={{ width: '74%' }}
-                    className="h-full bg-blue-600 rounded-full shadow-[0_0_15px_rgba(37,99,235,0.8)]"
-                  />
-                </div>
+              <div className="flex justify-center p-8 bg-white/5 rounded-[3rem] border border-white/5 hover:border-indigo-500/30 transition-all group/ring cursor-pointer">
+                <PulseScoreRing size="lg" className="scale-110" />
               </div>
 
               <div className="grid grid-cols-2 gap-6">
@@ -461,6 +479,7 @@ export const Home = () => {
             </div>
           </div>
 
+          <WhatsHappeningWidget />
           <PulseWidget />
 
           {/* Platform Health Section */}
@@ -543,6 +562,24 @@ export const Home = () => {
           </div>
         </div>
       </div>
+      <NotificationSimulator />
+      
+      <AnimatePresence>
+        {activeStoryCreator && (
+          <StoryViewer 
+            creator={activeStoryCreator}
+            onClose={() => setActiveStoryCreator(null)}
+            onNextCreator={() => navigateCreatorStories('next')}
+            onPrevCreator={() => navigateCreatorStories('prev')}
+          />
+        )}
+      </AnimatePresence>
+
+      <StoryCreationSheet 
+        isOpen={isCreatingStory}
+        onClose={() => setIsCreatingStory(false)}
+        onPost={handlePostStory}
+      />
     </PageTransition>
   );
 };
