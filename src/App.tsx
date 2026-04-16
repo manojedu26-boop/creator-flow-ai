@@ -68,20 +68,20 @@ const App = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Sonner />
-        <Toaster />
-        <AnimatePresence mode="wait">
-          {showIntro ? (
-            <Intro key="intro" onComplete={() => setShowIntro(false)} />
-          ) : (
-            <AuthProvider>
-              <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
-                <ExploreProvider>
-                  <PulseProvider>
-                    <BrowserRouter key="app">
-                  <Suspense fallback={<PageLoader />}>
-                    <Routes>
+      <BrowserRouter key="app">
+        <TooltipProvider>
+          <Sonner />
+          <Toaster />
+          <AnimatePresence mode="wait">
+            {showIntro ? (
+              <Intro key="intro" onComplete={() => setShowIntro(false)} />
+            ) : (
+              <AuthProvider>
+                <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
+                  <ExploreProvider>
+                    <PulseProvider>
+                      <Suspense fallback={<PageLoader />}>
+                        <Routes>
                       {/* Public Routes */}
                       <Route path="/media-kit/:id" element={<PublicMediaKit />} />
                       <Route path="/" element={<Index />} />
@@ -125,15 +125,15 @@ const App = () => {
 
                       <Route path="*" element={<NotFound />} />
                     </Routes>
-                  </Suspense>
-                </BrowserRouter>
-              </PulseProvider>
-              </ExploreProvider>
-              </ThemeProvider>
-            </AuthProvider>
-          )}
-        </AnimatePresence>
-      </TooltipProvider>
+                      </Suspense>
+                    </PulseProvider>
+                  </ExploreProvider>
+                </ThemeProvider>
+              </AuthProvider>
+            )}
+          </AnimatePresence>
+        </TooltipProvider>
+      </BrowserRouter>
     </QueryClientProvider>
   );
 };
