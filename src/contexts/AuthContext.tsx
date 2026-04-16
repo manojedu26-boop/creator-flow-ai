@@ -57,48 +57,55 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setUser(mockUser);
     }
 
-    // 2. Supabase Session Listener
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (session?.user) {
-        // Map Supabase user to our internal User format
-        const { user: sbUser } = session;
-        const name = sbUser.user_metadata.full_name || sbUser.email?.split('@')[0] || "Operative";
-        
-        const existingProfile = db.getAll<User>('users').find(u => u.email === sbUser.email);
-        
-        if (existingProfile) {
-          setUser(existingProfile);
-        } else {
-          // Create a new local profile for the OAuth user
-          const newUser: User = {
-            id: sbUser.id,
-            name: name,
-            firstName: name.split(' ')[0],
-            handle: `@${name.toLowerCase().replace(/\s+/g, '')}_${Math.random().toString(36).substr(2, 4)}`,
-            email: sbUser.email!,
-            photo: sbUser.user_metadata.avatar_url || null,
-            niche: "Fitness & Lifestyle",
-            platforms: ["Instagram"],
-            type: 'Creator',
-            followerCounts: { "Instagram": "0" },
-            onboarded: false
-          };
-          db.insert('users', newUser);
-          setUser(newUser);
+    // 2. Supabase Session Listener (Only if client is initialized)
+    let subscription: any = null;
+    
+    if (supabase) {
+      const { data } = supabase.auth.onAuthStateChange(async (event, session) => {
+        if (session?.user) {
+          // Map Supabase user to our internal User format
+          const { user: sbUser } = session;
+          const name = sbUser.user_metadata.full_name || sbUser.email?.split('@')[0] || "Operative";
+          
+          const existingProfile = db.getAll<User>('users').find(u => u.email === sbUser.email);
+          
+          if (existingProfile) {
+            setUser(existingProfile);
+          } else {
+            // Create a new local profile for the OAuth user
+            const newUser: User = {
+              id: sbUser.id,
+              name: name,
+              firstName: name.split(' ')[0],
+              handle: `@${name.toLowerCase().replace(/\s+/g, '')}_${Math.random().toString(36).substr(2, 4)}`,
+              email: sbUser.email!,
+              photo: sbUser.user_metadata.avatar_url || null,
+              niche: "Fitness & Lifestyle",
+              platforms: ["Instagram"],
+              type: 'Creator',
+              followerCounts: { "Instagram": "0" },
+              onboarded: false
+            };
+            db.insert('users', newUser);
+            setUser(newUser);
+          }
+          
+          if (event === 'SIGNED_IN') {
+            toast.success("Identity Verified", { description: "Secure session initialized." });
+          }
+        } else if (event === 'SIGNED_OUT') {
+          setUser(null);
+          db.reset();
         }
-        
-        if (event === 'SIGNED_IN') {
-          toast.success("Identity Verified", { description: "Secure session initialized." });
-        }
-      } else if (event === 'SIGNED_OUT') {
-        setUser(null);
-        db.reset();
-      }
+        setIsLoading(false);
+      });
+      subscription = data.subscription;
+    } else {
       setIsLoading(false);
-    });
+    }
 
     return () => {
-      subscription.unsubscribe();
+      if (subscription) subscription.unsubscribe();
     };
   }, []);
 
