@@ -14,21 +14,41 @@ import { toast } from "@/components/ui/sonner";
 import { cn } from "../../lib/utils";
 import { Logo } from "../shared/Logo";
 
-export const navItems = [
-  { icon: Home,         label: "Home",              href: "/dashboard" },
-  { icon: Activity,     label: "Pulse",             href: "/pulse", badge: "🔴" },
-  { icon: Compass,      label: "Explore",           href: "/explore" },
-  { icon: BarChart3,    label: "Analytics",         href: "/analytics" },
-  { icon: Handshake,    label: "Brand Deals",       href: "/deals" },
-  { icon: BrainCircuit, label: "AI Studio",         href: "/studio" },
-  { icon: Calendar,     label: "Calendar",          href: "/calendar" },
-  { icon: TrendingUp,   label: "Growth",            href: "/growth" },
-  { icon: Globe,        label: "Network",           href: "/network" },
-  { icon: DollarSign,   label: "Revenue",           href: "/revenue" },
-  { icon: ShieldCheck,  label: "Contracts",         href: "/contracts" },
-  { icon: Palette,      label: "Media Kit",         href: "/mediakit" },
-  { icon: MessageSquare,label: "Messages",          href: "/messages" },
-  { icon: Bell,         label: "Notifications",     href: "/notifications" },
+export const navGroups = [
+  {
+    title: "HQ",
+    items: [
+      { icon: Home,         label: "Home",              href: "/dashboard" },
+      { icon: Activity,     label: "Pulse",             href: "/pulse", badge: "🔴" },
+      { icon: Compass,      label: "Explore",           href: "/explore" },
+    ]
+  },
+  {
+    title: "Creative Hub",
+    items: [
+      { icon: BrainCircuit, label: "AI Studio",         href: "/studio" },
+      { icon: Calendar,     label: "Calendar",          href: "/calendar" },
+      { icon: TrendingUp,   label: "Growth",            href: "/growth" },
+    ]
+  },
+  {
+    title: "Business",
+    items: [
+      { icon: BarChart3,    label: "Analytics",         href: "/analytics" },
+      { icon: Handshake,    label: "Brand Deals",       href: "/deals" },
+      { icon: DollarSign,   label: "Revenue",           href: "/revenue" },
+      { icon: ShieldCheck,  label: "Contracts",         href: "/contracts" },
+      { icon: Palette,      label: "Media Kit",         href: "/mediakit" },
+    ]
+  },
+  {
+    title: "Networking",
+    items: [
+      { icon: Globe,        label: "Network",           href: "/network" },
+      { icon: MessageSquare,label: "Messages",          href: "/messages" },
+      { icon: Bell,         label: "Notifications",     href: "/notifications" },
+    ]
+  }
 ];
 
 const springTransition: any = { type: "spring", stiffness: 400, damping: 40, mass: 1 };
@@ -131,67 +151,88 @@ export const Sidebar = () => {
         )}
       </div>
 
-      {/* Nav Items */}
-      <nav className="flex-1 overflow-y-auto no-scrollbar py-4 px-3 space-y-0.5">
-        {navItems.map((item) => {
-          const isActive = location.pathname === item.href ||
-            (item.href !== "/dashboard" && location.pathname.startsWith(item.href));
-          const isNotifications = item.href === "/notifications";
+      {/* Nav Items Grouped - Compact Vertical Logic */}
+      <nav className="flex-1 overflow-y-auto no-scrollbar py-4 px-3 space-y-6">
+        {navGroups.map((group) => (
+          <div key={group.title} className="space-y-1">
+            {expanded && (
+              <motion.h3 
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="px-4 text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2 truncate"
+              >
+                {group.title}
+              </motion.h3>
+            )}
+            
+            <div className="space-y-0.5">
+              {group.items.map((item) => {
+                const isActive = location.pathname === item.href ||
+                  (item.href !== "/dashboard" && location.pathname.startsWith(item.href));
+                const isNotifications = item.href === "/notifications";
 
-          return (
-            <Link
-              key={item.label}
-              to={item.href}
-              className={cn(
-                "flex items-center rounded-2xl relative transition-all group py-3.5",
-                expanded ? "px-4 gap-4" : "justify-center px-0 gap-0",
-                isActive ? "bg-slate-950 text-white shadow-xl shadow-slate-200" : "text-slate-400 hover:bg-slate-50 hover:text-slate-900"
-              )}
-              title={!expanded ? item.label : undefined}
-            >
-              {isActive && (
-                <motion.div
-                  layoutId="activeNav"
-                  className="absolute right-2 top-1/2 -translate-y-1/2 w-1 h-4 bg-blue-500 rounded-full"
-                />
-              )}
-
-              {/* Icon with notification badge */}
-              <div className="relative shrink-0">
-                <item.icon className={`w-5 h-5 transition-all ${isActive ? "text-blue-600" : "group-hover:text-slate-900"}`} />
-                {isNotifications && unreadCount > 0 && (
-                  <span className="absolute -top-1.5 -right-1.5 min-w-[16px] h-4 bg-rose-600 text-white text-[9px] font-black rounded-full flex items-center justify-center px-1 border border-white">
-                    {unreadCount > 9 ? "9+" : unreadCount}
-                  </span>
-                )}
-              </div>
-
-              <AnimatePresence mode="wait">
-                {expanded && (
-                  <motion.span
-                    className="font-black text-[11px] uppercase tracking-widest whitespace-nowrap"
-                    initial={{ opacity: 0, x: -5 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -5, transition: { duration: 0.1 } }}
+                return (
+                  <Link
+                    key={item.label}
+                    to={item.href}
+                    className={cn(
+                      "flex items-center rounded-xl relative transition-all group py-2.5",
+                      expanded ? "px-4 gap-3.5" : "justify-center px-0 gap-0",
+                      isActive 
+                        ? "bg-slate-950 text-white shadow-xl shadow-slate-200" 
+                        : "text-slate-400 hover:bg-slate-50 hover:text-slate-900"
+                    )}
+                    title={!expanded ? item.label : undefined}
                   >
-                    {item.label}
-                  </motion.span>
-                )}
-              </AnimatePresence>
+                    {isActive && (
+                      <motion.div
+                        layoutId="activeNavTab"
+                        className="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-4 bg-blue-500 rounded-full"
+                      />
+                    )}
 
-              {/* Notification count in expanded mode */}
-              {isNotifications && unreadCount > 0 && expanded && (
-                <motion.span
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="shrink-0 min-w-[20px] h-5 bg-rose-500 text-white text-[9px] font-black rounded-full flex items-center justify-center px-1.5"
-                >
-                  {unreadCount > 9 ? "9+" : unreadCount}
-                </motion.span>
-              )}
-            </Link>
-          );
-        })}
+                    {/* Icon with notification badge */}
+                    <div className="relative shrink-0 flex items-center justify-center">
+                      <item.icon className={cn(
+                        "w-4.5 h-4.5 transition-all outline-none",
+                        isActive ? "text-blue-500" : "group-hover:text-slate-900"
+                      )} />
+                      {isNotifications && unreadCount > 0 && (
+                        <span className="absolute -top-1.5 -right-1.5 min-w-[16px] h-4 bg-rose-600 text-white text-[9px] font-black rounded-full flex items-center justify-center px-1 border border-white">
+                          {unreadCount > 9 ? "9+" : unreadCount}
+                        </span>
+                      )}
+                    </div>
+
+                    <AnimatePresence mode="wait">
+                      {expanded && (
+                        <motion.span
+                          className="font-bold text-[10px] uppercase tracking-wider whitespace-nowrap"
+                          initial={{ opacity: 0, x: -5 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0, x: -5, transition: { duration: 0.1 } }}
+                        >
+                          {item.label}
+                        </motion.span>
+                      )}
+                    </AnimatePresence>
+
+                    {/* Notification count in expanded mode */}
+                    {isNotifications && unreadCount > 0 && expanded && (
+                      <motion.span
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="ml-auto shrink-0 min-w-[20px] h-5 bg-rose-500 text-white text-[9px] font-black rounded-full flex items-center justify-center px-1.5"
+                      >
+                        {unreadCount > 9 ? "9+" : unreadCount}
+                      </motion.span>
+                    )}
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        ))}
       </nav>
 
       {/* Creator Profile Bottom */}

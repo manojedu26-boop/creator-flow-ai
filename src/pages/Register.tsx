@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "@/components/ui/sonner";
 import { useAuth } from "../contexts/AuthContext";
 import { Logo } from "@/components/shared/Logo";
+import { supabase } from "../lib/supabase";
 
 const getPasswordStrength = (pw: string): { label: string; color: string; barColor: string; width: string } => {
   if (pw.length === 0) return { label: "", color: "", barColor: "", width: "0%" };
@@ -82,24 +83,25 @@ const Register = () => {
     setTimeout(() => navigate("/onboarding"), 1100);
   };
 
-  const googleAccounts = [
-    { name: "Naveen Kumar", email: "naveen.k@gmail.com", image: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=100&h=100&fit=crop" },
-    { name: "Creator Lab", email: "lab@creatorforge.ai", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop" },
-  ];
-
-  const handleGoogleSelect = (index: number) => {
-    setSelectedGoogleAccount(index);
-    setTimeout(() => {
-      setShowGooglePicker(false);
-      register(googleAccounts[index].name, googleAccounts[index].email);
-      toast.success("Identity Verified via Google", { description: `Welcome back, ${googleAccounts[index].name.split(' ')[0]}.` });
-      navigate("/onboarding");
-    }, 1200);
+  const handleGoogleOAuth = async () => {
+    try {
+      setIsLoading(true);
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: window.location.origin + '/dashboard',
+        }
+      });
+      if (error) throw error;
+    } catch (error: any) {
+      toast.error("Authentication Failed", { description: error.message });
+      setIsLoading(false);
+    }
   };
 
   return (
     <>
-      {/* Google Picker Modal Mockup */}
+      {/* Google Identity Picker Modal */}
       <AnimatePresence>
         {showGooglePicker && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center px-6">
@@ -118,38 +120,40 @@ const Register = () => {
             >
               <div className="p-8 border-b border-white/5 flex items-center justify-between">
                 <div>
-                   <h3 className="text-xl font-black text-white">Select Identity Node</h3>
-                   <p className="text-[10px] font-black uppercase tracking-widest text-slate-500 mt-1">to authorize CreatorForge access</p>
+                   <h3 className="text-xl font-black text-white">Identity Cluster</h3>
+                   <p className="text-[10px] font-black uppercase tracking-widest text-slate-500 mt-1">Select authorization node</p>
                 </div>
                 <button onClick={() => setShowGooglePicker(false)} className="w-10 h-10 rounded-full hover:bg-white/5 flex items-center justify-center transition-colors">
                   <X className="w-5 h-5 text-slate-500" />
                 </button>
               </div>
               <div className="p-4 space-y-2">
-                {googleAccounts.map((acc, i) => (
-                  <button
-                    key={acc.email}
-                    onClick={() => handleGoogleSelect(i)}
-                    disabled={selectedGoogleAccount !== null}
-                    className="w-full flex items-center gap-4 p-4 rounded-2xl hover:bg-white/5 transition-all text-left relative group"
-                  >
-                    <img src={acc.image} className="w-10 h-10 rounded-full bg-slate-800 object-cover border border-white/5" />
-                    <div className="flex-1">
-                      <p className="text-sm font-bold text-white">{acc.name}</p>
-                      <p className="text-xs text-slate-500">{acc.email}</p>
-                    </div>
-                    {selectedGoogleAccount === i ? (
-                      <div className="w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
-                    ) : (
-                      <ChevronRight className="w-4 h-4 text-slate-600 group-hover:text-blue-500 transition-colors" />
-                    )}
-                  </button>
-                ))}
-                <button className="w-full flex items-center gap-4 p-4 rounded-2xl hover:bg-white/5 transition-all text-left">
-                  <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/5">
-                    <User className="w-5 h-5 text-slate-500" />
+                {/* Real OAuth Trigger Buttons */}
+                <button
+                  onClick={handleGoogleOAuth}
+                  className="w-full flex items-center gap-4 p-5 rounded-2xl hover:bg-white/5 transition-all text-left relative group border border-white/5 hover:border-blue-500/50"
+                >
+                  <div className="w-10 h-10 rounded-full bg-blue-600/20 flex items-center justify-center border border-blue-500/20">
+                    <Chrome className="w-5 h-5 text-blue-500" />
                   </div>
-                  <span className="text-sm font-bold text-white">Use another account</span>
+                  <div className="flex-1">
+                    <p className="text-sm font-bold text-white">Authorize via Google</p>
+                    <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">Fast Sync Protocol</p>
+                  </div>
+                  <div className={cn("w-2 h-2 rounded-full bg-emerald-500 animate-pulse")} />
+                </button>
+
+                <button 
+                  onClick={handleGoogleOAuth}
+                  className="w-full flex items-center gap-4 p-5 rounded-2xl hover:bg-white/5 transition-all text-left group"
+                >
+                  <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/5">
+                    <User className="w-5 h-5 text-slate-500 group-hover:text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-sm font-bold text-white">Use another account</p>
+                    <p className="text-[9px] font-black uppercase tracking-widest text-slate-600">Standard SDK Auth</p>
+                  </div>
                 </button>
               </div>
               <div className="p-8 bg-black/20 border-t border-white/5 text-[10px] text-slate-500 leading-relaxed font-bold">

@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { toast } from "@/components/ui/sonner";
 import { db } from "../lib/db";
+import { supabase } from "../lib/supabase";
 
 export interface User {
   id: string;
@@ -47,6 +48,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    // 1. Initial local profile load
     const users = db.getAll<User>('users');
     if (users.length > 0) {
       setUser(users[0]);
@@ -54,7 +56,50 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       db.seed('users', [mockUser]);
       setUser(mockUser);
     }
-    setIsLoading(false);
+
+    // 2. Supabase Session Listener
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (session?.user) {
+        // Map Supabase user to our internal User format
+        const { user: sbUser } = session;
+        const name = sbUser.user_metadata.full_name || sbUser.email?.split('@')[0] || "Operative";
+        
+        const existingProfile = db.getAll<User>('users').find(u => u.email === sbUser.email);
+        
+        if (existingProfile) {
+          setUser(existingProfile);
+        } else {
+          // Create a new local profile for the OAuth user
+          const newUser: User = {
+            id: sbUser.id,
+            name: name,
+            firstName: name.split(' ')[0],
+            handle: `@${name.toLowerCase().replace(/\s+/g, '')}_${Math.random().toString(36).substr(2, 4)}`,
+            email: sbUser.email!,
+            photo: sbUser.user_metadata.avatar_url || null,
+            niche: "Fitness & Lifestyle",
+            platforms: ["Instagram"],
+            type: 'Creator',
+            followerCounts: { "Instagram": "0" },
+            onboarded: false
+          };
+          db.insert('users', newUser);
+          setUser(newUser);
+        }
+        
+        if (event === 'SIGNED_IN') {
+          toast.success("Identity Verified", { description: "Secure session initialized." });
+        }
+      } else if (event === 'SIGNED_OUT') {
+        setUser(null);
+        db.reset();
+      }
+      setIsLoading(false);
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
   const login = (email: string, _password: string) => {

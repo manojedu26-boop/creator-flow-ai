@@ -6,6 +6,7 @@ import { Sparkles, ArrowLeft, Mail, Lock, Eye, EyeOff, Chrome, Stars, Zap, Check
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "@/components/ui/sonner";
 import { useAuth } from "../contexts/AuthContext";
+import { supabase } from "../lib/supabase";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -70,15 +71,20 @@ const Login = () => {
     setTimeout(() => navigate("/dashboard"), 900);
   };
 
-  const handleGoogleOAuth = () => {
-    toast.info("Google Sign-In", { description: "Connecting to Google... (simulated)" });
-    setIsLoading(true);
-    setTimeout(() => {
-      const googleUser = { name: "Google User", email: "googleuser@gmail.com" };
-      login(googleUser.email, "google-oauth");
-      toast.success("Signed in with Google!", { description: "Welcome to CreatorForge." });
-      navigate("/dashboard");
-    }, 1500);
+  const handleGoogleOAuth = async () => {
+    try {
+      setIsLoading(true);
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: window.location.origin + '/dashboard',
+        }
+      });
+      if (error) throw error;
+    } catch (error: any) {
+      toast.error("Authentication Failed", { description: error.message });
+      setIsLoading(false);
+    }
   };
 
   return (
