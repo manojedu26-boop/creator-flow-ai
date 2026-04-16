@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
+import { Logo } from "./Logo";
 
 export const Intro = ({ onComplete }: { onComplete: () => void }) => {
   const [isDone, setIsDone] = useState(false);
@@ -56,8 +57,22 @@ export const Intro = ({ onComplete }: { onComplete: () => void }) => {
           initial="hidden"
           animate="visible"
           exit="exit"
-          className="fixed inset-0 z-[9999] bg-black flex items-center justify-center overflow-hidden perspective-1000"
+          className="fixed inset-0 z-[9999] bg-black flex flex-col items-center justify-center overflow-hidden perspective-1000"
         >
+          {/* Logo Identity Node */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8, filter: "blur(20px)" }}
+            animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+            transition={{ delay: 0.2, duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
+            className="mb-12 relative"
+          >
+             <Logo iconOnly iconClassName="w-24 h-24 md:w-32 md:h-32 shadow-none" />
+             <motion.div 
+               animate={{ opacity: [0, 0.5, 0] }}
+               transition={{ duration: 3, repeat: Infinity }}
+               className="absolute inset-0 bg-amber-500/20 blur-3xl rounded-full"
+             />
+          </motion.div>
           {/* Ambient Background Glow */}
           <motion.div 
             initial={{ opacity: 0 }}

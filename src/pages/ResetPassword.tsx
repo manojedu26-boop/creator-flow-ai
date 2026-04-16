@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { cn } from "@/lib/utils";
+import { Logo } from "@/components/shared/Logo";
 import { motion } from "framer-motion";
 import { Sparkles, Lock, Eye, EyeOff, CheckCircle2, AlertCircle } from "lucide-react";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -78,8 +80,9 @@ const ResetPassword = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <div className="flex items-center gap-2 font-black text-2xl tracking-tighter mb-1 uppercase">
-          <Sparkles className="w-6 h-6 text-primary" /><span>CreatorForge</span><span className="text-primary">AI</span>
+        <div className="flex items-center gap-3 font-black text-3xl tracking-tighter uppercase text-white mb-10">
+          <Logo iconOnly iconClassName="w-10 h-10 shadow-none bg-transparent" />
+          <span>CreatorForge<span className="text-blue-500">AI</span></span>
         </div>
 
         <div className="rounded-[2.5rem] bg-black/40 backdrop-blur-3xl p-8 md:p-10 border border-white/10 shadow-2xl mt-8">

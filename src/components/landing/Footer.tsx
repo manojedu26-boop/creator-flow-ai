@@ -1,16 +1,12 @@
-import { Sparkles, Globe, Twitter, Instagram, Youtube, Zap } from "lucide-react";
+import { Globe, Twitter, Instagram, Youtube, Zap } from "lucide-react";
+import { Logo } from "../shared/Logo";
 
 const Footer = () => (
   <footer className="bg-slate-950 border-t border-white/5 pt-32 pb-16 px-6">
     <div className="container max-w-7xl relative z-10">
       <div className="grid grid-cols-1 md:grid-cols-12 gap-12 mb-24">
         <div className="col-span-1 md:col-span-5">
-          <div className="flex items-center gap-3 font-black text-3xl tracking-tighter uppercase text-white mb-8">
-            <div className="w-12 h-12 rounded-xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
-               <Sparkles className="w-6 h-6 text-white" />
-            </div>
-            <span>CreatorForge<span className="text-blue-500 font-black italic ml-1">AI</span></span>
-          </div>
+          <Logo className="mb-8" />
           <p className="text-slate-500 font-medium text-xl leading-relaxed max-w-sm mb-10">
             The high-fidelity command centre for the world's most ambitious icons. Built for the future of creator intelligence.
           </p>

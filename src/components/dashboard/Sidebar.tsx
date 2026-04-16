@@ -12,6 +12,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { db } from "../../lib/db";
 import { toast } from "@/components/ui/sonner";
 import { cn } from "../../lib/utils";
+import { Logo } from "../shared/Logo";
 
 export const navItems = [
   { icon: Home,         label: "Home",              href: "/dashboard" },
@@ -110,29 +111,24 @@ export const Sidebar = () => {
         )}
         onClick={toggleSidebar}
       >
-        <div className="relative shrink-0 w-8 h-8 flex items-center justify-center bg-blue-600 rounded-xl shadow-lg shadow-blue-500/20">
-          <Sparkles className="w-5 h-5 text-white" />
-          <motion.div 
-            animate={{ scale: [1, 1.2, 1], rotate: [0, 90, 0] }}
-            transition={{ duration: 4, repeat: Infinity }}
-            className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-white" 
-          />
-        </div>
-        <AnimatePresence mode="wait">
-          {expanded && (
-            <motion.div
-              className="flex flex-col absolute left-20"
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -10, transition: { duration: 0.1 } }}
-            >
-              <span className="font-black tracking-tighter text-lg uppercase text-slate-950">
-                CreatorForge<span className="text-blue-600">AI</span>
-              </span>
-              <span className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-400 -mt-1">Suite v3.1</span>
-            </motion.div>
+        <Logo 
+          iconOnly={!expanded} 
+          iconClassName="w-8 h-8"
+          textClassName="text-lg text-slate-950"
+          className={cn(
+            "transition-all duration-300",
+            !expanded && "px-0"
           )}
-        </AnimatePresence>
+        />
+        {expanded && (
+          <motion.span 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-400 absolute bottom-3 left-20"
+          >
+            Suite v3.1
+          </motion.span>
+        )}
       </div>
 
       {/* Nav Items */}

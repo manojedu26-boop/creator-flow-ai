@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, Menu, X, ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Logo } from "@/components/shared/Logo";
 
 const navLinks = [
   { label: "Features", href: "#features" },
@@ -22,15 +23,7 @@ const Navbar = () => {
       transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
     >
       <div className="container max-w-[1440px] flex items-center justify-between h-[var(--header-h)] px-6 md:px-12 text-white">
-        <div 
-          className="flex items-center gap-3 font-black text-2xl tracking-tighter cursor-pointer group" 
-          onClick={() => navigate("/")}
-        >
-          <div className="w-11 h-11 rounded-xl bg-blue-600 flex items-center justify-center shadow-[0_0_20px_rgba(37,99,235,0.3)] group-hover:scale-110 transition-transform">
-             <Sparkles className="w-5 h-5 text-white fill-white/20" />
-          </div>
-          <span className="text-white uppercase tracking-tighter">CREATORFORGE<span className="text-blue-500">AI</span></span>
-        </div>
+        <Logo />
 
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-10">
@@ -70,12 +63,7 @@ const Navbar = () => {
             <SheetContent side="right" className="w-full sm:w-[400px] bg-slate-950 border-l border-white/5 p-0">
                <div className="flex flex-col h-full">
                   <div className="p-8 border-b border-white/5 bg-slate-900/50">
-                    <div className="flex items-center gap-3 font-black text-2xl tracking-tighter">
-                      <div className="w-11 h-11 rounded-xl bg-blue-600 flex items-center justify-center shadow-lg">
-                        <Sparkles className="w-5 h-5 text-white" />
-                      </div>
-                      <span className="text-white uppercase tracking-tighter">CREATORFORGE<span className="text-blue-500">AI</span></span>
-                    </div>
+                    <Logo />
                   </div>
                   <nav className="flex-1 px-8 py-12 space-y-10">
                     {navLinks.map((link) => (

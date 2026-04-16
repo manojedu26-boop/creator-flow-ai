@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
+import { Logo } from "@/components/shared/Logo";
 import { Sparkles, ArrowLeft, Mail, Lock, Eye, EyeOff, Chrome, Stars, Zap, Check } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "@/components/ui/sonner";
@@ -99,10 +101,8 @@ const Login = () => {
 
         <div className="flex flex-col gap-4 mb-12">
           <div className="flex items-center gap-3 font-black text-3xl tracking-tighter uppercase text-white">
-            <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
-               <Sparkles className="w-5 h-5 text-white" />
-            </div>
-            <span>CreatorForge<span className="text-blue-600">AI</span></span>
+               <Logo iconOnly iconClassName="w-10 h-10 shadow-none bg-transparent" />
+               <span>CreatorForge<span className="text-blue-600">AI</span></span>
           </div>
           <p className="text-slate-400 font-bold text-lg">Authorize Identity Node to access your creator suite.</p>
         </div>

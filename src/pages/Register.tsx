@@ -4,6 +4,7 @@ import { Sparkles, ArrowLeft, Mail, Lock, User, ChevronRight, Eye, EyeOff, Chrom
 import { useNavigate } from "react-router-dom";
 import { toast } from "@/components/ui/sonner";
 import { useAuth } from "../contexts/AuthContext";
+import { Logo } from "@/components/shared/Logo";
 
 const getPasswordStrength = (pw: string): { label: string; color: string; barColor: string; width: string } => {
   if (pw.length === 0) return { label: "", color: "", barColor: "", width: "0%" };
@@ -176,9 +177,7 @@ const Register = () => {
 
         <div className="flex flex-col gap-4 mb-12">
           <div className="flex items-center gap-3 font-black text-3xl tracking-tighter uppercase text-white">
-            <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-500/20">
-               <Sparkles className="w-5 h-5 text-white" />
-            </div>
+            <Logo iconOnly iconClassName="w-10 h-10 shadow-none bg-transparent" />
             <span>CreatorForge<span className="text-blue-600">AI</span></span>
           </div>
           <p className="text-slate-400 font-bold text-lg">Join 5,000+ operatives scaling their empire.</p>
