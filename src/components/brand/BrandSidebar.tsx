@@ -7,6 +7,8 @@ import {
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
+import { Logo } from "../shared/Logo";
+import { cn } from "@/lib/utils";
 
 const menuItems = [
   { icon: Home, label: "Brand Home", path: "/brand" },
@@ -30,15 +32,21 @@ export const BrandSidebar = () => {
     >
       <div className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent pointer-events-none" />
       
-      {/* Brand Logo */}
-      <div className="p-6 mb-8 flex items-center gap-3">
-         <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white font-black text-xl shadow-lg shadow-primary/20">B</div>
+      <div className={cn(
+        "p-6 mb-8 flex items-center transition-all duration-300",
+        isCollapsed ? "justify-center px-0" : "gap-3"
+      )}>
+         <Logo 
+            iconOnly={isCollapsed} 
+            iconClassName={isCollapsed ? "w-8 h-8" : "w-10 h-10"}
+            textClassName="text-lg"
+            className={cn(isCollapsed && "gap-0")}
+         />
          {!isCollapsed && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-               <h1 className="text-lg font-black tracking-tighter text-white uppercase">CreatorForge <span className="text-primary">Brand</span></h1>
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col -mt-1">
                <div className="flex items-center gap-1.5 opacity-50">
                   <ShieldCheck className="w-3 h-3 text-emerald-500" />
-                  <span className="text-[9px] font-black uppercase tracking-widest text-white">Verified Enterprise</span>
+                  <span className="text-[9px] font-black uppercase tracking-[0.3em] text-white">Verified Enterprise</span>
                </div>
             </motion.div>
          )}
