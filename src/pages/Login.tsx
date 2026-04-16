@@ -72,6 +72,14 @@ const Login = () => {
   };
 
   const handleGoogleOAuth = async () => {
+    if (!supabase) {
+      toast.error("Configuration Missing", { 
+        description: "Supabase keys not found. Please add them to your Vercel Dashboard environment variables.",
+        duration: 5000
+      });
+      return;
+    }
+
     try {
       setIsLoading(true);
       const { error } = await supabase.auth.signInWithOAuth({
