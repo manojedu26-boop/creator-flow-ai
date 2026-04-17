@@ -177,10 +177,19 @@ const Hero = () => {
           </Magnetic>
           <Magnetic>
              <button 
+               onClick={() => window.open("https://play.google.com/store/apps", "_blank")} 
+               className="h-20 px-16 rounded-[2.5rem] bg-indigo-600/20 border border-indigo-500/30 text-indigo-300 font-black text-[12px] uppercase tracking-[0.4em] backdrop-blur-md hover:bg-indigo-600/30 transition-all active:scale-95 flex items-center gap-4"
+             >
+               <PlayCircle className="w-5 h-5 text-indigo-400" />
+               Get the App
+             </button>
+          </Magnetic>
+          <Magnetic>
+             <button 
                onClick={() => setShowVideo(true)} 
                className="h-20 px-16 rounded-[2.5rem] bg-white/5 border border-white/10 text-white font-black text-[12px] uppercase tracking-[0.4em] backdrop-blur-md hover:bg-white/10 transition-all active:scale-95 flex items-center gap-4"
              >
-               <PlayCircle className="w-5 h-5 text-blue-400" />
+               <Zap className="w-5 h-5 text-blue-400" />
                View Intelligence
              </button>
           </Magnetic>

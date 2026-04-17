@@ -40,6 +40,7 @@ const Messages = lazy(() => import("./pages/dashboard/Messages.tsx").then(m => (
 const Settings = lazy(() => import("./pages/dashboard/Settings.tsx").then(m => ({ default: m.Settings })));
 const NotificationsPage = lazy(() => import("./pages/dashboard/Notifications.tsx").then(m => ({ default: m.Notifications })));
 const CollabRoom = lazy(() => import("./pages/dashboard/CollabRoom.tsx").then(m => ({ default: m.CollabRoom })));
+const VideoEditor = lazy(() => import("./pages/dashboard/VideoEditor.tsx").then(m => ({ default: m.VideoEditor })));
 
 const BrandLayout = lazy(() => import("./components/brand/BrandLayout").then(m => ({ default: m.BrandLayout })));
 const BrandHome = lazy(() => import("./pages/brand/BrandHome.tsx").then(m => ({ default: m.BrandHome })));
@@ -98,6 +99,7 @@ const App = () => {
                         <Route path="/explore" element={<Explore />} />
                         <Route path="/analytics" element={<Analytics />} />
                         <Route path="/deals" element={<BrandDeals />} />
+                        <Route path="/editor" element={<VideoEditor />} />
                         <Route path="/studio" element={<ContentStudio />} />
                         <Route path="/calendar" element={<Calendar />} />
                         <Route path="/growth" element={<Growth />} />

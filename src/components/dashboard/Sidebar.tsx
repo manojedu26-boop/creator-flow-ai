@@ -27,6 +27,7 @@ export const navGroups = [
     title: "Creative Hub",
     items: [
       { icon: BrainCircuit, label: "AI Studio",         href: "/studio" },
+      { icon: Play,         label: "Video Edit",       href: "/editor" },
       { icon: Calendar,     label: "Calendar",          href: "/calendar" },
       { icon: TrendingUp,   label: "Growth",            href: "/growth" },
     ]
