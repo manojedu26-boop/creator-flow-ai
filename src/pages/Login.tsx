@@ -43,32 +43,33 @@ const Login = () => {
       return;
     }
 
-    setIsLoading(true);
-    setErrors({});
-
-    // Simulate API call — 800ms delay
-    await new Promise(r => setTimeout(r, 800));
-
-    // Check against stored users in localStorage
-    const users: any[] = JSON.parse(localStorage.getItem("cf_users") || "[]");
-    const found = users.find(u => u.email === email);
-
-    if (!found || found.password !== btoa(password)) {
-      setErrors({ general: "Incorrect email or password." });
-      setIsLoading(false);
+    if (!supabase) {
+      toast.error("Configuration Missing", { 
+        description: "Supabase keys not found. Please add them to your Vercel Dashboard.",
+        duration: 5000
+      });
       return;
     }
 
-    if (rememberMe) {
-      localStorage.setItem("cf_remember", "true");
-      localStorage.setItem("cf_session_expiry", String(Date.now() + 30 * 24 * 60 * 60 * 1000));
-    } else {
-      localStorage.setItem("cf_session_expiry", String(Date.now() + 24 * 60 * 60 * 1000));
-    }
+    setIsLoading(true);
+    setErrors({});
 
-    login(email, password);
-    toast.success("Welcome back! 🔥", { description: "Redirecting to your dashboard..." });
-    setTimeout(() => navigate("/dashboard"), 900);
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      });
+
+      if (error) throw error;
+
+      if (data.session) {
+        toast.success("Identity Verified! 🔥", { description: "Redirecting to your dashboard..." });
+        setTimeout(() => navigate("/dashboard"), 900);
+      }
+    } catch (error: any) {
+      setErrors({ general: error.message || "Failed to authorize security link." });
+      setIsLoading(false);
+    }
   };
 
   const handleGoogleOAuth = async () => {

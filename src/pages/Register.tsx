@@ -58,30 +58,47 @@ const Register = () => {
     const errs = validate();
     if (Object.keys(errs).length > 0) { setErrors(errs); return; }
 
-    setIsLoading(true);
-    await new Promise(r => setTimeout(r, 1000));
-
-    const users: any[] = JSON.parse(localStorage.getItem("cf_users") || "[]");
-    if (users.find((u: any) => u.email === email)) {
-      setErrors({ email: "An account with this email already exists" });
-      setIsLoading(false);
+    if (!supabase) {
+      toast.error("Configuration Missing", { 
+        description: "Supabase keys not found. Please add them to your Vercel Dashboard.",
+        duration: 5000
+      });
       return;
     }
 
-    const newUser = {
-      id: Math.random().toString(36).substr(2, 9),
-      name,
-      email,
-      password: btoa(password),
-      type: accountType,
-      createdAt: new Date().toISOString()
-    };
-    localStorage.setItem("cf_users", JSON.stringify([...users, newUser]));
+    setIsLoading(true);
+    
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            full_name: name,
+            account_type: accountType
+          },
+          emailRedirectTo: window.location.origin + '/onboarding'
+        }
+      });
 
-    register(name, email);
+      if (error) throw error;
 
-    toast.success("Account created! 🎉", { description: "Welcome to CreatorForge. Finishing your setup..." });
-    setTimeout(() => navigate("/onboarding"), 1100);
+      if (data.user) {
+        toast.success("Identity Sequence Initiated! 🎉", { 
+          description: "A verification link has been sent to your neural link (email). Please verify to continue.",
+          duration: 8000
+        });
+        
+        // We still store a temporary entry in local DB to bridge the experience
+        // though the real profile is created in AuthContext when they confirm email
+        register(name, email);
+        
+        setTimeout(() => navigate("/login"), 3000);
+      }
+    } catch (error: any) {
+      toast.error("Protocol Failure", { description: error.message });
+      setIsLoading(false);
+    }
   };
 
   const handleGoogleOAuth = async () => {

@@ -63,16 +63,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (supabase) {
       const { data } = supabase.auth.onAuthStateChange(async (event, session) => {
         if (session?.user) {
-          // Map Supabase user to our internal User format
           const { user: sbUser } = session;
-          const name = sbUser.user_metadata.full_name || sbUser.email?.split('@')[0] || "Operative";
           
-          const existingProfile = db.getAll<User>('users').find(u => u.email === sbUser.email);
+          // Get name and account type from metadata
+          const name = sbUser.user_metadata.full_name || sbUser.email?.split('@')[0] || "Operative";
+          const type = sbUser.user_metadata.account_type || 'Creator';
+          
+          const existingProfile = db.getAll<User>('users').find(u => u.id === sbUser.id || u.email === sbUser.email);
           
           if (existingProfile) {
-            setUser(existingProfile);
+            // Update existing profile with any new metadata
+            const updatedProfile = { ...existingProfile, name, type, photo: sbUser.user_metadata.avatar_url || existingProfile.photo };
+            db.update<User>('users', existingProfile.id, updatedProfile);
+            setUser(updatedProfile);
           } else {
-            // Create a new local profile for the OAuth user
+            // Create a new local profile for the user
             const newUser: User = {
               id: sbUser.id,
               name: name,
@@ -80,9 +85,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
               handle: `@${name.toLowerCase().replace(/\s+/g, '')}_${Math.random().toString(36).substr(2, 4)}`,
               email: sbUser.email!,
               photo: sbUser.user_metadata.avatar_url || null,
-              niche: "Fitness & Lifestyle",
+              niche: "Fitness & Lifestyle", // Default
               platforms: ["Instagram"],
-              type: 'Creator',
+              type: type as 'Creator' | 'Brand',
               followerCounts: { "Instagram": "0" },
               onboarded: false
             };
