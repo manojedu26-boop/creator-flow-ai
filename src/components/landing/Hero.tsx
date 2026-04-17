@@ -115,10 +115,10 @@ const NeuralCore = () => {
   );
 };
 const TITANS = [
-  { name: "Dhruv Rathee", handle: "@dhruvrathee", followers: "24M+", photo: "https://yt3.googleusercontent.com/ytc/AIdro_m4_X9U6P7Jz-mC-6L9vX-_uC0-5P4l4-2lZ7_9=s176-c-k-c0x00ffffff-no-rj" },
-  { name: "CarryMinati", handle: "@carryminati", followers: "41M+", photo: "https://yt3.googleusercontent.com/ytc/AIdro_m6_d_S-m9Q9_m9_-m9_-_u_-_u_-_u_-_u=s176-c-k-c0x00ffffff-no-rj" },
-  { name: "Technical Guruji", handle: "@technicalguruji", followers: "23M+", photo: "https://yt3.googleusercontent.com/ytc/AIdro_n_-_u_-_u_-_u_-_u_-_u_-_u_-_u_-_u=s176-c-k-c0x00ffffff-no-rj" },
-  { name: "Mallika Motiramani", handle: "@mallikamotiramani", followers: "500K+", photo: "https://yt3.googleusercontent.com/ytc/AIdro_m7_-_u_-_u_-_u_-_u_-_u_-_u_-_u_-_u=s176-c-k-c0x00ffffff-no-rj" },
+  { name: "CarryMinati", handle: "@carryminati", followers: "41M+", photo: "https://upload.wikimedia.org/wikipedia/commons/a/a2/Ajey_Nagar_YouTube_FF_2019.jpg" },
+  { name: "Dhruv Rathee", handle: "@dhruvrathee", followers: "24M+", photo: "https://upload.wikimedia.org/wikipedia/commons/e/ee/Dhruv_Rathee.jpg" },
+  { name: "Technical Guruji", handle: "@technicalguruji", followers: "23M+", photo: "https://upload.wikimedia.org/wikipedia/commons/e/e0/Gaurav_Chaudhary_at_the_YouTube_Fanfest_2018_%28cropped%29.jpg" },
+  { name: "Mallika Motiramani", handle: "@mallikamotiramani", followers: "500K+", photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Mallika" },
 ];
 
 const FeaturedTestimonial = () => (
@@ -137,8 +137,8 @@ const FeaturedTestimonial = () => (
         "CreatorForge AI is the only tool that actually understands the scale of my production. It's like having a neural expansion of my own team."
       </p>
       <div className="flex items-center gap-4 pt-6 border-t border-white/5">
-        <div className="w-14 h-14 rounded-2xl border border-white/10 overflow-hidden shadow-xl">
-           <img src="https://yt3.googleusercontent.com/ytc/AIdro_m4_X9U6P7Jz-mC-6L9vX-_uC0-5P4l4-2lZ7_9=s176-c-k-c0x00ffffff-no-rj" alt="Dhruv Rathee" className="w-full h-full object-cover" />
+        <div className="w-14 h-14 rounded-2xl border border-white/10 overflow-hidden shadow-xl bg-slate-800">
+           <img src="https://upload.wikimedia.org/wikipedia/commons/e/ee/Dhruv_Rathee.jpg" alt="Dhruv Rathee" className="w-full h-full object-cover" />
         </div>
         <div className="text-left">
            <p className="text-sm font-black text-white uppercase tracking-tight">Dhruv Rathee</p>
