@@ -121,7 +121,7 @@ export const Sidebar = () => {
     <motion.div
       className="fixed left-0 top-0 bottom-0 z-sidebar bg-white border-r border-slate-100 hidden lg:flex flex-col shadow-[1px_0_10px_rgba(0,0,0,0.02)] overflow-hidden"
       animate={{ width: expanded ? 280 : 80 }}
-      transition={springTransition}
+      transition={{ duration: 0.3, ease: "easeInOut" }}
       onMouseEnter={() => setIsHoverExpanded(true)}
       onMouseLeave={() => setIsHoverExpanded(false)}
     >
@@ -142,30 +142,38 @@ export const Sidebar = () => {
             !expanded && "px-0"
           )}
         />
-        {expanded && (
-          <motion.span 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-400 absolute bottom-3 left-20"
-          >
-            Suite v3.1
-          </motion.span>
-        )}
+        <AnimatePresence>
+          {expanded && (
+            <motion.span 
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -10 }}
+              transition={{ duration: 0.3 }}
+              className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-400 absolute bottom-3 left-20 whitespace-nowrap"
+            >
+              Suite v3.1
+            </motion.span>
+          )}
+        </AnimatePresence>
       </div>
 
       {/* Nav Items Grouped - Compact Vertical Logic */}
       <nav className="flex-1 overflow-y-auto no-scrollbar py-4 px-3 space-y-6">
         {navGroups.map((group) => (
           <div key={group.title} className="space-y-1">
-            {expanded && (
-              <motion.h3 
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="px-4 text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2 truncate"
-              >
-                {group.title}
-              </motion.h3>
-            )}
+            <AnimatePresence>
+              {expanded && (
+                <motion.h3 
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -10 }}
+                  transition={{ duration: 0.3 }}
+                  className="px-4 text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2 truncate"
+                >
+                  {group.title}
+                </motion.h3>
+              )}
+            </AnimatePresence>
             
             <div className="space-y-0.5">
               {group.items.map((item) => {
@@ -178,7 +186,7 @@ export const Sidebar = () => {
                     key={item.label}
                     to={item.href}
                     className={cn(
-                      "flex items-center rounded-xl relative transition-all group py-2.5",
+                      "flex items-center rounded-xl relative transition-all duration-300 ease-in-out group py-2.5",
                       expanded ? "px-4 gap-3.5" : "justify-center px-0 gap-0",
                       isActive 
                         ? "bg-slate-950 text-white shadow-xl shadow-slate-200" 
@@ -206,16 +214,19 @@ export const Sidebar = () => {
                       )}
                     </div>
 
-                    <AnimatePresence mode="wait">
+                    <AnimatePresence initial={false}>
                       {expanded && (
-                        <motion.span
-                          className="font-bold text-[10px] uppercase tracking-wider whitespace-nowrap"
-                          initial={{ opacity: 0, x: -5 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          exit={{ opacity: 0, x: -5, transition: { duration: 0.1 } }}
+                        <motion.div
+                          initial={{ opacity: 0, width: 0, x: -10 }}
+                          animate={{ opacity: 1, width: "auto", x: 0 }}
+                          exit={{ opacity: 0, width: 0, x: -10 }}
+                          transition={{ duration: 0.3, ease: "easeInOut" }}
+                          className="overflow-hidden flex items-center"
                         >
-                          {item.label}
-                        </motion.span>
+                          <span className="font-bold text-[10px] uppercase tracking-wider whitespace-nowrap">
+                            {item.label}
+                          </span>
+                        </motion.div>
                       )}
                     </AnimatePresence>
 
