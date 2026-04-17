@@ -215,10 +215,6 @@ export const Home = () => {
         )}
       </AnimatePresence>
 
-      <StoryBar 
-        onStoryClick={handleStoryClick} 
-        className="mb-4 sticky top-0 md:relative bg-white/40 backdrop-blur-md z-[60] border-b border-slate-100" 
-      />
 
       {/* Hero Section — System Readiness */}
       <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-12 px-2 mt-8">
@@ -238,12 +234,9 @@ export const Home = () => {
             <motion.h1 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-5xl md:text-8xl font-black tracking-tighter text-slate-950 uppercase leading-[0.8] mb-4"
+              className="text-3xl md:text-5xl font-black tracking-tighter text-slate-950 uppercase leading-none mb-2 italic"
             >
-              Intelligence <br />
-              <span className="text-indigo-600 inline-flex items-center gap-6">
-                Operational <Sparkles className="w-12 h-12 md:w-20 md:h-20 text-slate-200 fill-slate-200 animate-pulse" />
-              </span>
+              CREATOR <span className="text-indigo-600">COMMAND</span> CENTER
             </motion.h1>
             <p className="text-slate-400 font-bold max-w-3xl text-sm md:text-lg uppercase tracking-[0.15em] leading-relaxed">
               Welcome back, <span className="text-slate-900">{user?.firstName || 'Commander'}</span>. All neural nodes are active. <br />
@@ -354,11 +347,11 @@ export const Home = () => {
                    Neural Feed • Synchronised {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </p>
               </div>
-              <div className="bg-slate-950 text-white text-[11px] font-black px-8 py-4 rounded-[1.5rem] uppercase tracking-[0.2em] shadow-floating shrink-0">
+              <div className="bg-slate-950 text-white text-[10px] font-black px-6 py-3 rounded-[1.25rem] uppercase tracking-[0.2em] shadow-floating shrink-0">
                 Sequence: {completedCount}/{tasks.length}
               </div>
             </div>
-            <div className="p-12 space-y-6">
+            <div className="p-10 space-y-4">
               {tasks.map((task, i) => (
                 <motion.div
                   key={task.id}
@@ -367,7 +360,7 @@ export const Home = () => {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: i * 0.05 }}
                   className={cn(
-                    "group flex items-center gap-10 p-10 rounded-[3rem] transition-all relative overflow-hidden",
+                    "group flex items-center gap-8 p-8 rounded-[2.5rem] transition-all relative overflow-hidden",
                     task.completed 
                       ? "bg-slate-50/50 border-transparent opacity-60" 
                       : "bg-white border border-slate-100 hover:border-indigo-600 hover:shadow-premium hover:-translate-y-1"
@@ -376,25 +369,25 @@ export const Home = () => {
                   <button
                     onClick={() => toggleTask(task.id)}
                     className={cn(
-                      "shrink-0 w-12 h-12 rounded-[1.25rem] border-2 flex items-center justify-center transition-all",
+                      "shrink-0 w-10 h-10 rounded-[1rem] border-2 flex items-center justify-center transition-all",
                       task.completed 
                         ? "bg-emerald-500 border-emerald-500 shadow-lg shadow-emerald-500/30" 
                         : "border-slate-200 hover:border-indigo-600 bg-white"
                     )}
                   >
-                    {task.completed && <Check className="w-6 h-6 text-white stroke-[4]" />}
+                    {task.completed && <Check className="w-5 h-5 text-white stroke-[4]" />}
                   </button>
                   <div className="flex-1 min-w-0">
                     <p className={cn(
-                      "text-2xl font-black tracking-tight text-slate-950",
+                      "text-xl font-black tracking-tight text-slate-950",
                       task.completed && "line-through text-slate-400"
                     )}>
                       {task.text}
                     </p>
-                    <div className="flex items-center gap-8 mt-4">
-                      <span className="text-[10px] font-black uppercase tracking-[0.3em] text-indigo-600">{task.category}</span>
-                      <span className="flex items-center gap-2 text-[10px] font-black uppercase text-slate-400 tracking-[0.2em]">
-                        <Clock className="w-3.5 h-3.5" /> {task.time}
+                    <div className="flex items-center gap-6 mt-3">
+                      <span className="text-[9px] font-black uppercase tracking-[0.3em] text-indigo-600">{task.category}</span>
+                      <span className="flex items-center gap-2 text-[9px] font-black uppercase text-slate-400 tracking-[0.2em]">
+                        <Clock className="w-3 h-3" /> {task.time}
                       </span>
                     </div>
                   </div>
@@ -404,35 +397,35 @@ export const Home = () => {
           </div>
 
           {/* Performance Stream */}
-          <div className="rounded-[4rem] bg-white border border-slate-100 overflow-hidden shadow-2xl shadow-slate-100/50">
-            <div className="p-12 border-b border-slate-50 flex items-center justify-between">
-              <h3 className="text-3xl font-black tracking-tight flex items-center gap-5 text-slate-950 uppercase">
-                <Play className="w-8 h-8 text-blue-600 fill-blue-600" />
+          <div className="rounded-[3rem] bg-white border border-slate-100 overflow-hidden shadow-2xl shadow-slate-100/50">
+            <div className="p-10 border-b border-slate-50 flex items-center justify-between">
+              <h3 className="text-2xl font-black tracking-tight flex items-center gap-4 text-slate-950 uppercase">
+                <Play className="w-6 h-6 text-blue-600 fill-blue-600" />
                 Live Performance
               </h3>
-              <button className="text-[10px] font-black uppercase text-blue-600 bg-blue-50 px-6 py-3 rounded-full hover:bg-blue-600 hover:text-white transition-all tracking-[0.2em] shadow-sm">
+              <button className="text-[9px] font-black uppercase text-blue-600 bg-blue-50 px-5 py-2.5 rounded-full hover:bg-blue-600 hover:text-white transition-all tracking-[0.2em] shadow-sm">
                 Control Hub
               </button>
             </div>
-            <div className="p-12">
-              <div className="space-y-6">
+            <div className="p-10">
+              <div className="space-y-4">
                 {recentPosts.map((post, i) => (
-                  <div key={post.id} className="flex items-center justify-between p-8 rounded-[2.5rem] bg-white border border-slate-100 group hover:border-slate-950 hover:shadow-2xl transition-all h-32">
-                    <div className="flex items-center gap-8">
-                      <div className="w-20 h-20 rounded-[1.5rem] bg-slate-950 flex items-center justify-center relative overflow-hidden group-hover:scale-105 transition-all shadow-xl">
-                        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white z-10">{post.platform}</span>
+                  <div key={post.id} className="flex items-center justify-between p-6 rounded-[2rem] bg-white border border-slate-100 group hover:border-slate-950 hover:shadow-2xl transition-all h-28">
+                    <div className="flex items-center gap-6">
+                      <div className="w-16 h-16 rounded-[1.25rem] bg-slate-950 flex items-center justify-center relative overflow-hidden group-hover:scale-105 transition-all shadow-xl">
+                        <span className="text-[9px] font-black uppercase tracking-[0.3em] text-white z-10">{post.platform}</span>
                         <div className="absolute inset-0 bg-blue-600 opacity-20" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h4 className="text-xl font-black text-slate-950 truncate max-w-[200px] md:max-w-md">{post.text}</h4>
-                        <div className="flex gap-6 text-[10px] font-black text-slate-400 uppercase tracking-[0.25em] mt-3">
+                        <h4 className="text-lg font-black text-slate-950 truncate max-w-[200px] md:max-w-md">{post.text}</h4>
+                        <div className="flex gap-4 text-[9px] font-black text-slate-400 uppercase tracking-[0.25em] mt-2">
                            <span className="text-blue-600 font-black">{post.type}</span>
                            <span>•</span>
                            <span>{post.date}</span>
                         </div>
                       </div>
                     </div>
-                    <div className="p-5 rounded-2xl bg-slate-50 border border-slate-100 text-slate-950 font-black text-xs group-hover:bg-blue-600 group-hover:text-white transition-all">
+                    <div className="p-4 rounded-xl bg-slate-50 border border-slate-100 text-slate-950 font-black text-[10px] group-hover:bg-blue-600 group-hover:text-white transition-all">
                        Analyze
                     </div>
                   </div>
@@ -445,35 +438,35 @@ export const Home = () => {
         {/* Sidebar Widgets */}
         <div className="space-y-12">
           {/* Creator Profile Summary Widget */}
-          <div className="rounded-[4rem] bg-slate-950 p-12 relative overflow-hidden group shadow-2xl shadow-slate-900/30">
+          <div className="rounded-[3rem] bg-slate-950 p-10 relative overflow-hidden group shadow-2xl shadow-slate-900/30">
             <div className="absolute -top-10 -right-10 w-40 h-40 bg-blue-600 rounded-full blur-[80px] opacity-20 animate-float" />
-            <div className="relative z-10 space-y-10">
-              <div className="flex items-center gap-6">
-                <div className="w-24 h-24 rounded-[2.5rem] bg-white p-1.5 shadow-2xl shadow-blue-500/20 group-hover:scale-110 transition-transform">
+            <div className="relative z-10 space-y-8">
+              <div className="flex items-center gap-5">
+                <div className="w-20 h-20 rounded-[2rem] bg-white p-1 shadow-2xl shadow-blue-500/20 group-hover:scale-110 transition-transform">
                   <img 
                     src={user?.photo || "https://api.dicebear.com/7.x/avataaars/svg?seed=Naveen"} 
                     alt="Profile" 
-                    className="w-full h-full rounded-[2.1rem] object-cover"
+                    className="w-full h-full rounded-[1.8rem] object-cover"
                   />
                 </div>
-                <div className="space-y-2">
-                  <h4 className="text-3xl font-black tracking-[0.02em] leading-none text-white uppercase">{user?.name || 'Naveen'}</h4>
-                  <p className="text-[10px] font-black text-blue-500 uppercase tracking-[0.3em]">{user?.handle || '@naveenfitlife'}</p>
+                <div className="space-y-1">
+                  <h4 className="text-2xl font-black tracking-[0.02em] leading-none text-white uppercase">{user?.name || 'Naveen'}</h4>
+                  <p className="text-[9px] font-black text-blue-500 uppercase tracking-[0.3em]">{user?.handle || '@naveenfitlife'}</p>
                 </div>
               </div>
               
-              <div className="flex justify-center p-8 bg-white/5 rounded-[3rem] border border-white/5 hover:border-indigo-500/30 transition-all group/ring cursor-pointer">
-                <PulseScoreRing size="lg" className="scale-110" />
+              <div className="flex justify-center p-6 bg-white/5 rounded-[2.5rem] border border-white/5 hover:border-indigo-500/30 transition-all group/ring cursor-pointer">
+                <PulseScoreRing size="md" className="scale-100" />
               </div>
 
-              <div className="grid grid-cols-2 gap-6">
-                <div className="text-center p-6 bg-white/5 rounded-[2rem] border border-white/5 hover:border-blue-500/30 transition-all">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="text-center p-5 bg-white/5 rounded-[1.5rem] border border-white/5 hover:border-blue-500/30 transition-all">
                    <p className="text-lg font-black text-white">48.2k</p>
-                   <p className="text-[9px] font-black uppercase text-white/30 tracking-[0.3em] mt-2">Scale</p>
+                   <p className="text-[8px] font-black uppercase text-white/30 tracking-[0.3em] mt-1">Scale</p>
                 </div>
-                <div className="text-center p-6 bg-white/5 rounded-[2rem] border border-white/5 hover:border-blue-500/30 transition-all">
+                <div className="text-center p-5 bg-white/5 rounded-[1.5rem] border border-white/5 hover:border-blue-500/30 transition-all">
                    <p className="text-lg font-black text-white">4.8%</p>
-                   <p className="text-[9px] font-black uppercase text-white/30 tracking-[0.3em] mt-2">Impact</p>
+                   <p className="text-[8px] font-black uppercase text-white/30 tracking-[0.3em] mt-1">Impact</p>
                 </div>
               </div>
             </div>
@@ -483,21 +476,21 @@ export const Home = () => {
           <PulseWidget />
 
           {/* Platform Health Section */}
-          <div className="rounded-[4rem] bg-white border border-slate-100 p-12 shadow-2xl shadow-slate-100/50">
-            <h3 className="text-3xl font-black tracking-tight flex items-center gap-5 mb-10 text-slate-950 uppercase">
-              <Network className="w-8 h-8 text-blue-600" />
+          <div className="rounded-[3rem] bg-white border border-slate-100 p-10 shadow-2xl shadow-slate-100/50">
+            <h3 className="text-2xl font-black tracking-tight flex items-center gap-4 mb-8 text-slate-950 uppercase">
+              <Network className="w-6 h-6 text-blue-600" />
               Impact Analytics
             </h3>
-            <div className="space-y-8">
+            <div className="space-y-6">
               {platformHealth.map((plat) => (
-                <div key={plat.platform} className="p-8 rounded-[2.5rem] bg-slate-50/50 border border-slate-50 space-y-6 hover:bg-white hover:shadow-xl transition-all">
+                <div key={plat.platform} className="p-6 rounded-[2rem] bg-slate-50/50 border border-slate-50 space-y-4 hover:bg-white hover:shadow-xl transition-all">
                   <div className="flex justify-between items-center">
-                    <div className="flex items-center gap-4">
-                      <div className={cn("w-3 h-3 rounded-full shadow-[0_0_10px_rgba(37,99,235,0.5)]", plat.color)} />
-                      <span className="text-[12px] font-black uppercase tracking-[0.4em] text-slate-950">{plat.platform}</span>
+                    <div className="flex items-center gap-3">
+                      <div className={cn("w-2.5 h-2.5 rounded-full shadow-[0_0_10px_rgba(37,99,235,0.5)]", plat.color)} />
+                      <span className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-950">{plat.platform}</span>
                     </div>
                     <span className={cn(
-                      "text-[9px] font-black px-4 py-2 rounded-full uppercase tracking-widest shadow-sm",
+                      "text-[8px] font-black px-3 py-1.5 rounded-full uppercase tracking-widest shadow-sm",
                       plat.status === 'Healthy' ? 'bg-emerald-500 text-white' : 'bg-blue-600 text-white'
                     )}>
                       {plat.status}
@@ -505,11 +498,12 @@ export const Home = () => {
                   </div>
                   <div className="flex justify-between items-end">
                     <div>
-                      <p className="text-3xl font-black leading-none text-slate-950">{plat.followers}</p>
-                      <p className="text-[10px] font-black text-slate-400 mt-3 uppercase tracking-widest">{plat.growth}</p>
+                      <p className="text-2xl font-black leading-none text-slate-950">{plat.followers}</p>
+                      <p className="text-[9px] font-black text-slate-400 mt-2 uppercase tracking-widest">{plat.growth}</p>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm font-black text-slate-950">{plat.engagement}</p>
+                      <h3 className="text-xl font-black text-slate-900 uppercase">Growth Oracle</h3>
+                      <p className="text-slate-400 text-[9px] font-black uppercase tracking-widest mt-1">Predictive audience analytics</p>
                       <p className="text-[8px] font-black uppercase tracking-widest text-slate-300 text-right mt-1">Retention</p>
                     </div>
                   </div>

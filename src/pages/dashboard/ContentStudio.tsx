@@ -994,7 +994,7 @@ export const ContentStudio = () => {
 
         {/* RIGHT WORKSPACE (Desktop) */}
         {!isMobile && (
-          <div className="flex-1 overflow-y-auto px-12 relative bg-white no-scrollbar">
+          <div className="flex-1 overflow-y-auto px-12 relative bg-white no-scrollbar min-h-[500px]">
             {workspaceContent}
           </div>
         )}
@@ -1069,8 +1069,8 @@ const HashtagEnginePanel = ({ niche }: { niche: string }) => {
       </div>
       <div className="flex gap-4 bg-slate-50 border border-slate-200 p-4 rounded-[2.5rem] shadow-inner">
         <input placeholder="Keywords / Context / Narrative..." value={topic} onChange={e => setTopic(e.target.value)} className="flex-1 h-14 bg-transparent border-none px-6 text-sm font-bold text-slate-900 focus:outline-none placeholder:text-slate-400" />
-        <button onClick={generate} disabled={running} className="h-14 px-8 bg-slate-900 text-white rounded-2xl font-black uppercase tracking-widest hover:bg-blue-600 transition-all active:scale-[0.99] disabled:opacity-60 flex items-center gap-3 shrink-0 shadow-xl shadow-blue-500/10">
-          {running ? <><Loader2 className="w-5 h-5 animate-spin" /><span className="text-[10px] max-w-[80px] truncate hidden sm:block font-black uppercase tracking-widest">{thinkLocal}</span></> : <><Hash className="w-5 h-5 text-blue-400" /> Extract Tags</>}
+        <button onClick={generate} disabled={running} className="h-14 min-w-[160px] px-8 bg-slate-900 text-white rounded-2xl font-black uppercase tracking-widest hover:bg-blue-600 transition-all active:scale-[0.99] disabled:opacity-60 flex items-center justify-center gap-3 shrink-0 shadow-xl shadow-blue-500/10">
+          {running ? <><Loader2 className="w-5 h-5 animate-spin" /><span className="text-[10px] font-black uppercase tracking-widest">{thinkLocal || 'Processing'}</span></> : <><Hash className="w-5 h-5 text-blue-400" /> Extract Tags</>}
         </button>
       </div>
       {pills && !running && (

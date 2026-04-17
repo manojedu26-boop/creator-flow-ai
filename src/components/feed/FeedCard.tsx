@@ -45,21 +45,21 @@ export const FeedCard = ({ post, currentUserId }: FeedCardProps) => {
     <motion.div 
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-white border border-slate-100 rounded-[3rem] overflow-hidden shadow-premium group"
+      className="bg-white border border-slate-100 rounded-[2rem] overflow-hidden shadow-sm group"
     >
       {/* Header */}
-      <div className="p-6 flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-2xl bg-slate-900 p-0.5 shadow-lg group-hover:scale-110 transition-transform">
+      <div className="p-4 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-slate-900 p-0.5 shadow-md group-hover:scale-110 transition-transform">
             <img 
               src={post.profiles?.avatar_url || `https://api.dicebear.com/7.x/avataaars/svg?seed=${post.profiles?.username}`} 
               alt={post.profiles?.username}
-              className="w-full h-full rounded-[1.1rem] object-cover"
+              className="w-full h-full rounded-[0.9rem] object-cover"
             />
           </div>
           <div>
-            <h4 className="text-sm font-black uppercase tracking-tight text-slate-950">{post.profiles?.username}</h4>
-            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+            <h4 className="text-xs font-black uppercase tracking-tight text-slate-950">{post.profiles?.username}</h4>
+            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">
               {new Date(post.created_at).toLocaleDateString()}
             </p>
           </div>
@@ -70,8 +70,8 @@ export const FeedCard = ({ post, currentUserId }: FeedCardProps) => {
       </div>
 
       {/* Media Content */}
-      <div className="px-6 pb-6">
-        <div className="relative aspect-square rounded-[2.5rem] overflow-hidden bg-slate-50 border border-slate-100 group/media">
+      <div className="px-4 pb-4">
+        <div className="relative aspect-square rounded-[1.5rem] overflow-hidden bg-slate-50 border border-slate-100 group/media">
           {post.media_url ? (
             <img 
               src={post.media_url} 
@@ -100,38 +100,38 @@ export const FeedCard = ({ post, currentUserId }: FeedCardProps) => {
       </div>
 
       {/* Actions */}
-      <div className="px-10 pb-4 flex items-center justify-between">
-        <div className="flex items-center gap-8">
+      <div className="px-6 pb-3 flex items-center justify-between">
+        <div className="flex items-center gap-6">
           <button 
             onClick={handleLike}
             className={cn(
-              "flex items-center gap-2 transition-all hover:scale-110 active:scale-95",
+              "flex items-center gap-1.5 transition-all hover:scale-110 active:scale-95",
               isLiked ? "text-rose-500" : "text-slate-400 hover:text-rose-500"
             )}
           >
-            <Heart className={cn("w-6 h-6", isLiked && "fill-rose-500")} />
-            <span className="text-[12px] font-black">{likesCount}</span>
+            <Heart className={cn("w-5 h-5", isLiked && "fill-rose-500")} />
+            <span className="text-[11px] font-black">{likesCount}</span>
           </button>
           
-          <button className="flex items-center gap-2 text-slate-400 hover:text-indigo-600 transition-all hover:scale-110">
-            <MessageCircle className="w-6 h-6" />
-            <span className="text-[12px] font-black">{post.comments_count}</span>
+          <button className="flex items-center gap-1.5 text-slate-400 hover:text-indigo-600 transition-all hover:scale-110">
+            <MessageCircle className="w-5 h-5" />
+            <span className="text-[11px] font-black">{post.comments_count}</span>
           </button>
 
           <button className="text-slate-400 hover:text-emerald-500 transition-all hover:scale-110">
-            <Share2 className="w-6 h-6" />
+            <Share2 className="w-5 h-5" />
           </button>
         </div>
 
         <button className="text-slate-400 hover:text-slate-950 transition-all hover:scale-110">
-          <Bookmark className="w-6 h-6" />
+          <Bookmark className="w-5 h-5" />
         </button>
       </div>
 
       {/* Caption */}
-      <div className="px-10 pb-10">
-        <p className="text-sm font-medium text-slate-800 leading-relaxed">
-          <span className="font-black text-slate-950 mr-3 uppercase text-[12px]">{post.profiles?.username}</span>
+      <div className="px-6 pb-6">
+        <p className="text-[13px] font-medium text-slate-800 leading-relaxed">
+          <span className="font-black text-slate-950 mr-2 uppercase text-[11px]">{post.profiles?.username}</span>
           {post.content}
         </p>
       </div>

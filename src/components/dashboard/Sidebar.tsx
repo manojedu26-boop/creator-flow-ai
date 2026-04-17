@@ -19,9 +19,8 @@ export const navGroups = [
     title: "HQ",
     items: [
       { icon: Home,         label: "Home",              href: "/dashboard" },
-      { icon: Activity,     label: "Pulse",             href: "/pulse", badge: "🔴" },
+      { icon: Activity,     label: "The Pulse",         href: "/pulse", badge: "🔴" },
       { icon: Compass,      label: "Explore",           href: "/explore" },
-      { icon: MessageCircle, label: "Social Feed",       href: "/feed" },
     ]
   },
   {
@@ -168,7 +167,7 @@ export const Sidebar = () => {
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -10 }}
                   transition={{ duration: 0.3 }}
-                  className="px-4 text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2 truncate"
+                  className="px-4 text-[8px] font-black uppercase tracking-[0.2em] text-slate-400 mb-1 truncate"
                 >
                   {group.title}
                 </motion.h3>
@@ -186,8 +185,8 @@ export const Sidebar = () => {
                     key={item.label}
                     to={item.href}
                     className={cn(
-                      "flex items-center rounded-xl relative transition-all duration-300 ease-in-out group py-2.5",
-                      expanded ? "px-4 gap-3.5" : "justify-center px-0 gap-0",
+                      "flex items-center rounded-xl relative transition-all duration-300 ease-in-out group py-1.5",
+                      expanded ? "px-4 gap-2.5" : "justify-center px-0 gap-0",
                       isActive 
                         ? "bg-slate-950 text-white shadow-xl shadow-slate-200" 
                         : "text-slate-400 hover:bg-slate-50 hover:text-slate-900"
@@ -223,7 +222,7 @@ export const Sidebar = () => {
                           transition={{ duration: 0.3, ease: "easeInOut" }}
                           className="overflow-hidden flex items-center"
                         >
-                          <span className="font-bold text-[10px] uppercase tracking-wider whitespace-nowrap">
+                          <span className="font-bold text-[9px] uppercase tracking-wider whitespace-nowrap">
                             {item.label}
                           </span>
                         </motion.div>

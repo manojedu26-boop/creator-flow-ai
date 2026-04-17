@@ -41,7 +41,6 @@ const Settings = lazy(() => import("./pages/dashboard/Settings.tsx").then(m => (
 const NotificationsPage = lazy(() => import("./pages/dashboard/Notifications.tsx").then(m => ({ default: m.Notifications })));
 const CollabRoom = lazy(() => import("./pages/dashboard/CollabRoom.tsx").then(m => ({ default: m.CollabRoom })));
 const VideoEditor = lazy(() => import("./pages/dashboard/VideoEditor.tsx").then(m => ({ default: m.VideoEditor })));
-const SocialFeed = lazy(() => import("./pages/dashboard/SocialFeed.tsx").then(m => ({ default: m.SocialFeed })));
 
 const BrandLayout = lazy(() => import("./components/brand/BrandLayout").then(m => ({ default: m.BrandLayout })));
 const BrandHome = lazy(() => import("./pages/brand/BrandHome.tsx").then(m => ({ default: m.BrandHome })));
@@ -113,7 +112,6 @@ const App = () => {
                         <Route path="/notifications" element={<NotificationsPage />} />
                         <Route path="/settings" element={<Settings />} />
                         <Route path="/collab/:id" element={<CollabRoom />} />
-                        <Route path="/feed" element={<SocialFeed />} />
                       </Route>
 
                       {/* Brand Mode Routes */}

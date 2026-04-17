@@ -114,6 +114,40 @@ const NeuralCore = () => {
     </div>
   );
 };
+const TITANS = [
+  { name: "Dhruv Rathee", handle: "@dhruvrathee", followers: "24M+", photo: "https://yt3.googleusercontent.com/ytc/AIdro_m4_X9U6P7Jz-mC-6L9vX-_uC0-5P4l4-2lZ7_9=s176-c-k-c0x00ffffff-no-rj" },
+  { name: "CarryMinati", handle: "@carryminati", followers: "41M+", photo: "https://yt3.googleusercontent.com/ytc/AIdro_m6_d_S-m9Q9_m9_-m9_-_u_-_u_-_u_-_u=s176-c-k-c0x00ffffff-no-rj" },
+  { name: "Technical Guruji", handle: "@technicalguruji", followers: "23M+", photo: "https://yt3.googleusercontent.com/ytc/AIdro_n_-_u_-_u_-_u_-_u_-_u_-_u_-_u_-_u=s176-c-k-c0x00ffffff-no-rj" },
+  { name: "Mallika Motiramani", handle: "@mallikamotiramani", followers: "500K+", photo: "https://yt3.googleusercontent.com/ytc/AIdro_m7_-_u_-_u_-_u_-_u_-_u_-_u_-_u_-_u=s176-c-k-c0x00ffffff-no-rj" },
+];
+
+const FeaturedTestimonial = () => (
+  <motion.div 
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ delay: 0.4 }}
+    className="relative group max-w-xl mx-auto mb-12"
+  >
+    <div className="absolute inset-0 bg-blue-600/10 blur-[40px] rounded-full group-hover:bg-blue-600/20 transition-all" />
+    <div className="relative bg-white/5 backdrop-blur-3xl border border-white/10 p-8 rounded-[3rem] shadow-2xl overflow-hidden">
+      <div className="flex gap-4 mb-4">
+        {[1,2,3,4,5].map(i => <Stars key={i} className="w-4 h-4 text-blue-400 fill-blue-400" />)}
+      </div>
+      <p className="text-xl md:text-2xl font-medium text-white italic leading-relaxed mb-8">
+        "CreatorForge AI is the only tool that actually understands the scale of my production. It's like having a neural expansion of my own team."
+      </p>
+      <div className="flex items-center gap-4 pt-6 border-t border-white/5">
+        <div className="w-14 h-14 rounded-2xl border border-white/10 overflow-hidden shadow-xl">
+           <img src="https://yt3.googleusercontent.com/ytc/AIdro_m4_X9U6P7Jz-mC-6L9vX-_uC0-5P4l4-2lZ7_9=s176-c-k-c0x00ffffff-no-rj" alt="Dhruv Rathee" className="w-full h-full object-cover" />
+        </div>
+        <div className="text-left">
+           <p className="text-sm font-black text-white uppercase tracking-tight">Dhruv Rathee</p>
+           <p className="text-[10px] font-black text-blue-500 uppercase tracking-widest">24M+ Subscribers · Neural Power User</p>
+        </div>
+      </div>
+    </div>
+  </motion.div>
+);
 
 const Hero = () => {
   const navigate = useNavigate();
@@ -138,9 +172,35 @@ const Hero = () => {
           <Sparkles className="w-3.5 h-3.5 fill-blue-500" />
           Synchronising Creator Intelligence
         </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex flex-col items-center gap-6 mb-12"
+        >
+          <div className="flex -space-x-4 mb-2">
+            {TITANS.map((titan, i) => (
+              <motion.div 
+                key={titan.name}
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.2 + i * 0.1 }}
+                className="w-14 h-14 rounded-2xl border-4 border-slate-950 overflow-hidden shadow-2xl relative group cursor-pointer"
+              >
+                <img src={titan.photo} alt={titan.name} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
+                <div className="absolute inset-0 bg-blue-600/20 group-hover:opacity-0 transition-opacity" />
+              </motion.div>
+            ))}
+            <div className="w-14 h-14 rounded-2xl border-4 border-slate-950 bg-slate-900 flex items-center justify-center text-[10px] font-black text-blue-400 shadow-2xl">
+              15K+
+            </div>
+          </div>
+          <p className="text-[11px] font-black uppercase tracking-[0.4em] text-slate-500">
+            Trusted by <span className="text-blue-500">11,240+ Titans</span> scaling to $1B+
+          </p>
+        </motion.div>
 
         <motion.h1
-          className="text-6xl md:text-8xl font-black tracking-tighter leading-[0.85] mb-12 text-white uppercase"
+          className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.85] mb-8 text-white uppercase"
           initial={{ opacity: 0, scale: 0.9, y: 40 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
@@ -152,13 +212,14 @@ const Hero = () => {
         </motion.h1>
 
         <motion.p
-          className="text-lg md:text-2xl text-slate-400 max-w-4xl mx-auto mb-16 font-medium leading-relaxed italic"
+          className="text-lg md:text-xl text-slate-400 max-w-3xl mx-auto mb-16 font-medium leading-relaxed italic"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
         >
           CreatorForge AI disrupts the manual grind with obsidian-grade precision. Predict trends, automate production, and scale your brand with the industry's most advanced neural core.
         </motion.p>
+        <FeaturedTestimonial />
 
         <motion.div
           className="flex flex-col sm:flex-row items-center justify-center gap-8 mb-16"
