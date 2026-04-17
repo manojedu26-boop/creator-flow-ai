@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   Home, BarChart3, Handshake, BrainCircuit, Calendar,
   TrendingUp, Globe, DollarSign, ShieldCheck, Palette,
-  MessageSquare, Bell, Settings, Sparkles,
+  MessageSquare, MessageCircle, Bell, Settings, Sparkles,
   LogOut, Instagram, Youtube, Play, User, RefreshCcw,
   ChevronRight, Activity, Compass
 } from "lucide-react";
@@ -21,6 +21,7 @@ export const navGroups = [
       { icon: Home,         label: "Home",              href: "/dashboard" },
       { icon: Activity,     label: "Pulse",             href: "/pulse", badge: "🔴" },
       { icon: Compass,      label: "Explore",           href: "/explore" },
+      { icon: MessageCircle, label: "Social Feed",       href: "/feed" },
     ]
   },
   {
