@@ -6,6 +6,7 @@ import { toast } from "@/components/ui/sonner";
 import { useAuth } from "../contexts/AuthContext";
 import { Logo } from "@/components/shared/Logo";
 import { supabase } from "../lib/supabase";
+import { cn } from "@/lib/utils";
 
 const getPasswordStrength = (pw: string): { label: string; color: string; barColor: string; width: string } => {
   if (pw.length === 0) return { label: "", color: "", barColor: "", width: "0%" };
