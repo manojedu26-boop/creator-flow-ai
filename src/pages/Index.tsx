@@ -6,6 +6,7 @@ import Pricing from "@/components/landing/Pricing";
 import Testimonials from "@/components/landing/Testimonials";
 import FAQ from "@/components/landing/FAQ";
 import FinalCTA from "@/components/landing/FinalCTA";
+import { StackedExperience } from "@/components/landing/StackedExperience";
 import { FluidCursor } from "@/components/shared/FluidCursor";
 import Footer from "@/components/landing/Footer";
 
@@ -21,6 +22,7 @@ const Index = () => {
         <div id="features">
           <Features />
         </div>
+        <StackedExperience />
         <div id="pricing">
           <Pricing />
         </div>
