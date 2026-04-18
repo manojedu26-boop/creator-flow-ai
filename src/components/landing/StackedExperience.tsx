@@ -105,7 +105,7 @@ export const StackedExperience = () => {
   });
 
   return (
-    <section ref={container} className="relative h-[400vh] bg-slate-950 py-24">
+    <section ref={container} className="relative h-[180vh] bg-slate-950 py-12">
        <div className="sticky top-24 z-20 pointer-events-none container max-w-7xl px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

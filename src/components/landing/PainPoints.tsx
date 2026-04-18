@@ -23,7 +23,7 @@ const item = {
 };
 
 const PainPoints = () => (
-  <section className="py-24 md:py-32 px-6 bg-slate-950 relative overflow-hidden">
+  <section className="py-16 md:py-20 px-6 bg-slate-950 relative overflow-hidden">
     <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[1px] bg-gradient-to-r from-transparent via-blue-500/20 to-transparent" />
     
     <div className="container max-w-7xl relative z-10">

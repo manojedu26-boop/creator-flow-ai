@@ -4,7 +4,6 @@ import PainPoints from "@/components/landing/PainPoints";
 import Features from "@/components/landing/Features";
 import Pricing from "@/components/landing/Pricing";
 import Testimonials from "@/components/landing/Testimonials";
-import ArcCarousel from "@/components/landing/ArcCarousel";
 import FAQ from "@/components/landing/FAQ";
 import FinalCTA from "@/components/landing/FinalCTA";
 import { StackedExperience } from "@/components/landing/StackedExperience";
@@ -18,7 +17,7 @@ const Index = () => {
       <Navbar />
       <main>
         <Hero />
-        <FinalCTA />
+        <Testimonials />
         <PainPoints />
         <div id="features">
           <Features />
@@ -27,11 +26,10 @@ const Index = () => {
         <div id="pricing">
           <Pricing />
         </div>
-        <ArcCarousel />
-        <Testimonials />
         <div id="faq">
           <FAQ />
         </div>
+        <FinalCTA />
       </main>
       <Footer />
     </div>
