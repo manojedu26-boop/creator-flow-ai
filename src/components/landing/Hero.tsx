@@ -1,48 +1,24 @@
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, Sparkles, Play, X, Stars, Zap, PlayCircle, Brain, Activity, Cpu } from "lucide-react";
+import { ArrowRight, Sparkles, X, Zap, PlayCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Magnetic } from "../shared/MotionComponents";
-
-const NeuralCore = () => {
-  return (
-    <div className="relative w-full h-[300px] md:h-[400px] bg-slate-950/40 backdrop-blur-3xl rounded-[3rem] border border-white/5 overflow-hidden shadow-2xl group transition-all hover:border-blue-500/20">
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:32px_32px]" />
-      <div className="absolute inset-0 flex items-center justify-center">
-        <motion.div 
-          animate={{ scale: [1, 1.05, 1], opacity: [0.3, 0.6, 0.3] }}
-          transition={{ duration: 4, repeat: Infinity }}
-          className="w-64 h-64 bg-blue-600/10 rounded-full blur-[80px]"
-        />
-        <div className="relative">
-           <div className="w-24 h-24 bg-slate-900 rounded-[2rem] border border-white/10 flex items-center justify-center relative overflow-hidden shadow-2xl">
-              <Brain className="w-10 h-10 text-blue-500 animate-pulse" />
-           </div>
-        </div>
-      </div>
-      <div className="absolute top-8 left-8 grid gap-3">
-         <div className="flex items-center gap-3 bg-white/5 backdrop-blur-md border border-white/10 p-3 rounded-xl">
-            <Activity className="w-4 h-4 text-emerald-400" />
-            <p className="text-[9px] font-black uppercase text-white">Neural Flux: Optimal</p>
-         </div>
-      </div>
-    </div>
-  );
-};
+import { TitanArc } from "./TitanArc";
 
 const Hero = () => {
   const navigate = useNavigate();
   const [showVideo, setShowVideo] = useState(false);
   
   return (
-    <section className="relative min-h-[90vh] flex flex-col items-center justify-center overflow-hidden bg-slate-950 px-6 pt-24 pb-12">
+    <section className="relative min-h-[85vh] flex flex-col items-center justify-center overflow-hidden bg-slate-950 px-6 pt-24 pb-12">
+      {/* Ambient Effects */}
       <div className="absolute inset-0 pointer-events-none -z-10">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:60px_60px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:60px_60px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
         <div className="absolute top-0 left-1/4 w-[50%] h-[50%] bg-blue-600/10 rounded-full blur-[140px] opacity-40 animate-pulse" />
       </div>
 
-      <div className="container relative z-10 max-w-7xl text-center">
+      <div className="container relative z-10 max-w-7xl text-center flex flex-col items-center">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -73,11 +49,16 @@ const Hero = () => {
           Disrupt the manual grind with obsidian-grade precision. Predict trends, automate production, and scale with the industry's most advanced neural core.
         </motion.p>
         
+        {/* TITAN ARC - CENTERPIECE */}
+        <div className="w-full mb-12">
+            <TitanArc />
+        </div>
+
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
-          className="mb-10"
+          className="mb-10 text-center"
         >
           <p className="text-[10px] font-black uppercase tracking-[0.5em] text-slate-500">
             Trusted by <span className="text-blue-500">11,240+ Titans</span>
@@ -85,30 +66,21 @@ const Hero = () => {
         </motion.div>
 
         <motion.div
-          className="flex flex-wrap items-center justify-center gap-6 mb-12"
+          className="flex flex-wrap items-center justify-center gap-6"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
           <Magnetic>
              <button onClick={() => navigate("/register")} className="h-16 px-10 rounded-2xl bg-blue-600 text-white font-black text-[10px] uppercase tracking-[0.4em] shadow-xl hover:bg-blue-500 transition-all flex items-center gap-3">
-               Initiate <ArrowRight className="w-4 h-4" />
+               Initiate Deployment <ArrowRight className="w-4 h-4" />
              </button>
           </Magnetic>
           <Magnetic>
              <button onClick={() => setShowVideo(true)} className="h-16 px-10 rounded-2xl bg-white/5 border border-white/10 text-white font-black text-[10px] uppercase tracking-[0.4em] backdrop-blur-md hover:bg-white/10 transition-all flex items-center gap-3">
-               <Zap className="w-4 h-4 text-blue-400" /> Intelligence
+               <Zap className="w-4 h-4 text-blue-400" /> View Intelligence
              </button>
           </Magnetic>
-        </motion.div>
-
-        <motion.div
-           initial={{ opacity: 0, y: 40 }}
-           whileInView={{ opacity: 1, y: 0 }}
-           viewport={{ once: true }}
-           className="max-w-4xl mx-auto"
-        >
-           <NeuralCore />
         </motion.div>
       </div>
 
