@@ -114,40 +114,76 @@ const NeuralCore = () => {
     </div>
   );
 };
-const TITANS = [
-  { name: "CarryMinati", handle: "@carryminati", followers: "41M+", photo: "https://upload.wikimedia.org/wikipedia/commons/a/a2/Ajey_Nagar_YouTube_FF_2019.jpg" },
-  { name: "Dhruv Rathee", handle: "@dhruvrathee", followers: "24M+", photo: "https://upload.wikimedia.org/wikipedia/commons/e/ee/Dhruv_Rathee.jpg" },
-  { name: "Technical Guruji", handle: "@technicalguruji", followers: "23M+", photo: "https://upload.wikimedia.org/wikipedia/commons/e/e0/Gaurav_Chaudhary_at_the_YouTube_Fanfest_2018_%28cropped%29.jpg" },
-  { name: "Mallika Motiramani", handle: "@mallikamotiramani", followers: "500K+", photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Mallika" },
+const TITAN_DATA = [
+  { name: "Dhruv Rathee", handle: "@dhruvrathee", followers: "24M+", quote: "CreatorForge AI actually understands the scale of my production. It's like having a neural expansion of my team.", photo: "https://upload.wikimedia.org/wikipedia/commons/e/ee/Dhruv_Rathee.jpg" },
+  { name: "CarryMinati", handle: "@carryminati", followers: "41M+", quote: "The AI script engine is actually legit. It understands the vibe of my niche better than most humans.", photo: "https://upload.wikimedia.org/wikipedia/commons/a/a2/Ajey_Nagar_YouTube_FF_2019.jpg" },
+  { name: "Technical Guruji", handle: "@technicalguruji", followers: "23M+", quote: "Managing 5 channels used to be a nightmare. Now it's a single obsidian dashboard.", photo: "https://upload.wikimedia.org/wikipedia/commons/e/e0/Gaurav_Chaudhary_at_the_YouTube_Fanfest_2018_%28cropped%29.jpg" },
+  { name: "Bhuvan Bam", handle: "@bhuvanbam", followers: "26M+", quote: "The content calendar is absolute fire. Keeps my consistency on point without the creative burnout.", photo: "https://upload.wikimedia.org/wikipedia/commons/e/e0/Bhuvan_Bam_at_the_YouTube_Fanfest_2019.jpg" },
+  { name: "Prajakta Koli", handle: "@mostlysane", followers: "7M+", quote: "My brand deals have 3x conversion since I started using the AI Media Kit. It's too professional.", photo: "https://upload.wikimedia.org/wikipedia/commons/d/d4/Prajakta_Koli_at_the_YouTube_Fanfest_2018.jpg" },
+  { name: "Flying Beast", handle: "@flyingbeast", followers: "9M+", quote: "Data-backed trend detection helps me stay ahead of the curve every single vlog. Essential tool.", photo: "https://upload.wikimedia.org/wikipedia/commons/0/07/Gaurav_Taneja_at_the_YouTube_Fanfest_2019.jpg" },
+  { name: "Zakir Khan", handle: "@zakirkhan", followers: "7M+", quote: "The hashtag engine is surprisingly good at catching the local pulse. Very impressive tech.", photo: "https://upload.wikimedia.org/wikipedia/commons/e/e3/Zakir_Khan_at_the_YouTube_Fanfest_2019.jpg" },
+  { name: "Mallika Motiramani", handle: "@mallika", followers: "500K+", quote: "Finally an AI that doesn't sound like a robot. The caption writer is a game changer.", photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Mallika" },
+  { name: "Ranveer Allahbadia", handle: "@beerbiceps", followers: "7M+", quote: "Neural networking for creators is the future. This is the command center we've been waiting for.", photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Ranveer" },
+  { name: "Sandeep Maheshwari", handle: "@sandeepmaheshwari", followers: "28M+", quote: "True intelligence is about focus. This platform gives me exactly what I need to impact more lives.", photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sandeep" },
 ];
 
-const FeaturedTestimonial = () => (
-  <motion.div 
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ delay: 0.4 }}
-    className="relative group max-w-xl mx-auto mb-12"
-  >
-    <div className="absolute inset-0 bg-blue-600/10 blur-[40px] rounded-full group-hover:bg-blue-600/20 transition-all" />
-    <div className="relative bg-white/5 backdrop-blur-3xl border border-white/10 p-8 rounded-[3rem] shadow-2xl overflow-hidden">
-      <div className="flex gap-4 mb-4">
-        {[1,2,3,4,5].map(i => <Stars key={i} className="w-4 h-4 text-blue-400 fill-blue-400" />)}
-      </div>
-      <p className="text-xl md:text-2xl font-medium text-white italic leading-relaxed mb-8">
-        "CreatorForge AI is the only tool that actually understands the scale of my production. It's like having a neural expansion of my own team."
-      </p>
-      <div className="flex items-center gap-4 pt-6 border-t border-white/5">
-        <div className="w-14 h-14 rounded-2xl border border-white/10 overflow-hidden shadow-xl bg-slate-800">
-           <img src="https://upload.wikimedia.org/wikipedia/commons/e/ee/Dhruv_Rathee.jpg" alt="Dhruv Rathee" className="w-full h-full object-cover" />
+const TitanCarousel = () => {
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setIndex((prev) => (prev + 1) % TITAN_DATA.length);
+    }, 4500);
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <div className="relative w-full max-w-2xl mx-auto h-[320px] md:h-[350px] mb-8 flex items-center justify-center">
+      <AnimatePresence mode="popLayout">
+        <div className="absolute inset-0 flex items-center justify-center">
+          {/* Stacked Cards behind (Visual only) */}
+          <div className="absolute w-[85%] h-[90%] bg-white/5 border border-white/5 rounded-[3rem] blur-sm -z-10 translate-y-4 scale-95 opacity-50" />
+          <div className="absolute w-[80%] h-[80%] bg-white/5 border border-white/5 rounded-[3rem] blur-md -z-20 translate-y-8 scale-90 opacity-20" />
+
+          {/* Active Card */}
+          <motion.div
+            key={index}
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: -20 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="w-full h-full bg-white/5 backdrop-blur-3xl border border-white/10 p-8 md:p-12 rounded-[4rem] shadow-2xl flex flex-col justify-center relative overflow-hidden group"
+          >
+            {/* Glossy Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-50 pointer-events-none" />
+            
+            <div className="flex gap-2 mb-6">
+              {[1, 2, 3, 4, 5].map((i) => (
+                <Stars key={i} className="w-4 h-4 text-blue-500 fill-blue-500" />
+              ))}
+            </div>
+
+            <p className="text-xl md:text-2xl font-black text-white italic leading-relaxed mb-8 relative z-10 uppercase tracking-tight">
+              "{TITAN_DATA[index].quote}"
+            </p>
+
+            <div className="flex items-center gap-6 pt-8 border-t border-white/5 relative z-10">
+              <div className="w-16 h-16 rounded-2xl border border-white/10 overflow-hidden shadow-2xl bg-slate-900 shrink-0">
+                <img src={TITAN_DATA[index].photo} alt={TITAN_DATA[index].name} className="w-full h-full object-cover" />
+              </div>
+              <div className="text-left">
+                <p className="text-lg font-black text-white uppercase tracking-tighter">{TITAN_DATA[index].name}</p>
+                <p className="text-[10px] font-black text-blue-500 uppercase tracking-[0.2em] mt-1">
+                  {TITAN_DATA[index].followers} SCALE · Neural Power User
+                </p>
+              </div>
+            </div>
+          </motion.div>
         </div>
-        <div className="text-left">
-           <p className="text-sm font-black text-white uppercase tracking-tight">Dhruv Rathee</p>
-           <p className="text-[10px] font-black text-blue-500 uppercase tracking-widest">24M+ Subscribers · Neural Power User</p>
-        </div>
-      </div>
+      </AnimatePresence>
     </div>
-  </motion.div>
-);
+  );
+};
 
 const Hero = () => {
   const navigate = useNavigate();
@@ -172,32 +208,6 @@ const Hero = () => {
           <Sparkles className="w-3.5 h-3.5 fill-blue-500" />
           Synchronising Creator Intelligence
         </motion.div>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="flex flex-col items-center gap-6 mb-12"
-        >
-          <div className="flex -space-x-4 mb-2">
-            {TITANS.map((titan, i) => (
-              <motion.div 
-                key={titan.name}
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.2 + i * 0.1 }}
-                className="w-14 h-14 rounded-2xl border-4 border-slate-950 overflow-hidden shadow-2xl relative group cursor-pointer"
-              >
-                <img src={titan.photo} alt={titan.name} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500" />
-                <div className="absolute inset-0 bg-blue-600/20 group-hover:opacity-0 transition-opacity" />
-              </motion.div>
-            ))}
-            <div className="w-14 h-14 rounded-2xl border-4 border-slate-950 bg-slate-900 flex items-center justify-center text-[10px] font-black text-blue-400 shadow-2xl">
-              15K+
-            </div>
-          </div>
-          <p className="text-[11px] font-black uppercase tracking-[0.4em] text-slate-500">
-            Trusted by <span className="text-blue-500">11,240+ Titans</span> scaling to $1B+
-          </p>
-        </motion.div>
 
         <motion.h1
           className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.85] mb-8 text-white uppercase"
@@ -219,7 +229,18 @@ const Hero = () => {
         >
           CreatorForge AI disrupts the manual grind with obsidian-grade precision. Predict trends, automate production, and scale your brand with the industry's most advanced neural core.
         </motion.p>
-        <FeaturedTestimonial />
+        <TitanCarousel />
+        
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1 }}
+          className="mb-16"
+        >
+          <p className="text-[12px] font-black uppercase tracking-[0.5em] text-slate-500">
+            Trusted by <span className="text-blue-500">11,240+ Titans</span> scaling to $1B+
+          </p>
+        </motion.div>
 
         <motion.div
           className="flex flex-col sm:flex-row items-center justify-center gap-8 mb-16"
