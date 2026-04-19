@@ -21,6 +21,8 @@ const ResetPassword = lazy(() => import("./pages/ResetPassword.tsx"));
 const Onboarding = lazy(() => import("./pages/Onboarding.tsx"));
 const NotFound = lazy(() => import("./pages/NotFound.tsx"));
 const PublicMediaKit = lazy(() => import("./pages/PublicMediaKit.tsx"));
+const Marketplace = lazy(() => import("./pages/Marketplace.tsx"));
+const MarketplaceDetail = lazy(() => import("./pages/MarketplaceDetail.tsx"));
 
 const DashboardLayout = lazy(() => import("./components/dashboard/DashboardLayout.tsx").then(m => ({ default: m.DashboardLayout })));
 const DashboardHome = lazy(() => import("./pages/dashboard/Home.tsx").then(m => ({ default: m.Home })));
@@ -91,6 +93,8 @@ const App = () => {
                       <Route path="/forgot-password" element={<ForgotPassword />} />
                       <Route path="/reset-password" element={<ResetPassword />} />
                       <Route path="/onboarding" element={<Onboarding />} />
+                      <Route path="/marketplace" element={<Marketplace />} />
+                      <Route path="/marketplace/:id" element={<MarketplaceDetail />} />
 
                       {/* Post-Login CreatorForge Architecture */}
                       <Route element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
@@ -103,6 +107,7 @@ const App = () => {
                         <Route path="/studio" element={<ContentStudio />} />
                         <Route path="/calendar" element={<Calendar />} />
                         <Route path="/growth" element={<Growth />} />
+                        <Route path="/marketplace" element={<Marketplace />} />
                         <Route path="/network" element={<Network />} />
                         <Route path="/network/profile/:id" element={<Profile />} />
                         <Route path="/revenue" element={<Revenue />} />

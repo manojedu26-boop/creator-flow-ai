@@ -230,7 +230,7 @@ const Register = () => {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-              className="rounded-[2.5rem] md:rounded-[3rem] bg-white/80 backdrop-blur-2xl border border-slate-200/60 p-10 md:p-12 shadow-[0_50px_100px_-20px_rgba(0,0,0,0.05)] space-y-6 relative overflow-hidden group"
+              className="rounded-[2.5rem] md:rounded-[3rem] bg-obsidian backdrop-blur-3xl border border-white/5 p-10 md:p-12 shadow-2xl space-y-6 relative overflow-hidden group shimmer-border"
             >
               <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity pointer-events-none">
                  <Stars className="w-20 h-20 text-blue-600" />
@@ -242,13 +242,12 @@ const Register = () => {
               </div>
 
               <div className="space-y-4">
-                {/* Google OAuth Option */}
                 <button
                   type="button"
                   onClick={() => setShowGooglePicker(true)}
-                  className="w-full h-24 rounded-3xl bg-white/5 border border-white/10 p-6 flex items-center gap-6 hover:border-blue-500 hover:bg-white/10 transition-all active:scale-[0.98] group/opt overflow-hidden relative"
+                  className="w-full h-24 rounded-3xl bg-slate-950 p-6 flex items-center gap-6 hover:border-blue-500 transition-all active:scale-[0.98] group/opt overflow-hidden relative shimmer-border border-blue-600/40"
                 >
-                  <div className="absolute inset-0 bg-blue-600/0 group-hover/opt:bg-blue-600/5 transition-colors" />
+                  <div className="absolute inset-0 bg-blue-600/5 group-hover/opt:bg-blue-600/10 transition-colors" />
                   <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 group-hover/opt:bg-white group-hover/opt:border-blue-200 transition-all relative z-10">
                     <Chrome className="w-6 h-6 text-blue-500 group-hover/opt:scale-110 transition-transform" />
                   </div>
@@ -259,11 +258,10 @@ const Register = () => {
                   <ChevronRight className="w-5 h-5 text-slate-600 group-hover/opt:translate-x-1 group-hover/opt:text-blue-500 transition-all relative z-10" />
                 </button>
 
-                {/* Email Option */}
                 <button
                   type="button"
                   onClick={() => setView("email")}
-                  className="w-full h-24 rounded-3xl bg-white/5 border border-white/10 p-6 flex items-center gap-6 hover:border-white/20 hover:bg-white/10 transition-all active:scale-[0.98] group/opt overflow-hidden relative"
+                  className="w-full h-24 rounded-3xl bg-white/5 border border-white/10 p-6 flex items-center gap-6 hover:border-white/20 hover:bg-white/10 transition-all active:scale-[0.98] group/opt overflow-hidden relative shimmer-border"
                 >
                   <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 group-hover/opt:bg-white group-hover/opt:text-slate-950 group-hover/opt:scale-110 transition-all relative z-10">
                     <Mail className="w-6 h-6 text-slate-500 group-hover/opt:text-slate-950 transition-all" />
@@ -300,7 +298,6 @@ const Register = () => {
                  <Stars className="w-20 h-20 text-blue-600" />
               </div>
 
-              {/* Account Type */}
               <div className="space-y-3">
                 <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 ml-1">Operative Designation</label>
                 <div className="grid grid-cols-2 gap-4">
@@ -335,7 +332,6 @@ const Register = () => {
                   {errors.name && <p className="text-rose-500 text-[10px] font-black uppercase tracking-wider pl-1 mt-1">{errors.name}</p>}
                 </div>
 
-                {/* Email */}
                 <div className="space-y-2">
                   <label className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-500 ml-1">Primary Intelligence Link (Email)</label>
                   <div className="relative">
@@ -368,7 +364,6 @@ const Register = () => {
                       {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                     </button>
                   </div>
-                  {/* Strength indicator */}
                   {password.length > 0 && (
                     <div className="space-y-2 px-1">
                       <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">

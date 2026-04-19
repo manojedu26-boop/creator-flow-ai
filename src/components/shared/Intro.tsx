@@ -70,7 +70,7 @@ export const Intro = ({ onComplete }: { onComplete: () => void }) => {
              <motion.div 
                animate={{ opacity: [0, 0.5, 0] }}
                transition={{ duration: 3, repeat: Infinity }}
-               className="absolute inset-0 bg-amber-500/20 blur-3xl rounded-full"
+               className="absolute inset-0 bg-blue-600/20 blur-3xl rounded-full"
              />
           </motion.div>
           {/* Ambient Background Glow */}

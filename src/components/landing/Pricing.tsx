@@ -67,10 +67,10 @@ const Pricing = () => {
           {plans.map((plan, i) => (
             <motion.div
               key={plan.name}
-              className={`relative rounded-[3.5rem] p-12 transition-all flex flex-col group overflow-hidden ${
+              className={`relative rounded-3xl p-10 transition-all flex flex-col group overflow-hidden shimmer-border ${
                 plan.highlighted
-                  ? "bg-slate-900/60 border-2 border-blue-600 shadow-[0_30px_100px_rgba(37,99,235,0.15)] scale-105 z-10"
-                  : "bg-slate-900/30 border border-white/5 hover:border-white/10"
+                  ? "bg-slate-900 border-2 border-blue-600 shadow-[0_30px_100px_rgba(37,99,235,0.15)] scale-105 z-10 border-blue-600/60"
+                  : "bg-slate-900/30 border border-white/5 hover:border-white/10 border-blue-600/20"
               }`}
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}

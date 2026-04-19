@@ -39,7 +39,8 @@
     --radius: 2rem; 
 
     /* Custom Tokens */
-    --gold: 42 90% 61%;
+    --gold: 226 100% 50.4%; /* Deep Blue Titan */
+    --accent-blue: 226 70% 55.5%;
     --glass: 255 255% 255% / 0.7;
     --glass-border: 255 255% 255% / 0.1;
     
@@ -143,7 +144,7 @@
   }
 
   .text-kinetic {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-primary to-slate-900;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-blue-600 to-slate-900;
     background-size: 200% auto;
     animation: textShine 4s linear infinite;
   }
@@ -172,12 +173,12 @@
     0%, 100% {
       opacity: 1;
       transform: scale(1);
-      box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.4);
+      box-shadow: 0 0 0 0 rgba(0, 85, 212, 0.4);
     }
     50% {
       opacity: 0.8;
       transform: scale(1.03);
-      box-shadow: 0 0 20px 2px rgba(79, 70, 229, 0.2);
+      box-shadow: 0 0 20px 2px rgba(0, 85, 212, 0.2);
     }
   }
 
@@ -208,12 +209,64 @@
   .story-progress-fill {
     @apply h-full bg-white transition-all duration-100 ease-linear;
   }
+
+  /* DYNAMIC TRAVELING SHIMMER (Enterprise Edition) */
+  @keyframes rotate-shimmer {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  .shimmer-border {
+    position: relative;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .shimmer-border::before {
+    content: "";
+    position: absolute;
+    z-index: -2;
+    left: -50%;
+    top: -50%;
+    width: 200%;
+    height: 200%;
+    background-color: transparent;
+    background-repeat: no-repeat;
+    background-size: 50% 50%, 50% 50%;
+    background-position: 0 0, 100% 0, 100% 100%, 0 100%;
+    background-image: conic-gradient(
+      from 90deg at 50% 50%,
+      transparent 0%,
+      hsl(var(--gold)) 25%,
+      transparent 50%
+    );
+    animation: rotate-shimmer 4s linear infinite;
+  }
+
+  .shimmer-border::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    left: 1px;
+    top: 1px;
+    width: calc(100% - 2px);
+    height: calc(100% - 2px);
+    background: inherit;
+    border-radius: inherit;
+  }
+
+  /* Obsidian Glass Variant for Auth Nodes */
+  .bg-obsidian {
+    background: rgba(2, 6, 23, 0.85);
+    backdrop-blur: 32px;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+  }
 }
 
 /* NPROGRESS GLOBAL BAR STYLING */
 #nprogress { pointer-events: none; }
 #nprogress .bar {
-  background: hsl(var(--primary));
+  background: hsl(var(--gold));
   position: fixed;
   z-index: 10001;
   top: 0; left: 0;

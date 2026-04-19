@@ -36,6 +36,7 @@ export const navGroups = [
     title: "Business",
     items: [
       { icon: BarChart3,    label: "Analytics",         href: "/analytics" },
+      { icon: Compass,      label: "Marketplace",       href: "/marketplace" },
       { icon: Handshake,    label: "Brand Deals",       href: "/deals" },
       { icon: DollarSign,   label: "Revenue",           href: "/revenue" },
       { icon: ShieldCheck,  label: "Contracts",         href: "/contracts" },

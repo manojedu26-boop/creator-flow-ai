@@ -15,16 +15,17 @@ const Index = () => {
       <FluidCursor />
       <Navbar />
       <main>
-        {/* Elite Positional Refinement: Reordered for 'Architecture First' Narrative */}
+        {/* Master Hero & Titan Arc: The Alpha Entry Point */}
+        <Hero />
+        
+        {/* Creator Ceiling: Optimized for narrative momentum */}
         <PainPoints />
         
+        {/* Elite Architecture: High-fidelity feature stack */}
         <div id="features">
            <Features />
         </div>
 
-        {/* The Master Legacy Section (Moved after Architecture cards) */}
-        <Hero />
-        
         <div id="pricing">
           <Pricing />
         </div>

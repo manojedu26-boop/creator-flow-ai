@@ -122,19 +122,19 @@ const Login = () => {
           <p className="text-slate-400 font-bold text-lg">Authorize Identity Node to access your creator suite.</p>
         </div>
 
-        <div className="rounded-[2.5rem] md:rounded-[3rem] bg-slate-900/50 backdrop-blur-2xl border border-white/5 p-10 md:p-12 shadow-2xl space-y-8 relative overflow-hidden group">
+        <div className="rounded-[2.5rem] md:rounded-[3rem] bg-slate-900/50 backdrop-blur-2xl border border-white/5 p-10 md:p-12 shadow-2xl space-y-8 relative overflow-hidden group shimmer-border">
           <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity pointer-events-none">
              <Stars className="w-20 h-20 text-blue-600" />
           </div>
 
-          {/* Google OAuth - Premium SDK Look */}
+          {/* Google OAuth - Premium Obsidian SDK Look */}
           <button
             type="button"
             onClick={handleGoogleOAuth}
             disabled={isLoading}
-            className="w-full h-16 rounded-2xl bg-white/5 border border-white/10 text-[11px] font-black uppercase tracking-[0.2em] text-white flex items-center justify-center gap-4 hover:border-blue-500 hover:bg-white/10 transition-all active:scale-[0.98] disabled:opacity-50 relative group/google overflow-hidden"
+            className="w-full h-16 rounded-2xl bg-obsidian text-[11px] font-black uppercase tracking-[0.2em] text-white flex items-center justify-center gap-4 hover:border-blue-500 transition-all active:scale-[0.98] disabled:opacity-50 relative group/google overflow-hidden shimmer-border border-blue-600/40"
           >
-            <div className="absolute inset-0 bg-blue-600/0 group-hover/google:bg-blue-600/5 transition-colors" />
+            <div className="absolute inset-0 bg-blue-600/5 group-hover/google:bg-blue-600/10 transition-colors" />
             <Chrome className="w-5 h-5 text-blue-500 relative z-10 transition-transform group-hover/google:scale-110" />
             <span className="relative z-10">Vault Sync via Google Intelligence</span>
           </button>
