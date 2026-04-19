@@ -41,26 +41,19 @@ export const Logo = ({
       )}
       onClick={handleClick}
     >
-      {/* High-Fidelity Icon Frame */}
+      {/* The Absolute Official Identity Node */}
       <motion.div 
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
         className={cn(
-          "relative shrink-0 w-12 h-12 flex items-center justify-center transition-all duration-500",
-          "rounded-2xl bg-white shadow-[0_8px_30px_rgb(0,85,212,0.2)] group-hover:shadow-[0_15px_40px_rgb(0,85,212,0.4)]",
-          "border border-white/20",
+          "relative shrink-0 flex items-center justify-center transition-all duration-300",
           iconClassName
         )}
       >
-        <div className="absolute inset-0 bg-blue-600/5 blur-xl group-hover:bg-blue-600/10 transition-colors" />
         <img 
           src="/logo.png" 
-          alt="CF" 
-          className="w-full h-full object-contain relative z-10 p-1"
-          onError={(e) => {
-            (e.target as any).style.display = 'none';
-            (e.target as any).parentElement.innerHTML = '<span class="text-blue-600 font-extrabold text-2xl uppercase tracking-tighter">CF</span>';
-          }}
+          alt="CreatorForge AI Official" 
+          className="w-full h-full object-contain relative z-10"
         />
       </motion.div>
 
