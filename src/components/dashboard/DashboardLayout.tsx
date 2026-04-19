@@ -185,7 +185,7 @@ export const DashboardLayout = () => {
         <main className="flex-1 pb-[calc(var(--bottom-nav-h)+1rem)] relative bg-mesh-primary overflow-y-auto no-scrollbar scroll-smooth">
           <PullToRefresh onRefresh={handleRefresh}>
             <IOSSwipeBack>
-              <div className="px-[var(--page-px)] py-4 no-scrollbar max-w-[1400px] mx-auto min-h-screen space-y-4">
+              <div className="px-[var(--page-px)] py-4 no-scrollbar max-w-[1600px] mx-auto min-h-screen space-y-4">
                 
                 {/* DYNAMIC BREADCRUMBS */}
                 {/* DYNAMIC BREADCRUMBS */}

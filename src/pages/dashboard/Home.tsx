@@ -14,14 +14,12 @@ import { toast } from "../../components/ui/sonner";
 import { useAuth } from "../../contexts/AuthContext";
 import { db } from "../../lib/db";
 import { cn } from "../../lib/utils";
-import confetti from "canvas-confetti";
 import { PulseWidget } from "../../components/pulse/PulseWidget";
 import { PulseScoreRing } from "../../components/pulse/PulseScoreRing";
 import { WhatsHappeningWidget } from "../../components/pulse/WhatsHappeningWidget";
 import { NotificationSimulator } from "../../components/pulse/NotificationSimulator";
-import { StoryBar } from "../../components/stories/StoryBar";
-import { StoryViewer } from "../../components/stories/StoryViewer";
 import { StoryCreationSheet } from "../../components/stories/StoryCreationSheet";
+import { StoryViewer } from "../../components/stories/StoryViewer";
 import { Creator } from "../../types/stories";
 import { MOCK_CREATORS } from "../../data/mockStories";
 
@@ -119,7 +117,6 @@ export const Home = () => {
     const currentIndex = creators.findIndex(c => c.id === activeStoryCreator?.id);
     let nextIndex = direction === 'next' ? currentIndex + 1 : currentIndex - 1;
     
-    // Simple wrap or skip if no stories
     while (nextIndex >= 0 && nextIndex < creators.length) {
       if (creators[nextIndex].stories.length > 0) {
         setActiveStoryCreator(creators[nextIndex]);
@@ -144,7 +141,7 @@ export const Home = () => {
   }
 
   return (
-    <PageTransition className="space-y-12 pb-24 lg:pb-12 h-screen overflow-y-auto no-scrollbar px-2 relative">
+    <PageTransition className="space-y-10 pb-24 h-screen overflow-y-auto no-scrollbar px-1 relative">
       <AnimatePresence>
         {isBriefOpen && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
@@ -216,8 +213,8 @@ export const Home = () => {
       </AnimatePresence>
 
 
-      {/* Hero Section — System Readiness */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 px-2 mt-4">
+      {/* High-Velocity Header: System Readiness */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 px-1">
         <div className="space-y-4">
           <motion.div 
             initial={{ opacity: 0, x: -20 }}
@@ -225,7 +222,7 @@ export const Home = () => {
             className="flex items-center gap-3"
           >
             <div className="px-3 py-1 bg-indigo-50 border border-indigo-100/50 rounded-full">
-              <span className="pro-label text-indigo-600/80 font-bold">Command Centre v4.0</span>
+              <span className="pro-label text-indigo-600/80 font-bold">HQ Command v4.2</span>
             </div>
             <SystemStatus />
           </motion.div>
@@ -238,8 +235,8 @@ export const Home = () => {
             >
               CREATOR <span className="text-indigo-600/80">COMMAND</span> CENTER
             </motion.h1>
-            <p className="text-slate-400 font-medium max-w-2xl text-xs md:text-sm uppercase tracking-[0.1em] leading-relaxed">
-              Commander <span className="text-slate-900 font-bold">{user?.firstName}</span>. Impact projected <span className="text-indigo-600 font-bold">+14%</span>.
+            <p className="text-slate-400 font-medium max-w-2xl text-[10px] md:text-xs uppercase tracking-[0.1em] leading-relaxed">
+              Commander <span className="text-slate-900 font-bold">{user?.firstName}</span> • Impact Flow <span className="text-indigo-600 font-bold">+14% Velocity</span>.
             </p>
           </div>
         </div>
@@ -247,75 +244,91 @@ export const Home = () => {
         <div className="flex items-center gap-3">
           <button 
             onClick={() => setIsBriefOpen(true)}
-            className="h-14 px-8 bg-indigo-600 text-white rounded-2xl flex items-center gap-4 hover:bg-slate-950 transition-all active:scale-95 shadow-sm"
+            className="h-12 px-6 bg-indigo-600 text-white rounded-xl flex items-center gap-3 hover:bg-slate-950 transition-all active:scale-95 shadow-lg shadow-indigo-600/10"
           >
             <Plus className="w-4 h-4 text-white stroke-[3]" />
-            <span className="pro-label text-white font-bold">Mission</span>
+            <span className="pro-label text-white font-bold">New Mission</span>
           </button>
         </div>
       </div>
 
-      {/* Global Actions Bar — Depth Layer */}
-      <div className="grid grid-cols-3 gap-3 px-2">
+      {/* Global Actions: Balanced Strategy Bar */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
            <button 
             onClick={fetchData}
             disabled={isLoading}
-            className="h-16 rounded-2xl bg-white border border-slate-100 hover:border-indigo-600 transition-all flex items-center justify-center gap-3 text-slate-400 hover:text-indigo-600 shadow-sm active:scale-98 group"
+            className="h-20 rounded-2xl bg-white border border-slate-100 hover:border-indigo-600 transition-all flex items-center px-8 gap-5 text-slate-400 hover:text-indigo-600 shadow-sm active:scale-98 group"
           >
-            <RefreshIcon className={cn("w-4 h-4", isLoading ? "animate-spin" : "group-hover:rotate-180 transition-transform duration-500")} />
-            <span className="pro-label font-bold">Sync</span>
+            <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center group-hover:bg-indigo-50 transition-colors">
+              <RefreshIcon className={cn("w-5 h-5", isLoading ? "animate-spin" : "group-hover:rotate-180 transition-transform duration-700")} />
+            </div>
+            <div className="text-left">
+              <p className="pro-label font-bold text-slate-950 group-hover:text-indigo-600">Sync Pipeline</p>
+              <p className="text-[9px] font-medium text-slate-400 group-hover:text-indigo-400">Updates nodes every 15m</p>
+            </div>
           </button>
 
           <button 
             onClick={() => setIsDiscoveryOpen(true)}
-            className="h-16 rounded-2xl bg-white border border-slate-100 hover:border-indigo-600 transition-all flex items-center justify-center gap-3 text-slate-900 shadow-sm group"
+            className="h-20 rounded-2xl bg-white border border-slate-100 hover:border-blue-600 transition-all flex items-center px-8 gap-5 text-slate-900 shadow-sm group"
           >
-            <Search className="w-4 h-4 text-indigo-600 group-hover:scale-110 transition-transform" /> 
-            <span className="pro-label text-slate-900 font-bold">Discovery</span>
+            <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center group-hover:bg-blue-50 transition-colors">
+              <Search className="w-5 h-5 text-blue-600 group-hover:scale-110 transition-transform" />
+            </div>
+            <div className="text-left">
+              <p className="pro-label text-slate-900 font-bold group-hover:text-blue-600">Neural Search</p>
+              <p className="text-[9px] font-medium text-slate-400 group-hover:text-blue-400">Deep creator intelligence</p>
+            </div>
           </button>
 
           <button 
-            className="h-16 rounded-2xl bg-slate-950 text-white hover:bg-indigo-600 transition-all flex items-center justify-center gap-3 shadow-sm active:scale-98 group"
+            className="h-20 rounded-2xl bg-slate-950 text-white hover:bg-indigo-600 transition-all flex items-center px-8 gap-5 shadow-sm active:scale-98 group"
           >
-            <Zap className="w-4 h-4 text-emerald-400 fill-emerald-400 group-hover:animate-bounce" /> 
-            <span className="pro-label text-white font-bold">Universal</span>
+            <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center group-hover:bg-white/10 transition-colors">
+              <Zap className="w-5 h-5 text-emerald-400 fill-emerald-400 group-hover:animate-pulse" />
+            </div>
+            <div className="text-left">
+              <p className="pro-label text-white font-bold">Pulse Engine</p>
+              <p className="text-[9px] font-medium text-slate-500 group-hover:text-indigo-200">System-wide performance</p>
+            </div>
           </button>
       </div>
 
-
-      {/* KPI Stats — Ambient Layering */}
-      <div className="grid grid-cols-5 gap-3 items-stretch px-2 overflow-x-auto no-scrollbar pb-2">
+      {/* KPI Stats: High-Density Expansion */}
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         {stats.map((stat, i) => (
           <motion.div
             key={stat.label}
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.05 }}
-            className="group relative overflow-hidden rounded-2xl bg-white p-4 border border-slate-100 transition-all shadow-sm flex flex-col justify-between min-w-[120px]"
+            className="group relative overflow-hidden rounded-2xl bg-white p-5 border border-slate-100 transition-all shadow-sm flex flex-col justify-between"
           >
             <div className="relative z-10">
-              <div className={cn("p-1.5 rounded-lg w-fit mb-3", stat.bg, stat.color)}>
-                <stat.icon className="w-3.5 h-3.5" />
+              <div className={cn("p-2 rounded-xl w-fit mb-4", stat.bg, stat.color)}>
+                <stat.icon className="w-4 h-4" />
               </div>
-              <div className="space-y-0.5">
-                <p className="pro-label">{stat.label}</p>
-                <h3 className="text-base font-bold tracking-tight text-slate-950 leading-none data-value">
+              <div className="space-y-1">
+                <p className="pro-label text-[9px] text-slate-400">{stat.label}</p>
+                <h3 className="text-xl font-bold tracking-tighter text-slate-950 leading-none data-value">
                   <CountUp value={stat.value} prefix={stat.label === 'Revenue' ? '₹ ' : ''} />
                 </h3>
               </div>
             </div>
-            <div className={cn("pro-tag mt-3 w-fit shrink-0", stat.up ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-indigo-50 text-indigo-600 border-indigo-100')}>
+            <div className={cn("pro-tag mt-4 w-fit shrink-0", stat.up ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-indigo-50 text-indigo-600 border-indigo-100')}>
               {stat.delta}
             </div>
           </motion.div>
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-        {/* Main Content Area */}
-        <div className="lg:col-span-2 space-y-12">
+      {/* REBALANCED GRID: ONE BESIDE ONE Logic */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+        
+        {/* Left/Center Column: Primary Intelligence */}
+        <div className="space-y-10">
           {/* AI Strategic Intelligence Deck */}
-          <div className="rounded-[4rem] bg-white border border-slate-100 overflow-hidden shadow-premium premium-card">
+          <div className="rounded-[2.5rem] bg-white border border-slate-100 overflow-hidden shadow-premium premium-card">
             <div className="p-6 md:p-8 border-b border-slate-50 flex items-center justify-between bg-slate-50/20">
               <div className="space-y-2">
                 <div className="flex items-center gap-3">
@@ -323,18 +336,18 @@ export const Home = () => {
                       <Zap className="w-4 h-4 text-white fill-white" />
                    </div>
                    <h3 className="text-xl font-semibold tracking-tight text-slate-950 uppercase leading-none">
-                    Intelligence
+                    Mission Log
                    </h3>
                 </div>
                 <p className="pro-label pl-11">
                    Neural Feed • Synchronised
                 </p>
               </div>
-              <div className="bg-slate-950 text-white pro-label px-4 py-2 rounded-lg font-bold shadow-sm shrink-0 tracking-widest">
+              <div className="bg-slate-950 text-white pro-label px-4 py-2 rounded-lg font-bold shadow-sm shrink-0 tracking-widest text-[9px]">
                 {completedCount}/{tasks.length}
               </div>
             </div>
-            <div className="p-4 md:p-6 space-y-2">
+            <div className="p-4 md:p-6 space-y-2.5">
               {tasks.map((task, i) => (
                   <motion.div
                     key={task.id}
@@ -368,8 +381,8 @@ export const Home = () => {
                         {task.text}
                       </p>
                       <div className="flex items-center gap-4 mt-1">
-                        <span className="pro-label text-indigo-600/80 font-bold">{task.category}</span>
-                        <span className="flex items-center gap-1.5 pro-label">
+                        <span className="pro-label text-indigo-600/80 font-bold text-[8px]">{task.category}</span>
+                        <span className="flex items-center gap-1.5 pro-label text-[8px]">
                           <Clock className="w-2.5 h-2.5" /> {task.time}
                         </span>
                       </div>
@@ -379,96 +392,67 @@ export const Home = () => {
             </div>
           </div>
 
-          {/* Performance Stream */}
-          <div className="rounded-[3rem] bg-white border border-slate-100 overflow-hidden shadow-2xl shadow-slate-100/50">
-            <div className="p-4 md:p-6 border-b border-slate-50 flex items-center justify-between">
-              <h3 className="text-lg font-semibold tracking-tight flex items-center gap-2 text-slate-950 uppercase opacity-40">
-                Performance Data Strip
-              </h3>
-              <button className="pro-label text-indigo-600 bg-indigo-50 px-3 py-1.5 rounded-md font-bold">
-                Nodes
-              </button>
-            </div>
-            <div className="p-4 overflow-x-auto no-scrollbar">
-              <div className="flex gap-4 min-w-max pb-2">
-                {recentPosts.map((post, i) => (
-                  <div key={post.id} className="w-[180px] p-4 rounded-xl bg-white border border-slate-100 group hover:border-slate-950 transition-all flex flex-col justify-between h-[120px]">
-                    <div className="flex items-center justify-between">
-                      <div className="w-8 h-8 rounded-lg bg-slate-950 flex items-center justify-center relative overflow-hidden group-hover:scale-105 transition-all">
-                        <span className="pro-label text-white z-10 font-bold">{post.platform}</span>
-                      </div>
-                      <div className="pro-label italic">{post.date}</div>
+          {/* Side-by-Side Horizontal Row 1: Pulse & Profile */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+             <div className="space-y-4">
+                <PulseWidget />
+             </div>
+             
+             <div className="rounded-[2rem] bg-slate-950 p-8 relative overflow-hidden group shadow-xl">
+                <div className="absolute -top-10 -right-10 w-40 h-40 bg-indigo-600 rounded-full blur-[80px] opacity-20 animate-float" />
+                <div className="relative z-10 space-y-6">
+                  <div className="flex items-center gap-4">
+                    <div className="w-16 h-16 rounded-2xl bg-white p-0.5">
+                      <img 
+                        src={user?.photo || "https://api.dicebear.com/7.x/avataaars/svg?seed=Naveen"} 
+                        alt="Profile" 
+                        className="w-full h-full rounded-2xl object-cover"
+                      />
                     </div>
-                    <div className="space-y-1 mt-2">
-                        <h4 className="text-[11px] font-semibold text-slate-950 truncate">{post.text}</h4>
-                        <div className="pro-label text-indigo-600 font-bold">{post.type}</div>
+                    <div className="space-y-1">
+                      <h4 className="text-xl font-semibold tracking-tight text-white uppercase">{user?.name || 'Naveen'}</h4>
+                      <p className="pro-label text-indigo-500 font-bold text-[10px]">{user?.handle || '@naveenfitlife'}</p>
                     </div>
-                    <button className="w-full mt-2 py-1.5 rounded-lg bg-slate-50 border border-slate-100 pro-label text-slate-950 font-bold hover:bg-slate-950 hover:text-white transition-all">
-                       Audit Node
-                    </button>
                   </div>
-                ))}
-              </div>
-            </div>
+                  
+                  <div className="flex justify-center p-6 bg-white/5 rounded-2xl border border-white/5 cursor-pointer hover:bg-white/10 transition-colors">
+                    <PulseScoreRing size="sm" className="scale-110" />
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="text-center p-4 bg-white/5 rounded-xl border border-white/5">
+                       <p className="text-base font-bold text-white font-mono">48.2k</p>
+                       <p className="pro-label text-white/30 mt-1 text-[8px]">Scale</p>
+                    </div>
+                    <div className="text-center p-4 bg-white/5 rounded-xl border border-white/5">
+                       <p className="text-base font-bold text-white font-mono">4.8%</p>
+                       <p className="pro-label text-white/30 mt-1 text-[8px]">Impact</p>
+                    </div>
+                  </div>
+                </div>
+             </div>
           </div>
         </div>
 
-        {/* Sidebar Widgets */}
-        <div className="space-y-12">
-          {/* Creator Profile Summary Widget */}
-          <div className="rounded-2xl bg-slate-950 p-6 relative overflow-hidden group shadow-md">
-            <div className="absolute -top-10 -right-10 w-40 h-40 bg-indigo-600 rounded-full blur-[80px] opacity-20 animate-float" />
-            <div className="relative z-10 space-y-4">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-xl bg-white p-0.5">
-                  <img 
-                    src={user?.photo || "https://api.dicebear.com/7.x/avataaars/svg?seed=Naveen"} 
-                    alt="Profile" 
-                    className="w-full h-full rounded-lg object-cover"
-                  />
-                </div>
-                <div className="space-y-0.5">
-                  <h4 className="text-lg font-semibold tracking-tight text-white uppercase">{user?.name || 'Naveen'}</h4>
-                  <p className="pro-label text-indigo-500 font-bold">{user?.handle || '@naveenfitlife'}</p>
-                </div>
-              </div>
-              
-              <div className="flex justify-center p-4 bg-white/5 rounded-xl border border-white/5 cursor-pointer">
-                <PulseScoreRing size="sm" className="scale-75" />
-              </div>
-
-              <div className="grid grid-cols-2 gap-2">
-                <div className="text-center p-3 bg-white/5 rounded-lg border border-white/5">
-                   <p className="text-sm font-bold text-white font-mono">48.2k</p>
-                   <p className="pro-label text-white/30 mt-1">Scale</p>
-                </div>
-                <div className="text-center p-3 bg-white/5 rounded-lg border border-white/5">
-                   <p className="text-sm font-bold text-white font-mono">4.8%</p>
-                   <p className="pro-label text-white/30 mt-1">Impact</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <WhatsHappeningWidget />
-          <PulseWidget />
-
-          {/* Platform Health Section */}
-          <div className="rounded-[3rem] bg-white border border-slate-100 p-10 shadow-2xl shadow-slate-100/50">
-            <h3 className="text-xl font-semibold tracking-tight flex items-center gap-4 mb-6 text-slate-950 uppercase opacity-40">
-              <Network className="w-5 h-5" />
-              Impact Analytics
+        {/* Right/Secondary Column: High-Density Analytics & Capital */}
+        <div className="space-y-10">
+          
+          {/* Side-by-Side Strategy Row 2: Impact Analytics */}
+          <div className="rounded-[2.5rem] bg-white border border-slate-100 p-8 shadow-2xl shadow-slate-100/50">
+            <h3 className="pro-label text-slate-950 font-bold mb-8 flex items-center gap-4 opacity-100 text-[10px]">
+              <Network className="w-5 h-5 text-indigo-600" />
+              IMPACT ANALYTICS
             </h3>
-            <div className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {platformHealth.map((plat) => (
-                <div key={plat.platform} className="p-6 rounded-[2rem] bg-slate-50/50 border border-slate-100 space-y-4 hover:bg-white hover:shadow-xl transition-all">
+                <div key={plat.platform} className="p-6 rounded-[2rem] bg-slate-50/50 border border-slate-100 space-y-5 hover:bg-white hover:shadow-xl transition-all h-full flex flex-col justify-between">
                   <div className="flex justify-between items-center">
                     <div className="flex items-center gap-3">
                       <div className={cn("w-2.5 h-2.5 rounded-full shadow-[0_0_10px_rgba(37,99,235,0.5)]", plat.color)} />
-                      <span className="pro-label text-slate-950 font-bold">{plat.platform}</span>
+                      <span className="pro-label text-slate-950 font-bold text-[10px]">{plat.platform}</span>
                     </div>
                     <span className={cn(
-                      "pro-tag",
+                      "pro-tag text-[7px]",
                       plat.status === 'Healthy' ? 'bg-emerald-500 text-white border-emerald-600' : 'bg-blue-600 text-white border-blue-700'
                     )}>
                       {plat.status}
@@ -477,44 +461,53 @@ export const Home = () => {
                   <div className="flex justify-between items-end">
                     <div>
                       <p className="text-2xl font-bold font-mono tracking-tighter text-slate-950">{plat.followers}</p>
-                      <p className="pro-label mt-1">{plat.growth}</p>
-                    </div>
-                    <div className="text-right">
-                      <h4 className="text-base font-semibold text-slate-900 uppercase">Growth Oracle</h4>
-                      <p className="pro-label mt-1">Predictive Analytics</p>
-                      <p className="pro-label text-[8px] opacity-30 mt-1">Retention</p>
+                      <p className="pro-label mt-1 text-[9px] text-slate-400">{plat.growth}</p>
                     </div>
                   </div>
                 </div>
               ))}
+              
+              {/* Performance Data Summary Placeholder */}
+              <div className="p-6 rounded-[2.5rem] bg-slate-950 flex flex-col justify-center items-center text-center space-y-3 cursor-pointer hover:bg-indigo-600 transition-all">
+                <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
+                   <TrendingUp className="w-5 h-5 text-white" />
+                </div>
+                <p className="pro-label text-white/50 text-[9px]">Deep Audit</p>
+                <p className="text-white font-bold text-xs">Unlock Q4 Strategy</p>
+              </div>
             </div>
           </div>
 
-          {/* Revenue Funnel Widget */}
-          <div className="rounded-[4rem] bg-white border border-slate-100 p-12 shadow-xl shadow-slate-100/50 relative overflow-hidden group">
+          {/* Revenue Funnel: Full Width Strategy Block */}
+          <div className="rounded-[2.5rem] bg-white border border-slate-100 p-10 shadow-xl shadow-slate-100/50 relative overflow-hidden group">
              <div className="absolute -top-10 -left-10 w-40 h-40 bg-indigo-600 rounded-full blur-[100px] opacity-10" />
-             <h3 className="text-2xl font-semibold tracking-tight flex items-center gap-4 mb-2 text-slate-950 uppercase">
-               <Briefcase className="w-6 h-6 text-blue-600" />
-               Capital Hub
-             </h3>
-             <p className="pro-label mb-8">Projected Liquidity: <span className="text-slate-950 font-bold">₹ 3.2M</span></p>
+             <div className="flex justify-between items-start mb-10">
+               <div className="space-y-1">
+                 <h3 className="text-2xl font-semibold tracking-tight text-slate-950 uppercase flex items-center gap-4">
+                   <Briefcase className="w-6 h-6 text-blue-600" />
+                   Capital Hub
+                 </h3>
+                 <p className="pro-label mb-8">Projected Liquidity: <span className="text-slate-950 font-bold">₹ 3.2M</span></p>
+               </div>
+               <div className="pro-tag bg-blue-50 text-blue-600 border-blue-100">Live Forecast</div>
+             </div>
              
-             <div className="space-y-10">
+             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
                 {[
                    { label: 'Pipeline', count: 3, percent: 60, color: 'bg-slate-200' },
                    { label: 'Negotiation', count: 1, percent: 35, color: 'bg-blue-300' },
                    { label: 'Live Deals', count: 3, percent: 85, color: 'bg-blue-600' },
                 ].map((stage) => (
                   <div key={stage.label} className="space-y-4">
-                    <div className="flex justify-between items-center pro-label text-slate-950 font-bold">
+                    <div className="flex justify-between items-center pro-label text-slate-950 font-bold text-[9px]">
                        <span className="opacity-40">{stage.label}</span>
-                       <span className="text-blue-600">{stage.count} Active</span>
+                       <span className="text-blue-600">{stage.count} Nodes</span>
                     </div>
-                    <div className="h-3 rounded-full bg-slate-50 overflow-hidden shadow-inner p-0.5">
+                    <div className="h-2 rounded-full bg-slate-50 overflow-hidden shadow-inner flex p-0">
                        <motion.div 
                         initial={{ width: 0 }}
                         animate={{ width: `${stage.percent}%` }}
-                        className={cn("h-full rounded-full shadow-[0_0_10px_rgba(0,0,0,0.1)]", stage.color)}
+                        className={cn("h-full rounded-full transition-all", stage.color)}
                        />
                     </div>
                   </div>
@@ -522,18 +515,17 @@ export const Home = () => {
              </div>
              
              <button 
-               onClick={() => {
-                 toast.success("Opening Management Console...", {
-                    description: "Calibrating financial intelligence for Q4..."
-                 });
-               }}
-               className="w-full mt-12 h-16 rounded-[2rem] bg-slate-950 text-white hover:bg-blue-600 hover:scale-[1.02] transition-all pro-label font-bold text-white shadow-2xl shadow-blue-900/20 active:scale-95"
+               onClick={() => toast.success("Opening Management Console...")}
+               className="w-full h-14 rounded-2xl bg-slate-950 text-white hover:bg-blue-600 hover:scale-[1.01] transition-all pro-label font-bold text-white shadow-2xl shadow-blue-900/10 active:scale-95 text-[10px]"
              >
-                Manage Economy
+                Manage Economy Core
              </button>
           </div>
+
+          <WhatsHappeningWidget />
         </div>
       </div>
+
       <NotificationSimulator />
       
       <AnimatePresence>
