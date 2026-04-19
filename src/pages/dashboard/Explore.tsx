@@ -32,15 +32,15 @@ export const Explore = () => {
            <div className="absolute top-0 right-0 w-[40%] h-[100%] bg-indigo-600/5 blur-[120px] -z-10 rounded-full" />
            <div className="max-w-7xl mx-auto space-y-2">
               <div className="flex items-center gap-3">
-                 <div className="px-3 py-1 bg-slate-950 text-white rounded-full text-[8px] font-black uppercase tracking-[0.3em] flex items-center gap-2">
+                 <div className="px-3 py-1 bg-slate-950 text-white rounded-full pro-tag border-slate-800 flex items-center gap-2">
                     <Globe className="w-3 h-3 text-indigo-400" /> Platform Multi-Node
                  </div>
-                 <span className="text-[8px] font-black uppercase tracking-[0.3em] text-slate-400 italic">Discovery v3.0</span>
+                 <span className="pro-label italic opacity-40">Discovery Node 3.5</span>
               </div>
               <h1 className="text-3xl md:text-4xl font-semibold tracking-tighter text-slate-950 uppercase leading-none">
                  The <span className="text-indigo-600">Discovery</span> Hub
               </h1>
-              <p className="text-xs font-semibold text-slate-400 uppercase tracking-tight max-w-xl leading-relaxed">
+              <p className="pro-label text-xs tracking-tight max-w-xl leading-relaxed">
                  Real-time platform topology and high-velocity trend identification.
               </p>
            </div>
@@ -75,14 +75,14 @@ export const Explore = () => {
                  <div className="w-16 h-16 bg-white/5 rounded-2xl mx-auto flex items-center justify-center border border-white/10">
                     <Compass className="w-8 h-8 text-white animate-spin" style={{ animationDuration: '8s' }} />
                  </div>
-                 <div className="space-y-2">
-                    <h2 className="text-2xl font-black text-white uppercase tracking-tighter">Node Active</h2>
-                    <p className="text-[10px] font-bold text-slate-500 max-w-xs mx-auto leading-relaxed">
+                 <div className="space-y-1">
+                    <h2 className="text-2xl font-semibold text-white uppercase tracking-tight">Node Active</h2>
+                    <p className="pro-label text-slate-500 max-w-xs mx-auto leading-relaxed">
                        Synchronizing global creator clusters. Updates every 15m.
                     </p>
                  </div>
-                 <button className="h-16 px-12 bg-white text-slate-950 rounded-[1.5rem] text-[11px] font-black uppercase tracking-[0.4em] hover:bg-indigo-600 hover:text-white transition-all shadow-xl shadow-white/5 active:scale-95 flex items-center gap-4 mx-auto">
-                   Refresh All Systems <Sparkles className="w-5 h-5" />
+                 <button className="h-14 px-10 bg-white text-slate-950 rounded-xl pro-label font-bold text-slate-950 tracking-[0.2em] hover:bg-white/90 transition-all shadow-md active:scale-95 flex items-center gap-3 mx-auto">
+                   Refresh Systems <Sparkles className="w-4 h-4" />
                  </button>
               </div>
            </section>

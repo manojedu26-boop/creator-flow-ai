@@ -31,7 +31,7 @@ const SystemStatus = () => (
       <div className="absolute inset-0 bg-emerald-500 rounded-full animate-ping opacity-20" />
       <div className="relative w-full h-full bg-emerald-500 rounded-full shadow-[0_0_12px_rgba(16,185,129,0.4)]" />
     </div>
-    <span className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-600/80">Engine Synchronised</span>
+    <span className="pro-label text-emerald-600/80 font-bold">Engine Synchronised</span>
   </div>
 );
 
@@ -163,17 +163,17 @@ export const Home = () => {
                          <div className="w-14 h-14 rounded-2xl bg-indigo-600 flex items-center justify-center shadow-2xl shadow-indigo-500/30">
                             <Plus className="w-7 h-7 text-white stroke-[3]" />
                          </div>
-                         <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tight text-slate-950">Mission Brief</h2>
+                         <h2 className="text-2xl md:text-3xl font-semibold uppercase tracking-tight text-slate-950">Mission Brief</h2>
                       </div>
-                      <button onClick={() => setIsBriefOpen(false)} className="text-[11px] font-black uppercase tracking-[0.3em] text-slate-300 hover:text-slate-950 transition-colors">Abort</button>
+                      <button onClick={() => setIsBriefOpen(false)} className="pro-label text-slate-300 hover:text-slate-950 transition-colors">Abort</button>
                    </div>
                    <div className="space-y-8">
                       <div className="p-10 rounded-[3rem] bg-slate-50 border border-slate-100 space-y-6">
-                         <p className="text-[10px] font-black uppercase tracking-[0.4em] text-indigo-600">Initialising Campaign Node</p>
-                         <h3 className="text-2xl font-black text-slate-950 uppercase leading-none">Creator Warroom v2.4</h3>
+                         <p className="pro-label text-indigo-600">Initialising Campaign Node</p>
+                         <h3 className="text-2xl font-semibold text-slate-950 uppercase leading-none">Creator Warroom v2.4</h3>
                          <div className="flex flex-col sm:flex-row gap-5">
-                            <button className="flex-1 h-14 rounded-2xl bg-white border border-slate-200 text-[11px] font-black uppercase tracking-widest text-slate-950 hover:border-indigo-600 transition-all">Archive Data</button>
-                            <button className="flex-1 h-14 rounded-2xl bg-slate-950 text-white text-[11px] font-black uppercase tracking-widest hover:bg-indigo-600 transition-all">Launch Sequence</button>
+                            <button className="flex-1 h-14 rounded-2xl bg-white border border-slate-200 pro-label text-slate-950 hover:border-indigo-600 transition-all font-bold">Archive Data</button>
+                            <button className="flex-1 h-14 rounded-2xl bg-slate-950 text-white pro-label hover:bg-indigo-600 transition-all font-bold">Launch Sequence</button>
                          </div>
                       </div>
                    </div>
@@ -198,15 +198,15 @@ export const Home = () => {
                       <div className="w-20 h-20 bg-indigo-50 border border-indigo-100 rounded-[2rem] flex items-center justify-center mx-auto mb-8 animate-float">
                         <Search className="w-8 h-8 text-indigo-600" />
                       </div>
-                      <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tight text-slate-950">Global Intelligence</h2>
-                      <p className="text-slate-400 font-bold uppercase tracking-[0.3em] text-xs">Accessing neural creator nodes across the planet</p>
+                      <h2 className="text-4xl md:text-5xl font-semibold uppercase tracking-tight text-slate-950">Global Intelligence</h2>
+                      <p className="pro-label text-xs">Accessing neural creator nodes across the planet</p>
                    </div>
                    <div className="relative">
                       <Search className="absolute left-10 top-1/2 -translate-y-1/2 w-7 h-7 text-slate-300" />
                       <input 
                         type="text" 
                         placeholder="Search for trends, creators, or metrics..." 
-                        className="w-full h-24 rounded-[3rem] bg-slate-50 border border-slate-100 pl-24 pr-12 text-xl font-black text-slate-950 placeholder:text-slate-200 focus:outline-none focus:ring-8 focus:ring-indigo-600/5 transition-all"
+                        className="w-full h-24 rounded-[3rem] bg-slate-50 border border-slate-100 pl-24 pr-12 text-xl font-semibold text-slate-950 placeholder:text-slate-200 focus:outline-none focus:ring-8 focus:ring-indigo-600/5 transition-all"
                       />
                    </div>
                 </div>
@@ -225,7 +225,7 @@ export const Home = () => {
             className="flex items-center gap-3"
           >
             <div className="px-3 py-1 bg-indigo-50 border border-indigo-100/50 rounded-full">
-              <span className="text-[9px] font-black uppercase tracking-[0.2em] text-indigo-600/80">Command Centre v4.0</span>
+              <span className="pro-label text-indigo-600/80 font-bold">Command Centre v4.0</span>
             </div>
             <SystemStatus />
           </motion.div>
@@ -250,7 +250,7 @@ export const Home = () => {
             className="h-14 px-8 bg-indigo-600 text-white rounded-2xl flex items-center gap-4 hover:bg-slate-950 transition-all active:scale-95 shadow-sm"
           >
             <Plus className="w-4 h-4 text-white stroke-[3]" />
-            <span className="text-[10px] font-black uppercase tracking-[0.2em]">Mission</span>
+            <span className="pro-label text-white font-bold">Mission</span>
           </button>
         </div>
       </div>
@@ -263,22 +263,22 @@ export const Home = () => {
             className="h-16 rounded-2xl bg-white border border-slate-100 hover:border-indigo-600 transition-all flex items-center justify-center gap-3 text-slate-400 hover:text-indigo-600 shadow-sm active:scale-98 group"
           >
             <RefreshIcon className={cn("w-4 h-4", isLoading ? "animate-spin" : "group-hover:rotate-180 transition-transform duration-500")} />
-            <span className="text-[9px] font-black uppercase tracking-[0.2em]">Sync</span>
+            <span className="pro-label font-bold">Sync</span>
           </button>
 
           <button 
             onClick={() => setIsDiscoveryOpen(true)}
-            className="h-16 rounded-2xl bg-white border border-slate-100 hover:border-indigo-600 transition-all flex items-center justify-center gap-3 font-black text-[9px] uppercase tracking-[0.2em] text-slate-900 shadow-sm group"
+            className="h-16 rounded-2xl bg-white border border-slate-100 hover:border-indigo-600 transition-all flex items-center justify-center gap-3 text-slate-900 shadow-sm group"
           >
             <Search className="w-4 h-4 text-indigo-600 group-hover:scale-110 transition-transform" /> 
-            Discovery
+            <span className="pro-label text-slate-900 font-bold">Discovery</span>
           </button>
 
           <button 
-            className="h-16 rounded-2xl bg-slate-950 text-white hover:bg-indigo-600 transition-all flex items-center justify-center gap-3 font-black text-[9px] uppercase tracking-[0.2em] shadow-sm active:scale-98 group"
+            className="h-16 rounded-2xl bg-slate-950 text-white hover:bg-indigo-600 transition-all flex items-center justify-center gap-3 shadow-sm active:scale-98 group"
           >
             <Zap className="w-4 h-4 text-emerald-400 fill-emerald-400 group-hover:animate-bounce" /> 
-            Universal
+            <span className="pro-label text-white font-bold">Universal</span>
           </button>
       </div>
 
@@ -298,13 +298,13 @@ export const Home = () => {
                 <stat.icon className="w-3.5 h-3.5" />
               </div>
               <div className="space-y-0.5">
-                <p className="text-[7px] font-bold uppercase tracking-widest text-slate-400">{stat.label}</p>
+                <p className="pro-label">{stat.label}</p>
                 <h3 className="text-base font-bold tracking-tight text-slate-950 leading-none data-value">
                   <CountUp value={stat.value} prefix={stat.label === 'Revenue' ? '₹ ' : ''} />
                 </h3>
               </div>
             </div>
-            <div className={cn("inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[7px] font-black mt-3 w-fit shrink-0 border", stat.up ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-indigo-50 text-indigo-600 border-indigo-100')}>
+            <div className={cn("pro-tag mt-3 w-fit shrink-0", stat.up ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-indigo-50 text-indigo-600 border-indigo-100')}>
               {stat.delta}
             </div>
           </motion.div>
@@ -326,11 +326,11 @@ export const Home = () => {
                     Intelligence
                    </h3>
                 </div>
-                <p className="text-[8px] font-black text-slate-400 tracking-[0.2em] uppercase pl-11">
+                <p className="pro-label pl-11">
                    Neural Feed • Synchronised
                 </p>
               </div>
-              <div className="bg-slate-950 text-white text-[9px] font-black px-4 py-2 rounded-lg uppercase tracking-[0.2em] shadow-sm shrink-0">
+              <div className="bg-slate-950 text-white pro-label px-4 py-2 rounded-lg font-bold shadow-sm shrink-0 tracking-widest">
                 {completedCount}/{tasks.length}
               </div>
             </div>
@@ -368,8 +368,8 @@ export const Home = () => {
                         {task.text}
                       </p>
                       <div className="flex items-center gap-4 mt-1">
-                        <span className="text-[8px] font-black uppercase tracking-widest text-indigo-600/80">{task.category}</span>
-                        <span className="flex items-center gap-1.5 text-[8px] font-black uppercase text-slate-400 tracking-widest">
+                        <span className="pro-label text-indigo-600/80 font-bold">{task.category}</span>
+                        <span className="flex items-center gap-1.5 pro-label">
                           <Clock className="w-2.5 h-2.5" /> {task.time}
                         </span>
                       </div>
@@ -382,10 +382,10 @@ export const Home = () => {
           {/* Performance Stream */}
           <div className="rounded-[3rem] bg-white border border-slate-100 overflow-hidden shadow-2xl shadow-slate-100/50">
             <div className="p-4 md:p-6 border-b border-slate-50 flex items-center justify-between">
-              <h3 className="text-lg font-bold tracking-tight flex items-center gap-2 text-slate-950 uppercase opacity-40">
+              <h3 className="text-lg font-semibold tracking-tight flex items-center gap-2 text-slate-950 uppercase opacity-40">
                 Performance Data Strip
               </h3>
-              <button className="text-[7px] font-black uppercase text-indigo-600 bg-indigo-50 px-3 py-1.5 rounded-md tracking-widest">
+              <button className="pro-label text-indigo-600 bg-indigo-50 px-3 py-1.5 rounded-md font-bold">
                 Nodes
               </button>
             </div>
@@ -395,15 +395,15 @@ export const Home = () => {
                   <div key={post.id} className="w-[180px] p-4 rounded-xl bg-white border border-slate-100 group hover:border-slate-950 transition-all flex flex-col justify-between h-[120px]">
                     <div className="flex items-center justify-between">
                       <div className="w-8 h-8 rounded-lg bg-slate-950 flex items-center justify-center relative overflow-hidden group-hover:scale-105 transition-all">
-                        <span className="text-[7px] font-black uppercase text-white z-10">{post.platform}</span>
+                        <span className="pro-label text-white z-10 font-bold">{post.platform}</span>
                       </div>
-                      <div className="text-[7px] font-bold text-slate-400 uppercase tracking-widest">{post.date}</div>
+                      <div className="pro-label italic">{post.date}</div>
                     </div>
                     <div className="space-y-1 mt-2">
-                        <h4 className="text-[11px] font-bold text-slate-950 truncate">{post.text}</h4>
-                        <div className="text-[7px] font-black text-indigo-600 uppercase tracking-widest">{post.type}</div>
+                        <h4 className="text-[11px] font-semibold text-slate-950 truncate">{post.text}</h4>
+                        <div className="pro-label text-indigo-600 font-bold">{post.type}</div>
                     </div>
-                    <button className="w-full mt-2 py-1.5 rounded-lg bg-slate-50 border border-slate-100 text-slate-950 font-black text-[7px] uppercase tracking-widest hover:bg-slate-950 hover:text-white transition-all">
+                    <button className="w-full mt-2 py-1.5 rounded-lg bg-slate-50 border border-slate-100 pro-label text-slate-950 font-bold hover:bg-slate-950 hover:text-white transition-all">
                        Audit Node
                     </button>
                   </div>
@@ -428,8 +428,8 @@ export const Home = () => {
                   />
                 </div>
                 <div className="space-y-0.5">
-                  <h4 className="text-lg font-bold tracking-tight text-white uppercase">{user?.name || 'Naveen'}</h4>
-                  <p className="text-[7px] font-black text-indigo-500 uppercase tracking-widest">{user?.handle || '@naveenfitlife'}</p>
+                  <h4 className="text-lg font-semibold tracking-tight text-white uppercase">{user?.name || 'Naveen'}</h4>
+                  <p className="pro-label text-indigo-500 font-bold">{user?.handle || '@naveenfitlife'}</p>
                 </div>
               </div>
               
@@ -439,12 +439,12 @@ export const Home = () => {
 
               <div className="grid grid-cols-2 gap-2">
                 <div className="text-center p-3 bg-white/5 rounded-lg border border-white/5">
-                   <p className="text-sm font-bold text-white">48.2k</p>
-                   <p className="text-[6px] font-bold uppercase text-white/30 tracking-widest mt-1">Scale</p>
+                   <p className="text-sm font-bold text-white font-mono">48.2k</p>
+                   <p className="pro-label text-white/30 mt-1">Scale</p>
                 </div>
                 <div className="text-center p-3 bg-white/5 rounded-lg border border-white/5">
-                   <p className="text-sm font-bold text-white">4.8%</p>
-                   <p className="text-[6px] font-bold uppercase text-white/30 tracking-widest mt-1">Impact</p>
+                   <p className="text-sm font-bold text-white font-mono">4.8%</p>
+                   <p className="pro-label text-white/30 mt-1">Impact</p>
                 </div>
               </div>
             </div>
@@ -455,34 +455,34 @@ export const Home = () => {
 
           {/* Platform Health Section */}
           <div className="rounded-[3rem] bg-white border border-slate-100 p-10 shadow-2xl shadow-slate-100/50">
-            <h3 className="text-2xl font-black tracking-tight flex items-center gap-4 mb-8 text-slate-950 uppercase">
-              <Network className="w-6 h-6 text-blue-600" />
+            <h3 className="text-xl font-semibold tracking-tight flex items-center gap-4 mb-6 text-slate-950 uppercase opacity-40">
+              <Network className="w-5 h-5" />
               Impact Analytics
             </h3>
             <div className="space-y-6">
               {platformHealth.map((plat) => (
-                <div key={plat.platform} className="p-6 rounded-[2rem] bg-slate-50/50 border border-slate-50 space-y-4 hover:bg-white hover:shadow-xl transition-all">
+                <div key={plat.platform} className="p-6 rounded-[2rem] bg-slate-50/50 border border-slate-100 space-y-4 hover:bg-white hover:shadow-xl transition-all">
                   <div className="flex justify-between items-center">
                     <div className="flex items-center gap-3">
                       <div className={cn("w-2.5 h-2.5 rounded-full shadow-[0_0_10px_rgba(37,99,235,0.5)]", plat.color)} />
-                      <span className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-950">{plat.platform}</span>
+                      <span className="pro-label text-slate-950 font-bold">{plat.platform}</span>
                     </div>
                     <span className={cn(
-                      "text-[8px] font-black px-3 py-1.5 rounded-full uppercase tracking-widest shadow-sm",
-                      plat.status === 'Healthy' ? 'bg-emerald-500 text-white' : 'bg-blue-600 text-white'
+                      "pro-tag",
+                      plat.status === 'Healthy' ? 'bg-emerald-500 text-white border-emerald-600' : 'bg-blue-600 text-white border-blue-700'
                     )}>
                       {plat.status}
                     </span>
                   </div>
                   <div className="flex justify-between items-end">
                     <div>
-                      <p className="text-2xl font-black leading-none text-slate-950">{plat.followers}</p>
-                      <p className="text-[9px] font-black text-slate-400 mt-2 uppercase tracking-widest">{plat.growth}</p>
+                      <p className="text-2xl font-bold font-mono tracking-tighter text-slate-950">{plat.followers}</p>
+                      <p className="pro-label mt-1">{plat.growth}</p>
                     </div>
                     <div className="text-right">
-                      <h3 className="text-xl font-black text-slate-900 uppercase">Growth Oracle</h3>
-                      <p className="text-slate-400 text-[9px] font-black uppercase tracking-widest mt-1">Predictive audience analytics</p>
-                      <p className="text-[8px] font-black uppercase tracking-widest text-slate-300 text-right mt-1">Retention</p>
+                      <h4 className="text-base font-semibold text-slate-900 uppercase">Growth Oracle</h4>
+                      <p className="pro-label mt-1">Predictive Analytics</p>
+                      <p className="pro-label text-[8px] opacity-30 mt-1">Retention</p>
                     </div>
                   </div>
                 </div>
@@ -493,20 +493,20 @@ export const Home = () => {
           {/* Revenue Funnel Widget */}
           <div className="rounded-[4rem] bg-white border border-slate-100 p-12 shadow-xl shadow-slate-100/50 relative overflow-hidden group">
              <div className="absolute -top-10 -left-10 w-40 h-40 bg-indigo-600 rounded-full blur-[100px] opacity-10" />
-             <h3 className="text-3xl font-black tracking-tight flex items-center gap-5 mb-4 text-slate-950 uppercase">
-               <Briefcase className="w-8 h-8 text-blue-600" />
+             <h3 className="text-2xl font-semibold tracking-tight flex items-center gap-4 mb-2 text-slate-950 uppercase">
+               <Briefcase className="w-6 h-6 text-blue-600" />
                Capital Hub
              </h3>
-             <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 mb-12">Projected Liquidity: <span className="text-slate-950">₹ 3.2M</span></p>
+             <p className="pro-label mb-8">Projected Liquidity: <span className="text-slate-950 font-bold">₹ 3.2M</span></p>
              
              <div className="space-y-10">
                 {[
-                  { label: 'Pipeline', count: 3, percent: 60, color: 'bg-slate-200' },
-                  { label: 'Negotiation', count: 1, percent: 35, color: 'bg-blue-300' },
-                  { label: 'Live Deals', count: 3, percent: 85, color: 'bg-blue-600' },
+                   { label: 'Pipeline', count: 3, percent: 60, color: 'bg-slate-200' },
+                   { label: 'Negotiation', count: 1, percent: 35, color: 'bg-blue-300' },
+                   { label: 'Live Deals', count: 3, percent: 85, color: 'bg-blue-600' },
                 ].map((stage) => (
                   <div key={stage.label} className="space-y-4">
-                    <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-[0.3em] text-slate-950">
+                    <div className="flex justify-between items-center pro-label text-slate-950 font-bold">
                        <span className="opacity-40">{stage.label}</span>
                        <span className="text-blue-600">{stage.count} Active</span>
                     </div>
@@ -524,10 +524,10 @@ export const Home = () => {
              <button 
                onClick={() => {
                  toast.success("Opening Management Console...", {
-                   description: "Calibrating financial intelligence for Q4..."
+                    description: "Calibrating financial intelligence for Q4..."
                  });
                }}
-               className="w-full mt-12 h-16 rounded-[2rem] bg-slate-950 text-white hover:bg-blue-600 hover:scale-[1.02] transition-all font-black text-[11px] uppercase tracking-[0.3em] shadow-2xl shadow-blue-900/20 active:scale-95"
+               className="w-full mt-12 h-16 rounded-[2rem] bg-slate-950 text-white hover:bg-blue-600 hover:scale-[1.02] transition-all pro-label font-bold text-white shadow-2xl shadow-blue-900/20 active:scale-95"
              >
                 Manage Economy
              </button>

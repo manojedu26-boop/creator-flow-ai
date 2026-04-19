@@ -23,33 +23,33 @@ const CreatorCard = ({ creator, index }: { creator: any, index: number }) => {
               <div className="w-12 h-12 rounded-xl border border-white/10 p-0.5">
                  <img src={creator.avatar} className="w-full h-full rounded-lg object-cover" alt="Av" />
               </div>
-              <div className="px-2 py-0.5 bg-white/10 backdrop-blur-md rounded-md border border-white/10 text-[7px] font-black uppercase text-white">
+              <div className="px-2 py-0.5 bg-white/10 backdrop-blur-md rounded-md border border-white/10 pro-tag text-white">
                  {creator.er}% ER
               </div>
           </div>
 
           <div className="space-y-3">
              <div className="space-y-0.5">
-                <h4 className="text-sm font-bold text-white uppercase tracking-tight leading-none truncate">{creator.name}</h4>
-                <p className="text-[7px] font-medium text-white/40 uppercase tracking-widest">{creator.handle}</p>
+                <h4 className="text-sm font-semibold text-white uppercase tracking-tight leading-none truncate">{creator.name}</h4>
+                <p className="pro-label text-white/40">{creator.handle}</p>
              </div>
 
              <div className="grid grid-cols-2 gap-2 pt-2 border-t border-white/5">
                 <div>
-                   <p className="text-[6px] font-bold uppercase text-white/30 tracking-widest leading-none">Scale</p>
-                   <p className="text-[10px] font-bold text-white">{creator.followers}</p>
+                   <p className="pro-label text-[6px] text-white/30 truncate">Scale</p>
+                   <p className="text-[10px] font-bold text-white font-mono">{creator.followers}</p>
                 </div>
                 <div className="text-right">
-                   <p className="text-[6px] font-bold uppercase text-white/30 tracking-widest leading-none">Score</p>
-                   <p className="text-[10px] font-bold text-indigo-400">{creator.score}</p>
+                   <p className="pro-label text-[6px] text-white/30 truncate">Score</p>
+                   <p className="text-[10px] font-bold text-indigo-400 font-mono">{creator.score}</p>
                 </div>
              </div>
 
              <button 
-               onClick={() => toast.success("Synergy Logged 🤝")}
-               className="w-full h-8 bg-white rounded-lg text-slate-950 font-black text-[8px] uppercase tracking-wider hover:bg-indigo-600 hover:text-white transition-all active:scale-95 flex items-center justify-center gap-1"
+                onClick={() => toast.success("Synergy Logged 🤝")}
+                className="w-full h-8 bg-white rounded-lg text-slate-950 pro-label font-bold text-slate-950 tracking-wider hover:bg-indigo-600 hover:text-white transition-all active:scale-95 flex items-center justify-center gap-1"
              >
-               Sync <Plus className="w-3 h-3" />
+                Sync <Plus className="w-3 h-3" />
              </button>
           </div>
        </div>
@@ -68,7 +68,7 @@ export const CreatorSpotlight = () => {
          </div>
          <div className="space-y-0.5">
             <h3 className="text-xl font-semibold uppercase tracking-tighter text-slate-950">Rising Stars</h3>
-            <p className="text-[8px] font-black uppercase text-slate-400 tracking-[0.2em]">Neural Intelligence Selection</p>
+            <p className="pro-label">Neural Intelligence Selection</p>
          </div>
       </div>
 
@@ -76,12 +76,11 @@ export const CreatorSpotlight = () => {
         {creators.map((creator, i) => (
           <CreatorCard key={creator.id} creator={creator} index={i} />
         ))}
-        {/* Placeholder for more cards (Compressed) */}
         <div className="h-[220px] border-2 border-dashed border-slate-100 rounded-2xl flex flex-col items-center justify-center p-6 text-center space-y-2 opacity-50 hover:opacity-100 transition-all cursor-pointer group">
             <div className="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center group-hover:scale-110 transition-all">
                <Plus className="w-5 h-5 text-slate-400" />
             </div>
-            <p className="text-[8px] font-bold uppercase text-slate-400 tracking-widest">Explore Hub</p>
+            <p className="pro-label text-slate-400">Explore Hub</p>
         </div>
       </div>
     </section>

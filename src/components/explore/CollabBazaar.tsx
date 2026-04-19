@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Users, MessageSquare, Sparkles, Zap, Star, Heart, Target, TrendingUp, Handshake, ChevronRight } from 'lucide-react';
+import { Users, MessageSquare, Sparkles, Zap, Handshake, ChevronRight } from 'lucide-react';
 import { useExplore } from '@/contexts/ExploreContext';
 import { cn } from '@/lib/utils';
 import { toast } from '@/components/ui/sonner';
@@ -24,30 +24,31 @@ const CollabCard = ({ collab, index }: { collab: any, index: number }) => {
                 </div>
              </div>
              <div className="flex flex-col items-end gap-1.5">
-                <div className="px-4 py-1.5 bg-indigo-50 text-indigo-600 rounded-full text-[10px] font-black uppercase tracking-widest border border-indigo-100 flex items-center gap-2">
-                   <Sparkles className="w-3.5 h-3.5" /> {collab.matchScore}% Match
+                <div className="px-3 py-1 bg-indigo-50 text-indigo-600 rounded-full border border-indigo-100 flex items-center gap-2">
+                   <Sparkles className="w-3 h-3" /> 
+                   <span className="pro-label text-indigo-600 font-bold">{collab.matchScore}% Match</span>
                 </div>
-                <span className="text-[9px] font-black text-slate-300 uppercase tracking-widest italic">Neural Synergy Probability</span>
+                <span className="text-[8px] font-semibold text-slate-300 uppercase tracking-widest italic">Neural Synergy Probability</span>
              </div>
           </div>
 
           <div className="space-y-3">
-             <div className="space-y-0.5">
-                <h4 className="text-2xl font-black text-slate-950 uppercase tracking-tighter leading-none">{collab.name}</h4>
-                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{collab.niche} • {collab.audienceSize} Analytics</p>
+             <div className="space-y-1">
+                <h4 className="text-2xl font-semibold text-slate-950 uppercase tracking-tight leading-none">{collab.name}</h4>
+                <p className="pro-label text-slate-400">{collab.niche} • {collab.audienceSize} Analytics</p>
              </div>
              <div className="p-5 bg-slate-50 rounded-2xl border border-slate-100 relative group-hover:bg-white transition-all overflow-hidden h-[110px]">
                 <div className="absolute top-0 right-0 p-3 opacity-5 group-hover:rotate-12 transition-transform">
-                   <MessageSquare className="w-12 h-12 text-slate-950" />
+                   <MessageSquare className="w-10 h-10 text-slate-950" />
                 </div>
-                <p className="text-[11px] font-bold text-slate-600 italic line-clamp-3 relative z-10">"{collab.lookingFor}"</p>
+                <p className="text-[11px] font-medium text-slate-600 italic line-clamp-3 relative z-10">"{collab.lookingFor}"</p>
              </div>
           </div>
        </div>
 
        <button 
           onClick={() => toast.success("Synergy Protocols Initialized... 🤝")}
-          className="w-full h-14 bg-white border border-slate-950 text-slate-950 rounded-2xl text-[10px] font-black uppercase tracking-[0.3em] flex items-center justify-center gap-3 hover:bg-slate-950 hover:text-white transition-all active:scale-95 group shadow-sm"
+          className="w-full h-14 bg-white border border-slate-950 text-slate-950 rounded-2xl pro-label font-bold text-slate-950 tracking-[0.2em] flex items-center justify-center gap-3 hover:bg-slate-950 hover:text-white transition-all active:scale-95 group shadow-sm"
        >
           Reach Out <MessageSquare className="w-4 h-4 group-hover:scale-110 transition-transform" />
        </button>
@@ -62,16 +63,16 @@ export const CollabBazaar = () => {
     <section className="space-y-10 px-8">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-           <div className="w-12 h-12 rounded-[1.2rem] bg-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-500/20">
-              <Users className="w-6 h-6 text-white" />
+           <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-500/20">
+              <Users className="w-5 h-5 text-white" />
            </div>
-           <div className="space-y-1">
-              <h3 className="text-3xl font-black uppercase tracking-tighter text-slate-950">Open Collab Requests this week</h3>
-              <p className="text-[10px] font-black uppercase text-slate-400 tracking-[0.3em]">Network Topology • Synergy Node Optimization</p>
+           <div className="space-y-0.5">
+              <h3 className="text-2xl font-semibold uppercase tracking-tight text-slate-950">Collaborative Requests</h3>
+              <p className="pro-label tracking-[0.2em]">Network Topology • Synergy Node Optimization</p>
            </div>
         </div>
-        <button className="h-12 px-8 bg-slate-50 text-slate-400 border border-slate-100 rounded-xl text-[9px] font-black uppercase tracking-widest hover:text-slate-950 hover:border-slate-300 transition-all flex items-center gap-3">
-          Post Request <Plus className="w-4 h-4 text-indigo-600" />
+        <button className="h-10 px-6 bg-slate-50 text-slate-400 border border-slate-100 rounded-lg pro-label hover:text-slate-950 hover:border-slate-300 transition-all flex items-center gap-2">
+          Post Request <Plus className="w-3 h-3 text-indigo-600" />
         </button>
       </div>
 
@@ -85,15 +86,15 @@ export const CollabBazaar = () => {
                <Zap className="w-48 h-48 text-white fill-white" />
             </div>
             
-            <div className="w-20 h-20 bg-white/10 rounded-[2.5rem] flex items-center justify-center backdrop-blur-xl border border-white/20 relative z-10 group-hover:rotate-12 transition-transform">
-               <Sparkles className="w-10 h-10 text-white fill-white" />
+            <div className="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center backdrop-blur-xl border border-white/20 relative z-10 group-hover:rotate-12 transition-transform">
+               <Sparkles className="w-8 h-8 text-white fill-white" />
             </div>
-            <div className="space-y-2 relative z-10">
-               <h4 className="text-2xl font-black text-white uppercase tracking-tight">AI Synergy Matching</h4>
-               <p className="text-[10px] font-black uppercase text-white/60 tracking-widest max-w-[200px] mx-auto leading-relaxed">Let our neural engine find your 99% audience match automatically.</p>
+            <div className="space-y-1.5 relative z-10">
+               <h4 className="text-xl font-semibold text-white uppercase tracking-tight">AI Synergy</h4>
+               <p className="pro-label text-white/60 max-w-[200px] mx-auto leading-relaxed">Automated 99% audience match identifier.</p>
             </div>
-            <button className="w-full h-14 bg-white text-indigo-600 rounded-2xl text-[10px] font-black uppercase tracking-[0.3em] flex items-center justify-center gap-3 relative z-10 hover:bg-slate-50 transition-all font-sans">
-              Enable Intelligence <ChevronRight className="w-4 h-4" />
+            <button className="w-full h-14 bg-white text-indigo-600 rounded-2xl pro-label font-bold text-indigo-600 flex items-center justify-center gap-3 relative z-10 hover:bg-slate-50 transition-all">
+              Initialize IQ <ChevronRight className="w-4 h-4" />
             </button>
          </div>
       </div>

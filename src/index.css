@@ -91,26 +91,37 @@
   body {
     @apply bg-background text-foreground antialiased selection:bg-primary selection:text-white;
     font-family: 'Inter', system-ui, sans-serif;
+    font-weight: 400;
   }
 
   /* ARCHITECTURAL TYPOGRAPHY SCALE (Sleeker, More Professional) */
-  h1 { font-size: clamp(1.75rem, 6vw, 4.5rem); }
-  h2 { font-size: clamp(1.25rem, 4vw, 2.75rem); }
-  h3 { font-size: clamp(1.1rem, 2.5vw, 1.75rem); }
+  h1 { font-size: clamp(1.75rem, 6vw, 4rem); }
+  h2 { font-size: clamp(1.25rem, 4vw, 2.5rem); }
+  h3 { font-size: clamp(1.1rem, 2.5vw, 1.5rem); }
   
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Outfit', sans-serif;
-    @apply font-semibold tracking-tighter uppercase leading-[1] md:leading-[0.95];
+    font-weight: 600 !important; /* Force Semibold across all dashboard nodes */
+    @apply tracking-tight uppercase leading-[0.95];
+  }
+
+  p, span, div, button {
+    font-family: 'Inter', sans-serif;
   }
 
   .data-value {
     font-family: 'DM Mono', monospace;
-    @apply tracking-tight;
+    @apply tracking-tight font-medium;
   }
 
-  /* Tokenized Metadata Tags */
-  .meta-tag {
-    @apply text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] leading-none;
+  /* HIGH-DENSITY METADATA LABELS */
+  .pro-label {
+    @apply text-[9px] md:text-[10px] font-bold uppercase tracking-[0.2em] leading-none text-slate-400;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .pro-tag {
+    @apply text-[8px] font-bold uppercase tracking-[0.25em] px-2 py-0.5 rounded-full border;
   }
 
   @media (max-width: 767px) {
