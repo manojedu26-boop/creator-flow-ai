@@ -17,6 +17,7 @@ import { toast } from "../../components/ui/sonner";
 import { db } from "../../lib/db";
 import { EmailComposer } from "../../components/dashboard/EmailComposer";
 import { cn } from "../../lib/utils";
+import { generateViralHooks } from "../../services/viralBrain";
 
 const growthData = [
   { day: 'Day 1', current: 48200, ai: 48200 },
@@ -58,6 +59,49 @@ export const Growth = () => {
   const [tasks, setTasks] = useState<any[]>([]);
   const [selectedCollab, setSelectedCollab] = useState<any>(null);
   const [showPitcher, setShowPitcher] = useState(false);
+  const [isBrainLoading, setIsBrainLoading] = useState(false);
+  const [generatedHooks, setGeneratedHooks] = useState<string[]>([]);
+
+  const handleViralBrain = async (videoUrl: string) => {
+    const regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = videoUrl.match(regExp);
+    const videoId = (match && match[2].length === 11) ? match[2] : videoUrl;
+
+    if (videoId.length !== 11) {
+      toast.error("Invalid Target", { description: "Please provide a valid YouTube Video ID or URL." });
+      return;
+    }
+
+    setIsBrainLoading(true);
+    try {
+      const result = await generateViralHooks(videoId);
+      if (result.error) {
+        toast.error("Synthesis Interrupt", { description: result.error });
+      } else {
+        setGeneratedHooks(result.hooks);
+        
+        // Persist to Growth Tasks DB as high-impact actions
+        result.hooks.forEach(hook => {
+          db.insert('growthTasks', {
+            id: `task_${Math.random().toString(36).substr(2, 9)}`,
+            task: hook,
+            day: 'AI Generated',
+            completed: false
+          } as any);
+        });
+
+        // Update local state to reflect new mission nodes
+        const updatedData = db.getAll<any>('growthTasks');
+        setTasks(updatedData);
+        
+        toast.success("Intelligence Synthesized", { description: `Processed: ${result.metadata?.originalTitle || 'Video Node'}. Hooks added to mission pipeline.` });
+      }
+    } catch (err) {
+      toast.error("Protocol Failure", { description: "The Viral Brain encountered an unexpected error." });
+    } finally {
+      setIsBrainLoading(false);
+    }
+  };
 
   useEffect(() => {
     const data = db.getAll<any>('growthTasks');
@@ -175,9 +219,9 @@ export const Growth = () => {
                </div>
             </div>
          </div>
-      </motion.div>
+       </motion.div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
          <motion.div variants={staggerItem} className="space-y-8">
             <div className="flex items-center justify-between">
                <h3 className="text-xl font-black uppercase tracking-tight flex items-center gap-3 text-slate-900">
@@ -223,21 +267,72 @@ export const Growth = () => {
             <h3 className="text-xl font-black uppercase tracking-tight flex items-center gap-3 text-slate-900">
                <Target className="w-5 h-5 text-blue-600" /> 90-Day Scaling Projection
             </h3>
-            <div className="bg-white border border-slate-200 rounded-[3rem] p-10 h-[400px] shadow-sm">
+            <div className="bg-white border border-slate-200 rounded-[3rem] p-10 h-[280px] shadow-sm">
                <GrowthProjectionChart data={growthData} />
             </div>
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-               {[
-                 { label: '50K Target', val: '22 Days', color: 'text-emerald-600', bg: 'bg-emerald-50' },
-                 { label: 'Ads Eligibility', val: 'Qualified', color: 'text-blue-600', bg: 'bg-blue-50' },
-                 { label: 'Avg Growth', val: '+12.4%', color: 'text-indigo-600', bg: 'bg-indigo-50' },
-                 { label: 'Creator Tier', val: 'Rising Star', color: 'text-amber-600', bg: 'bg-amber-50' },
-               ].map(stat => (
-                 <div key={stat.label} className={cn("p-6 rounded-[2rem] border border-slate-100 shadow-sm", stat.bg)}>
-                    <p className="text-[9px] font-black text-slate-400 uppercase mb-2 tracking-[0.1em]">{stat.label}</p>
-                    <p className={`text-sm font-black ${stat.color} uppercase`}>{stat.val}</p>
-                 </div>
-               ))}
+            
+            {/* Viral Brain Section */}
+            <div className="bg-slate-950 rounded-[2.5rem] border border-white/5 p-8 relative overflow-hidden group shadow-2xl shimmer-border">
+               <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
+                  <Zap className="w-24 h-24 text-blue-600" />
+               </div>
+               <div className="flex items-center gap-5 mb-8">
+                  <div className="w-14 h-14 rounded-2xl bg-blue-600 flex items-center justify-center shadow-2xl shadow-blue-500/20 ring-1 ring-white/10 shrink-0">
+                     <Lightbulb className="w-7 h-7 text-white" />
+                  </div>
+                  <div>
+                     <h3 className="text-2xl font-black uppercase tracking-tighter text-white">Viral Brain v1.0</h3>
+                     <p className="text-[9px] font-black uppercase tracking-[0.4em] text-blue-500 mt-1">Short-Form Hook Protocol</p>
+                  </div>
+               </div>
+
+               <div className="space-y-6">
+                  <div className="flex flex-col md:flex-row gap-4">
+                     <div className="flex-1 relative">
+                        <Link className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                        <input 
+                           type="text" 
+                           placeholder="Enter YouTube Video ID or URL" 
+                           className="w-full h-16 rounded-2xl bg-white/5 border border-white/10 pl-14 pr-6 text-sm font-bold text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
+                           id="video-target"
+                        />
+                     </div>
+                     <button 
+                        onClick={() => {
+                           const el = document.getElementById('video-target') as HTMLInputElement;
+                           if (el && el.value) handleViralBrain(el.value);
+                        }}
+                        disabled={isBrainLoading}
+                        className="h-16 px-10 rounded-2xl bg-blue-600 text-white text-[10px] font-black uppercase tracking-[0.3em] shadow-xl shadow-blue-500/20 hover:bg-blue-700 active:scale-95 transition-all disabled:opacity-50 flex items-center justify-center gap-3 shrink-0"
+                     >
+                        {isBrainLoading ? <RefreshCcw className="w-4 h-4 animate-spin" /> : <Zap className="w-4 h-4" />}
+                        {isBrainLoading ? "Synthesizing..." : "Forge Hooks"}
+                     </button>
+                  </div>
+
+                  {generatedHooks.length > 0 && (
+                     <motion.div 
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4"
+                     >
+                        {generatedHooks.map((hook, i) => (
+                           <div key={i} className="bg-white/5 border border-white/5 rounded-2xl p-5 group/hook relative">
+                              <p className="text-xs font-bold text-slate-400 leading-relaxed mb-4">{hook}</p>
+                              <button 
+                                 onClick={() => {
+                                    navigator.clipboard.writeText(hook);
+                                    toast.success("Hook Copied", { description: "Node response duplicated to clipboard." });
+                                 }}
+                                 className="text-[9px] font-black uppercase tracking-widest text-blue-500 flex items-center gap-2 hover:text-white transition-colors"
+                              >
+                                 <MousePointer2 className="w-3 h-3" /> Duplicate
+                              </button>
+                           </div>
+                        ))}
+                     </motion.div>
+                  )}
+               </div>
             </div>
          </motion.div>
       </div>
