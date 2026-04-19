@@ -259,41 +259,34 @@ export const Analytics = () => {
         <div className="relative z-10 p-[var(--card-p)] space-y-4 md:space-y-6">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div>
-              <div className="flex items-center gap-2 mb-2">
-                <span className="w-2 h-2 rounded-full bg-blue-600" />
-                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-blue-600">Growth Momentum</span>
+              <div className="flex items-center gap-2 mb-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse" />
+                <span className="text-[9px] font-black uppercase tracking-[0.3em] text-blue-600/70">Growth Momentum</span>
               </div>
-              <h3 className="text-2xl md:text-3xl font-black tracking-tight uppercase leading-none text-slate-900">30-Day Follower <span className="text-blue-600">Intelligence</span></h3>
-              <p className="text-xs text-slate-400 mt-2 font-black uppercase tracking-widest">Strategic cross-platform reach for {user?.name || 'Naveen'}</p>
+              <h3 className="text-xl md:text-2xl font-semibold tracking-tight uppercase leading-none text-slate-900">30-Day Follower <span className="text-blue-600/80">Intelligence</span></h3>
             </div>
             
-            <div className="flex items-center gap-4">
-               <div className="flex items-center gap-1 bg-slate-50 p-1.5 rounded-2xl border border-slate-100">
-                  {[
-                    { id: 'ig', color: '#ec4899', icon: Instagram },
-                    { id: 'yt', color: '#ef4444', icon: Youtube },
-                    { id: 'tt', color: '#2563eb', icon: Sparkles },
-                  ].map(p => (
+            <div className="flex items-center gap-2.5">
+                <div className="flex items-center gap-1 bg-slate-50/50 p-1 rounded-xl border border-slate-100/50">
+                  {[{ id: 'ig', color: '#ec4899', icon: Instagram }, { id: 'yt', color: '#ef4444', icon: Youtube }, { id: 'tt', color: '#2563eb', icon: Sparkles }].map(p => (
                     <button 
                        key={p.id}
                        onClick={() => togglePlatform(p.id)}
                        className={cn(
-                        "p-2.5 rounded-xl transition-all duration-300",
+                        "p-1.5 rounded-lg transition-all duration-300",
                         activePlatforms.includes(p.id) ? "bg-white shadow-sm ring-1 ring-slate-200" : "opacity-30 hover:opacity-60"
                        )}
                     >
-                       <p.icon className="w-4 h-4" style={{ color: p.color }} />
+                       <p.icon className="w-3.5 h-3.5" style={{ color: p.color }} />
                     </button>
                   ))}
                </div>
                
-               <div className="bg-emerald-50 border border-emerald-100 text-emerald-700 px-6 py-3 rounded-2xl flex items-center gap-3">
-                 <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center">
-                   <TrendingUp className="w-4 h-4" />
-                 </div>
+               <div className="bg-emerald-50/50 border border-emerald-100/50 text-emerald-700 px-3 py-1.5 rounded-xl flex items-center gap-2 shadow-sm">
+                 <TrendingUp className="w-3.5 h-3.5" />
                  <div className="flex flex-col">
-                   <span className="text-lg font-black leading-none">+5,100</span>
-                   <span className="text-[8px] font-black uppercase tracking-widest opacity-70">Total Surge</span>
+                   <span className="text-sm font-bold leading-none data-value tracking-tighter transition-all">+5.1K</span>
+                   <span className="text-[7px] font-black uppercase tracking-widest opacity-60 leading-none">Surge</span>
                  </div>
                </div>
             </div>
@@ -304,18 +297,18 @@ export const Analytics = () => {
               <GrowthChart data={snapshots} />
           </div>
           
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pb-4">
+          <div className="grid grid-cols-4 gap-2 md:gap-4 pb-2 -mx-2 md:mx-0 overflow-x-auto no-scrollbar">
             {[
               { label: 'Avg Daily', val: '+170', change: '+12%', color: 'text-blue-600' },
               { label: 'Peak Hour', val: '7:30 PM', change: 'Stable', color: 'text-slate-900' },
-              { label: 'Top Platform', val: 'Insta', change: '42% Share', color: 'text-blue-600' },
+              { label: 'Top Platform', val: 'Insta', change: '42%', color: 'text-blue-600' },
               { label: 'Engagement', val: '4.8%', change: '+0.4%', color: 'text-emerald-600' },
             ].map((stat, i) => (
-              <div key={i} className="bg-white border border-slate-100 p-5 rounded-[2rem] hover:shadow-lg hover:border-blue-100 transition-all shadow-sm">
-                <p className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400 mb-2">{stat.label}</p>
-                <div className="flex items-baseline gap-2">
-                  <span className={cn("text-xl font-black tracking-tighter uppercase", stat.color)}>{stat.val}</span>
-                  <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest">{stat.change}</span>
+              <div key={i} className="bg-slate-50/30 border border-slate-100/50 p-3 md:p-4 rounded-2xl transition-all shadow-sm min-w-[100px] flex-1">
+                <p className="text-[8px] font-bold uppercase tracking-widest text-slate-400 mb-1.5">{stat.label}</p>
+                <div className="flex flex-col">
+                  <span className={cn("text-sm md:text-lg font-bold data-value tracking-tight uppercase leading-none", stat.color)}>{stat.val}</span>
+                  <span className="text-[7px] font-black text-slate-400 uppercase tracking-widest mt-1 opacity-60">{stat.change}</span>
                 </div>
               </div>
             ))}
@@ -343,21 +336,21 @@ export const Analytics = () => {
         </motion.div>
       </div>
 
-      <motion.div variants={staggerItem} className="premium-card bg-blue-50/50 border border-blue-100 rounded-[2.5rem] p-8 shadow-sm relative overflow-hidden group">
-        <div className="absolute top-0 right-0 p-8 text-blue-600 opacity-5 group-hover:opacity-10 transition-opacity">
-          <Sparkles className="w-32 h-32 rotate-12" />
+      <motion.div variants={staggerItem} className="premium-card bg-blue-50/50 border border-blue-100/50 rounded-2xl p-4 md:p-6 shadow-sm relative overflow-hidden group">
+        <div className="absolute top-0 right-0 p-4 text-blue-600 opacity-5 group-hover:opacity-10 transition-opacity">
+          <Sparkles className="w-20 h-20 rotate-12" />
         </div>
-        <div className="flex items-start gap-6 relative z-10">
-          <div className="w-14 h-14 rounded-2xl bg-white flex items-center justify-center shrink-0 border border-blue-100 shadow-sm">
-             <Sparkles className="w-7 h-7 text-blue-600" />
+        <div className="flex items-start gap-4 relative z-10">
+          <div className="w-10 h-10 rounded-lg bg-white flex items-center justify-center shrink-0 border border-blue-100/50 shadow-sm">
+             <Sparkles className="w-5 h-5 text-blue-600" />
           </div>
-          <div className="space-y-3">
-             <h3 className="text-lg font-black tracking-tight uppercase flex items-center gap-3 text-slate-900">
+          <div className="space-y-1.5 flex-1 min-w-0">
+             <h3 className="text-xs font-bold tracking-tight uppercase flex items-center justify-between text-slate-900">
                AI Strategy Insight
-               <span className="px-2 py-0.5 rounded-full bg-blue-600 text-white text-[9px] font-black tracking-widest">ACTIONABLE</span>
+               <span className="px-1.5 py-0.5 rounded-full bg-blue-600 text-white text-[7px] font-black tracking-widest">ELITE</span>
              </h3>
-             <p className="text-lg font-bold leading-relaxed max-w-4xl text-slate-700 underline-offset-4 decoration-blue-200">
-                {user?.firstName || 'Naveen'}, your Reels are outperforming all other formats by <span className="text-blue-600 tracking-tight font-black underline decoration-blue-400 decoration-4">3.2x</span>. Your audience is most active on Tuesday and Thursday evenings between 6PM–9PM IST. Your 4.8% engagement rate puts you in the top 12% of fitness creators in India. However, your posting frequency dropped 30% in the last 10 days — this directly caused a dip in reach on YouTube. Post 3 Reels this week across IG and TikTok to recover momentum.
+             <p className="text-[13px] font-medium leading-snug text-slate-700">
+                {user?.firstName || 'Naveen'}, Reels are outperforming other formats by <span className="text-blue-600 font-bold">3.2x</span>. Peak activity detected <span className="text-blue-600 font-bold">Tue/Thu 6-9PM</span>. You are in the top <span className="text-blue-600 font-bold">12%</span> of fitness creators. <span className="underline decoration-blue-200 underline-offset-2">Action:</span> Post 3 Reels this week for 15% reach recovery.
              </p>
           </div>
         </div>
@@ -659,18 +652,18 @@ export const Analytics = () => {
         </div>
       </header>
 
-      <div className="sticky-tabs h-scroll-fade flex items-center gap-6 border-b border-slate-100 overflow-x-auto scrollbar-none pb-0 -mx-[var(--page-px)] px-[var(--page-px)] bg-white/80 backdrop-blur-md">
+      <div className="sticky-tabs h-scroll-fade flex items-center gap-5 border-b border-slate-100 overflow-x-auto scrollbar-none pb-0 -mx-[var(--page-px)] px-[var(--page-px)] bg-white/80 backdrop-blur-md">
         {tabs.map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
-            className={`pb-4 text-[10px] font-black uppercase tracking-widest relative transition-all whitespace-nowrap ${
+            className={`pb-3 text-[9px] font-black uppercase tracking-widest relative transition-all whitespace-nowrap ${
               activeTab === tab ? "text-blue-600" : "text-slate-400 hover:text-slate-600"
             }`}
           >
             {tab}
             {activeTab === tab && (
-              <motion.div layoutId="activeTab" className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600" />
+              <motion.div layoutId="activeTab" className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600 shadow-[0_-2px_10px_rgba(37,99,235,0.4)]" />
             )}
           </button>
         ))}

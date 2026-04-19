@@ -178,14 +178,14 @@ export const DashboardLayout = () => {
       </div>
       
       <div 
-        className="flex-1 flex flex-col relative z-header w-full overflow-hidden transition-[padding] duration-300 ease-in-out lg:pl-[var(--sidebar-w)]"
+        className="flex-1 flex flex-col relative z-header w-full overflow-hidden transition-[padding] duration-300 ease-in-out lg:pl-[var(--sidebar-w)] h-screen"
       >
         <Header title={pageTitle} onSearch={() => setIsCommandPaletteOpen(true)} />
         
-        <main className="flex-1 pt-[var(--header-h)] pb-[calc(var(--bottom-nav-h)+2rem)] relative bg-mesh-primary">
+        <main className="flex-1 pb-[calc(var(--bottom-nav-h)+1rem)] relative bg-mesh-primary overflow-y-auto no-scrollbar scroll-smooth">
           <PullToRefresh onRefresh={handleRefresh}>
             <IOSSwipeBack>
-              <div className="px-[var(--page-px)] py-6 no-scrollbar max-w-[1400px] mx-auto min-h-screen space-y-6">
+              <div className="px-[var(--page-px)] py-4 no-scrollbar max-w-[1400px] mx-auto min-h-screen space-y-4">
                 
                 {/* DYNAMIC BREADCRUMBS */}
                 {/* DYNAMIC BREADCRUMBS */}

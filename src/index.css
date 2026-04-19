@@ -36,7 +36,7 @@
     --input: 214.3 31.8% 91.4%;
     --ring: 226 70% 55.5%;
 
-    --radius: 2rem; 
+    --radius: 1.25rem; /* More precise, less bulky */
 
     /* Custom Tokens */
     --gold: 226 100% 50.4%; /* Deep Blue Titan */
@@ -44,11 +44,12 @@
     --glass: 255 255% 255% / 0.7;
     --glass-border: 255 255% 255% / 0.1;
     
-    /* Layout Variables */
-    --sidebar-w: 300px; 
-    --sidebar-collapsed-w: 96px;
-    --header-h: 80px;
-    --page-px: 3rem;
+    /* Layout Variables (Dynamic Scaling) */
+    --sidebar-w: 280px; 
+    --sidebar-collapsed-w: 80px;
+    --header-h: 64px;
+    --page-px: clamp(1rem, 4vw, 2.5rem); 
+    --grid-gap: clamp(1rem, 3vw, 2rem);
 
     /* Ambient Shadow System (Multi-layered) */
     --shadow-elevated-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
@@ -92,14 +93,19 @@
     font-family: 'Inter', system-ui, sans-serif;
   }
 
-  /* FLUID TYPOGRAPHY SCALE (Clamp-based) */
-  h1 { font-size: clamp(2.5rem, 8vw, 6rem); }
-  h2 { font-size: clamp(1.75rem, 5vw, 3.5rem); }
-  h3 { font-size: clamp(1.25rem, 3vw, 2rem); }
+  /* ARCHITECTURAL TYPOGRAPHY SCALE (Sleeker, More Professional) */
+  h1 { font-size: clamp(1.75rem, 6vw, 4.5rem); }
+  h2 { font-size: clamp(1.25rem, 4vw, 2.75rem); }
+  h3 { font-size: clamp(1.1rem, 2.5vw, 1.75rem); }
   
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Outfit', sans-serif;
-    @apply font-black tracking-tighter uppercase leading-[0.9] md:leading-[0.85];
+    @apply font-semibold tracking-tighter uppercase leading-[1] md:leading-[0.95];
+  }
+
+  .data-value {
+    font-family: 'DM Mono', monospace;
+    @apply tracking-tight;
   }
 
   /* Tokenized Metadata Tags */
@@ -247,10 +253,10 @@
     content: "";
     position: absolute;
     z-index: -1;
-    left: 1px;
-    top: 1px;
-    width: calc(100% - 2px);
-    height: calc(100% - 2px);
+    left: 0.5px;
+    top: 0.5px;
+    width: calc(100% - 1px);
+    height: calc(100% - 1px);
     background: inherit;
     border-radius: inherit;
   }

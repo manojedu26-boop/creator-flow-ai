@@ -125,63 +125,63 @@ export const Growth = () => {
 
   return (
     <PageTransition className="space-y-[var(--grid-gap)] pb-20 lg:pb-0">
-      <header className="mb-10">
-        <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-blue-600 mb-3">
+      <header className="mb-6">
+        <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-blue-600/70 mb-1.5">
           <TrendingUp className="w-3.5 h-3.5" />
           Growth Intelligence
         </div>
-        <h1 className="text-4xl md:text-5xl font-black tracking-tighter uppercase leading-[0.85] text-slate-900">
-           Operation <span className="text-blue-600">Scale</span>
+        <h1 className="text-2xl md:text-4xl font-semibold tracking-tighter uppercase leading-none text-slate-900">
+           Operation <span className="text-blue-600/80">Scale</span>
         </h1>
       </header>
 
       <motion.div variants={staggerItem} className="bg-white border border-slate-200 rounded-[3rem] shadow-sm relative overflow-hidden group">
          <div className="absolute inset-0 bg-slate-50/50 opacity-40 group-hover:opacity-60 transition-opacity duration-700 pointer-events-none" />
-         
-         <div className="relative z-10 p-10 lg:p-14 flex flex-col lg:flex-row gap-16 text-slate-900">
-            <div className="flex-1 space-y-12">
-               <div className="space-y-6">
-                  <div className="flex items-center gap-4">
-                     <div className="px-5 py-2 rounded-2xl bg-blue-600 text-white text-[10px] font-black uppercase tracking-[0.2em] flex items-center gap-2 shadow-lg shadow-blue-500/20">
-                        <Flame className="w-4 h-4" /> Velocity Unlocked
+                 <div className="relative z-10 p-6 md:p-10 flex flex-col lg:flex-row gap-10 text-slate-900">
+            <div className="flex-1 space-y-8">
+               <div className="space-y-4">
+                  <div className="flex items-center gap-3">
+                     <div className="px-3 py-1.5 rounded-xl bg-blue-600 text-white text-[9px] font-black uppercase tracking-[0.1em] flex items-center gap-1.5 shadow-lg shadow-blue-500/20">
+                        <Flame className="w-3 h-3" /> Velocity Unlocked
                      </div>
-                     <div className="px-5 py-2 rounded-2xl bg-slate-50 text-slate-500 border border-slate-100 text-[10px] font-black uppercase tracking-[0.2em] shadow-inner">
-                        Network Reach: 48.2K / 50K
+                     <div className="px-3 py-1.5 rounded-xl bg-slate-50/50 text-slate-500 border border-slate-100/50 text-[9px] font-black uppercase tracking-[0.1em]">
+                        Network: 48.2K / 50K
                      </div>
                   </div>
-                  <h2 className="text-4xl md:text-6xl font-black tracking-tighter uppercase leading-[0.85] text-slate-900">
-                    Mission: <span className="text-blue-600">Market Capture</span>
+                  <h2 className="text-2xl md:text-4xl font-semibold tracking-tighter uppercase leading-none text-slate-900">
+                    Mission: <span className="text-blue-600/80">Market Capture</span>
                   </h2>
-                  <p className="text-slate-500 text-lg max-w-3xl leading-relaxed font-medium">
-                     {user?.firstName || 'Naveen'}, your <span className="text-slate-900 font-bold underline decoration-blue-500/30 decoration-4 underline-offset-4">{user?.niche || 'Fitness & Lifestyle'}</span> ecosystem is approaching critical mass. Data models suggest immediate scaling via automated outreach.
+                  <p className="text-slate-500 text-sm max-w-2xl leading-relaxed font-medium">
+                     {user?.firstName || 'Naveen'}, your <span className="text-slate-900 font-bold underline decoration-blue-500/30 decoration-2 underline-offset-2">{user?.niche || 'Fitness'}</span> ecosystem is approaching critical mass. Data models suggest immediate scaling.
                   </p>
                </div>
 
-               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {tasks.map((a) => (
                     <div 
                       key={a.id} 
                       onClick={() => toggleAction(a.id)}
                       className={cn(
-                        "p-8 rounded-[2.5rem] border transition-all duration-500 cursor-pointer flex items-center gap-6 group/task shadow-sm",
+                        "p-4 rounded-2xl border transition-all duration-300 cursor-pointer flex items-center gap-4 group/task shadow-sm",
                         a.completed 
-                        ? 'bg-blue-50 border-blue-100' 
-                        : 'bg-white border-slate-100 hover:border-blue-200 hover:shadow-md'
+                        ? 'bg-blue-50/50 border-blue-100/50' 
+                        : 'bg-white border-slate-100 hover:border-blue-200'
                       )}
                     >
                        <div className={cn(
-                         "w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all duration-500 shadow-sm",
+                         "w-5 h-5 rounded-full border flex items-center justify-center transition-all duration-300",
                          a.completed ? 'bg-blue-600 border-blue-600' : 'border-slate-200 group-hover/task:border-blue-300'
                        )}>
-                          {a.completed && <CheckCircle2 className="w-5 h-5 text-white" />}
+                          {a.completed && <CheckCircle2 className="w-3 h-3 text-white" />}
                        </div>
                        <div className="flex-1 min-w-0 text-slate-900">
                           <span className={cn(
-                            "text-[10px] font-black uppercase block tracking-[0.2em] mb-1.5",
+                            "text-[8px] font-black uppercase block tracking-widest mb-0.5",
                             a.completed ? "text-blue-600 opacity-60" : "text-slate-400"
-                          )}>{a.day} High-Impact Action</span>
+                          )}>{a.day}</span>
                           <span className={cn(
-                            "text-[15px] font-black transition-all duration-500 tracking-tight",
+                            "text-[13px] font-bold transition-all duration-300 tracking-tight",
                             a.completed ? 'text-slate-300 line-through' : 'text-slate-900'
                           )}>{a.task}</span>
                        </div>
@@ -190,15 +190,15 @@ export const Growth = () => {
                </div>
             </div>
 
-            <div className="w-full lg:w-[350px] flex flex-col items-center justify-center space-y-12">
-               <div className="relative w-64 h-64 flex items-center justify-center">
+            <div className="w-full lg:w-[280px] flex flex-col items-center justify-center space-y-8">
+               <div className="relative w-48 h-48 flex items-center justify-center">
                   <svg className="w-full h-full -rotate-90">
-                     <circle cx="128" cy="128" r="100" fill="none" stroke="#f8fafc" strokeWidth="18" />
+                     <circle cx="96" cy="96" r="80" fill="none" stroke="#f8fafc" strokeWidth="12" />
                      <motion.circle 
-                       cx="128" cy="128" r="100" fill="none" stroke="url(#progressGradient)" strokeWidth="18" strokeLinecap="round"
-                       strokeDasharray={2 * Math.PI * 100}
-                       initial={{ strokeDashoffset: 2 * Math.PI * 100 }}
-                       animate={{ strokeDashoffset: 2 * Math.PI * 100 * (1 - (tasks.length ? completedCount / tasks.length : 0)) }}
+                       cx="96" cy="96" r="80" fill="none" stroke="url(#progressGradient)" strokeWidth="12" strokeLinecap="round"
+                       strokeDasharray={2 * Math.PI * 80}
+                       initial={{ strokeDashoffset: 2 * Math.PI * 80 }}
+                       animate={{ strokeDashoffset: 2 * Math.PI * 80 * (1 - (tasks.length ? completedCount / tasks.length : 0)) }}
                        transition={{ duration: 1.5, ease: "easeOut" }}
                      />
                      <defs>
@@ -209,13 +209,13 @@ export const Growth = () => {
                      </defs>
                   </svg>
                   <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-                     <span className="text-6xl font-black text-slate-900 tracking-tighter">{tasks.length ? Math.round((completedCount / tasks.length) * 100) : 0}<span className="text-xl opacity-30 text-slate-400">%</span></span>
-                     <span className="text-[10px] font-black uppercase text-blue-600 tracking-[0.4em] mt-2">Impact Score</span>
+                     <span className="text-4xl font-black text-slate-900 tracking-tighter data-value">{tasks.length ? Math.round((completedCount / tasks.length) * 100) : 0}<span className="text-sm opacity-30 text-slate-400">%</span></span>
+                     <span className="text-[8px] font-black uppercase text-blue-600 tracking-[0.3em] mt-1">Impact Score</span>
                   </div>
                </div>
-               <div className="bg-slate-50/50 p-8 rounded-[3rem] border border-slate-100 w-full text-center shadow-inner">
-                  <p className="text-[10px] font-black uppercase text-slate-400 tracking-[0.3em] mb-3">Live Network Potency</p>
-                  <p className="text-4xl font-black text-blue-600 tracking-tighter">384.2K</p>
+               <div className="bg-slate-50/30 p-5 rounded-2xl border border-slate-100/50 w-full text-center">
+                  <p className="text-[8px] font-black uppercase text-slate-400 tracking-[0.2em] mb-1.5">Network Potency</p>
+                  <p className="text-3xl font-black text-blue-600 tracking-tighter data-value">384.2K</p>
                </div>
             </div>
          </div>

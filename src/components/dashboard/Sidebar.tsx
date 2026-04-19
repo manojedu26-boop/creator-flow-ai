@@ -128,19 +128,15 @@ export const Sidebar = () => {
       {/* Logo + Pin Toggle */}
       <div
         className={cn(
-          "flex items-center h-[var(--header-h)] cursor-pointer border-b border-slate-50 relative shrink-0 group transition-all duration-300",
-          expanded ? "px-6 gap-4" : "justify-center px-0 gap-0"
+          "flex items-center h-[var(--header-h)] cursor-pointer border-b border-slate-50 relative shrink-0 transition-all duration-300",
+          expanded ? "px-6 gap-3" : "justify-center px-0"
         )}
         onClick={toggleSidebar}
       >
         <Logo 
           iconOnly={!expanded} 
-          iconClassName="w-8 h-8"
-          textClassName="text-lg text-slate-950"
-          className={cn(
-            "transition-all duration-300",
-            !expanded && "px-0"
-          )}
+          iconClassName="w-7 h-7"
+          textClassName="text-base text-slate-950"
         />
         <AnimatePresence>
           {expanded && (
@@ -148,10 +144,9 @@ export const Sidebar = () => {
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -10 }}
-              transition={{ duration: 0.3 }}
-              className="text-[9px] font-black uppercase tracking-[0.3em] text-slate-400 absolute bottom-3 left-20 whitespace-nowrap"
+              className="text-[8px] font-bold uppercase tracking-[0.2em] text-slate-400 absolute bottom-3 left-16"
             >
-              Suite v3.1
+              SUITE v3.5
             </motion.span>
           )}
         </AnimatePresence>
@@ -164,11 +159,10 @@ export const Sidebar = () => {
             <AnimatePresence>
               {expanded && (
                 <motion.h3 
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -10 }}
-                  transition={{ duration: 0.3 }}
-                  className="px-4 text-[8px] font-black uppercase tracking-[0.2em] text-slate-400 mb-1 truncate"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="px-4 text-[7px] font-bold uppercase tracking-[0.15em] text-slate-400 mb-0.5 truncate"
                 >
                   {group.title}
                 </motion.h3>
@@ -186,10 +180,10 @@ export const Sidebar = () => {
                     key={item.label}
                     to={item.href}
                     className={cn(
-                      "flex items-center rounded-xl relative transition-all duration-300 ease-in-out group py-1.5",
-                      expanded ? "px-4 gap-2.5" : "justify-center px-0 gap-0",
+                      "flex items-center rounded-lg relative transition-all duration-200 group py-1",
+                      expanded ? "px-4 gap-2" : "justify-center px-0",
                       isActive 
-                        ? "bg-slate-950 text-white shadow-xl shadow-slate-200" 
+                        ? "bg-slate-950 text-white shadow-md shadow-slate-200" 
                         : "text-slate-400 hover:bg-slate-50 hover:text-slate-900"
                     )}
                     title={!expanded ? item.label : undefined}
@@ -208,7 +202,7 @@ export const Sidebar = () => {
                         isActive ? "text-blue-500" : "group-hover:text-slate-900"
                       )} />
                       {isNotifications && unreadCount > 0 && (
-                        <span className="absolute -top-1.5 -right-1.5 min-w-[16px] h-4 bg-rose-600 text-white text-[9px] font-black rounded-full flex items-center justify-center px-1 border border-white">
+                        <span className="absolute -top-1 -right-1 min-w-[12px] h-3 bg-rose-600 text-white text-[7px] font-bold rounded-full flex items-center justify-center px-0.5 border border-white">
                           {unreadCount > 9 ? "9+" : unreadCount}
                         </span>
                       )}
@@ -223,9 +217,9 @@ export const Sidebar = () => {
                           transition={{ duration: 0.3, ease: "easeInOut" }}
                           className="overflow-hidden flex items-center"
                         >
-                          <span className="font-bold text-[9px] uppercase tracking-wider whitespace-nowrap">
-                            {item.label}
-                          </span>
+                           <span className="font-semibold text-[10px] uppercase tracking-tight whitespace-nowrap">
+                             {item.label}
+                           </span>
                         </motion.div>
                       )}
                     </AnimatePresence>

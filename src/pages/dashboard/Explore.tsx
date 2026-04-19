@@ -27,22 +27,21 @@ export const Explore = () => {
           style={{ scaleX }}
         />
 
-        {/* Global Hub Header */}
-        <header className="pt-16 pb-10 px-8 relative overflow-hidden">
-           <div className="absolute top-0 right-0 w-[40%] h-[100%] bg-indigo-600/5 blur-[120px] -z-10 rounded-full animate-pulse" />
-           <div className="max-w-7xl mx-auto space-y-4">
-              <div className="flex items-center gap-4">
-                 <div className="px-5 py-2 bg-slate-950 text-white rounded-full text-[10px] font-black uppercase tracking-[0.4em] shadow-xl flex items-center gap-3">
-                    <Globe className="w-4 h-4 text-indigo-400" /> Platform Intelligence
+        {/* Global Hub Header (Compressed) */}
+        <header className="pt-8 pb-6 px-4 md:px-8 relative overflow-hidden">
+           <div className="absolute top-0 right-0 w-[40%] h-[100%] bg-indigo-600/5 blur-[120px] -z-10 rounded-full" />
+           <div className="max-w-7xl mx-auto space-y-2">
+              <div className="flex items-center gap-3">
+                 <div className="px-3 py-1 bg-slate-950 text-white rounded-full text-[8px] font-black uppercase tracking-[0.3em] flex items-center gap-2">
+                    <Globe className="w-3 h-3 text-indigo-400" /> Platform Multi-Node
                  </div>
-                 <div className="h-0.5 w-12 bg-slate-100" />
-                 <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 italic">Discovery Engine V3.0</span>
+                 <span className="text-[8px] font-black uppercase tracking-[0.3em] text-slate-400 italic">Discovery v3.0</span>
               </div>
-              <h1 className="text-7xl font-black uppercase tracking-tighter text-slate-950 leading-[0.9]">
-                 The <span className="text-indigo-600 underline decoration-indigo-600/20 underline-offset-[12px]">Discovery</span> Engine
+              <h1 className="text-3xl md:text-4xl font-semibold tracking-tighter text-slate-950 uppercase leading-none">
+                 The <span className="text-indigo-600">Discovery</span> Hub
               </h1>
-              <p className="text-xl font-black text-slate-400 uppercase tracking-tight max-w-2xl leading-relaxed">
-                 Access real-time platform topology, identify high-velocity trends, and secure premium brand node connections.
+              <p className="text-xs font-semibold text-slate-400 uppercase tracking-tight max-w-xl leading-relaxed">
+                 Real-time platform topology and high-velocity trend identification.
               </p>
            </div>
         </header>
@@ -50,7 +49,7 @@ export const Explore = () => {
         {/* Section 1: Search & Niche (Sticky) */}
         <ExploreSearch />
 
-        <div className="max-w-7xl mx-auto space-y-32 pt-20">
+        <div className="max-w-7xl mx-auto space-y-12 pt-10">
            {/* Section 2: Trending Now */}
            <TrendingNow />
 
@@ -70,16 +69,16 @@ export const Explore = () => {
            <CollabBazaar />
            
            {/* Final Hub Call to Action */}
-           <section className="px-8 flex items-center justify-center pt-20">
-              <div className="w-full max-w-4xl p-16 bg-slate-950 rounded-[4rem] text-center space-y-10 relative overflow-hidden shadow-2xl">
+           <section className="px-8 flex items-center justify-center pt-10">
+              <div className="w-full max-w-3xl p-8 bg-slate-950 rounded-[2.5rem] text-center space-y-6 relative overflow-hidden shadow-2xl">
                  <div className="absolute inset-0 bg-indigo-600/10 blur-[80px] -z-10" />
-                 <div className="w-24 h-24 bg-white/5 rounded-[2.5rem] mx-auto flex items-center justify-center border border-white/10 group-hover:scale-110 transition-transform">
-                    <Compass className="w-12 h-12 text-white animate-spin" style={{ animationDuration: '8s' }} />
+                 <div className="w-16 h-16 bg-white/5 rounded-2xl mx-auto flex items-center justify-center border border-white/10">
+                    <Compass className="w-8 h-8 text-white animate-spin" style={{ animationDuration: '8s' }} />
                  </div>
-                 <div className="space-y-4">
-                    <h2 className="text-5xl font-black text-white uppercase tracking-tighter">Your Intelligence Node is Active</h2>
-                    <p className="text-sm font-bold text-slate-500 max-w-md mx-auto leading-relaxed">
-                       You are currently synchronizing with the global creator cluster. Fresh trends and opportunities arrive every 15 minutes.
+                 <div className="space-y-2">
+                    <h2 className="text-2xl font-black text-white uppercase tracking-tighter">Node Active</h2>
+                    <p className="text-[10px] font-bold text-slate-500 max-w-xs mx-auto leading-relaxed">
+                       Synchronizing global creator clusters. Updates every 15m.
                     </p>
                  </div>
                  <button className="h-16 px-12 bg-white text-slate-950 rounded-[1.5rem] text-[11px] font-black uppercase tracking-[0.4em] hover:bg-indigo-600 hover:text-white transition-all shadow-xl shadow-white/5 active:scale-95 flex items-center gap-4 mx-auto">

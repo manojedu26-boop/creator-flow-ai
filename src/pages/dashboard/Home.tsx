@@ -217,114 +217,97 @@ export const Home = () => {
 
 
       {/* Hero Section — System Readiness */}
-      <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-12 px-2 mt-8">
-        <div className="space-y-8">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 px-2 mt-4">
+        <div className="space-y-4">
           <motion.div 
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="flex items-center gap-4"
+            className="flex items-center gap-3"
           >
-            <div className="px-4 py-2 bg-indigo-50 border border-indigo-100/50 rounded-full">
-              <span className="text-[11px] font-black uppercase tracking-[0.3em] text-indigo-600">Command Centre v4.0</span>
+            <div className="px-3 py-1 bg-indigo-50 border border-indigo-100/50 rounded-full">
+              <span className="text-[9px] font-black uppercase tracking-[0.2em] text-indigo-600/80">Command Centre v4.0</span>
             </div>
             <SystemStatus />
           </motion.div>
           
-          <div className="space-y-2">
+          <div className="space-y-1">
             <motion.h1 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-3xl md:text-5xl font-black tracking-tighter text-slate-950 uppercase leading-none mb-2 italic"
+              className="text-2xl md:text-4xl font-semibold tracking-tighter text-slate-950 uppercase leading-none italic"
             >
-              CREATOR <span className="text-indigo-600">COMMAND</span> CENTER
+              CREATOR <span className="text-indigo-600/80">COMMAND</span> CENTER
             </motion.h1>
-            <p className="text-slate-400 font-bold max-w-3xl text-sm md:text-lg uppercase tracking-[0.15em] leading-relaxed">
-              Welcome back, <span className="text-slate-900">{user?.firstName || 'Commander'}</span>. All neural nodes are active. <br />
-              <span className="text-indigo-600">Projected impact score +14% for the upcoming cycle.</span>
+            <p className="text-slate-400 font-medium max-w-2xl text-xs md:text-sm uppercase tracking-[0.1em] leading-relaxed">
+              Commander <span className="text-slate-900 font-bold">{user?.firstName}</span>. Impact projected <span className="text-indigo-600 font-bold">+14%</span>.
             </p>
           </div>
         </div>
         
-        <div className="flex items-center gap-4">
-          <MagneticPulse color="bg-indigo-600">
-            <button 
-              onClick={() => setIsBriefOpen(true)}
-              className="h-20 px-12 bg-indigo-600 text-white rounded-3xl flex items-center gap-6 shadow-floating hover:shadow-indigo-500/20 transition-all group active:scale-95"
-            >
-              <div className="p-2 bg-white/20 rounded-xl group-hover:rotate-90 transition-transform duration-500">
-                <Plus className="w-5 h-5 text-white stroke-[4]" />
-              </div>
-              <span className="text-[12px] font-black uppercase tracking-[0.3em]">Initialise Mission</span>
-            </button>
-          </MagneticPulse>
+        <div className="flex items-center gap-3">
+          <button 
+            onClick={() => setIsBriefOpen(true)}
+            className="h-14 px-8 bg-indigo-600 text-white rounded-2xl flex items-center gap-4 hover:bg-slate-950 transition-all active:scale-95 shadow-sm"
+          >
+            <Plus className="w-4 h-4 text-white stroke-[3]" />
+            <span className="text-[10px] font-black uppercase tracking-[0.2em]">Mission</span>
+          </button>
         </div>
       </div>
 
       {/* Global Actions Bar — Depth Layer */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 px-2">
-        <Magnetic strength={0.1}>
-          <button 
+      <div className="grid grid-cols-3 gap-3 px-2">
+           <button 
             onClick={fetchData}
             disabled={isLoading}
-            className="w-full h-20 rounded-[2.5rem] bg-white border border-slate-100 hover:border-indigo-600 hover:bg-slate-50 transition-all flex items-center justify-center gap-4 text-slate-400 hover:text-indigo-600 shadow-premium active:scale-98 group"
+            className="h-16 rounded-2xl bg-white border border-slate-100 hover:border-indigo-600 transition-all flex items-center justify-center gap-3 text-slate-400 hover:text-indigo-600 shadow-sm active:scale-98 group"
           >
-            <RefreshIcon className={cn("w-6 h-6", isLoading ? "animate-spin" : "group-hover:rotate-180 transition-transform duration-700")} />
-            <span className="text-[11px] font-black uppercase tracking-[0.3em]">Re-sync Intelligence</span>
+            <RefreshIcon className={cn("w-4 h-4", isLoading ? "animate-spin" : "group-hover:rotate-180 transition-transform duration-500")} />
+            <span className="text-[9px] font-black uppercase tracking-[0.2em]">Sync</span>
           </button>
-        </Magnetic>
 
-        <Magnetic strength={0.1}>
           <button 
             onClick={() => setIsDiscoveryOpen(true)}
-            className="w-full h-20 rounded-[2.5rem] bg-white border border-slate-100 hover:border-indigo-600 transition-all flex items-center justify-center gap-4 font-black text-[11px] uppercase tracking-[0.3em] text-slate-900 shadow-premium group"
+            className="h-16 rounded-2xl bg-white border border-slate-100 hover:border-indigo-600 transition-all flex items-center justify-center gap-3 font-black text-[9px] uppercase tracking-[0.2em] text-slate-900 shadow-sm group"
           >
-            <Search className="w-6 h-6 text-indigo-600 group-hover:scale-110 transition-transform" /> 
-            Data Discovery Hub
+            <Search className="w-4 h-4 text-indigo-600 group-hover:scale-110 transition-transform" /> 
+            Discovery
           </button>
-        </Magnetic>
 
-        <Magnetic strength={0.1}>
           <button 
-            className="w-full h-20 rounded-[2.5rem] bg-slate-950 text-white hover:bg-indigo-600 transition-all flex items-center justify-center gap-4 font-black text-[11px] uppercase tracking-[0.3em] shadow-floating-blue active:scale-98 group"
+            className="h-16 rounded-2xl bg-slate-950 text-white hover:bg-indigo-600 transition-all flex items-center justify-center gap-3 font-black text-[9px] uppercase tracking-[0.2em] shadow-sm active:scale-98 group"
           >
-            <Zap className="w-6 h-6 text-emerald-400 fill-emerald-400 group-hover:animate-bounce" /> 
-            Universal Dashboard
+            <Zap className="w-4 h-4 text-emerald-400 fill-emerald-400 group-hover:animate-bounce" /> 
+            Universal
           </button>
-        </Magnetic>
       </div>
 
 
       {/* KPI Stats — Ambient Layering */}
-      <div className="grid grid-cols-2 lg:grid-cols-5 gap-6 md:gap-10 items-stretch px-2">
+      <div className="grid grid-cols-5 gap-3 items-stretch px-2 overflow-x-auto no-scrollbar pb-2">
         {stats.map((stat, i) => (
-          <Magnetic key={stat.label} strength={0.2}>
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: i * 0.05, type: "spring", damping: 15 }}
-              className="group relative overflow-hidden rounded-[4rem] bg-white p-8 md:p-10 border border-slate-100 transition-all shadow-premium hover:shadow-floating premium-card flex flex-col justify-between h-full min-h-[180px] md:min-h-[280px]"
-            >
-              <div className="absolute top-0 right-0 p-8 opacity-5">
-                <stat.icon className="w-32 h-32" />
+          <motion.div
+            key={stat.label}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: i * 0.05 }}
+            className="group relative overflow-hidden rounded-2xl bg-white p-4 border border-slate-100 transition-all shadow-sm flex flex-col justify-between min-w-[120px]"
+          >
+            <div className="relative z-10">
+              <div className={cn("p-1.5 rounded-lg w-fit mb-3", stat.bg, stat.color)}>
+                <stat.icon className="w-3.5 h-3.5" />
               </div>
-
-              <div className="relative z-10">
-                <div className={cn("p-5 rounded-[2rem] w-fit mb-8 shadow-sm transition-all group-hover:scale-110 group-hover:shadow-lg", stat.bg, stat.color)}>
-                  <stat.icon className="w-7 h-7" />
-                </div>
-                <div className="space-y-2">
-                  <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400 group-hover:text-indigo-600 transition-colors">{stat.label}</p>
-                  <h3 className="text-3xl md:text-5xl font-black tracking-tight text-slate-950 leading-none">
-                    <CountUp value={stat.value} prefix={stat.label === 'Revenue' ? '₹ ' : ''} />
-                  </h3>
-                </div>
+              <div className="space-y-0.5">
+                <p className="text-[7px] font-bold uppercase tracking-widest text-slate-400">{stat.label}</p>
+                <h3 className="text-base font-bold tracking-tight text-slate-950 leading-none data-value">
+                  <CountUp value={stat.value} prefix={stat.label === 'Revenue' ? '₹ ' : ''} />
+                </h3>
               </div>
-              <div className={cn("relative z-10 inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-[10px] font-black mt-6 w-fit shrink-0 border", stat.up ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-indigo-50 text-indigo-600 border-indigo-100')}>
-                {stat.up ? <TrendingUp className="w-3.5 h-3.5" /> : <ChevronRight className="w-3.5 h-3.5" />}
-                {stat.delta}
-              </div>
-            </motion.div>
-          </Magnetic>
+            </div>
+            <div className={cn("inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[7px] font-black mt-3 w-fit shrink-0 border", stat.up ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-indigo-50 text-indigo-600 border-indigo-100')}>
+              {stat.delta}
+            </div>
+          </motion.div>
         ))}
       </div>
 
@@ -333,101 +316,96 @@ export const Home = () => {
         <div className="lg:col-span-2 space-y-12">
           {/* AI Strategic Intelligence Deck */}
           <div className="rounded-[4rem] bg-white border border-slate-100 overflow-hidden shadow-premium premium-card">
-            <div className="p-12 border-b border-slate-50 flex items-center justify-between bg-slate-50/20">
-              <div className="space-y-4">
-                <div className="flex items-center gap-4">
-                   <div className="w-12 h-12 rounded-2xl bg-indigo-600 flex items-center justify-center shadow-2xl shadow-indigo-500/20">
-                      <Zap className="w-6 h-6 text-white fill-white" />
+            <div className="p-6 md:p-8 border-b border-slate-50 flex items-center justify-between bg-slate-50/20">
+              <div className="space-y-2">
+                <div className="flex items-center gap-3">
+                   <div className="w-8 h-8 rounded-xl bg-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-500/20">
+                      <Zap className="w-4 h-4 text-white fill-white" />
                    </div>
-                   <h3 className="text-3xl font-black tracking-tight text-slate-950 uppercase leading-none">
-                    Strategic Intelligence
+                   <h3 className="text-xl font-semibold tracking-tight text-slate-950 uppercase leading-none">
+                    Intelligence
                    </h3>
                 </div>
-                <p className="text-[10px] font-black text-slate-400 tracking-[0.3em] uppercase pl-16">
-                   Neural Feed • Synchronised {new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                <p className="text-[8px] font-black text-slate-400 tracking-[0.2em] uppercase pl-11">
+                   Neural Feed • Synchronised
                 </p>
               </div>
-              <div className="bg-slate-950 text-white text-[10px] font-black px-6 py-3 rounded-[1.25rem] uppercase tracking-[0.2em] shadow-floating shrink-0">
-                Sequence: {completedCount}/{tasks.length}
+              <div className="bg-slate-950 text-white text-[9px] font-black px-4 py-2 rounded-lg uppercase tracking-[0.2em] shadow-sm shrink-0">
+                {completedCount}/{tasks.length}
               </div>
             </div>
-            <div className="p-10 space-y-4">
+            <div className="p-4 md:p-6 space-y-2">
               {tasks.map((task, i) => (
-                <motion.div
-                  key={task.id}
-                  layout
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.05 }}
-                  className={cn(
-                    "group flex items-center gap-8 p-8 rounded-[2.5rem] transition-all relative overflow-hidden",
-                    task.completed 
-                      ? "bg-slate-50/50 border-transparent opacity-60" 
-                      : "bg-white border border-slate-100 hover:border-indigo-600 hover:shadow-premium hover:-translate-y-1"
-                  )}
-                >
-                  <button
-                    onClick={() => toggleTask(task.id)}
+                  <motion.div
+                    key={task.id}
+                    layout
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.05 }}
                     className={cn(
-                      "shrink-0 w-10 h-10 rounded-[1rem] border-2 flex items-center justify-center transition-all",
+                      "group flex items-center gap-4 p-4 rounded-2xl transition-all relative overflow-hidden",
                       task.completed 
-                        ? "bg-emerald-500 border-emerald-500 shadow-lg shadow-emerald-500/30" 
-                        : "border-slate-200 hover:border-indigo-600 bg-white"
+                        ? "bg-slate-50/50 border-transparent opacity-60" 
+                        : "bg-white border border-slate-100 hover:border-indigo-600/50"
                     )}
                   >
-                    {task.completed && <Check className="w-5 h-5 text-white stroke-[4]" />}
-                  </button>
-                  <div className="flex-1 min-w-0">
-                    <p className={cn(
-                      "text-xl font-black tracking-tight text-slate-950",
-                      task.completed && "line-through text-slate-400"
-                    )}>
-                      {task.text}
-                    </p>
-                    <div className="flex items-center gap-6 mt-3">
-                      <span className="text-[9px] font-black uppercase tracking-[0.3em] text-indigo-600">{task.category}</span>
-                      <span className="flex items-center gap-2 text-[9px] font-black uppercase text-slate-400 tracking-[0.2em]">
-                        <Clock className="w-3 h-3" /> {task.time}
-                      </span>
+                    <button
+                      onClick={() => toggleTask(task.id)}
+                      className={cn(
+                        "shrink-0 w-6 h-6 rounded-lg border-2 flex items-center justify-center transition-all",
+                        task.completed 
+                          ? "bg-emerald-500 border-emerald-500" 
+                          : "border-slate-200 hover:border-indigo-600 bg-white"
+                      )}
+                    >
+                      {task.completed && <Check className="w-3.5 h-3.5 text-white stroke-[4]" />}
+                    </button>
+                    <div className="flex-1 min-w-0">
+                      <p className={cn(
+                        "text-sm font-semibold tracking-tight text-slate-950",
+                        task.completed && "line-through text-slate-400"
+                      )}>
+                        {task.text}
+                      </p>
+                      <div className="flex items-center gap-4 mt-1">
+                        <span className="text-[8px] font-black uppercase tracking-widest text-indigo-600/80">{task.category}</span>
+                        <span className="flex items-center gap-1.5 text-[8px] font-black uppercase text-slate-400 tracking-widest">
+                          <Clock className="w-2.5 h-2.5" /> {task.time}
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                </motion.div>
+                  </motion.div>
               ))}
             </div>
           </div>
 
           {/* Performance Stream */}
           <div className="rounded-[3rem] bg-white border border-slate-100 overflow-hidden shadow-2xl shadow-slate-100/50">
-            <div className="p-10 border-b border-slate-50 flex items-center justify-between">
-              <h3 className="text-2xl font-black tracking-tight flex items-center gap-4 text-slate-950 uppercase">
-                <Play className="w-6 h-6 text-blue-600 fill-blue-600" />
-                Live Performance
+            <div className="p-4 md:p-6 border-b border-slate-50 flex items-center justify-between">
+              <h3 className="text-lg font-bold tracking-tight flex items-center gap-2 text-slate-950 uppercase opacity-40">
+                Performance Data Strip
               </h3>
-              <button className="text-[9px] font-black uppercase text-blue-600 bg-blue-50 px-5 py-2.5 rounded-full hover:bg-blue-600 hover:text-white transition-all tracking-[0.2em] shadow-sm">
-                Control Hub
+              <button className="text-[7px] font-black uppercase text-indigo-600 bg-indigo-50 px-3 py-1.5 rounded-md tracking-widest">
+                Nodes
               </button>
             </div>
-            <div className="p-10">
-              <div className="space-y-4">
+            <div className="p-4 overflow-x-auto no-scrollbar">
+              <div className="flex gap-4 min-w-max pb-2">
                 {recentPosts.map((post, i) => (
-                  <div key={post.id} className="flex items-center justify-between p-6 rounded-[2rem] bg-white border border-slate-100 group hover:border-slate-950 hover:shadow-2xl transition-all h-28">
-                    <div className="flex items-center gap-6">
-                      <div className="w-16 h-16 rounded-[1.25rem] bg-slate-950 flex items-center justify-center relative overflow-hidden group-hover:scale-105 transition-all shadow-xl">
-                        <span className="text-[9px] font-black uppercase tracking-[0.3em] text-white z-10">{post.platform}</span>
-                        <div className="absolute inset-0 bg-blue-600 opacity-20" />
+                  <div key={post.id} className="w-[180px] p-4 rounded-xl bg-white border border-slate-100 group hover:border-slate-950 transition-all flex flex-col justify-between h-[120px]">
+                    <div className="flex items-center justify-between">
+                      <div className="w-8 h-8 rounded-lg bg-slate-950 flex items-center justify-center relative overflow-hidden group-hover:scale-105 transition-all">
+                        <span className="text-[7px] font-black uppercase text-white z-10">{post.platform}</span>
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <h4 className="text-lg font-black text-slate-950 truncate max-w-[200px] md:max-w-md">{post.text}</h4>
-                        <div className="flex gap-4 text-[9px] font-black text-slate-400 uppercase tracking-[0.25em] mt-2">
-                           <span className="text-blue-600 font-black">{post.type}</span>
-                           <span>•</span>
-                           <span>{post.date}</span>
-                        </div>
-                      </div>
+                      <div className="text-[7px] font-bold text-slate-400 uppercase tracking-widest">{post.date}</div>
                     </div>
-                    <div className="p-4 rounded-xl bg-slate-50 border border-slate-100 text-slate-950 font-black text-[10px] group-hover:bg-blue-600 group-hover:text-white transition-all">
-                       Analyze
+                    <div className="space-y-1 mt-2">
+                        <h4 className="text-[11px] font-bold text-slate-950 truncate">{post.text}</h4>
+                        <div className="text-[7px] font-black text-indigo-600 uppercase tracking-widest">{post.type}</div>
                     </div>
+                    <button className="w-full mt-2 py-1.5 rounded-lg bg-slate-50 border border-slate-100 text-slate-950 font-black text-[7px] uppercase tracking-widest hover:bg-slate-950 hover:text-white transition-all">
+                       Audit Node
+                    </button>
                   </div>
                 ))}
               </div>
@@ -438,35 +416,35 @@ export const Home = () => {
         {/* Sidebar Widgets */}
         <div className="space-y-12">
           {/* Creator Profile Summary Widget */}
-          <div className="rounded-[3rem] bg-slate-950 p-10 relative overflow-hidden group shadow-2xl shadow-slate-900/30">
-            <div className="absolute -top-10 -right-10 w-40 h-40 bg-blue-600 rounded-full blur-[80px] opacity-20 animate-float" />
-            <div className="relative z-10 space-y-8">
-              <div className="flex items-center gap-5">
-                <div className="w-20 h-20 rounded-[2rem] bg-white p-1 shadow-2xl shadow-blue-500/20 group-hover:scale-110 transition-transform">
+          <div className="rounded-2xl bg-slate-950 p-6 relative overflow-hidden group shadow-md">
+            <div className="absolute -top-10 -right-10 w-40 h-40 bg-indigo-600 rounded-full blur-[80px] opacity-20 animate-float" />
+            <div className="relative z-10 space-y-4">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-xl bg-white p-0.5">
                   <img 
                     src={user?.photo || "https://api.dicebear.com/7.x/avataaars/svg?seed=Naveen"} 
                     alt="Profile" 
-                    className="w-full h-full rounded-[1.8rem] object-cover"
+                    className="w-full h-full rounded-lg object-cover"
                   />
                 </div>
-                <div className="space-y-1">
-                  <h4 className="text-2xl font-black tracking-[0.02em] leading-none text-white uppercase">{user?.name || 'Naveen'}</h4>
-                  <p className="text-[9px] font-black text-blue-500 uppercase tracking-[0.3em]">{user?.handle || '@naveenfitlife'}</p>
+                <div className="space-y-0.5">
+                  <h4 className="text-lg font-bold tracking-tight text-white uppercase">{user?.name || 'Naveen'}</h4>
+                  <p className="text-[7px] font-black text-indigo-500 uppercase tracking-widest">{user?.handle || '@naveenfitlife'}</p>
                 </div>
               </div>
               
-              <div className="flex justify-center p-6 bg-white/5 rounded-[2.5rem] border border-white/5 hover:border-indigo-500/30 transition-all group/ring cursor-pointer">
-                <PulseScoreRing size="md" className="scale-100" />
+              <div className="flex justify-center p-4 bg-white/5 rounded-xl border border-white/5 cursor-pointer">
+                <PulseScoreRing size="sm" className="scale-75" />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div className="text-center p-5 bg-white/5 rounded-[1.5rem] border border-white/5 hover:border-blue-500/30 transition-all">
-                   <p className="text-lg font-black text-white">48.2k</p>
-                   <p className="text-[8px] font-black uppercase text-white/30 tracking-[0.3em] mt-1">Scale</p>
+              <div className="grid grid-cols-2 gap-2">
+                <div className="text-center p-3 bg-white/5 rounded-lg border border-white/5">
+                   <p className="text-sm font-bold text-white">48.2k</p>
+                   <p className="text-[6px] font-bold uppercase text-white/30 tracking-widest mt-1">Scale</p>
                 </div>
-                <div className="text-center p-5 bg-white/5 rounded-[1.5rem] border border-white/5 hover:border-blue-500/30 transition-all">
-                   <p className="text-lg font-black text-white">4.8%</p>
-                   <p className="text-[8px] font-black uppercase text-white/30 tracking-[0.3em] mt-1">Impact</p>
+                <div className="text-center p-3 bg-white/5 rounded-lg border border-white/5">
+                   <p className="text-sm font-bold text-white">4.8%</p>
+                   <p className="text-[6px] font-bold uppercase text-white/30 tracking-widest mt-1">Impact</p>
                 </div>
               </div>
             </div>
