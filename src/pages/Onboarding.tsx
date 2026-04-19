@@ -55,8 +55,24 @@ const Onboarding = () => {
           reason: "Your retention spikes by 42% when you introduce high-contrast visual cues in the first 3 seconds."
         });
         setIsAnalyzing(false);
-      }, 3000);
+      }, 1500); // Accelerated to 1.5s
       return () => clearTimeout(timer);
+    }
+    
+    // Auto-advance from result to action brief
+    if (currentStep === 3 && analysisResult && !isAnalyzing) {
+      const autoTimer = setTimeout(() => {
+        nextStep();
+      }, 1000); // Accelerated to 1s
+      return () => clearTimeout(autoTimer);
+    }
+
+    // Auto-finalize from action brief to dashboard
+    if (currentStep === 4) {
+      const finalizeTimer = setTimeout(() => {
+        handleFinalize();
+      }, 2500); // Final check at 2.5s
+      return () => clearTimeout(finalizeTimer);
     }
   }, [currentStep, isAnalyzing, analysisResult]);
 
@@ -159,16 +175,16 @@ const Onboarding = () => {
       setIsSyncing(true);
       let progress = 0;
       const interval = setInterval(() => {
-        progress += 2;
+        progress += 5; // Finish in 800ms
         setSyncProgress(progress);
         if (progress >= 100) {
           clearInterval(interval);
           setTimeout(() => {
              setIsSyncing(false);
              nextStep();
-          }, 800);
+          }, 300); // Fast transition
         }
-      }, 50);
+      }, 40);
     };
 
     return (
@@ -446,16 +462,16 @@ const Onboarding = () => {
                                   setIsSyncing(true);
                                   let progress = 0;
                                   const interval = setInterval(() => {
-                                    progress += 2;
+                                    progress += 5; // Finish in 800ms
                                     setSyncProgress(progress);
                                     if (progress >= 100) {
                                       clearInterval(interval);
                                       setTimeout(() => {
                                          setIsSyncing(false);
                                          nextStep();
-                                      }, 800);
+                                      }, 300); // Fast transition
                                     }
-                                  }, 50);
+                                  }, 40);
                                 }}
                                 className="w-full h-16 rounded-[1.5rem] bg-obsidian border border-blue-600/30 text-[11px] font-black uppercase tracking-[0.3em] text-white flex items-center justify-center gap-4 hover:border-blue-500 transition-all active:scale-95 shimmer-border overflow-hidden group"
                               >
@@ -547,28 +563,37 @@ const Onboarding = () => {
                       <h2 className="text-5xl font-black uppercase tracking-tighter text-white">Deployment Brief</h2>
                       <p className="text-sm font-bold text-slate-500 uppercase tracking-widest leading-relaxed">System operational. Your initial trajectory is mapped.</p>
                     </div>
-                    <div className="grid grid-cols-1 gap-4">
-                      {[
-                        { icon: Zap, title: "Optimize First 3s Node", desc: "Inject high-fidelity visual anchors to maximize retention." },
-                        { icon: Stars, title: "Initialize High-Octane Hooks", desc: "Our AI generated 5 hooks based on your scan. Review in Studio." },
-                        { icon: BarChart3, title: "Scale Domain Authority", desc: "You're trending in 'Tech'. Double down on predictive themes." }
-                      ].map((item, i) => (
-                        <motion.div
-                          key={item.title}
-                          initial={{ opacity: 0, x: 20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: i * 0.1 }}
-                          className="group p-8 rounded-[2.5rem] bg-obsidian border border-white/5 hover:border-blue-500/30 transition-all flex items-center gap-6 shimmer-border"
-                        >
-                          <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center shrink-0 group-hover:bg-blue-600 transition-all">
-                            <item.icon className="w-6 h-6 text-blue-500 group-hover:text-white" />
+                    
+                    <div className="flex flex-col items-center gap-10">
+                      <div className="flex flex-col items-center gap-6">
+                        <p className="text-[10px] font-black uppercase tracking-[0.4em] text-blue-500 animate-pulse">Initializing Dashboard Workspace...</p>
+                        <div className="w-64 h-1 bg-white/5 rounded-full overflow-hidden relative">
+                           <motion.div 
+                             className="absolute inset-0 bg-blue-600 shadow-[0_0_15px_#2563eb]"
+                             initial={{ width: "0%" }}
+                             animate={{ width: "100%" }}
+                             transition={{ duration: 3, ease: "easeInOut" }}
+                           />
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 gap-4 w-full opacity-40 grayscale scale-95 pointer-events-none">
+                        {[
+                          { icon: Zap, title: "Optimize First 3s Node", desc: "Inject high-fidelity visual anchors to maximize retention." },
+                          { icon: Stars, title: "Initialize High-Octane Hooks", desc: "Our AI generated 5 hooks based on your scan. Review in Studio." },
+                          { icon: BarChart3, title: "Scale Domain Authority", desc: "You're trending in 'Tech'. Double down on predictive themes." }
+                        ].map((item, i) => (
+                          <div key={item.title} className="p-8 rounded-[2.5rem] bg-obsidian border border-white/5 flex items-center gap-6">
+                            <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center shrink-0">
+                              <item.icon className="w-6 h-6 text-blue-500" />
+                            </div>
+                            <div>
+                              <h4 className="text-[11px] font-black uppercase tracking-[0.2em] text-white mb-2">{item.title}</h4>
+                              <p className="text-xs font-bold text-slate-500">{item.desc}</p>
+                            </div>
                           </div>
-                          <div>
-                            <h4 className="text-[11px] font-black uppercase tracking-[0.2em] text-white mb-2">{item.title}</h4>
-                            <p className="text-xs font-bold text-slate-500">{item.desc}</p>
-                          </div>
-                        </motion.div>
-                      ))}
+                        ))}
+                      </div>
                     </div>
                   </div>
                 )}
