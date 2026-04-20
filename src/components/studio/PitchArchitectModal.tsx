@@ -7,7 +7,7 @@ import {
   ArrowRight, Loader2, RefreshCcw
 } from 'lucide-react';
 import { db } from '@/lib/db';
-import { generatePitch } from '@/lib/gemini';
+import { supabase } from '@/lib/supabase';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 
@@ -25,9 +25,23 @@ export const PitchArchitectModal = ({ isOpen, onClose, brand }: PitchArchitectMo
   const handleGenerate = async () => {
     setIsGenerating(true);
     try {
-      const generated = await generatePitch(brand.name, brand.niches[0], "Naveen Kumar");
-      setPitch(generated);
-      toast.success("AI Pitch Constructed!");
+      const { data, error } = await supabase.functions.invoke("studio-engine", {
+        body: { 
+          action: "BRAND_PITCH", 
+          brandName: brand.name,
+          niche: brand.niches[0],
+          creatorName: "Naveen Kumar" 
+        },
+      });
+
+      if (error) throw error;
+
+      if (data?.output) {
+        setPitch(data.output);
+        toast.success("AI Pitch Constructed!");
+      } else {
+        throw new Error("Invalid response");
+      }
     } catch (error) {
       toast.error("Failed to generate pitch. Using fallback.");
       setPitch(`Hi ${brand.name} team! I'm a creator in the ${brand.niches.join(', ')} space and I'd love to collaborate on your ${brand.campaignType}. My audience matches your target demographics perfectly.`);
