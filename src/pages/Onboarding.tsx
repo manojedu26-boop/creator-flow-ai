@@ -55,7 +55,7 @@ const Onboarding = () => {
           reason: "Your retention spikes by 42% when you introduce high-contrast visual cues in the first 3 seconds."
         });
         setIsAnalyzing(false);
-      }, 500); // Super-accelerated to 0.5s
+      }, 150); // Massive acceleration: 0.15s
       return () => clearTimeout(timer);
     }
     
@@ -63,7 +63,7 @@ const Onboarding = () => {
     if (currentStep === 3 && analysisResult && !isAnalyzing) {
       const autoTimer = setTimeout(() => {
         nextStep();
-      }, 400); // 0.4s
+      }, 100); // 0.1s
       return () => clearTimeout(autoTimer);
     }
 
@@ -71,7 +71,7 @@ const Onboarding = () => {
     if (currentStep === 4) {
       const finalizeTimer = setTimeout(() => {
         handleFinalize();
-      }, 800); // Fast-tracked final sweep at 0.8s
+      }, 200); // Fast-tracked final sweep at 0.2s
       return () => clearTimeout(finalizeTimer);
     }
   }, [currentStep, isAnalyzing, analysisResult]);
@@ -175,14 +175,14 @@ const Onboarding = () => {
       setIsSyncing(true);
       let progress = 0;
       const interval = setInterval(() => {
-        progress += 10; // Rapid Sync: Finish in 400ms
+        progress += 20; // Hyper-Sync: Finish in 200ms
         setSyncProgress(progress);
         if (progress >= 100) {
           clearInterval(interval);
           setTimeout(() => {
              setIsSyncing(false);
              nextStep();
-          }, 200); // 0.2s
+          }, 50); // 0.05s
         }
       }, 40);
     };
@@ -462,14 +462,14 @@ const Onboarding = () => {
                                   setIsSyncing(true);
                                   let progress = 0;
                                   const interval = setInterval(() => {
-                                    progress += 5; // Finish in 800ms
+                                    progress += 20; // Hyper-Sync: 200ms
                                     setSyncProgress(progress);
                                     if (progress >= 100) {
                                       clearInterval(interval);
                                       setTimeout(() => {
                                          setIsSyncing(false);
                                          nextStep();
-                                      }, 300); // Fast transition
+                                      }, 50); 
                                     }
                                   }, 40);
                                 }}
@@ -572,7 +572,7 @@ const Onboarding = () => {
                              className="absolute inset-0 bg-blue-600 shadow-[0_0_15px_#2563eb]"
                              initial={{ width: "0%" }}
                              animate={{ width: "100%" }}
-                             transition={{ duration: 3, ease: "easeInOut" }}
+                             transition={{ duration: 0.4, ease: "easeOut" }}
                            />
                         </div>
                       </div>

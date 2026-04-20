@@ -75,7 +75,7 @@ export const PitchArchitectModal = ({ isOpen, onClose, brand }: PitchArchitectMo
         description: "Your pitch is now in the brand's neural queue."
       });
       onClose();
-    }, 1500);
+    }, 400); // 0.4s (Down from 1.5s)
   };
 
   return (

@@ -93,7 +93,7 @@ const Register = () => {
         // though the real profile is created in AuthContext when they confirm email
         register(name, email);
         
-        setTimeout(() => navigate("/login"), 3000);
+        setTimeout(() => navigate("/login"), 500); // Accelerated from 3s to 0.5s
       }
     } catch (error: any) {
       toast.error("Protocol Failure", { description: error.message });
@@ -151,7 +151,7 @@ const Register = () => {
                      onClick={() => {
                        register("Naveen Kumar", "naveen@example.com");
                        toast.success("Emergency Override Active", { description: "Bypassing security protocols..." });
-                       setTimeout(() => navigate("/dashboard"), 800);
+                       setTimeout(() => navigate("/dashboard"), 300);
                      }}
                      className="text-[10px] font-black uppercase tracking-widest text-slate-500 mt-1 cursor-pointer hover:text-blue-500 transition-colors"
                    >
