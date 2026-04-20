@@ -6,17 +6,29 @@ import { useExplore } from '@/contexts/ExploreContext';
 import { cn } from '@/lib/utils';
 import { toast } from '@/components/ui/sonner';
 import { PitchArchitectModal } from '@/components/studio/PitchArchitectModal';
+import { supabase } from '@/lib/supabase';
+import { useAuth } from '@/contexts/AuthContext';
 
-const BrandCard = ({ brand, index, onApply }: { brand: any, index: number, onApply: (b: any) => void }) => {
+const BrandCard = ({ brand, index, onApply, aiTip }: { brand: any, index: number, onApply: (b: any) => void, aiTip?: string }) => {
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ delay: index * 0.05 }}
       whileHover={{ y: -8 }}
-      className="p-8 bg-white border border-slate-100 rounded-[3rem] shadow-premium hover:shadow-floating-indigo transition-all group flex flex-col justify-between h-[420px]"
+      className="p-8 bg-white border border-slate-100 rounded-[3rem] shadow-premium hover:shadow-floating-indigo transition-all group flex flex-col justify-between h-[450px] relative overflow-hidden"
     >
-       <div className="space-y-6">
+       {aiTip && (
+         <motion.div 
+           initial={{ opacity: 0, y: 10 }}
+           animate={{ opacity: 1, y: 0 }}
+           className="absolute top-0 left-0 right-0 p-4 bg-indigo-600/5 border-b border-indigo-600/10 flex items-center gap-3 z-10 backdrop-blur-sm"
+         >
+           <Sparkles className="w-3 h-3 text-indigo-600 animate-pulse" />
+           <p className="text-[8px] font-black text-indigo-600 uppercase tracking-widest line-clamp-1">{aiTip}</p>
+         </motion.div>
+       )}
+       <div className={cn("space-y-6", aiTip ? "pt-8" : "")}>
           <div className="flex justify-between items-start">
              <div className="w-16 h-16 rounded-2xl border border-slate-100 p-3 bg-slate-50 flex items-center justify-center group-hover:scale-110 transition-transform">
                 <img src={brand.logo} className="w-full h-full object-contain" alt="Logo" />
@@ -77,8 +89,34 @@ const BrandCard = ({ brand, index, onApply }: { brand: any, index: number, onApp
 
 export const BrandCastingBoard = () => {
   const { brands } = useExplore();
+  const { user } = useAuth();
   const [filter, setFilter] = useState('All budgets');
   const [selectedForPitch, setSelectedForPitch] = useState<any | null>(null);
+  const [aiTips, setAiTips] = useState<Record<string, string>>({});
+
+  // Fetch AI tips for visible brands on mount
+  useEffect(() => {
+    if (brands.length > 0) {
+      brands.slice(0, 3).forEach(brand => fetchBrandTip(brand));
+    }
+  }, [brands.length]);
+
+  const fetchBrandTip = async (brand: any) => {
+    if (aiTips[brand.id]) return;
+    try {
+      const { data, error } = await supabase.functions.invoke("studio-engine", {
+        body: {
+          action: "BRAND_ANALYSIS",
+          brandName: brand.name,
+          niche: brand.niches[0],
+          inputData: brand.campaignType,
+        },
+      });
+      if (!error && data?.output) {
+        setAiTips(prev => ({ ...prev, [brand.id]: data.output.pitchAngle }));
+      }
+    } catch (e) {}
+  };
 
   const budgetFilters = ['All budgets', 'Under ₹25K', '₹25K–₹1L', '₹1L+'];
 
@@ -119,6 +157,7 @@ export const BrandCastingBoard = () => {
                  brand={brand} 
                  index={i} 
                  onApply={(b) => setSelectedForPitch(b)}
+                 aiTip={aiTips[brand.id]}
                />
             ))}
          </AnimatePresence>

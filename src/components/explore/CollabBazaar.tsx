@@ -1,11 +1,13 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Users, MessageSquare, Sparkles, Zap, Handshake, ChevronRight } from 'lucide-react';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Users, MessageSquare, Sparkles, Zap, Handshake, ChevronRight, Loader2, X, Send } from 'lucide-react';
 import { useExplore } from '@/contexts/ExploreContext';
 import { cn } from '@/lib/utils';
 import { toast } from '@/components/ui/sonner';
+import { supabase } from '@/lib/supabase';
+import { useAuth } from '@/contexts/AuthContext';
 
-const CollabCard = ({ collab, index }: { collab: any, index: number }) => {
+const CollabCard = ({ collab, index, onConnect }: { collab: any, index: number, onConnect: (c: any) => void }) => {
   return (
     <motion.div
       initial={{ opacity: 0, x: -20 }}
@@ -47,17 +49,139 @@ const CollabCard = ({ collab, index }: { collab: any, index: number }) => {
        </div>
 
        <button 
-          onClick={() => toast.success("Synergy Protocols Initialized... 🤝")}
-          className="w-full h-14 bg-white border border-slate-950 text-slate-950 rounded-2xl pro-label font-bold text-slate-950 tracking-[0.2em] flex items-center justify-center gap-3 hover:bg-slate-950 hover:text-white transition-all active:scale-95 group shadow-sm"
+          onClick={() => onConnect(collab)}
+          className="w-full h-14 bg-white border border-slate-950 text-slate-950 rounded-2xl pro-label font-bold tracking-[0.2em] flex items-center justify-center gap-3 hover:bg-slate-950 hover:text-white transition-all active:scale-95 group shadow-sm"
        >
-          Reach Out <MessageSquare className="w-4 h-4 group-hover:scale-110 transition-transform" />
+          AI Collab Pitch <Sparkles className="w-4 h-4 group-hover:scale-110 transition-transform" />
        </button>
     </motion.div>
   );
 };
 
+// ── Collab Pitch Modal ──────────────────────────────────────────────────────
+const CollabPitchModal = ({ collab, onClose }: { collab: any, onClose: () => void }) => {
+  const { user } = useAuth();
+  const [pitch, setPitch] = useState("");
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [isSent, setIsSent] = useState(false);
+
+  const generatePitch = async () => {
+    setIsGenerating(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("studio-engine", {
+        body: {
+          action: "COLLAB_SCOUT",
+          niche: (user as any)?.niche || "Content Creation",
+          brandName: collab.name,
+          inputData: collab.niche,
+          format: collab.lookingFor,
+        },
+      });
+      if (error) throw error;
+      if (data?.output) {
+        setPitch(data.output);
+        toast.success("AI Pitch Crafted!");
+      }
+    } catch (e: any) {
+      if (String(e).includes("429")) toast.error("API Quota Exceeded");
+      else toast.error("Pitch generation failed");
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const handleSend = () => {
+    if (!pitch) return;
+    setIsSent(true);
+    setTimeout(() => {
+      toast.success(`Collab request sent to ${collab.name} 🤝`);
+      onClose();
+    }, 1000);
+  };
+
+  return (
+    <div className="fixed inset-0 z-[7000] flex items-center justify-center p-4">
+      <motion.div
+        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+        onClick={onClose}
+        className="absolute inset-0 bg-slate-950/60 backdrop-blur-xl"
+      />
+      <motion.div
+        initial={{ scale: 0.9, opacity: 0, y: 20 }}
+        animate={{ scale: 1, opacity: 1, y: 0 }}
+        exit={{ scale: 0.9, opacity: 0, y: 20 }}
+        className="relative w-full max-w-xl bg-white rounded-[3rem] shadow-2xl overflow-hidden border border-slate-100"
+      >
+        <div className="p-8 border-b border-slate-50 flex items-center justify-between bg-slate-50/30">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-2xl overflow-hidden border border-slate-100">
+              <img src={collab.avatar} alt="" className="w-full h-full object-cover" />
+            </div>
+            <div>
+              <h2 className="text-lg font-black uppercase tracking-tight text-slate-900">{collab.name}</h2>
+              <p className="text-[10px] font-black text-indigo-600 uppercase tracking-widest">AI Collab Pitch Generator</p>
+            </div>
+          </div>
+          <button onClick={onClose} className="p-2 hover:bg-slate-100 rounded-full transition-colors">
+            <X className="w-5 h-5 text-slate-400" />
+          </button>
+        </div>
+
+        <div className="p-8 space-y-6">
+          <div className="flex items-center justify-between px-2">
+            <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Your Collab Pitch</label>
+            <button
+              onClick={generatePitch}
+              disabled={isGenerating}
+              className="flex items-center gap-2 text-[10px] font-black text-indigo-600 uppercase tracking-widest hover:text-indigo-700 disabled:opacity-50"
+            >
+              {isGenerating ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Sparkles className="w-3.5 h-3.5" />}
+              {pitch ? "Regenerate" : "Generate AI Pitch"}
+            </button>
+          </div>
+
+          <div className="relative">
+            <textarea
+              value={pitch}
+              onChange={(e) => setPitch(e.target.value)}
+              placeholder="Click 'Generate AI Pitch' to craft a personalized collaboration message..."
+              className="w-full h-40 bg-slate-50 border border-slate-100 rounded-[2rem] p-6 text-sm font-medium text-slate-700 placeholder:text-slate-300 focus:outline-none focus:ring-4 focus:ring-indigo-600/5 focus:border-indigo-600/20 resize-none"
+            />
+            {isGenerating && (
+              <div className="absolute inset-0 bg-white/60 backdrop-blur-[2px] flex items-center justify-center rounded-[2rem]">
+                <div className="flex flex-col items-center gap-3">
+                  <motion.div
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+                    className="w-8 h-8 border-2 border-indigo-600/20 border-t-indigo-600 rounded-full"
+                  />
+                  <span className="text-[9px] font-black text-indigo-600 uppercase tracking-widest">Crafting Collab Pitch...</span>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="flex gap-4">
+            <button onClick={onClose} className="flex-1 h-14 bg-white border border-slate-200 rounded-2xl font-black text-[10px] uppercase tracking-widest text-slate-400 hover:text-slate-950 transition-all">
+              Cancel
+            </button>
+            <button
+              onClick={handleSend}
+              disabled={!pitch || isSent}
+              className="flex-[2] h-14 bg-indigo-600 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest flex items-center justify-center gap-3 shadow-xl shadow-indigo-500/30 hover:bg-slate-950 transition-all disabled:opacity-50 active:scale-95"
+            >
+              {isSent ? "Sending..." : <><Send className="w-4 h-4" /> Send Collab Request</>}
+            </button>
+          </div>
+        </div>
+      </motion.div>
+    </div>
+  );
+};
+
 export const CollabBazaar = () => {
   const { collabs } = useExplore();
+  const [selectedCollab, setSelectedCollab] = useState<any | null>(null);
 
   return (
     <section className="space-y-10 px-8">
@@ -78,7 +202,7 @@ export const CollabBazaar = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
          {collabs.map((collab, i) => (
-           <CollabCard key={collab.id} collab={collab} index={i} />
+           <CollabCard key={collab.id} collab={collab} index={i} onConnect={setSelectedCollab} />
          ))}
          
          <div className="flex flex-col items-center justify-center p-12 bg-indigo-600 rounded-[3rem] text-center space-y-6 shadow-2xl shadow-indigo-200 group hover:shadow-indigo-300 transition-all relative overflow-hidden">
@@ -93,11 +217,17 @@ export const CollabBazaar = () => {
                <h4 className="text-xl font-semibold text-white uppercase tracking-tight">AI Synergy</h4>
                <p className="pro-label text-white/60 max-w-[200px] mx-auto leading-relaxed">Automated 99% audience match identifier.</p>
             </div>
-            <button className="w-full h-14 bg-white text-indigo-600 rounded-2xl pro-label font-bold text-indigo-600 flex items-center justify-center gap-3 relative z-10 hover:bg-slate-50 transition-all">
+            <button className="w-full h-14 bg-white text-indigo-600 rounded-2xl pro-label font-bold flex items-center justify-center gap-3 relative z-10 hover:bg-slate-50 transition-all">
               Initialize IQ <ChevronRight className="w-4 h-4" />
             </button>
          </div>
       </div>
+
+      <AnimatePresence>
+        {selectedCollab && (
+          <CollabPitchModal collab={selectedCollab} onClose={() => setSelectedCollab(null)} />
+        )}
+      </AnimatePresence>
     </section>
   );
 };

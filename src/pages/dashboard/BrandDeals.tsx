@@ -17,6 +17,7 @@ import confetti from "canvas-confetti";
 import { cn } from "@/lib/utils";
 import { BottomSheet } from "@/components/ui/BottomSheet";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "@/lib/supabase";
 
 type DealStatus = 'outreach' | 'live' | 'signed' | 'completed';
 
@@ -33,6 +34,8 @@ export const BrandDeals = () => {
   const [deals, setDeals] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedDeal, setSelectedDeal] = useState<any | null>(null);
+  const [dealInsight, setDealInsight] = useState<any | null>(null);
+  const [isLoadingInsight, setIsLoadingInsight] = useState(false);
 
   const fetchDeals = () => {
     setIsLoading(true);
@@ -46,6 +49,36 @@ export const BrandDeals = () => {
   useEffect(() => {
     fetchDeals();
   }, []);
+
+  // Load AI insight whenever a deal is selected
+  useEffect(() => {
+    if (selectedDeal) {
+      setDealInsight(null);
+      fetchDealInsight(selectedDeal);
+    }
+  }, [selectedDeal?.id]);
+
+  const fetchDealInsight = async (deal: any) => {
+    setIsLoadingInsight(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("studio-engine", {
+        body: {
+          action: "DEAL_INSIGHT",
+          brandName: deal.brand,
+          inputData: deal.type,
+          niche: (user as any)?.niche || "Fitness",
+          format: deal.value,
+        },
+      });
+      if (!error && data?.output) {
+        setDealInsight(data.output);
+      }
+    } catch (e) {
+      // Fail silently
+    } finally {
+      setIsLoadingInsight(false);
+    }
+  };
 
   const updateStatus = (id: string, status: DealStatus) => {
     db.update('deals', id, { status });
@@ -237,27 +270,69 @@ export const BrandDeals = () => {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
                    {/* Left Col: AI Intelligence & Insights */}
                    <div className="lg:col-span-2 space-y-10">
-                      {/* Neural Insight Hub */}
+                      {/* Neural Insight Hub — Live AI Data */}
                       <div className="p-10 rounded-[4rem] bg-slate-950 text-white relative overflow-hidden">
                          <div className="absolute top-0 right-0 p-10 opacity-10">
                             <Sparkles className="w-20 h-20" />
                          </div>
-                         <h4 className="text-[10px] font-black uppercase tracking-[0.5em] text-indigo-500 mb-8">AI Strategic Pulse</h4>
-                         <p className="text-2xl font-medium leading-relaxed italic text-indigo-100 mb-10">
-                            "{selectedDeal.notes}"
-                         </p>
-                         <div className="grid grid-cols-3 gap-6">
-                            {[
-                               { label: 'Match Confidence', val: '94%', color: 'text-blue-400' },
-                               { label: 'Est. Engagement', val: '5.2%', color: 'text-indigo-400' },
-                               { label: 'Risk Factor', val: 'Negligible', color: 'text-emerald-400' },
-                            ].map(idx => (
-                               <div key={idx.label} className="p-4 bg-white/5 rounded-2xl border border-white/5">
-                                  <p className="text-[9px] font-black uppercase text-white/40 tracking-widest mb-1">{idx.label}</p>
-                                  <p className={cn("text-lg font-black tracking-tight", idx.color)}>{idx.val}</p>
-                               </div>
-                            ))}
+                         <div className="flex items-center justify-between mb-8">
+                           <h4 className="text-[10px] font-black uppercase tracking-[0.5em] text-indigo-500">AI Strategic Pulse</h4>
+                           {isLoadingInsight && (
+                             <div className="flex items-center gap-2">
+                               <div className="w-3 h-3 border border-indigo-400/30 border-t-indigo-400 rounded-full animate-spin" />
+                               <span className="text-[8px] font-black text-indigo-400 uppercase tracking-widest">Analyzing...</span>
+                             </div>
+                           )}
                          </div>
+                         {dealInsight ? (
+                           <>
+                             <p className="text-lg font-medium leading-relaxed italic text-indigo-100 mb-10">
+                               "{dealInsight.negotiationTip}"
+                             </p>
+                             <div className="grid grid-cols-3 gap-6 mb-8">
+                               {[
+                                 { label: 'Match Score', val: `${dealInsight.matchScore}%`, color: 'text-blue-400' },
+                                 { label: 'Est. Engagement', val: dealInsight.engagementEstimate, color: 'text-indigo-400' },
+                                 { label: 'Risk Level', val: dealInsight.riskLevel, color: `text-${dealInsight.riskColor || 'emerald'}-400` },
+                               ].map(idx => (
+                                 <div key={idx.label} className="p-4 bg-white/5 rounded-2xl border border-white/5">
+                                   <p className="text-[9px] font-black uppercase text-white/40 tracking-widest mb-1">{idx.label}</p>
+                                   <p className={cn("text-lg font-black tracking-tight", idx.color)}>{idx.val}</p>
+                                 </div>
+                               ))}
+                             </div>
+                             <div className="p-6 bg-white/5 rounded-2xl border border-white/5 space-y-3">
+                               <p className="text-[9px] font-black text-white/40 uppercase tracking-widest">Recommended Action</p>
+                               <p className="text-sm font-bold text-emerald-400">{dealInsight.recommendedAction}</p>
+                             </div>
+                             {dealInsight.redFlags?.length > 0 && (
+                               <div className="mt-6 space-y-2">
+                                 <p className="text-[9px] font-black text-rose-400 uppercase tracking-widest">⚠ Red Flags</p>
+                                 {dealInsight.redFlags.map((f: string, i: number) => (
+                                   <p key={i} className="text-xs text-rose-300 font-medium">• {f}</p>
+                                 ))}
+                               </div>
+                             )}
+                           </>
+                         ) : (
+                           <>
+                             <p className="text-2xl font-medium leading-relaxed italic text-indigo-100 mb-10">
+                               "{selectedDeal.notes}"
+                             </p>
+                             <div className="grid grid-cols-3 gap-6">
+                               {[
+                                 { label: 'Match Confidence', val: '—', color: 'text-blue-400' },
+                                 { label: 'Est. Engagement', val: '—', color: 'text-indigo-400' },
+                                 { label: 'Risk Factor', val: '—', color: 'text-emerald-400' },
+                               ].map(idx => (
+                                 <div key={idx.label} className="p-4 bg-white/5 rounded-2xl border border-white/5">
+                                   <p className="text-[9px] font-black uppercase text-white/40 tracking-widest mb-1">{idx.label}</p>
+                                   <p className={cn("text-lg font-black tracking-tight animate-pulse", idx.color)}>{idx.val}</p>
+                                 </div>
+                               ))}
+                             </div>
+                           </>
+                         )}
                       </div>
 
                       {/* Content Deliverables */}

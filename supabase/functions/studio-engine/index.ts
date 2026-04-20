@@ -115,6 +115,126 @@ serve(async (req) => {
         prompt = `Generate a strategic thumbnail composition for a creator in the ${niche} niche for the topic: "${inputData}". Include Background, Subject, Overlay Text, and Composition recommendations. Return only the directive text.`;
         break;
 
+      // ── BRAND DEALS ENGINE ────────────────────────────────────────────────────
+
+      case "DEAL_INSIGHT":
+        isJson = true;
+        prompt = `
+          You are an elite brand partnership strategist with deep expertise in creator economy deals.
+          Analyze this deal:
+          - Brand: ${brandName}
+          - Campaign Type: ${inputData}
+          - Creator Niche: ${niche}
+          - Deal Value: ${format}
+          
+          Return a JSON object with this EXACT structure:
+          {
+            "matchScore": 94,
+            "engagementEstimate": "5.2%",
+            "riskLevel": "Low",
+            "riskColor": "emerald",
+            "negotiationTip": "One sharp, actionable negotiation tactic for this specific deal",
+            "brandProfile": "2-sentence summary of who this brand is and what they truly want from creators",
+            "creatorFit": "Why specifically this creator niche is a strong or weak match",
+            "redFlags": ["Flag 1 if any", "Flag 2 if any"],
+            "dealStrength": "Strong" | "Moderate" | "Weak",
+            "recommendedAction": "The single most important next step to take right now"
+          }
+        `;
+        break;
+
+      case "BRAND_ANALYSIS":
+        isJson = true;
+        prompt = `
+          You are a brand intelligence analyst for the creator economy.
+          Provide a deep analysis of the brand "${brandName}" operating in the ${niche} niche.
+          Campaign type they run: ${inputData}
+          
+          Return a JSON object:
+          {
+            "overview": "2-sentence brand overview",
+            "targetCreatorProfile": "Exact description of their ideal creator partner",
+            "campaignGoals": ["Goal 1", "Goal 2", "Goal 3"],
+            "negotiationLeverage": "Key leverage point for the creator in negotiations",
+            "redFlags": ["Potential red flag 1", "Potential red flag 2"],
+            "pitchAngle": "The most compelling angle to pitch this brand with",
+            "idealContentFormats": ["Format 1", "Format 2"],
+            "brandPersonality": "One word that defines this brand's personality"
+          }
+        `;
+        break;
+
+      case "CONTRACT_REVIEW":
+        isJson = true;
+        prompt = `
+          You are a seasoned entertainment and creator economy lawyer.
+          Review this contract clause or description: "${inputData}"
+          Brand: ${brandName || "Unknown"}
+          
+          Return a JSON object:
+          {
+            "riskRating": "Low" | "Medium" | "High" | "Critical",
+            "riskColor": "emerald" | "amber" | "orange" | "rose",
+            "summary": "Plain English explanation of what this clause means",
+            "redFlags": ["Specific red flag 1", "Specific red flag 2"],
+            "suggestedRevision": "Exact suggested revision or counter-clause wording",
+            "creatorProtections": ["Protection 1 to demand", "Protection 2 to demand"],
+            "verdict": "Should Sign" | "Negotiate First" | "Do Not Sign"
+          }
+        `;
+        break;
+
+      case "ROI_FORECAST":
+        isJson = true;
+        prompt = `
+          You are a financial strategist specializing in creator economy deals.
+          Creator Niche: ${niche}
+          Deal Fee: ₹${inputData}
+          Target Reach: ${format} people
+          Creator's typical Engagement Rate: ${duration || "4.5%"}
+          
+          Return a detailed JSON object:
+          {
+            "fairMarketValue": "₹X - ₹Y (range)",
+            "roiMultiple": "2.3x",
+            "breakdownInsight": "2-sentence analysis of the deal's financial health",
+            "benchmarkComparison": "How this compares to industry standard for this niche",
+            "negotiationFloor": "₹X minimum to accept",
+            "optimisticRevenue": "₹X if deal performs above average",
+            "recommendation": "Accept" | "Negotiate Up" | "Walk Away",
+            "recommendationReason": "Why this recommendation makes sense for this creator"
+          }
+        `;
+        break;
+
+      case "PITCH_REFINER":
+        prompt = `
+          You are an elite brand partnership copywriter.
+          Improve and refine this existing pitch to be more compelling, professional, and conversion-focused.
+          Keep the same tone but make it sharper, more specific, and persuasive.
+          
+          Original Pitch:
+          "${inputData}"
+          
+          Brand: ${brandName || "the brand"}
+          Creator Niche: ${niche || "content creation"}
+          
+          Return ONLY the improved pitch text. No explanations, no headers. Just the refined pitch.
+        `;
+        break;
+
+      case "COLLAB_SCOUT":
+        prompt = `
+          Write a compelling, personalized creator-to-creator collaboration pitch.
+          From: A ${niche} creator
+          To: ${brandName} (creator in: ${inputData})
+          Collaboration Goal: ${format || "Content series collaboration"}
+          
+          Write a short, direct, friendly pitch (under 120 words) that shows genuine interest in collaborating, highlights mutual audience benefits, and proposes a specific collab format.
+          Return only the pitch text.
+        `;
+        break;
+
       default:
         throw new Error("Action node not recognized by terminal.");
     }

@@ -22,6 +22,7 @@ import { StoryCreationSheet } from "../../components/stories/StoryCreationSheet"
 import { StoryViewer } from "../../components/stories/StoryViewer";
 import { Creator } from "../../types/stories";
 import { MOCK_CREATORS } from "../../data/mockStories";
+import { supabase } from "../../lib/supabase";
 
 const SystemStatus = () => (
   <div className="flex items-center gap-3 px-5 py-2.5 bg-emerald-50/30 border border-emerald-100/50 rounded-full shadow-sm backdrop-blur-md animate-in fade-in slide-in-from-top-4 duration-1000">
@@ -83,10 +84,34 @@ export const Home = () => {
   // Revenue Predictive Engine State
   const [roiParams, setRoiParams] = useState({ fee: 50000, reach: 100000 });
   const [isCalculating, setIsCalculating] = useState(false);
+  const [roiForecast, setRoiForecast] = useState<any>(null);
 
-  const calculateROI = () => {
+  const calculateROI = async () => {
     setIsCalculating(true);
-    setTimeout(() => setIsCalculating(false), 800);
+    setRoiForecast(null);
+    try {
+      const { data, error } = await supabase.functions.invoke("studio-engine", {
+        body: {
+          action: "ROI_FORECAST",
+          niche: (user as any)?.niche || "Fitness",
+          inputData: String(roiParams.fee),
+          format: String(roiParams.reach),
+          duration: "4.5%",
+        },
+      });
+      if (error) throw error;
+      if (data?.output) {
+        setRoiForecast(data.output);
+        toast.success("Revenue Forecast Ready!", { description: data.output.recommendation });
+      }
+    } catch (e: any) {
+      if (String(e).includes("429")) toast.error("API Quota Exceeded");
+      else toast.error("Forecast failed");
+      // Fallback to instant math
+      setRoiForecast(null);
+    } finally {
+      setIsCalculating(false);
+    }
   };
 
   useEffect(() => {
@@ -574,17 +599,41 @@ export const Home = () => {
                    </div>
 
                    <div className="p-6 rounded-3xl bg-white/10 border border-white/10 space-y-4">
-                      <div className="flex justify-between items-center">
-                         <p className="pro-label text-indigo-100 text-[9px]">Fair Market Value</p>
-                         <p className="text-lg font-black font-mono">₹ {(roiParams.reach * 0.85).toLocaleString()}</p>
-                      </div>
-                      <div className="flex justify-between items-center">
-                         <p className="pro-label text-indigo-100 text-[9px]">Potential ROI</p>
-                         <p className="text-lg font-black font-mono text-emerald-400">
-                            {((roiParams.reach * 0.85) / roiParams.fee).toFixed(1)}x
-                         </p>
-                      </div>
-                   </div>
+                       {roiForecast ? (
+                         <>
+                           <div className="flex justify-between items-center">
+                             <p className="pro-label text-indigo-100 text-[9px]">Fair Market Value</p>
+                             <p className="text-sm font-black font-mono">{roiForecast.fairMarketValue}</p>
+                           </div>
+                           <div className="flex justify-between items-center">
+                             <p className="pro-label text-indigo-100 text-[9px]">ROI Multiple</p>
+                             <p className="text-sm font-black font-mono text-emerald-400">{roiForecast.roiMultiple}</p>
+                           </div>
+                           <div className="flex justify-between items-center">
+                             <p className="pro-label text-indigo-100 text-[9px]">Negotiation Floor</p>
+                             <p className="text-sm font-black font-mono text-amber-400">{roiForecast.negotiationFloor}</p>
+                           </div>
+                           <div className="h-px bg-white/10" />
+                           <div className="p-3 bg-white/5 rounded-2xl">
+                             <p className="text-[9px] font-black text-white/40 uppercase tracking-widest mb-1">AI Verdict</p>
+                             <p className="text-sm font-black text-emerald-400">{roiForecast.recommendation} — {roiForecast.recommendationReason}</p>
+                           </div>
+                         </>
+                       ) : (
+                         <>
+                           <div className="flex justify-between items-center">
+                             <p className="pro-label text-indigo-100 text-[9px]">Fair Market Value</p>
+                             <p className="text-lg font-black font-mono">₹ {(roiParams.reach * 0.85).toLocaleString()}</p>
+                           </div>
+                           <div className="flex justify-between items-center">
+                             <p className="pro-label text-indigo-100 text-[9px]">Potential ROI</p>
+                             <p className="text-lg font-black font-mono text-emerald-400">
+                               {((roiParams.reach * 0.85) / roiParams.fee).toFixed(1)}x
+                             </p>
+                           </div>
+                         </>
+                       )}
+                    </div>              </div>
                 </div>
 
                 <button 

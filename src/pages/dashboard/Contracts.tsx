@@ -15,6 +15,7 @@ import { toast } from "../../components/ui/sonner";
 import { cn } from "../../lib/utils";
 import { ContractAuditDrawer } from "../../components/dashboard/ContractAuditDrawer";
 import { BottomSheet } from "../../components/ui/BottomSheet";
+import { supabase } from "@/lib/supabase";
 
 type RiskLevel = 'low' | 'medium' | 'high';
 
@@ -285,15 +286,30 @@ export const Contracts = () => {
                          </div>
                          <p className="text-[11px] font-bold text-slate-500 leading-relaxed mb-6">{f.desc}</p>
                           <button 
-                             onClick={() => {
+                             onClick={async () => {
                                 setActiveFlag(f);
                                 setCounterClause("");
                                 setShowCounterModal(true);
-                                toast.promise(new Promise(res => setTimeout(() => res("Creator and Brand agree that the non-compete shall be limited strictly to " + (user?.niche || 'Fitness') + " supplements and shall not apply to generic apparel or standard fitness equipment."), 2000)), {
-                                  loading: 'AI drafting counter-clause...',
-                                  success: (data: any) => { setCounterClause(data); return "Counter-clause ready!"; },
-                                  error: 'Drafting failed.'
-                                });
+                                
+                                try {
+                                  const { data, error } = await supabase.functions.invoke("studio-engine", {
+                                    body: {
+                                      action: "CONTRACT_REVIEW",
+                                      brandName: selectedContract.brand,
+                                      inputData: f.desc + " (Clause " + f.clause + ")",
+                                      niche: (user as any)?.niche || "Fitness",
+                                    },
+                                  });
+                                  if (!error && data?.output) {
+                                    setCounterClause(data.output.suggestedRevision || "Request a 12-month limit on exclusivity and specify the niche as " + ((user as any)?.niche || 'Fitness') + " only.");
+                                    toast.success("AI Counter-Proposal Ready!");
+                                  } else {
+                                    throw new Error("Failed to draft");
+                                  }
+                                } catch (e) {
+                                  setCounterClause("Drafting failed. Please try again.");
+                                  toast.error("AI Drafting Error");
+                                }
                              }}
                              className="w-full py-4 bg-white border border-slate-100 rounded-2xl text-[9px] font-black uppercase tracking-[0.2em] text-slate-900 hover:bg-slate-900 hover:text-white transition-all shadow-sm active:scale-[0.98]"
                           >
