@@ -55,7 +55,7 @@ const Onboarding = () => {
           reason: "Your retention spikes by 42% when you introduce high-contrast visual cues in the first 3 seconds."
         });
         setIsAnalyzing(false);
-      }, 1500); // Accelerated to 1.5s
+      }, 500); // Super-accelerated to 0.5s
       return () => clearTimeout(timer);
     }
     
@@ -63,7 +63,7 @@ const Onboarding = () => {
     if (currentStep === 3 && analysisResult && !isAnalyzing) {
       const autoTimer = setTimeout(() => {
         nextStep();
-      }, 1000); // Accelerated to 1s
+      }, 400); // 0.4s
       return () => clearTimeout(autoTimer);
     }
 
@@ -71,7 +71,7 @@ const Onboarding = () => {
     if (currentStep === 4) {
       const finalizeTimer = setTimeout(() => {
         handleFinalize();
-      }, 2500); // Final check at 2.5s
+      }, 800); // Fast-tracked final sweep at 0.8s
       return () => clearTimeout(finalizeTimer);
     }
   }, [currentStep, isAnalyzing, analysisResult]);
@@ -175,14 +175,14 @@ const Onboarding = () => {
       setIsSyncing(true);
       let progress = 0;
       const interval = setInterval(() => {
-        progress += 5; // Finish in 800ms
+        progress += 10; // Rapid Sync: Finish in 400ms
         setSyncProgress(progress);
         if (progress >= 100) {
           clearInterval(interval);
           setTimeout(() => {
              setIsSyncing(false);
              nextStep();
-          }, 300); // Fast transition
+          }, 200); // 0.2s
         }
       }, 40);
     };

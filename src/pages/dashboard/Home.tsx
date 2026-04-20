@@ -3,7 +3,7 @@ import {
   ChevronRight, Zap, Network,
   TrendingUp, Search, 
   ArrowRight, Users, MousePointer2, MessageSquare, Wallet, Briefcase, 
-  Check, Play, Clock, Plus, RefreshCcw as RefreshIcon, Stars, Sparkles, ChevronDown
+  Check, Play, Clock, Plus, RefreshCcw as RefreshIcon, Stars, Sparkles, ChevronDown, Calculator, Scale
 } from "lucide-react";
 import { PageTransition, CountUp, Magnetic, MagneticPulse } from "../../components/shared/MotionComponents";
 import { 
@@ -79,6 +79,15 @@ export const Home = () => {
   const [activeStoryCreator, setActiveStoryCreator] = useState<Creator | null>(null);
   const [isCreatingStory, setIsCreatingStory] = useState(false);
   const [creators, setCreators] = useState<Creator[]>(MOCK_CREATORS);
+
+  // Revenue Predictive Engine State
+  const [roiParams, setRoiParams] = useState({ fee: 50000, reach: 100000 });
+  const [isCalculating, setIsCalculating] = useState(false);
+
+  const calculateROI = () => {
+    setIsCalculating(true);
+    setTimeout(() => setIsCalculating(false), 800);
+  };
 
   useEffect(() => {
     fetchData();
@@ -520,6 +529,75 @@ export const Home = () => {
              >
                 Manage Economy Core
              </button>
+          </div>
+
+          {/* REVENUE PREDICTIVE ENGINE: Strategic Financial Node */}
+          <div className="rounded-[2.5rem] bg-indigo-600 p-10 text-white shadow-2xl shadow-indigo-200 relative overflow-hidden group">
+             <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-[80px] -mr-32 -mt-32" />
+             
+             <div className="relative z-10 space-y-8">
+                <div className="flex items-center justify-between">
+                   <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center">
+                         <Calculator className="w-6 h-6 text-white" />
+                      </div>
+                      <div>
+                         <h3 className="text-xl font-bold uppercase tracking-tight">Revenue Predictor</h3>
+                         <p className="text-[9px] font-bold text-indigo-200 uppercase tracking-widest">Brand Deal ROI Forecaster</p>
+                      </div>
+                   </div>
+                   <div className="px-3 py-1 bg-emerald-500 rounded-full text-[8px] font-black uppercase tracking-widest shadow-lg">
+                      Strategic AI
+                   </div>
+                </div>
+
+                <div className="space-y-6">
+                   <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                         <p className="pro-label text-indigo-200 text-[8px]">Base Fee (₹)</p>
+                         <input 
+                            type="number" 
+                            value={roiParams.fee}
+                            onChange={(e) => setRoiParams({...roiParams, fee: parseInt(e.target.value) || 0})}
+                            className="w-full h-12 bg-white/10 border border-white/10 rounded-xl px-4 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-white/20 transition-all font-mono" 
+                         />
+                      </div>
+                      <div className="space-y-2">
+                         <p className="pro-label text-indigo-200 text-[8px]">Target Reach</p>
+                         <input 
+                            type="number" 
+                            value={roiParams.reach}
+                            onChange={(e) => setRoiParams({...roiParams, reach: parseInt(e.target.value) || 0})}
+                            className="w-full h-12 bg-white/10 border border-white/10 rounded-xl px-4 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-white/20 transition-all font-mono" 
+                         />
+                      </div>
+                   </div>
+
+                   <div className="p-6 rounded-3xl bg-white/10 border border-white/10 space-y-4">
+                      <div className="flex justify-between items-center">
+                         <p className="pro-label text-indigo-100 text-[9px]">Fair Market Value</p>
+                         <p className="text-lg font-black font-mono">₹ {(roiParams.reach * 0.85).toLocaleString()}</p>
+                      </div>
+                      <div className="flex justify-between items-center">
+                         <p className="pro-label text-indigo-100 text-[9px]">Potential ROI</p>
+                         <p className="text-lg font-black font-mono text-emerald-400">
+                            {((roiParams.reach * 0.85) / roiParams.fee).toFixed(1)}x
+                         </p>
+                      </div>
+                   </div>
+                </div>
+
+                <button 
+                  onClick={calculateROI}
+                  className="w-full h-14 bg-white text-indigo-600 rounded-2xl pro-label font-bold text-[10px] hover:bg-indigo-50 transition-all active:scale-95 flex items-center justify-center gap-3"
+                >
+                   {isCalculating ? (
+                      <>Analyzing Market Vectors <RefreshIcon className="w-4 h-4 animate-spin" /></>
+                   ) : (
+                      <>Sync Prediction Engine <Scale className="w-4 h-4" /></>
+                   )}
+                </button>
+             </div>
           </div>
 
           <WhatsHappeningWidget />

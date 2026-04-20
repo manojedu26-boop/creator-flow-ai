@@ -13,6 +13,18 @@ import { db } from "../../lib/db";
 import { toast } from "@/components/ui/sonner";
 import { cn } from "../../lib/utils";
 import { Logo } from "../shared/Logo";
+import "./Sidebar.css";
+
+const TICKER_ITEMS = [
+  "Establishing Secure Neural Handshake...",
+  "Syncing TikTok Yield Nodes...",
+  "Analyzing Q4 Keyword Densities...",
+  "Calibrating Brand Voicing Algorithms...",
+  "Mapping Global Audience Pulses...",
+  "Optimizing Engagement Vectors...",
+  "Finalizing Narrative Meta-Threads...",
+  "Operational: System Core 100%"
+];
 
 export const navGroups = [
   {
@@ -240,7 +252,24 @@ export const Sidebar = () => {
             </div>
           </div>
         ))}
-      </nav>
+    </nav>
+
+      {/* Neural Heartbeat Ticker: Ambient Intelligence Heartbeat */}
+      <div className="mx-3 mb-2 h-6 bg-slate-950 rounded-lg border border-white/[0.03] flex items-center overflow-hidden relative pointer-events-none group/ticker">
+         <div className="absolute inset-y-0 left-0 w-8 bg-gradient-to-r from-slate-950 to-transparent z-10" />
+         <div className="absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-slate-950 to-transparent z-10" />
+         
+         <div className="flex animate-ticker whitespace-nowrap gap-12 pl-4">
+            {TICKER_ITEMS.concat(TICKER_ITEMS).map((item, i) => (
+              <div key={i} className="flex items-center gap-2">
+                 <div className="w-1 h-1 rounded-full bg-blue-500 animate-pulse shadow-[0_0_5px_rgba(59,130,246,0.8)]" />
+                 <span className="text-[7.5px] font-black uppercase tracking-[0.2em] text-blue-500/80 italic">
+                    {item}
+                 </span>
+              </div>
+            ))}
+         </div>
+      </div>
 
       {/* Creator Profile Bottom */}
       <div className="p-3 border-t border-slate-50 relative" ref={userMenuRef}>

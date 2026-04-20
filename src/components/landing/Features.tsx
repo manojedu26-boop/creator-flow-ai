@@ -48,7 +48,7 @@ const Features = () => (
       </motion.div>
 
       <motion.div
-        className="grid grid-cols-1 md:grid-cols-3 gap-8"
+        className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8"
         variants={container}
         initial="hidden"
         whileInView="show"
@@ -58,7 +58,7 @@ const Features = () => (
           <motion.div
             key={f.title}
             variants={item}
-            className="group relative rounded-[2.5rem] bg-slate-900 px-8 py-10 border border-white/5 transition-all duration-500 hover:border-blue-500/50 hover:shadow-[0_20px_50px_-10px_rgba(37,99,235,0.2)] overflow-hidden shimmer-border border-blue-600/30 h-full"
+            className="group relative rounded-[2rem] md:rounded-[2.5rem] bg-slate-900 px-6 md:px-8 py-8 md:py-10 border border-white/5 transition-all duration-500 hover:border-blue-500/50 hover:shadow-[0_20px_50px_-10px_rgba(37,99,235,0.2)] overflow-hidden shimmer-border border-blue-600/30 h-full"
           >
             <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             

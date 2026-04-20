@@ -47,7 +47,7 @@ const PainPoints = () => (
       </motion.div>
 
       <motion.div
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8"
+        className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8"
         variants={container}
         initial="hidden"
         whileInView="show"
@@ -57,19 +57,19 @@ const PainPoints = () => (
           <motion.div
             key={p.title}
             variants={item}
-            className="group relative rounded-[3.5rem] bg-slate-900/40 backdrop-blur-3xl p-10 border border-white/5 transition-all hover:border-blue-500/30 cursor-default overflow-hidden"
+            className="group relative rounded-[2rem] md:rounded-[3.5rem] bg-slate-900/40 backdrop-blur-3xl p-6 md:p-10 border border-white/5 transition-all hover:border-blue-500/30 cursor-default overflow-hidden"
           >
             <div className="absolute inset-0 bg-blue-600/5 opacity-0 group-hover:opacity-100 transition-opacity" />
             
             <div className="relative z-10">
-               <div className="w-16 h-16 rounded-[1.5rem] bg-white/5 flex items-center justify-center mb-8 transition-transform group-hover:scale-110 group-hover:bg-blue-600 group-hover:text-white group-hover:shadow-[0_10px_30px_rgba(37,99,235,0.3)]">
-                 <p.icon className="w-7 h-7 text-blue-400 group-hover:text-white transition-colors" />
+               <div className="w-12 h-12 md:w-16 md:h-16 rounded-[1.2rem] md:rounded-[1.5rem] bg-white/5 flex items-center justify-center mb-6 md:mb-8 transition-transform group-hover:scale-110 group-hover:bg-blue-600 group-hover:text-white group-hover:shadow-[0_10px_30px_rgba(37,99,235,0.3)]">
+                 <p.icon className="w-5 h-5 md:w-7 md:h-7 text-blue-400 group-hover:text-white transition-colors" />
                </div>
-               <h3 className="text-2xl font-black mb-4 text-white uppercase tracking-tight leading-none">{p.title}</h3>
-               <p className="text-lg text-slate-500 font-medium leading-relaxed mb-10">{p.desc}</p>
+               <h3 className="text-sm md:text-2xl font-black mb-3 md:mb-4 text-white uppercase tracking-tight leading-none truncate md:whitespace-normal">{p.title}</h3>
+               <p className="text-[10px] md:text-lg text-slate-500 font-medium leading-relaxed mb-6 md:mb-10 line-clamp-2 md:line-clamp-none">{p.desc}</p>
                
-               <div className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.3em] text-blue-500/60 transition-colors group-hover:text-blue-400">
-                  <XCircle className="w-3.5 h-3.5" /> High Criticality
+               <div className="flex items-center gap-2 md:gap-3 text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] md:tracking-[0.3em] text-blue-500/60 transition-colors group-hover:text-blue-400">
+                  <XCircle className="w-3 md:w-3.5 h-3 md:h-3.5" /> <span className="hidden xs:inline">High Criticality</span><span className="xs:hidden">CRITICAL</span>
                </div>
             </div>
           </motion.div>

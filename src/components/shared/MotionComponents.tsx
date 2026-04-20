@@ -3,14 +3,18 @@ import { useEffect, useState, useRef, ReactNode, MouseEvent } from "react";
 import { Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-// Section 14.1: Page transitions
+// Section 14.1: Cinematic Warp Transitions
 export const PageTransition = ({ children, className = "" }: { children: React.ReactNode, className?: string }) => (
   <motion.div
-    initial={{ opacity: 0, y: 15 }}
-    animate={{ opacity: 1, y: 0 }}
-    exit={{ opacity: 0, y: -15 }}
-    transition={{ duration: 0.25, ease: "easeOut" }}
-    className={className}
+    initial={{ opacity: 0, scale: 0.94, filter: "blur(10px)" }}
+    animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+    exit={{ opacity: 0, scale: 1.05, filter: "blur(10px)" }}
+    transition={{ 
+      duration: 0.8, 
+      ease: [0.16, 1, 0.3, 1], // Custom cinematic physics
+      opacity: { duration: 0.4 }
+    }}
+    className={cn("w-full h-full", className)}
   >
     {children}
   </motion.div>

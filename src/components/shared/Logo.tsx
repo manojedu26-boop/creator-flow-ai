@@ -117,7 +117,7 @@ export const Logo = ({
             CREATORFORGE<span className="text-blue-600 italic">AI</span>
           </span>
           <span className="text-[7.5px] font-black uppercase tracking-[0.4em] text-slate-400 mt-1.5 ml-0.5">
-            Billion Dollar Growth Engine
+            Elite Creator Interface
           </span>
         </motion.div>
       )}
