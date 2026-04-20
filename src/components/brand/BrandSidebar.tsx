@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
+import { motion } from "framer-motion";
 import { 
   Users, Briefcase, MessageSquare, Settings, 
   Plus, LogOut, Stars, TrendingUp, Search,

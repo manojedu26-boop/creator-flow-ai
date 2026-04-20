@@ -6,7 +6,7 @@ import {
   Star, Target, Radio, Globe, CreditCard,
   Instagram, Youtube, Smartphone, Search,
   Filter, Calendar, DollarSign, Wallet,
-  Handshake, Sparkles, TrendingUp
+  Handshake, Sparkles, TrendingUp, Camera
 } from "lucide-react";
 import { PageTransition, CountUp } from "@/components/shared/MotionComponents";
 import { db } from "@/lib/db";
@@ -73,7 +73,7 @@ export const BrandDeals = () => {
 
   if (isLoading) {
     return (
-      <div className="h-screen flex flex-col items-center justify-center bg-slate-950 space-y-6">
+      <div className="h-screen flex flex-col items-center justify-center bg-white space-y-6">
         <motion.div 
           animate={{ rotate: 360 }}
           transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
@@ -85,7 +85,7 @@ export const BrandDeals = () => {
   }
 
   return (
-    <PageTransition className="space-y-12 max-w-[1800px] mx-auto pb-32 px-4">
+    <PageTransition className="space-y-12 max-w-[1800px] mx-auto pb-32 px-4 bg-white">
       {/* Billion-Dollar Header */}
       <div className="flex flex-col xl:flex-row xl:items-end justify-between gap-12 pt-12">
         <div className="space-y-6">
@@ -98,21 +98,21 @@ export const BrandDeals = () => {
                 <span className="text-[10px] font-black uppercase tracking-widest">Neural Link Active</span>
              </div>
           </div>
-          <h2 className="text-7xl md:text-8xl font-black tracking-tighter uppercase leading-[0.8] text-white">
+          <h2 className="text-7xl md:text-8xl font-black tracking-tighter uppercase leading-[0.8] text-slate-950">
             Brand<br/>
             <span className="text-blue-600 italic">Marketplace.</span>
           </h2>
           <p className="text-slate-500 font-bold uppercase tracking-[0.2em] text-[10px] max-w-xl leading-relaxed">
-            Collaborate with elite brands using the world's first <span className="text-white">AI-augmented deal engine</span>. 
+            Collaborate with elite brands using the world's first <span className="text-slate-900">AI-augmented deal engine</span>. 
             Automated contracts, real-time escrow, and high-fidelity media kits.
           </p>
         </div>
 
         {/* Dynamic Metrics */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-8 p-8 bg-white/5 border border-white/5 rounded-[3rem] backdrop-blur-3xl shrink-0">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-8 p-8 bg-slate-50 border border-slate-100 rounded-[3rem] shrink-0">
            <div className="space-y-1">
               <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Active Revenue Nodes</p>
-              <p className="text-3xl font-black text-white italic">₹ 1.8L+</p>
+              <p className="text-3xl font-black text-slate-950 italic">₹ 1.8L+</p>
            </div>
            <div className="space-y-1">
               <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Success Quantum</p>
@@ -126,14 +126,14 @@ export const BrandDeals = () => {
       </div>
 
       {/* Navigation Hub */}
-      <div className="flex flex-wrap gap-4 p-3 bg-slate-900/50 border border-white/5 rounded-[2.5rem] w-fit backdrop-blur-2xl">
+      <div className="flex flex-wrap gap-4 p-3 bg-slate-50 border border-slate-200 rounded-[2.5rem] w-fit">
          {TABS.map(tab => (
            <button
              key={tab.id}
              onClick={() => setActiveTab(tab.id)}
              className={cn(
                "px-8 py-5 rounded-[2rem] flex items-center gap-4 transition-all relative group",
-               activeTab === tab.id ? "bg-blue-600 text-white shadow-2xl shadow-blue-600/30" : "hover:bg-white/5 text-slate-400"
+               activeTab === tab.id ? "bg-blue-600 text-white shadow-2xl shadow-blue-600/30" : "hover:bg-slate-100 text-slate-400"
              )}
            >
              <tab.icon className={cn("w-5 h-5", activeTab === tab.id ? "text-white" : "text-slate-500")} />
@@ -160,11 +160,11 @@ export const BrandDeals = () => {
                  <div className="space-y-10">
                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                       <div className="space-y-2">
-                         <h3 className="text-3xl font-black text-white uppercase tracking-tighter">Campaign Opportunities</h3>
+                         <h3 className="text-3xl font-black text-slate-950 uppercase tracking-tighter">Campaign Opportunities</h3>
                          <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Sourced from global agency partners</p>
                       </div>
                       <div className="flex gap-4">
-                         <div className="h-14 px-6 bg-white/5 border border-white/10 rounded-2xl flex items-center gap-3 text-slate-400 italic font-medium text-sm">
+                         <div className="h-14 px-6 bg-slate-50 border border-slate-200 rounded-2xl flex items-center gap-3 text-slate-400 italic font-medium text-sm">
                             <Search className="w-4 h-4" /> Filter by niche...
                          </div>
                       </div>
@@ -172,28 +172,28 @@ export const BrandDeals = () => {
 
                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                       {castings.map(cast => (
-                        <div key={cast.id} className="group p-10 bg-slate-900 border border-white/5 rounded-[4rem] hover:border-blue-600/50 transition-all shadow-2xl relative overflow-hidden">
+                        <div key={cast.id} className="group p-10 bg-white border border-slate-100 rounded-[4rem] hover:border-blue-600/50 transition-all shadow-sm hover:shadow-xl relative overflow-hidden">
                            <div className="absolute top-0 right-0 w-40 h-40 bg-blue-600/5 blur-3xl -z-10 group-hover:bg-blue-600/10 transition-all" />
                            
                            <div className="flex items-center justify-between mb-8">
-                              <div className="w-16 h-16 rounded-3xl bg-white border border-white/10 p-3 shadow-xl">
+                              <div className="w-16 h-16 rounded-3xl bg-white border border-slate-100 p-3 shadow-sm">
                                  <img src={`https://logo.clearbit.com/${cast.brand.toLowerCase()}.com`} alt="" className="w-full h-full object-contain" />
                               </div>
                               <div className="text-right">
                                  <p className="text-lg font-black text-blue-500 tracking-tighter">{cast.budget}</p>
-                                 <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Budget Node</p>
+                                 <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Budget Node</p>
                               </div>
                            </div>
 
-                           <h4 className="text-xl font-black text-white uppercase tracking-tight mb-4">{cast.title}</h4>
+                           <h4 className="text-xl font-black text-slate-900 uppercase tracking-tight mb-4">{cast.title}</h4>
                            <p className="text-sm font-bold text-slate-500 leading-relaxed mb-8 line-clamp-2">{cast.description}</p>
 
                            <div className="flex items-center gap-3 mb-10">
                               <span className="px-4 py-1.5 bg-blue-600/10 text-blue-500 text-[10px] font-black rounded-xl border border-blue-600/10 uppercase italic">{cast.niche}</span>
-                              <span className="px-4 py-1.5 bg-white/5 text-slate-400 text-[10px] font-black rounded-xl border border-white/5 uppercase">Global</span>
+                              <span className="px-4 py-1.5 bg-slate-50 text-slate-400 text-[10px] font-black rounded-xl border border-slate-100 uppercase">Global</span>
                            </div>
 
-                           <button className="w-full h-16 rounded-[1.5rem] bg-white text-slate-950 font-black text-[11px] uppercase tracking-[0.2em] shadow-xl hover:bg-blue-600 hover:text-white transition-all flex items-center justify-center gap-3 active:scale-95 group">
+                           <button className="w-full h-16 rounded-[1.5rem] bg-slate-950 text-white font-black text-[11px] uppercase tracking-[0.2em] shadow-xl hover:bg-blue-600 transition-all flex items-center justify-center gap-3 active:scale-95 group">
                               Initiate Handshake <ArrowRight className="w-4 h-4 group-hover:translate-x-1" />
                            </button>
                         </div>
@@ -224,22 +224,22 @@ export const BrandDeals = () => {
 
                    <div className="grid grid-cols-1 gap-6">
                       {deals.filter(d => d.status === 'offered').map(deal => (
-                        <div key={deal.id} className="p-8 bg-slate-900 border border-white/5 rounded-[3rem] hover:border-blue-600/30 transition-all flex flex-col md:flex-row items-center gap-10">
-                           <div className="w-20 h-20 rounded-[2rem] bg-white p-4 shadow-2xl">
+                        <div key={deal.id} className="p-8 bg-white border border-slate-100 rounded-[3rem] hover:border-blue-600/30 transition-all flex flex-col md:flex-row items-center gap-10 shadow-sm">
+                           <div className="w-20 h-20 rounded-[2rem] bg-white p-4 shadow-xl border border-slate-100">
                               <img src={deal.logo} alt="" className="w-full h-full object-contain" />
                            </div>
                            <div className="flex-1 space-y-2">
                               <div className="flex items-center gap-4 mb-2">
-                                 <h4 className="text-2xl font-black text-white uppercase tracking-tighter">{deal.brand}</h4>
+                                 <h4 className="text-2xl font-black text-slate-900 uppercase tracking-tighter">{deal.brand}</h4>
                                  <span className="px-3 py-1 bg-emerald-500/10 text-emerald-500 text-[9px] font-black rounded-lg border border-emerald-500/10 uppercase">High Match</span>
                               </div>
                               <p className="text-xs font-bold text-slate-500 max-w-lg leading-relaxed uppercase tracking-wide">Protocol: {deal.type} • Deadline: {deal.deadline}</p>
                            </div>
                            <div className="flex flex-col items-end gap-2">
-                              <p className="text-3xl font-black text-white tracking-tighter">₹ {deal.value.toLocaleString()}</p>
+                              <p className="text-3xl font-black text-slate-950 tracking-tighter">₹ {deal.value.toLocaleString()}</p>
                               <div className="flex gap-3 mt-4">
-                                 <button className="h-12 px-6 bg-white/5 border border-white/10 rounded-xl text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-white transition-all">Decline</button>
-                                 <button className="h-12 px-6 bg-white/5 border border-white/10 rounded-xl text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-sky-400 transition-all">Negotiate</button>
+                                 <button className="h-12 px-6 bg-slate-50 border border-slate-200 rounded-xl text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-slate-900 transition-all">Decline</button>
+                                 <button className="h-12 px-6 bg-slate-50 border border-slate-200 rounded-xl text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-sky-600 transition-all">Negotiate</button>
                                  <button className="h-12 px-10 bg-blue-600 text-white rounded-xl text-[10px] font-black uppercase tracking-widest shadow-xl shadow-blue-600/20 hover:scale-105 transition-all">Accept Offer</button>
                               </div>
                            </div>
@@ -263,18 +263,20 @@ export const BrandDeals = () => {
                      
                      return (
                        <div key={status} className="flex flex-col gap-6">
-                         <div className="p-6 bg-white/5 border border-white/5 rounded-[2rem] flex items-center justify-between backdrop-blur-3xl">
+                         <div className="p-6 bg-slate-50 border border-slate-200 rounded-[2rem] flex items-center justify-between">
                             <div className="flex items-center gap-4">
-                               <div className={cn("p-2 rounded-xl bg-slate-900 border border-white/5", labels[status].color)}>
-                                  {/* Just rendering icon directly for demo */}
-                                  <ShieldCheck className="w-5 h-5" />
+                               <div className={cn("p-2 rounded-xl bg-white border border-slate-100", labels[status].color)}>
+                                  {status === 'agreed' && <ShieldCheck className="w-5 h-5" />}
+                                  {status === 'content_created' && <Camera className="w-5 h-5" />}
+                                  {status === 'submitted' && <Globe className="w-5 h-5" />}
+                                  {status === 'paid' && <Wallet className="w-5 h-5" />}
                                </div>
                                <div>
-                                  <h4 className="text-[11px] font-black uppercase tracking-widest text-white leading-none">{labels[status].label}</h4>
-                                  <p className="text-[8px] font-bold text-slate-500 uppercase mt-1 tracking-tighter">Active Nodes</p>
+                                  <h4 className="text-[11px] font-black uppercase tracking-widest text-slate-900 leading-none">{labels[status].label}</h4>
+                                  <p className="text-[8px] font-bold text-slate-400 uppercase mt-1 tracking-tighter">Active Nodes</p>
                                </div>
                             </div>
-                            <span className="w-8 h-8 rounded-full bg-slate-900 flex items-center justify-center text-[10px] font-black text-white border border-white/10">
+                            <span className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-[10px] font-black text-slate-900 border border-slate-200">
                               {stepDeals.length}
                             </span>
                          </div>
@@ -283,23 +285,23 @@ export const BrandDeals = () => {
                             {stepDeals.map(deal => (
                               <div 
                                 key={deal.id} 
-                                className="group p-8 bg-slate-900 border border-white/5 rounded-[3rem] hover:border-blue-600/30 transition-all shadow-xl relative overflow-hidden cursor-pointer"
+                                className="group p-8 bg-white border border-slate-100 rounded-[3rem] hover:border-blue-600/30 transition-all shadow-sm hover:shadow-xl relative overflow-hidden cursor-pointer"
                                 onClick={() => setSelectedDeal(deal)}
                               >
                                  <div className="flex items-center justify-between mb-8">
-                                    <div className="w-14 h-14 rounded-2xl bg-white p-3 shadow-2xl group-hover:scale-110 transition-transform">
+                                    <div className="w-14 h-14 rounded-2xl bg-white border border-slate-100 p-3 shadow-sm group-hover:scale-110 transition-transform">
                                        <img src={deal.logo} alt="" className="w-full h-full object-contain" />
                                     </div>
-                                    <ArrowRight className="w-4 h-4 text-slate-700 group-hover:text-blue-500 group-hover:translate-x-1" />
+                                    <ArrowRight className="w-4 h-4 text-slate-200 group-hover:text-blue-500 group-hover:translate-x-1" />
                                  </div>
-                                 <h5 className="text-sm font-black text-white uppercase tracking-tight truncate mb-2">{deal.brand}</h5>
-                                 <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{deal.type}</p>
+                                 <h5 className="text-sm font-black text-slate-900 uppercase tracking-tight truncate mb-2">{deal.brand}</h5>
+                                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{deal.type}</p>
                                  
-                                 <div className="flex items-center justify-between mt-8 pt-6 border-t border-white/5">
+                                 <div className="flex items-center justify-between mt-8 pt-6 border-t border-slate-50">
                                     <span className="text-sm font-black text-blue-500 tracking-tighter">₹ {deal.value.toLocaleString()}</span>
                                     <div className="flex items-center gap-1.5">
                                        <div className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse" />
-                                       <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Locked</span>
+                                       <span className="text-[8px] font-black text-slate-300 uppercase tracking-widest">Locked</span>
                                     </div>
                                  </div>
                               </div>
@@ -315,7 +317,7 @@ export const BrandDeals = () => {
                {activeTab === 'rates' && (
                  <div className="w-full max-w-5xl mx-auto space-y-12">
                     <div className="text-center space-y-4">
-                       <h3 className="text-5xl font-black text-white uppercase tracking-tighter">Monetization Pulse</h3>
+                       <h3 className="text-5xl font-black text-slate-950 uppercase tracking-tighter">Monetization Pulse</h3>
                        <p className="text-sm font-bold text-slate-500 uppercase tracking-[0.2em]">Configure your deployment costs for the global market</p>
                     </div>
 
@@ -326,21 +328,21 @@ export const BrandDeals = () => {
                          { id: 'video', label: 'YT Video', icon: Youtube, color: 'text-red-500' },
                          { id: 'post', label: 'Static Post', icon: Globe, color: 'text-emerald-500' },
                        ].map(rate => (
-                         <div key={rate.id} className="p-10 bg-slate-900 border border-white/5 rounded-[4rem] hover:border-blue-600/30 transition-all shadow-2xl relative group overflow-hidden">
+                         <div key={rate.id} className="p-10 bg-white border border-slate-100 rounded-[4rem] hover:border-blue-600/30 transition-all shadow-sm hover:shadow-xl relative group overflow-hidden">
                             <div className="mb-8 flex items-center justify-between">
-                               <div className={cn("w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center transition-all group-hover:scale-110", rate.color)}>
+                               <div className={cn("w-14 h-14 rounded-2xl bg-slate-50 flex items-center justify-center transition-all group-hover:scale-110", rate.color)}>
                                   <rate.icon className="w-6 h-6" />
                                </div>
                                <TrendingUp className="w-4 h-4 text-emerald-500 opacity-40" />
                             </div>
-                            <h4 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">{rate.label} Configuration</h4>
+                            <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">{rate.label} Configuration</h4>
                             <div className="relative">
-                               <span className="absolute left-0 top-1/2 -translate-y-1/2 text-2xl font-black text-white/20 italic">₹</span>
+                               <span className="absolute left-0 top-1/2 -translate-y-1/2 text-2xl font-black text-slate-200 italic">₹</span>
                                <input 
                                  type="text" 
                                  value={rates[rate.id]} 
                                  onChange={(e) => updateRate(rate.id, parseInt(e.target.value) || 0)}
-                                 className="w-full h-16 bg-transparent border-b border-white/10 text-4xl font-black text-white font-mono tracking-tighter pl-8 focus:border-blue-600 transition-all outline-none"
+                                 className="w-full h-16 bg-transparent border-b border-slate-100 text-4xl font-black text-slate-900 font-mono tracking-tighter pl-8 focus:border-blue-600 transition-all outline-none"
                                />
                             </div>
                             <p className="text-[9px] font-black text-emerald-500 uppercase tracking-widest mt-6">+12% Premium Service Fee</p>
@@ -498,7 +500,7 @@ export const BrandDeals = () => {
                                <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Net Dispatched</span>
                                <span className="text-4xl font-black text-emerald-600 font-mono tracking-tighter italic">
                                   ₹ {(selectedDeal.value * 0.88).toLocaleString()}
-                               </span>
+                                </span>
                             </div>
                           </div>
                        </div>

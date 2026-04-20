@@ -64,8 +64,30 @@ export const Header = ({ title = "Dashboard", onSearch }: { title?: string; onSe
 
   const loadNotifications = useCallback(() => {
     const all = db.getAll<Notification>("notifications");
+    
+    // Add specific mock notifications if they don't exist
+    const mockNotifs: Notification[] = [
+      {
+        id: "mock-1",
+        title: "Post Going Viral! 🔥",
+        body: "Your recent video is outperforming 95% of your typical reach. Optimize description now?",
+        type: "trending",
+        time: "Just Now",
+        read: false
+      },
+      {
+        id: "mock-2",
+        title: "New Deal Alert 🤝",
+        body: "Nike sent you a direct offer for the 'Summer Core' campaign. Review terms?",
+        type: "deal",
+        time: "2m ago",
+        read: false
+      }
+    ];
+
+    const combined = [...mockNotifs, ...all];
     // Sort newest first (by id timestamp or reverse array)
-    setNotifications([...all].reverse());
+    setNotifications(combined);
   }, []);
 
   const { theme, setTheme } = useTheme();

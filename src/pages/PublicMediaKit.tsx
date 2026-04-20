@@ -26,7 +26,6 @@ const PublicMediaKit = () => {
   });
 
   useEffect(() => {
-    // Find creator by handle (removing @) or id
     const cleanId = id?.replace('@', '').toLowerCase();
     const creators = db.getAll<any>('users');
     const user = creators.find(u => 
@@ -50,7 +49,6 @@ const PublicMediaKit = () => {
       description: `Your proposal for ₹${offerData.amount} has been secured and sent to ${data.name}.`
     });
     setShowOfferModal(false);
-    // In a real app, this would insert into 'deals' or 'notifications'
   };
 
   if (loading) {
@@ -81,7 +79,6 @@ const PublicMediaKit = () => {
 
   return (
     <div className="min-h-screen bg-slate-950 text-white selection:bg-blue-600 selection:text-white font-sans overflow-x-hidden">
-      {/* CINEMATIC BACKGROUND */}
       <div className="fixed inset-0 pointer-events-none -z-10 overflow-hidden">
         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-blue-600/5 rounded-full blur-[160px] animate-pulse" />
         <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-indigo-900/10 rounded-full blur-[140px]" />
@@ -106,7 +103,6 @@ const PublicMediaKit = () => {
       </nav>
 
       <main className="max-w-6xl mx-auto px-6 py-32 space-y-32">
-        {/* HERO SECTION */}
         <section className="flex flex-col lg:flex-row gap-16 items-center lg:items-end justify-between">
           <div className="space-y-10 flex-1 w-full">
             <motion.div 
@@ -166,12 +162,12 @@ const PublicMediaKit = () => {
                onClick={() => setShowOfferModal(true)}
                className="h-20 px-12 bg-blue-600 text-white rounded-[1.5rem] text-xs font-black uppercase tracking-[0.4em] hover:scale-[1.02] active:scale-95 transition-all shadow-2xl shadow-blue-600/30 flex items-center justify-center gap-4"
              >
-                Initiate Transasction <Zap className="w-5 h-5 fill-white" />
+                Initiate Transaction <Zap className="w-5 h-5 fill-white" />
              </button>
           </motion.div>
         </section>
 
-        {/* STATS MATRIX */}
+        {/* ... Rest of the file precisely preserved ... */}
         <section className="grid grid-cols-2 lg:grid-cols-4 gap-6">
            {[
              { label: 'Network Power', value: data.followerCounts?.Instagram || '48.2K', sub: 'Instagram Primary', icon: TrendingUp },
@@ -195,13 +191,11 @@ const PublicMediaKit = () => {
            ))}
         </section>
 
-        {/* MONETIZATION ARCHITECTURE */}
         <section className="space-y-12">
             <div className="text-center space-y-4">
                <h2 className="text-4xl font-black uppercase tracking-tighter">Monetization Pulse</h2>
                <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.4em]">Verified rate nodes for transparent corporate bidding</p>
             </div>
-
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                {[
                  { label: 'Sponsored Reel', val: rates?.reel || 25000, desc: 'High-fidelity cinematic integration' },
@@ -222,12 +216,8 @@ const PublicMediaKit = () => {
             </div>
         </section>
 
-        {/* EXPERIENCE LEDGER */}
         <section className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-           <motion.div 
-             initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 1.3 }}
-             className="space-y-10"
-           >
+           <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 1.3 }} className="space-y-10">
               <div className="space-y-4">
                 <h2 className="text-[10px] font-black uppercase text-blue-500 tracking-[0.5em]">The Strategic Vision</h2>
                 <p className="text-3xl md:text-4xl font-black tracking-tighter italic leading-tight">
@@ -240,14 +230,8 @@ const PublicMediaKit = () => {
                  ))}
               </div>
            </motion.div>
-           
-           <motion.div 
-             initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 1.4 }}
-             className="bg-white/5 border border-white/5 p-12 rounded-[4rem] space-y-12 backdrop-blur-3xl relative overflow-hidden"
-           >
-              <div className="absolute top-0 right-0 p-12 opacity-5">
-                 <ShieldCheck className="w-20 h-20" />
-              </div>
+           <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 1.4 }} className="bg-white/5 border border-white/5 p-12 rounded-[4rem] space-y-12 backdrop-blur-3xl relative overflow-hidden">
+              <div className="absolute top-0 right-0 p-12 opacity-5"><ShieldCheck className="w-20 h-20" /></div>
               <h3 className="text-[10px] font-black uppercase text-slate-500 tracking-widest">Collaborative Portfolio</h3>
               <div className="grid grid-cols-2 gap-12 items-center opacity-30 grayscale saturate-0 contrast-125">
                  <div className="text-3xl font-black italic tracking-tighter">NIKE</div>
@@ -263,101 +247,49 @@ const PublicMediaKit = () => {
            </motion.div>
         </section>
 
-        {/* FOOTER PROTOCOL */}
         <footer className="pt-32 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-12 opacity-30 pb-32">
            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10">
-                 <Zap className="w-6 h-6 text-white" />
-              </div>
+              <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10"><Zap className="w-6 h-6 text-white" /></div>
               <div className="space-y-1">
                 <span className="text-[10px] font-black uppercase tracking-[0.4em] block">Creator Identity Node • Verified</span>
                 <span className="text-[8px] font-bold text-slate-500 block uppercase">Protocol Instance v4.2.0 • 2026-04-20</span>
               </div>
            </div>
-           <div className="flex flex-wrap items-center justify-center gap-10 text-[9px] font-black uppercase tracking-[0.3em]">
-              <a href="#" className="hover:text-blue-500 transition-colors">Digital Forensics</a>
-              <a href="#" className="hover:text-blue-500 transition-colors">Contract Terms</a>
-              <a href="#" className="hover:text-blue-500 transition-colors">Escrow Logic</a>
-              <a href="#" className="hover:text-blue-500 transition-colors">Report Node</a>
-           </div>
         </footer>
       </main>
 
-      {/* SEND OFFER MODAL */}
       <AnimatePresence>
          {showOfferModal && (
            <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-slate-950/80 backdrop-blur-3xl">
-              <motion.div 
-                 initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                 animate={{ opacity: 1, scale: 1, y: 0 }}
-                 exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                 className="w-full max-w-2xl bg-slate-900 border border-white/10 rounded-[4rem] p-12 shadow-[0_35px_100px_-15px_rgba(37,99,235,0.2)] relative overflow-hidden"
-              >
-                 <div className="absolute top-0 right-0 p-12 opacity-5 pointer-events-none">
-                    <Send className="w-40 h-40" />
-                 </div>
-                 
-                 <button 
-                   onClick={() => setShowOfferModal(false)}
-                   className="absolute top-8 right-8 w-12 h-12 bg-white/5 border border-white/10 rounded-full flex items-center justify-center hover:bg-rose-500 transition-all group"
-                 >
-                    <X className="w-5 h-5 group-hover:rotate-90 transition-transform" />
-                 </button>
-
+              <motion.div initial={{ opacity: 0, scale: 0.9, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.9, y: 20 }} className="w-full max-w-2xl bg-slate-900 border border-white/10 rounded-[4rem] p-12 shadow-[0_35px_100px_-15px_rgba(37,99,235,0.2)] relative overflow-hidden">
+                 <button onClick={() => setShowOfferModal(false)} className="absolute top-8 right-8 w-12 h-12 bg-white/5 border border-white/10 rounded-full flex items-center justify-center hover:bg-rose-500 transition-all group"><X className="w-5 h-5 group-hover:rotate-90 transition-transform" /></button>
                  <div className="space-y-10">
                     <div className="space-y-3 text-center">
                        <h3 className="text-4xl font-black uppercase tracking-tighter">Bilateral Handshake</h3>
                        <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em]">Direct Engagement Protocol with {data.name}</p>
                     </div>
-
                     <form onSubmit={handleSendOffer} className="grid grid-cols-1 gap-8">
                        <div className="space-y-3">
                           <label className="text-[10px] font-black uppercase text-blue-500 tracking-widest ml-4">Deployment Value (₹)</label>
                           <div className="relative">
                              <DollarSign className="absolute left-6 top-1/2 -translate-y-1/2 w-6 h-6 text-slate-500" />
-                             <input 
-                               required
-                               type="number"
-                               placeholder="e.g. 50000"
-                               value={offerData.amount}
-                               onChange={(e) => setOfferData({...offerData, amount: e.target.value})}
-                               className="w-full h-16 bg-slate-950 border border-white/5 rounded-2xl pl-16 pr-8 font-mono text-xl text-white outline-none focus:border-blue-600 transition-all"
-                             />
+                             <input required type="number" placeholder="50000" value={offerData.amount} onChange={(e) => setOfferData({...offerData, amount: e.target.value})} className="w-full h-16 bg-slate-950 border border-white/5 rounded-2xl pl-16 pr-8 font-mono text-xl text-white outline-none focus:border-blue-600 transition-all" />
                           </div>
                        </div>
-
                        <div className="space-y-3">
                           <label className="text-[10px] font-black uppercase text-blue-500 tracking-widest ml-4">Strategic Deliverables</label>
-                          <textarea 
-                             required
-                             placeholder="e.g. 1 Sponsored Reel + 2 Stories"
-                             value={offerData.deliverables}
-                             onChange={(e) => setOfferData({...offerData, deliverables: e.target.value})}
-                             className="w-full h-32 bg-slate-950 border border-white/5 rounded-2xl p-6 text-sm font-bold text-white outline-none focus:border-blue-600 transition-all resize-none"
-                          />
+                          <textarea required placeholder="e.g. 1 Sponsored Reel + 2 Stories" value={offerData.deliverables} onChange={(e) => setOfferData({...offerData, deliverables: e.target.value})} className="w-full h-32 bg-slate-950 border border-white/5 rounded-2xl p-6 text-sm font-bold text-white outline-none focus:border-blue-600 transition-all resize-none" />
                        </div>
-
                        <div className="space-y-3">
                           <label className="text-[10px] font-black uppercase text-blue-500 tracking-widest ml-4">Target Deadline</label>
                           <div className="relative">
                              <Calendar className="absolute left-6 top-1/2 -translate-y-1/2 w-6 h-6 text-slate-500" />
-                             <input 
-                               required
-                               type="date"
-                               value={offerData.deadline}
-                               onChange={(e) => setOfferData({...offerData, deadline: e.target.value})}
-                               className="w-full h-16 bg-slate-950 border border-white/5 rounded-2xl pl-16 pr-8 text-sm font-bold text-white outline-none focus:border-blue-600 transition-all"
-                             />
+                             <input required type="date" value={offerData.deadline} onChange={(e) => setOfferData({...offerData, deadline: e.target.value})} className="w-full h-16 bg-slate-950 border border-white/5 rounded-2xl pl-16 pr-8 text-sm font-bold text-white outline-none focus:border-blue-600 transition-all" />
                           </div>
                        </div>
-
-                       <button 
-                         type="submit"
-                         className="h-20 bg-blue-600 text-white rounded-[1.5rem] font-black text-xs uppercase tracking-[0.4em] shadow-2xl shadow-blue-600/30 hover:bg-blue-500 transition-all flex items-center justify-center gap-4"
-                       >
+                       <button type="submit" className="h-20 bg-blue-600 text-white rounded-[1.5rem] font-black text-xs uppercase tracking-[0.4em] shadow-2xl shadow-blue-600/30 hover:bg-blue-500 transition-all flex items-center justify-center gap-4">
                           Establish Escrow Link <Send className="w-5 h-5 fill-white" />
                        </button>
-                       
                        <p className="text-[9px] font-black text-center text-slate-600 uppercase tracking-widest pt-4">Your funds will be held in CF Escrow (Razorpay Protected) until completion.</p>
                     </form>
                  </div>

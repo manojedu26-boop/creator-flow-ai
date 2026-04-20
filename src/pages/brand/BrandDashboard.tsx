@@ -61,24 +61,24 @@ export const BrandDashboard = () => {
        {/* High-Fidelity Search & Filter */}
        <div className="flex flex-col gap-10">
           <div className="space-y-4">
-             <h2 className="text-6xl md:text-7xl font-black tracking-tighter uppercase leading-[0.8] text-white">
+             <h2 className="text-6xl md:text-7xl font-black tracking-tighter uppercase leading-[0.8] text-slate-950">
                 Discover<br/>
                 <span className="text-indigo-600 italic">the Elite.</span>
              </h2>
              <p className="text-slate-500 font-bold uppercase tracking-[0.2em] text-[10px] max-w-xl">
-                Access over <span className="text-white">2.4M verified creators</span> with real-time engagement auditing. Filter by niche, reach, or neural match score.
+                Access over <span className="text-slate-900">2.4M verified creators</span> with real-time engagement auditing. Filter by niche, reach, or neural match score.
              </p>
           </div>
 
-          <div className="flex flex-col xl:flex-row gap-6 p-4 bg-white/5 border border-white/5 rounded-[3rem] backdrop-blur-3xl">
+          <div className="flex flex-col xl:flex-row gap-6 p-4 bg-slate-50 border border-slate-200 rounded-[3rem]">
              <div className="flex-1 relative group">
-                <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500 group-focus-within:text-indigo-500 transition-colors" />
+                <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-indigo-500 transition-colors" />
                 <input 
                   type="text" 
                   placeholder="Search creators by name, handle, or niche..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full h-16 bg-slate-900/50 rounded-2xl pl-16 pr-8 text-[11px] font-black uppercase tracking-widest text-white border border-white/5 focus:border-indigo-600 transition-all outline-none"
+                  className="w-full h-16 bg-white rounded-2xl pl-16 pr-8 text-[11px] font-black uppercase tracking-widest text-slate-900 border border-slate-200 focus:border-indigo-600 transition-all outline-none"
                 />
              </div>
              <div className="flex flex-wrap gap-2">
@@ -88,13 +88,13 @@ export const BrandDashboard = () => {
                     onClick={() => setActiveNiche(niche)}
                     className={cn(
                       "px-6 h-16 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all",
-                      activeNiche === niche ? "bg-indigo-600 text-white shadow-xl shadow-indigo-600/20" : "bg-white/5 text-slate-500 hover:text-white"
+                      activeNiche === niche ? "bg-indigo-600 text-white shadow-xl shadow-indigo-600/20" : "bg-white text-slate-500 border border-slate-200 hover:bg-slate-50"
                     )}
                   >
                     {niche}
                   </button>
                 ))}
-                <button className="w-16 h-16 bg-white/5 border border-white/5 rounded-2xl flex items-center justify-center text-slate-500 hover:text-white transition-all">
+                <button className="w-16 h-16 bg-white border border-slate-200 rounded-2xl flex items-center justify-center text-slate-500 hover:text-white transition-all hover:bg-indigo-600">
                    <Filter className="w-5 h-5" />
                 </button>
              </div>
@@ -112,14 +112,14 @@ export const BrandDashboard = () => {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.9 }}
                   transition={{ delay: i * 0.05 }}
-                  className="group bg-slate-900 border border-white/5 rounded-[4rem] p-10 hover:border-indigo-600/50 transition-all relative overflow-hidden"
+                  className="group bg-white border border-slate-100 rounded-[4rem] p-10 hover:border-indigo-600/50 transition-all relative overflow-hidden shadow-sm hover:shadow-xl"
                 >
                    {/* Background Glow */}
                    <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-600/5 blur-3xl -z-10 group-hover:bg-indigo-600/10 transition-all" />
                    
                    <div className="flex items-center justify-between mb-8">
                       <div className="w-20 h-20 rounded-[2rem] bg-gradient-to-br from-indigo-600 to-blue-600 p-1 shadow-2xl group-hover:scale-105 transition-transform">
-                         <div className="w-full h-full rounded-[1.8rem] overflow-hidden bg-slate-950 border-2 border-slate-950">
+                         <div className="w-full h-full rounded-[1.8rem] overflow-hidden bg-white border-2 border-white">
                             <img src={creator.photo || `https://api.dicebear.com/7.x/avataaars/svg?seed=${creator.name}`} alt="" className="w-full h-full object-cover" />
                          </div>
                       </div>
@@ -128,27 +128,27 @@ export const BrandDashboard = () => {
                             <ShieldCheck className="w-4 h-4" />
                             <span className="text-[10px] font-black uppercase tracking-widest italic">Verified</span>
                          </div>
-                         <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Score: 98.4</p>
+                         <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Score: 98.4</p>
                       </div>
                    </div>
 
-                   <h3 className="text-2xl font-black text-white uppercase tracking-tighter mb-1 truncate">{creator.name}</h3>
+                   <h3 className="text-2xl font-black text-slate-900 uppercase tracking-tighter mb-1 truncate">{creator.name}</h3>
                    <p className="text-[10px] font-bold text-indigo-500 uppercase tracking-widest mb-6">{creator.handle}</p>
 
                    {/* Quick Metrics */}
                    <div className="grid grid-cols-2 gap-4 mb-8">
-                      <div className="p-4 bg-white/5 rounded-2xl border border-white/5">
-                         <p className="text-[8px] font-black text-slate-600 uppercase tracking-widest mb-1">Total Reach</p>
-                         <p className="text-xl font-black text-white tracking-tighter">{creator.followerCounts?.Instagram || '45K'}</p>
+                      <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                         <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-1">Total Reach</p>
+                         <p className="text-xl font-black text-slate-900 tracking-tighter">{creator.followerCounts?.Instagram || '45K'}</p>
                       </div>
-                      <div className="p-4 bg-white/5 rounded-2xl border border-white/5">
-                         <p className="text-[8px] font-black text-slate-600 uppercase tracking-widest mb-1">Match Rate</p>
+                      <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                         <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-1">Match Rate</p>
                          <p className="text-xl font-black text-emerald-500 tracking-tighter">92%</p>
                       </div>
                    </div>
 
                    <div className="flex flex-wrap gap-2 mb-10">
-                      <span className="px-3 py-1 bg-white/5 border border-white/5 rounded-lg text-[8px] font-black text-slate-500 uppercase">{creator.niche}</span>
+                      <span className="px-3 py-1 bg-slate-100 border border-slate-200 rounded-lg text-[8px] font-black text-slate-500 uppercase">{creator.niche}</span>
                       {creator.platforms?.map((p: string) => (
                         <span key={p} className="px-3 py-1 bg-indigo-500/10 border border-indigo-500/10 rounded-lg text-[8px] font-black text-indigo-500 uppercase">{p}</span>
                       ))}

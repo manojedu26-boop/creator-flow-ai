@@ -45,6 +45,7 @@ const VideoEditor = lazy(() => import("./pages/dashboard/VideoEditor.tsx").then(
 
 const BrandLayout = lazy(() => import("./components/brand/BrandLayout").then(m => ({ default: m.BrandLayout })));
 const BrandHome = lazy(() => import("./pages/brand/BrandHome.tsx").then(m => ({ default: m.BrandHome })));
+const BrandDashboard = lazy(() => import("./pages/brand/BrandDashboard.tsx").then(m => ({ default: m.BrandDashboard })));
 const DiscoverCreators = lazy(() => import("./pages/brand/DiscoverCreators.tsx").then(m => ({ default: m.DiscoverCreators })));
 const PostBrief = lazy(() => import("./pages/brand/PostBrief.tsx").then(m => ({ default: m.PostBrief })));
 const ComingSoon = lazy(() => import("./pages/dashboard/ComingSoon.tsx").then(m => ({ default: m.ComingSoon })));

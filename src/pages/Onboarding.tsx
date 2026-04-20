@@ -101,19 +101,30 @@ const Onboarding = () => {
       return;
     }
     
-    // Brand Skip Logic
-    if (currentStep === 0 && selectedRole === 'Brand') {
-      setCurrentStep(5); // Skip to Brand Name step
-      return;
-    }
-
-    if (currentStep === 1 && selectedPlatforms.length === 0) {
-      toast.error("Network Required", { description: "Select at least one intelligence node." });
-      return;
-    }
-    if (currentStep === 2 && !selectedNiche) {
-      toast.error("Calibration Required", { description: "Specify your deployment sector." });
-      return;
+    if (selectedRole === 'Brand') {
+      if (currentStep === 0) {
+        setCurrentStep(5); // Jump to Brand Name step
+        return;
+      }
+      if (currentStep === 5 && !brandName) {
+        toast.error("Identity Required", { description: "Please enter your brand name." });
+        return;
+      }
+    } else {
+      // Creator Logic
+      if (currentStep === 1 && selectedPlatforms.length === 0) {
+        toast.error("Network Required", { description: "Select at least one intelligence node." });
+        return;
+      }
+      if (currentStep === 2 && !selectedNiche) {
+        toast.error("Calibration Required", { description: "Specify your deployment sector." });
+        return;
+      }
+      if (currentStep === 5) {
+        // Creators shouldn't really be here, but if they are, finalize
+        handleFinalize();
+        return;
+      }
     }
     
     if (currentStep < 5) setCurrentStep(currentStep + 1);

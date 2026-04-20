@@ -31,7 +31,6 @@ export const navGroups = [
     title: "HQ",
     items: [
       { icon: Home,         label: "Home",              href: "/dashboard" },
-      { icon: Activity,     label: "The Pulse",         href: "/pulse", badge: "🔴" },
       { icon: Compass,      label: "Explore",           href: "/explore" },
     ]
   },
@@ -47,7 +46,6 @@ export const navGroups = [
     title: "Business",
     items: [
       { icon: BarChart3,    label: "Analytics",         href: "/analytics" },
-      { icon: Compass,      label: "Marketplace",       href: "/marketplace" },
       { icon: Handshake,    label: "Brand Deals",       href: "/deals" },
       { icon: DollarSign,   label: "Revenue",           href: "/revenue" },
       { icon: ShieldCheck,  label: "Contracts",         href: "/contracts" },
@@ -59,7 +57,6 @@ export const navGroups = [
     items: [
       { icon: Globe,        label: "Network",           href: "/network" },
       { icon: MessageSquare,label: "Messages",          href: "/messages" },
-      { icon: Bell,         label: "Notifications",     href: "/notifications" },
     ]
   }
 ];
