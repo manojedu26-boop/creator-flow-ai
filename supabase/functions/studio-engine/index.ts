@@ -130,8 +130,16 @@ serve(async (req) => {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     })
   } catch (error) {
-    return new Response(JSON.stringify({ error: error.message }), {
-      status: 500,
+    const errorMsg = error.message || String(error)
+    let statusCode = 500
+    if (errorMsg.includes("429") || errorMsg.includes("quota")) {
+      statusCode = 429
+    } else if (errorMsg.includes("403") || errorMsg.includes("leaked")) {
+      statusCode = 403
+    }
+    
+    return new Response(JSON.stringify({ error: errorMsg }), {
+      status: statusCode,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     })
   }
