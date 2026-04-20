@@ -12,9 +12,11 @@ export interface User {
   photo: string | null;
   niche: string;
   platforms: string[];
-  type: 'Creator' | 'Brand';
+  type: 'Creator' | 'Brand' | null;
+  role_assigned: boolean;
   followerCounts: Record<string, string>;
   onboarded: boolean;
+  brandName?: string;
 }
 
 interface AuthContextType {
@@ -39,6 +41,7 @@ export const mockUser: User = {
   niche: "Fitness & Lifestyle",
   platforms: ["Instagram", "YouTube", "TikTok"],
   type: "Creator",
+  role_assigned: true,
   followerCounts: { "Instagram": "48.2K", "YouTube": "12.8K", "TikTok": "31.5K" },
   onboarded: true
 };
@@ -52,12 +55,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const users = db.getAll<User>('users');
     if (users.length > 0) {
       setUser(users[0]);
-    } else {
-      db.seed('users', [mockUser]);
-      setUser(mockUser);
     }
 
-    // 2. Supabase Session Listener (Only if client is initialized)
+    // 2. Supabase Session Listener
     let subscription: any = null;
     
     if (supabase) {
@@ -65,19 +65,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         if (session?.user) {
           const { user: sbUser } = session;
           
-          // Get name and account type from metadata
           const name = sbUser.user_metadata.full_name || sbUser.email?.split('@')[0] || "Operative";
-          const type = sbUser.user_metadata.account_type || 'Creator';
+          const type = sbUser.user_metadata.account_type || null;
           
           const existingProfile = db.getAll<User>('users').find(u => u.id === sbUser.id || u.email === sbUser.email);
           
           if (existingProfile) {
-            // Update existing profile with any new metadata
-            const updatedProfile = { ...existingProfile, name, type, photo: sbUser.user_metadata.avatar_url || existingProfile.photo };
+            const updatedProfile = { 
+              ...existingProfile, 
+              name, 
+              type: existingProfile.type || type, 
+              role_assigned: !!(existingProfile.type || type),
+              photo: sbUser.user_metadata.avatar_url || existingProfile.photo 
+            };
             db.update<User>('users', existingProfile.id, updatedProfile);
             setUser(updatedProfile);
           } else {
-            // Create a new local profile for the user
             const newUser: User = {
               id: sbUser.id,
               name: name,
@@ -85,9 +88,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
               handle: `@${name.toLowerCase().replace(/\s+/g, '')}_${Math.random().toString(36).substr(2, 4)}`,
               email: sbUser.email!,
               photo: sbUser.user_metadata.avatar_url || null,
-              niche: "Fitness & Lifestyle", // Default
-              platforms: ["Instagram"],
-              type: type as 'Creator' | 'Brand',
+              niche: "", 
+              platforms: [],
+              type: type as any,
+              role_assigned: !!type,
               followerCounts: { "Instagram": "0" },
               onboarded: false
             };
@@ -100,7 +104,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           }
         } else if (event === 'SIGNED_OUT') {
           setUser(null);
-          db.reset();
         }
         setIsLoading(false);
       });
@@ -115,16 +118,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const login = (email: string, _password: string) => {
-    // AuthContext login — credential check is done in Login.tsx before calling this
-    // Find user in DB or create session with mockUser if it's a demo login
     const users = db.getAll<User & { password?: string }>('users');
     let found = users.find(u => u.email === email);
     if (found) {
-      // Remove password from state
       const { password, ...safeUser } = found as any;
       setUser(safeUser);
     } else {
-      // Fallback: create session with mockUser
       const newUser = { ...mockUser, email };
       setUser(newUser);
       db.update<User>('users', mockUser.id, { email });
@@ -140,11 +139,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       handle: `@${name.toLowerCase().replace(/\s+/g, '')}`,
       email,
       photo: `https://api.dicebear.com/7.x/initials/svg?seed=${name}`,
-      niche: "Fitness & Lifestyle", // Default for demo
-      platforms: ["Instagram", "YouTube", "TikTok"],
-      type: 'Creator',
-      followerCounts: { "Instagram": "12.5K", "YouTube": "1.2K", "TikTok": "5.4K" },
-      onboarded: true
+      niche: "",
+      platforms: [],
+      type: null,
+      role_assigned: false,
+      followerCounts: { "Instagram": "0" },
+      onboarded: false
     };
     setUser(newUser);
     db.insert('users', newUser);
@@ -158,11 +158,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
     setUser(updatedUser);
     db.update('users', user.id, data);
+
+    if (supabase && (data.type || data.brandName)) {
+      supabase.auth.updateUser({
+        data: { 
+          account_type: data.type || user.type,
+          brand_name: data.brandName || user.brandName
+        }
+      });
+    }
   };
 
   const logout = () => {
+    if (supabase) supabase.auth.signOut();
     setUser(null);
-    db.reset(); // Clear DB on logout for demo purposes, or just remove session
   };
 
   const triggerSessionExpiry = () => {

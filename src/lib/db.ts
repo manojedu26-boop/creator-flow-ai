@@ -1,7 +1,7 @@
 // src/lib/db.ts
 // Mock Database Engine using LocalStorage for persistence
 
-export type CollectionName = 'users' | 'invoices' | 'contracts' | 'deals' | 'notifications' | 'messages' | 'content' | 'tasks' | 'cal_posts' | 'castings' | 'applications' | 'shortlists' | 'competitors' | 'growthTasks' | 'analyticsSnapshots' | 'aiChatHistory';
+export type CollectionName = 'users' | 'invoices' | 'contracts' | 'deals' | 'notifications' | 'messages' | 'content' | 'tasks' | 'cal_posts' | 'castings' | 'applications' | 'shortlists' | 'competitors' | 'growthTasks' | 'analyticsSnapshots' | 'aiChatHistory' | 'brands' | 'creator_rates';
 
 class Database {
   private prefix = 'cf_db_';
@@ -102,7 +102,7 @@ export const initializeDB = () => {
     }
   ]);
 
-  // 3. Deals (Kanban)
+  // 3. Deals (Lifecycle: Offered -> Agreed -> Content Created -> Submitted -> Approved -> Paid)
   db.seed('deals', [
     { 
       id: 'deal_1', 
@@ -110,9 +110,9 @@ export const initializeDB = () => {
       logo: 'https://logo.clearbit.com/muscleblaze.com', 
       type: 'Sponsored Reel', 
       platforms: ['IG', 'YT'], 
-      value: '₹ 35,000', 
+      value: 35000, 
       deadline: 'Mar 28', 
-      status: 'live', 
+      status: 'content_created', 
       deadlineColor: 'red',
       notes: "AI Insight: Your last Reel for MuscleBlaze had 4.8% engagement. Use similar hook for this one."
     },
@@ -122,9 +122,9 @@ export const initializeDB = () => {
       logo: 'https://logo.clearbit.com/decathlon.in', 
       type: 'Ambassador Program', 
       platforms: ['IG', 'YT', 'TT'], 
-      value: '₹ 75,000', 
+      value: 75000, 
       deadline: 'Apr 15', 
-      status: 'signed', 
+      status: 'agreed', 
       deadlineColor: 'green',
       notes: "Contract Shield: Exclusivity for 3 months. No gym-wear from competitors."
     },
@@ -134,24 +134,18 @@ export const initializeDB = () => {
       logo: 'https://logo.clearbit.com/nike.com', 
       type: 'Marathon Campaign', 
       platforms: ['IG'], 
-      value: '₹ 60,000', 
+      value: 60000, 
       deadline: 'Apr 05', 
-      status: 'outreach', 
+      status: 'offered', 
       deadlineColor: 'yellow',
-      notes: "Follow up needed: No reply in 5 days."
+      notes: "Action Required: Nike just posted. Confirm interest to initiate escrow."
     }
   ]);
 
   // 4. Notifications
   db.seed('notifications', [
     { id: 'not_1', title: 'New Deal Interest', body: 'Nike India wants to collaborate on your latest Reel. Respond now before the window closes.', type: 'deal', time: '2 mins ago', read: false, link: '/deals' },
-    { id: 'not_2', title: 'Payment Received', body: 'Fittr App cleared invoice #INV-8200 — ₹8,200 is on its way to your account.', type: 'revenue', time: '1 hour ago', read: true, link: '/revenue' },
-    { id: 'not_3', title: 'Contract Expiring Soon', body: 'Your MuscleBlaze deal expires in 3 days. Review the renewal terms in Contract Shield.', type: 'warning', time: '5 hours ago', read: false, link: '/contracts' },
-    { id: 'not_4', title: 'Trending Post 🔥', body: 'Your "Desk Setup Minimal" Reel is 3.2x above your average reach. Boost it now?', type: 'trending', time: '20 mins ago', read: false, link: '/analytics' },
-    { id: 'not_5', title: 'New Message from Nike PR', body: 'Nike PR Team replied to your brief submission. Open your inbox to respond.', type: 'message', time: '45 mins ago', read: false, link: '/messages' },
-    { id: 'not_6', title: 'New Connection Request', body: 'Sarah Chen (@sarahdesigns) wants to connect. She collabed with 3 fitness creators this month.', type: 'connection', time: '2 hours ago', read: true, link: '/network' },
-    { id: 'not_7', title: 'Posting Gap Detected', body: 'You have no content scheduled for Thursday. Your audience peaks on Thursdays at 7–9 PM.', type: 'reminder', time: '3 hours ago', read: false, link: '/calendar' },
-    { id: 'not_8', title: 'AI Weekly Insight', body: 'No-equipment workout content is peaking in your niche this week. Best time to post: Friday 8 PM.', type: 'ai', time: '6 hours ago', read: true, link: '/growth' },
+    { id: 'not_2', title: 'Payment Received', body: 'Fittr App cleared invoice #INV-8200 — ₹8,200 is on its way to your account.', type: 'revenue', time: '1 hour ago', read: true, link: '/revenue' }
   ]);
 
   // 5. Saved Content (Content Studio)
@@ -163,9 +157,7 @@ export const initializeDB = () => {
   // 6. Tasks
   db.seed('tasks', [
     { id: 't1', text: 'Post your Tuesday Reel by 7:00 PM — "3 exercises for desk workers"', time: '10 min', completed: false, category: 'Content' },
-    { id: 't2', text: 'Reply to 12 unanswered comments on last post', time: '5 min', completed: true, category: 'Community' },
-    { id: 't3', text: 'Follow up with Nike Brand Partnership — no reply in 5 days', time: '3 min', completed: false, category: 'Deals' },
-    { id: 't4', text: 'Generate captions for Thursday\'s carousel post', time: '2 min', completed: false, category: 'Content' },
+    { id: 't2', text: 'Reply to 12 unanswered comments on last post', time: '5 min', completed: true, category: 'Community' }
   ]);
 
   // 7. Calendar Posts
@@ -177,11 +169,22 @@ export const initializeDB = () => {
   // 8. Brand Castings (Campaign Briefs)
   db.seed('castings', [
     { id: 'cast_1', brand: 'Adobe India', title: 'Creative Cloud Mastery', description: 'Seeking 5 visual creators for a series of tips & tricks Reels.', niche: 'Design', budget: '₹ 45k - 70k', status: 'Live', date: '2025-03-28' },
-    { id: 'cast_2', brand: 'Samsung Bharat', title: 'Galaxy S26 Launch', description: 'Cinematic unboxing and low-light photography showcase.', niche: 'Tech', budget: '₹ 1.2L - 2L', status: 'Live', date: '2025-03-27' },
-    { id: 'cast_3', brand: 'MyProtein', title: 'Unlock Your Flow', description: 'Home workout routine using MyProtein supplements.', niche: 'Fitness', budget: '₹ 25k - 35k', status: 'Draft', date: '2025-03-25' }
+    { id: 'cast_2', brand: 'Samsung Bharat', title: 'Galaxy S26 Launch', description: 'Cinematic unboxing and low-light photography showcase.', niche: 'Tech', budget: '₹ 1.2L - 2L', status: 'Live', date: '2025-03-27' }
   ]);
 
-  // 9. Applications (Creators applying to Brand Briefs)
+  // 9. Brands (Profiles)
+  db.seed('brands', [
+    { id: 'b1', name: 'Nike India', logo: 'https://logo.clearbit.com/nike.com', industry: 'Sports', verified: true },
+    { id: 'b2', name: 'Red Bull', logo: 'https://logo.clearbit.com/redbull.com', industry: 'Energy Drinks', verified: true },
+    { id: 'b3', name: 'Samsung', logo: 'https://logo.clearbit.com/samsung.com', industry: 'Technology', verified: true }
+  ]);
+
+  // 10. Creator Rates
+  db.seed('creator_rates', [
+    { id: 'r1', userId: 'u1', story: 8000, reel: 25000, post: 15000, video: 50000 }
+  ]);
+
+  // 11. Applications (Creators applying to Brand Briefs)
   db.seed('applications', [
     { id: 'app_1', castingId: 'cast_1', creatorId: 'u1', creatorName: 'Naveen Kumar', status: 'Pending', match: 92, date: '2025-03-29' },
     { id: 'app_2', castingId: 'cast_2', creatorId: 'u1', creatorName: 'Naveen Kumar', status: 'Shortlisted', match: 88, date: '2025-03-30' }

@@ -86,6 +86,7 @@ const App = () => {
                         <Routes>
                       {/* Public Routes */}
                       <Route path="/media-kit/:id" element={<PublicMediaKit />} />
+                      <Route path="/kit/:id" element={<PublicMediaKit />} />
                       <Route path="/" element={<Index />} />
                       <Route path="/login" element={<Login />} />
                       <Route path="/register" element={<Register />} />
@@ -118,14 +119,12 @@ const App = () => {
                       </Route>
 
                       {/* Brand Mode Routes */}
-                      <Route path="/brand" element={<BrandLayout />}>
+                      <Route path="/brand" element={<ProtectedRoute><BrandLayout /></ProtectedRoute>}>
                         <Route index element={<BrandHome />} />
-                        <Route path="discover" element={<DiscoverCreators />} />
+                        <Route path="campaigns" element={<BrandDashboard />} />
                         <Route path="post-brief" element={<PostBrief />} />
-                        <Route path="analytics" element={<ComingSoon title="Campaign Analytics" />} />
-                        <Route path="messages" element={<ComingSoon title="Brand Messages" />} />
-                        <Route path="deals" element={<ComingSoon title="Active Deals" />} />
-                        <Route path="contracts" element={<ComingSoon title="Brand Contracts" />} />
+                        <Route path="messages" element={<Messages />} />
+                        <Route path="settings" element={<Settings />} />
                       </Route>
 
                       <Route path="*" element={<NotFound />} />

@@ -8,6 +8,7 @@ import {
 import { useState, useEffect } from "react";
 import { db } from "../../lib/db";
 import { toast } from "../../components/ui/sonner";
+import { IndianRupee } from "../../components/shared/CurrencyIcon";
 
 export const BrandHome = () => {
   const [stats, setStats] = useState({
