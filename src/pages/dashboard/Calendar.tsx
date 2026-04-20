@@ -18,7 +18,7 @@ import { cn } from "../../lib/utils";
 // ─── Types ──────────────────────────────────────────────────────────────────
 type Platform = "ig" | "yt" | "tt";
 type PostType = "reel" | "video" | "post" | "short" | "story" | "thread";
-type PostStatus = "draft" | "scheduled" | "published";
+type PostStatus = "draft" | "scheduled" | "published" | "approved";
 
 interface ScheduledPost {
   id: string;
@@ -71,6 +71,7 @@ const STATUS_COLOR: Record<PostStatus, string> = {
   draft: "bg-slate-50 text-slate-400 border-slate-100",
   scheduled: "bg-blue-50 text-blue-600 border-blue-100",
   published: "bg-emerald-50 text-emerald-600 border-emerald-100",
+  approved: "bg-green-50 text-green-600 border-green-200",
 };
 
 const MONTH_NAMES = ["January","February","March","April","May","June","July","August","September","October","November","December"];
@@ -109,6 +110,7 @@ const PostPill = ({
     className={cn(
         "p-2 rounded-xl border cursor-grab active:cursor-grabbing hover:shadow-md transition-all group/pill relative overflow-hidden",
         PLATFORM_BG[post.platform],
+        post.status === "approved" && "border-green-200 bg-green-50 shadow-[0_4px_12px_rgba(34,197,94,0.1)]",
         post.status === "published" ? "opacity-50" : "shadow-sm"
     )}
   >

@@ -14,9 +14,18 @@ import { BottomSheet } from "../../components/ui/BottomSheet";
 import { AutoResizeTextarea } from "../../components/shared/AutoResizeTextarea";
 import { useNavigate } from "react-router-dom";
 import { cn } from "../../lib/utils";
+import { 
+  generateDailyPostIdea, 
+  generate30DayStrategy, 
+  ContentSuggestion, 
+  CalendarEvent 
+} from "../../lib/gemini";
+import { DailyPostCard } from "../../components/studio/DailyPostCard";
+import { CaptionRewriter } from "../../components/studio/CaptionRewriter";
+import { Calendar as MonthPlanner } from "../../pages/dashboard/Calendar";
 
 // ── Types ───────────────────────────────────────────────────────────────────
-type ToolType = "caption" | "script" | "hook" | "hashtag" | "audio" | "pitch" | "bio" | "carousel" | "reel" | "thumbnail";
+type ToolType = "command" | "caption" | "script" | "hook" | "hashtag" | "audio" | "pitch" | "bio" | "carousel" | "reel" | "thumbnail";
 
 interface CaptionVariant { label: string; text: string; copied: boolean; saved: boolean; toneOpen: boolean; }
 interface ScriptSection { act: string; text: string; editing: boolean; }
@@ -27,6 +36,7 @@ interface HistoryItem { id: string; type: string; text: string; date: string; pl
 
 // ── Tool Definitions ─────────────────────────────────────────────────────────
 const tools = [
+  { id: "command", icon: Layout, label: "Command Center" },
   { id: "caption", icon: PenTool, label: "Caption Writer" },
   { id: "hook", icon: Zap, label: "Hook Generator" },
   { id: "hashtag", icon: Hash, label: "Hashtag Engine" },
@@ -128,7 +138,7 @@ const SEED_BIO = (niche: string): any[] => [
 export const ContentStudio = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [activeTool, setActiveTool] = useState<ToolType>("caption");
+  const [activeTool, setActiveTool] = useState<ToolType>("command");
   const [isGenerating, setIsGenerating] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
@@ -147,6 +157,11 @@ export const ContentStudio = () => {
   const [audioLoading, setAudioLoading] = useState(false);
   const [generationProgress, setGenerationProgress] = useState(0);
   const [generationPhase, setGenerationPhase] = useState("");
+
+  // AI Content Planner State
+  const [dailySuggestion, setDailySuggestion] = useState<ContentSuggestion | null>(null);
+  const [isSyncingCalendar, setIsSyncingCalendar] = useState(false);
+
 
   const ThinkingOverlay = ({ progress, phase }: { progress: number, phase: string }) => {
     return (
@@ -327,6 +342,71 @@ export const ContentStudio = () => {
     setIsGenerating(false);
     onDone();
   }, []);
+
+  const handleGenerateDaily = async () => {
+    setIsGenerating(true);
+    setGenerationProgress(0);
+    setGenerationPhase("Initializing Neural Broadcast...");
+    
+    try {
+      const suggestion = await generateDailyPostIdea({
+        niche: niche,
+        platforms: (user as any)?.platforms || ["instagram"]
+      });
+      
+      // Simulate progress for cinematic feel
+      for (let i = 0; i <= 100; i += 5) {
+        setGenerationProgress(i);
+        if (i < 30) setGenerationPhase("Scanning Niche Trends...");
+        else if (i < 60) setGenerationPhase("Calibrating Brand Voice...");
+        else if (i < 90) setGenerationPhase("Architecting Hook Node...");
+        else setGenerationPhase("Finalizing Synthesis...");
+        await new Promise(r => setTimeout(r, 100));
+      }
+      
+      setDailySuggestion(suggestion);
+      toast.success("Broadcast Node Ready!");
+    } catch (error) {
+      toast.error("Neural Synthesis Failed", { description: "Resetting alignment buffers..." });
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const handlePlanMonth = async () => {
+    setIsSyncingCalendar(true);
+    toast.info("Generating 30-Day Automated Matrix...");
+    try {
+      const currentMonth = new Date().toLocaleString('default', { month: 'long' });
+      const strategy = await generate30DayStrategy({
+        niche: niche,
+        platforms: (user as any)?.platforms || ["instagram"]
+      }, currentMonth);
+      
+      // Map to Calendar database format
+      const now = new Date();
+      strategy.forEach((event, i) => {
+        db.insert("cal_posts", {
+          id: `ai_auto_${Date.now()}_${i}`,
+          platforms: [event.platform],
+          type: event.type.toLowerCase(),
+          caption: event.topic,
+          time: event.time,
+          day: event.day,
+          month: now.getMonth(),
+          year: now.getFullYear(),
+          status: "approved"
+        });
+      });
+      
+      toast.success("Month Plan Locked!", { description: "30 items approved and synced to your roadmap." });
+    } catch (error) {
+      toast.error("Strategy Matrix Error");
+    } finally {
+      setIsSyncingCalendar(false);
+    }
+  };
+
 
   const saveToLibrary = (text: string, type: string, platform = "Instagram") => {
     const item: HistoryItem = { id: `c_${Date.now()}`, type, text, platform, date: new Date().toISOString().split("T")[0] };
@@ -880,8 +960,84 @@ export const ContentStudio = () => {
     </div>
   );
 
+  const renderCommandCenter = () => (
+    <div className="space-y-16 pb-20">
+      {/* SECTION 1: What should I post today? */}
+      <section className="space-y-8">
+        <div className="flex items-center justify-between">
+           <div>
+              <p className="text-[10px] font-black uppercase tracking-[0.4em] text-blue-600 mb-2">Primary Directive</p>
+              <h2 className="text-4xl font-black text-slate-900 tracking-tighter uppercase">Broadcast <span className="text-blue-600">Sync</span></h2>
+           </div>
+           {!dailySuggestion && (
+             <button 
+               onClick={handleGenerateDaily}
+               className="h-14 px-10 bg-slate-900 text-white rounded-2xl font-black uppercase tracking-[0.2em] shadow-xl shadow-blue-500/10 hover:bg-blue-600 transition-all flex items-center gap-3 active:scale-95"
+             >
+                <Zap className="w-5 h-5 text-blue-400" /> What should I post today?
+             </button>
+           )}
+        </div>
+
+        {dailySuggestion ? (
+          <div className="space-y-6">
+             <DailyPostCard 
+               suggestion={dailySuggestion} 
+               onApprove={() => {
+                 toast.success("Pushed to Timeline", { description: "Executing scheduled deployment..." });
+                 setDailySuggestion(null);
+               }} 
+             />
+             <button onClick={() => setDailySuggestion(null)} className="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-slate-900 transition-colors mx-auto block">Reset Directive</button>
+          </div>
+        ) : (
+          <div className="h-64 border-2 border-dashed border-slate-200 rounded-[3rem] bg-slate-50/50 flex flex-col items-center justify-center text-center p-12 group cursor-pointer hover:border-blue-400 transition-all" onClick={handleGenerateDaily}>
+             <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center mb-6 shadow-sm group-hover:bg-blue-600 group-hover:text-white transition-all">
+                <Sparkles className="w-8 h-8 text-blue-100 group-hover:text-white" />
+             </div>
+             <p className="text-[12px] font-black uppercase tracking-[0.3em] text-slate-300 group-hover:text-slate-900">Initialize Neural content Scan</p>
+          </div>
+        )}
+      </section>
+
+      {/* SECTION 2: Content Calendar */}
+      <section className="space-y-8">
+        <div className="flex items-center justify-between">
+           <div>
+              <p className="text-[10px] font-black uppercase tracking-[0.4em] text-blue-600 mb-2">Roadmap Matrix</p>
+              <h2 className="text-4xl font-black text-slate-900 tracking-tighter uppercase">30-Day <span className="text-blue-600">Strategy</span></h2>
+           </div>
+           <button 
+             onClick={handlePlanMonth}
+             disabled={isSyncingCalendar}
+             className="h-14 px-10 bg-blue-50 border border-blue-200 text-blue-600 rounded-2xl font-black uppercase tracking-[0.2em] hover:bg-blue-600 hover:text-white transition-all flex items-center gap-3 active:scale-95 disabled:opacity-50"
+           >
+              {isSyncingCalendar ? <Loader2 className="w-5 h-5 animate-spin" /> : <Calendar className="w-5 h-5" />}
+              {isSyncingCalendar ? "Synchronizing..." : "Plan my whole month in 5 minutes"}
+           </button>
+        </div>
+        
+        <div className="bg-white border border-slate-200 rounded-[3rem] p-4 shadow-sm overflow-hidden scale-95 origin-top h-[600px]">
+           <div className="h-full overflow-y-auto no-scrollbar pointer-events-auto">
+              <MonthPlanner />
+           </div>
+        </div>
+      </section>
+
+      {/* Section 3: Caption Rewriter */}
+      <section className="space-y-8">
+        <div>
+           <p className="text-[10px] font-black uppercase tracking-[0.4em] text-blue-600 mb-2">Linguistic Refinement</p>
+           <h2 className="text-4xl font-black text-slate-900 tracking-tighter uppercase">Tone <span className="text-blue-600">Architect</span></h2>
+        </div>
+        <CaptionRewriter />
+      </section>
+    </div>
+  );
+
   const renderToolContent = () => {
     switch (activeTool) {
+      case "command": return renderCommandCenter();
       case "caption": return renderCaptionWriter();
       case "script": return renderScriptGenerator();
       case "hook": return renderHookGenerator();
