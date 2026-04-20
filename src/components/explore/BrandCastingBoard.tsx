@@ -1,11 +1,13 @@
+
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Wallet, Clock, Users, ChevronRight, Sparkles, Filter, Briefcase, Target, ArrowRight } from 'lucide-react';
 import { useExplore } from '@/contexts/ExploreContext';
 import { cn } from '@/lib/utils';
 import { toast } from '@/components/ui/sonner';
+import { PitchArchitectModal } from '@/components/studio/PitchArchitectModal';
 
-const BrandCard = ({ brand, index }: { brand: any, index: number }) => {
+const BrandCard = ({ brand, index, onApply }: { brand: any, index: number, onApply: (b: any) => void }) => {
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.95 }}
@@ -64,7 +66,7 @@ const BrandCard = ({ brand, index }: { brand: any, index: number }) => {
        </div>
 
        <button 
-          onClick={() => toast.success("Deployment Request Dispatched 🚀")}
+          onClick={() => onApply(brand)}
           className="w-full h-14 bg-slate-950 text-white rounded-2xl text-[10px] font-black uppercase tracking-[0.3em] flex items-center justify-center gap-3 hover:bg-indigo-600 transition-all active:scale-95 group shadow-xl"
        >
           Apply Now <Sparkles className="w-4 h-4 group-hover:rotate-12 transition-transform" />
@@ -76,6 +78,7 @@ const BrandCard = ({ brand, index }: { brand: any, index: number }) => {
 export const BrandCastingBoard = () => {
   const { brands } = useExplore();
   const [filter, setFilter] = useState('All budgets');
+  const [selectedForPitch, setSelectedForPitch] = useState<any | null>(null);
 
   const budgetFilters = ['All budgets', 'Under ₹25K', '₹25K–₹1L', '₹1L+'];
 
@@ -111,7 +114,12 @@ export const BrandCastingBoard = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
          <AnimatePresence mode="popLayout">
             {brands.map((brand, i) => (
-               <BrandCard key={brand.id} brand={brand} index={i} />
+               <BrandCard 
+                 key={brand.id} 
+                 brand={brand} 
+                 index={i} 
+                 onApply={(b) => setSelectedForPitch(b)}
+               />
             ))}
          </AnimatePresence>
          
@@ -126,6 +134,14 @@ export const BrandCastingBoard = () => {
             <button className="px-8 h-12 bg-white border border-slate-200 rounded-xl text-[9px] font-black uppercase tracking-widest hover:border-indigo-600 hover:text-indigo-600 transition-all">Explore Gold Access</button>
          </div>
       </div>
+
+      {selectedForPitch && (
+        <PitchArchitectModal 
+          isOpen={true} 
+          onClose={() => setSelectedForPitch(null)} 
+          brand={selectedForPitch}
+        />
+      )}
     </section>
   );
 };

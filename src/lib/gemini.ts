@@ -129,3 +129,31 @@ export async function rewriteCaption(caption: string, tone: "Professional" | "Ca
     throw error;
   }
 }
+
+/**
+ * Generates a million-dollar pitch for a brand partnership.
+ */
+export async function generatePitch(brandName: string, niche: string, creatorName: string): Promise<string> {
+  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+  const prompt = `
+    You are an elite talent agent for ${creatorName}, a top-tier creator in the ${niche} niche.
+    Target Brand: ${brandName}
+    
+    Task: Write a high-conversion, professional yet creative pitch to secure a partnership with ${brandName}.
+    - Highlight audience alignment.
+    - Mention potential for high ROI.
+    - Keep it under 150 words.
+    - Sound confident and premium.
+    
+    Return only the pitch text.
+  `;
+
+  try {
+    const result = await model.generateContent(prompt);
+    return result.response.text().trim();
+  } catch (error) {
+    console.error("Pitch Generation Error:", error);
+    throw error;
+  }
+}

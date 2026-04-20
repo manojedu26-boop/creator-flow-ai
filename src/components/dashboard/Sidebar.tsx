@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Home, BarChart3, Handshake, BrainCircuit, Calendar,
+  Home, BarChart3, Handshake, BrainCircuit,
   TrendingUp, Globe, DollarSign, ShieldCheck, Palette,
   MessageSquare, MessageCircle, Bell, Settings, Sparkles,
   LogOut, Instagram, Youtube, Play, User, RefreshCcw,
@@ -40,7 +40,6 @@ export const navGroups = [
     items: [
       { icon: BrainCircuit, label: "AI Studio",         href: "/studio" },
       { icon: Play,         label: "Video Edit",       href: "/editor" },
-      { icon: Calendar,     label: "Calendar",          href: "/calendar" },
       { icon: TrendingUp,   label: "Growth",            href: "/growth" },
     ]
   },

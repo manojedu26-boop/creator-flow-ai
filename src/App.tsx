@@ -31,7 +31,6 @@ const Explore = lazy(() => import("./pages/dashboard/Explore.tsx").then(m => ({ 
 const Analytics = lazy(() => import("./pages/dashboard/Analytics.tsx").then(m => ({ default: m.Analytics })));
 const BrandDeals = lazy(() => import("./pages/dashboard/BrandDeals.tsx").then(m => ({ default: m.BrandDeals })));
 const ContentStudio = lazy(() => import("./pages/dashboard/ContentStudio.tsx").then(m => ({ default: m.ContentStudio })));
-const Calendar = lazy(() => import("./pages/dashboard/Calendar.tsx").then(m => ({ default: m.Calendar })));
 const Growth = lazy(() => import("./pages/dashboard/Growth.tsx").then(m => ({ default: m.Growth })));
 const Network = lazy(() => import("./pages/dashboard/Network.tsx").then(m => ({ default: m.Network })));
 const Profile = lazy(() => import("./pages/dashboard/Profile.tsx").then(m => ({ default: m.Profile })));
@@ -105,7 +104,6 @@ const App = () => {
                         <Route path="/deals" element={<BrandDeals />} />
                         <Route path="/editor" element={<VideoEditor />} />
                         <Route path="/studio" element={<ContentStudio />} />
-                        <Route path="/calendar" element={<Calendar />} />
                         <Route path="/growth" element={<Growth />} />
                         <Route path="/marketplace" element={<Marketplace />} />
                         <Route path="/network" element={<Network />} />
