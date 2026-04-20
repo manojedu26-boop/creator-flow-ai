@@ -21,6 +21,7 @@ import {
   ContentSuggestion, 
   CalendarEvent 
 } from "../../lib/gemini";
+import { supabase } from "../../lib/supabase";
 import { DailyPostCard } from "../../components/studio/DailyPostCard";
 import { CaptionRewriter } from "../../components/studio/CaptionRewriter";
 import { Calendar as MonthPlanner } from "./Calendar";
@@ -408,6 +409,58 @@ export const ContentStudio = () => {
     }
   };
 
+  const handleGenerateHooks = async () => {
+    if (!hookTopic.trim()) {
+      toast.error("Enter a topic for your hooks");
+      return;
+    }
+    
+    setIsGenerating(true);
+    setGenerationProgress(0);
+    setGenerationPhase("Initializing Attention Matrix...");
+
+    try {
+      // Direct call to our new Edge Function
+      const { data, error } = await supabase.functions.invoke("studio-engine", {
+        body: { 
+          action: "HOOK_GENERATOR", 
+          inputData: hookTopic 
+        },
+      });
+
+      if (error) throw error;
+
+      // Simulate a bit of cinematic progress for the brand feel
+      for (let i = 0; i <= 100; i += 10) {
+        setGenerationProgress(i);
+        if (i < 40) setGenerationPhase("Analyzing Viral Hooks...");
+        else if (i < 80) setGenerationPhase("Architecting Retention Paths...");
+        else setGenerationPhase("Finalizing Synthesis...");
+        await new Promise(r => setTimeout(r, 100));
+      }
+
+      if (data?.output) {
+        // Parse the hooks. They come as a string, often numbered.
+        // We'll split them and map to our HookItem format.
+        const generatedHooks = data.output.split('\n')
+          .filter((h: string) => h.trim().length > 0)
+          .map((text: string) => ({
+            type: "🚀 AI Generated",
+            text: text.replace(/^\d+\.\s*/, '').trim(),
+            saved: false
+          }));
+        
+        setHooks(generatedHooks);
+        toast.success(`${generatedHooks.length} Viral Hooks Generated!`);
+      }
+    } catch (error: any) {
+      console.error("Hook Generation Error:", error);
+      toast.error("Failed to generate attention hooks.");
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
 
   const saveToLibrary = (text: string, type: string, platform = "Instagram") => {
     const item: HistoryItem = { id: `c_${Date.now()}`, type, text, platform, date: new Date().toISOString().split("T")[0] };
@@ -713,7 +766,7 @@ export const ContentStudio = () => {
       </div>
       <div className="flex gap-4 bg-slate-50 border border-slate-200 p-4 rounded-[2.5rem] shadow-inner">
         <input placeholder="Core topic (e.g. Productivity Hacks for Creators)..." value={hookTopic} onChange={e => setHookTopic(e.target.value)} className="flex-1 h-14 bg-transparent border-none px-6 text-sm font-bold text-slate-900 focus:outline-none placeholder:text-slate-400" />
-        <button onClick={() => runGenerate(() => { setHooks(SEED_HOOKS()); toast.success("10 Retention Hooks Ready!"); })} disabled={isGenerating} className="h-14 px-8 bg-slate-900 text-white rounded-2xl font-black uppercase tracking-widest hover:bg-blue-600 transition-all active:scale-[0.99] disabled:opacity-60 flex items-center gap-3 shrink-0 shadow-xl shadow-blue-500/10">
+        <button onClick={handleGenerateHooks} disabled={isGenerating} className="h-14 px-8 bg-slate-900 text-white rounded-2xl font-black uppercase tracking-widest hover:bg-blue-600 transition-all active:scale-[0.99] disabled:opacity-60 flex items-center gap-3 shrink-0 shadow-xl shadow-blue-500/10">
           {isGenerating ? <><Loader2 className="w-5 h-5 animate-spin" /> <span className="text-[11px] font-black tracking-widest">{thinkingMsg}</span></> : <><Sparkles className="w-5 h-5 text-blue-400" /> Synthesize Hooks</>}
         </button>
       </div>
@@ -726,7 +779,7 @@ export const ContentStudio = () => {
         {hooks && !isGenerating && (
           <motion.div key="out" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
             <div className="flex justify-end">
-              <button onClick={() => runGenerate(() => setHooks(SEED_HOOKS()))} className="h-11 px-6 bg-white border border-slate-200 rounded-2xl text-[10px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-2 hover:bg-slate-50 hover:text-blue-600 transition-all shadow-sm">
+              <button onClick={handleGenerateHooks} className="h-11 px-6 bg-white border border-slate-200 rounded-2xl text-[10px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-2 hover:bg-slate-50 hover:text-blue-600 transition-all shadow-sm">
                 <RefreshCcw className="w-4 h-4" /> Refresh All Directives
               </button>
             </div>

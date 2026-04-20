@@ -4,7 +4,7 @@ import {
   Wand2, RefreshCcw, Check, Copy, 
   MessageSquare, Sparkles, Loader2 
 } from "lucide-react";
-import { rewriteCaption } from "../../lib/gemini";
+import { supabase } from "../../lib/supabase";
 import { cn } from "../../lib/utils";
 import { toast } from "../../components/ui/sonner";
 import { AutoResizeTextarea } from "../../components/shared/AutoResizeTextarea";
@@ -32,11 +32,25 @@ export const CaptionRewriter: React.FC = () => {
     }
     setIsRewriting(true);
     try {
-      const rewritten = await rewriteCaption(caption, selectedTone);
-      setResult(rewritten);
-      toast.success(`Success! Transformed to ${selectedTone} tone.`);
-    } catch (error) {
-      toast.error("Failed to rewrite caption");
+      const { data, error } = await supabase.functions.invoke("studio-engine", {
+        body: { 
+          action: "TONE_ARCHITECT", 
+          inputData: caption,
+          targetAesthetic: selectedTone 
+        },
+      });
+
+      if (error) throw error;
+
+      if (data?.output) {
+        setResult(data.output);
+        toast.success(`Success! Transformed to ${selectedTone} tone.`);
+      } else {
+        throw new Error("Invalid response from Forge");
+      }
+    } catch (error: any) {
+      console.error("The Forge failed:", error);
+      toast.error("The Forge failed to reconstruct linguistic nodes.");
     } finally {
       setIsRewriting(false);
     }
