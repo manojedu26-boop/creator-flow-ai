@@ -50,7 +50,11 @@ export const CaptionRewriter: React.FC = () => {
       }
     } catch (error: any) {
       console.error("The Forge failed:", error);
-      toast.error("The Forge failed to reconstruct linguistic nodes.");
+      if (error?.context?.status === 429 || String(error).includes("429")) {
+        toast.error("Gemini API Quota Exceeded", { description: "You have exhausted your free-tier limits." });
+      } else {
+        toast.error("The Forge failed to reconstruct linguistic nodes.");
+      }
     } finally {
       setIsRewriting(false);
     }

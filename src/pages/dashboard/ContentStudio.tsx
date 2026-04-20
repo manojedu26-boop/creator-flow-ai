@@ -598,9 +598,13 @@ export const ContentStudio = () => {
         setCaptions(variants);
         toast.success("3 Production variants locked!");
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Caption Gen Error:", error);
-      toast.error("Narrative Synthesis Failed");
+      if (error?.context?.status === 429 || String(error).includes("429")) {
+        toast.error("Gemini API Quota Exceeded", { description: "You have exhausted your free-tier limits." });
+      } else {
+        toast.error("Narrative Synthesis Failed");
+      }
     } finally {
       setIsGenerating(false);
     }
@@ -670,9 +674,13 @@ export const ContentStudio = () => {
         setScriptSections(data.output);
         toast.success("Sequence Locked & Generated!");
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Script Error:", error);
-      toast.error("Script Sequencing Failed");
+      if (error?.context?.status === 429 || String(error).includes("429")) {
+        toast.error("Gemini API Quota Exceeded", { description: "You have exhausted your free-tier limits." });
+      } else {
+        toast.error("Script Sequencing Failed");
+      }
     } finally {
       setIsGenerating(false);
     }
