@@ -4,7 +4,8 @@ import {
   PenTool, Video, Hash, Music, Zap, Mail, Layout, UserCircle,
   Grid, Lightbulb, Copy, RefreshCcw, Check, Sparkles, Download,
   ExternalLink, Eye, FileText, Share2, ChevronDown, UploadCloud,
-  Play, Bookmark, X, Clock, Loader2, ArrowRight, Trash2, BookOpen
+  Play, Bookmark, X, Clock, Loader2, ArrowRight, Trash2, BookOpen,
+  Calendar
 } from "lucide-react";
 import { PageTransition, SkeletonCard } from "../../components/shared/MotionComponents";
 import { db } from "../../lib/db";
@@ -22,7 +23,7 @@ import {
 } from "../../lib/gemini";
 import { DailyPostCard } from "../../components/studio/DailyPostCard";
 import { CaptionRewriter } from "../../components/studio/CaptionRewriter";
-import { Calendar as MonthPlanner } from "../../pages/dashboard/Calendar";
+import { Calendar as MonthPlanner } from "./Calendar";
 
 // ── Types ───────────────────────────────────────────────────────────────────
 type ToolType = "command" | "caption" | "script" | "hook" | "hashtag" | "audio" | "pitch" | "bio" | "carousel" | "reel" | "thumbnail";
