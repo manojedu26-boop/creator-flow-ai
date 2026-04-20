@@ -47,34 +47,20 @@ const Onboarding = () => {
   const [analysisResult, setAnalysisResult] = useState<null | { type: string; reason: string }>(null);
 
   useEffect(() => {
-    if (currentStep === 3 && !isAnalyzing && !analysisResult) {
-      setIsAnalyzing(true);
-      const timer = setTimeout(() => {
-        setAnalysisResult({
+    if (currentStep === 3 && !analysisResult) {
+       // Instant Analysis Execution
+       setAnalysisResult({
           type: "Horizontal Narrative Threads",
           reason: "Your retention spikes by 42% when you introduce high-contrast visual cues in the first 3 seconds."
-        });
-        setIsAnalyzing(false);
-      }, 150); // Massive acceleration: 0.15s
-      return () => clearTimeout(timer);
+       });
+       nextStep();
     }
     
-    // Auto-advance from result to action brief
-    if (currentStep === 3 && analysisResult && !isAnalyzing) {
-      const autoTimer = setTimeout(() => {
-        nextStep();
-      }, 100); // 0.1s
-      return () => clearTimeout(autoTimer);
-    }
-
     // Auto-finalize from action brief to dashboard
     if (currentStep === 4) {
-      const finalizeTimer = setTimeout(() => {
-        handleFinalize();
-      }, 200); // Fast-tracked final sweep at 0.2s
-      return () => clearTimeout(finalizeTimer);
+      handleFinalize();
     }
-  }, [currentStep, isAnalyzing, analysisResult]);
+  }, [currentStep, analysisResult]);
 
   // ——— Finalize Protocol ———
   const handleFinalize = () => {
