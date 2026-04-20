@@ -16,8 +16,6 @@ import { AutoResizeTextarea } from "../../components/shared/AutoResizeTextarea";
 import { useNavigate } from "react-router-dom";
 import { cn } from "../../lib/utils";
 import { 
-  generateDailyPostIdea, 
-  generate30DayStrategy, 
   ContentSuggestion, 
   CalendarEvent 
 } from "../../lib/gemini";
@@ -351,24 +349,32 @@ export const ContentStudio = () => {
     setGenerationPhase("Initializing Neural Broadcast...");
     
     try {
-      const suggestion = await generateDailyPostIdea({
-        niche: niche,
-        platforms: (user as any)?.platforms || ["instagram"]
+      const { data, error } = await supabase.functions.invoke("studio-engine", {
+        body: { 
+          action: "DAILY_POST", 
+          niche: niche,
+          platforms: (user as any)?.platforms || ["instagram"]
+        },
       });
-      
-      // Simulate progress for cinematic feel
-      for (let i = 0; i <= 100; i += 5) {
+
+      if (error) throw error;
+
+      // Simulate a bit of cinematic progress
+      for (let i = 0; i <= 100; i += 10) {
         setGenerationProgress(i);
         if (i < 30) setGenerationPhase("Scanning Niche Trends...");
         else if (i < 60) setGenerationPhase("Calibrating Brand Voice...");
         else if (i < 90) setGenerationPhase("Architecting Hook Node...");
         else setGenerationPhase("Finalizing Synthesis...");
-        await new Promise(r => setTimeout(r, 100));
+        await new Promise(r => setTimeout(r, 80));
       }
-      
-      setDailySuggestion(suggestion);
-      toast.success("Broadcast Node Ready!");
+
+      if (data?.output) {
+        setDailySuggestion(data.output);
+        toast.success("Broadcast Node Ready!");
+      }
     } catch (error) {
+      console.error("Daily Post Error:", error);
       toast.error("Neural Synthesis Failed", { description: "Resetting alignment buffers..." });
     } finally {
       setIsGenerating(false);
@@ -377,32 +383,43 @@ export const ContentStudio = () => {
 
   const handlePlanMonth = async () => {
     setIsSyncingCalendar(true);
+    setGenerationProgress(0);
+    setGenerationPhase("Initializing Strategy Matrix...");
     toast.info("Generating 30-Day Automated Matrix...");
+    
     try {
       const currentMonth = new Date().toLocaleString('default', { month: 'long' });
-      const strategy = await generate30DayStrategy({
-        niche: niche,
-        platforms: (user as any)?.platforms || ["instagram"]
-      }, currentMonth);
-      
+      const { data, error } = await supabase.functions.invoke("studio-engine", {
+        body: { 
+          action: "MONTH_STRATEGY", 
+          niche: niche,
+          month: currentMonth,
+          platforms: (user as any)?.platforms || ["instagram"]
+        },
+      });
+
+      if (error) throw error;
+
       // Map to Calendar database format
       const now = new Date();
-      strategy.forEach((event, i) => {
-        db.insert("cal_posts", {
-          id: `ai_auto_${Date.now()}_${i}`,
-          platforms: [event.platform],
-          type: event.type.toLowerCase(),
-          caption: event.topic,
-          time: event.time,
-          day: event.day,
-          month: now.getMonth(),
-          year: now.getFullYear(),
-          status: "approved"
+      if (data?.output && Array.isArray(data.output)) {
+        data.output.forEach((event: any, i: number) => {
+          db.insert("cal_posts", {
+            id: `ai_auto_${Date.now()}_${i}`,
+            platforms: [event.platform],
+            type: event.type.toLowerCase(),
+            caption: event.topic,
+            time: event.time,
+            day: event.day,
+            month: now.getMonth(),
+            year: now.getFullYear(),
+            status: "approved"
+          });
         });
-      });
-      
-      toast.success("Month Plan Locked!", { description: "30 items approved and synced to your roadmap." });
+        toast.success("Month Plan Locked!", { description: "30 items approved and synced to your roadmap." });
+      }
     } catch (error) {
+      console.error("Month Plan Error:", error);
       toast.error("Strategy Matrix Error");
     } finally {
       setIsSyncingCalendar(false);
@@ -456,6 +473,299 @@ export const ContentStudio = () => {
     } catch (error: any) {
       console.error("Hook Generation Error:", error);
       toast.error("Failed to generate attention hooks.");
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const handleGeneratePitch = async () => {
+    if (!brandName.trim()) {
+      toast.error("Enter a target brand name");
+      return;
+    }
+    
+    setIsGenerating(true);
+    setGenerationProgress(0);
+    setGenerationPhase("Drafting Collaboration Blueprint...");
+
+    try {
+      const { data, error } = await supabase.functions.invoke("studio-engine", {
+        body: { 
+          action: "BRAND_PITCH", 
+          brandName: brandName,
+          niche: niche,
+          creatorName: (user as any)?.name || "Naveen" 
+        },
+      });
+
+      if (error) throw error;
+
+      // Cinematic progress
+      for (let i = 0; i <= 100; i += 20) {
+        setGenerationProgress(i);
+        await new Promise(r => setTimeout(r, 120));
+      }
+
+      if (data?.output) {
+        setPitchResult(data.output);
+        toast.success("High-Conversion Pitch Ready!");
+      }
+    } catch (error) {
+      console.error("Pitch Error:", error);
+      toast.error("Pitch Synthesis Failed");
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const handleGenerateHashtags = async () => {
+    if (!captionTopic.trim()) {
+      toast.error("Enter a topic for hashtags");
+      return;
+    }
+    
+    setIsGenerating(true);
+    setGenerationProgress(0);
+    setGenerationPhase("Scanning Viral Clusters...");
+
+    try {
+      const { data, error } = await supabase.functions.invoke("studio-engine", {
+        body: { 
+          action: "HASHTAG_ENGINE", 
+          inputData: captionTopic 
+        },
+      });
+
+      if (error) throw error;
+
+      if (data?.output) {
+        // Transform the space/comma separated hashtags into our HashtagItem format
+        const tags = data.output.split(/[\s,]+/)
+          .filter((t: string) => t.startsWith("#"))
+          .map((text: string, i: number) => ({
+            text,
+            selected: true,
+            tier: i < 5 ? "mega" : i < 10 ? "mid" : "niche"
+          }));
+        setHashtags(tags);
+        toast.success("Viral Clusters Synced!");
+      }
+    } catch (error) {
+      console.error("Hashtag Error:", error);
+      toast.error("Neural Tagging Failed");
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const handleGenerateCaptions = async () => {
+    if (!captionTopic.trim()) {
+      toast.error("Enter a topic for your captions");
+      return;
+    }
+    
+    setIsGenerating(true);
+    setGenerationProgress(0);
+    setGenerationPhase("Architecting Narrative Nodes...");
+
+    try {
+      // In a real production scenario, we'd iterate or use a prompt that returns multiple.
+      // For this high-velocity UX, we'll prompt for 3 variants.
+      const { data, error } = await supabase.functions.invoke("studio-engine", {
+        body: { 
+          action: "TONE_ARCHITECT", 
+          inputData: captionTopic,
+          targetAesthetic: captionTone
+        },
+      });
+
+      if (error) throw error;
+
+      // Cinematic progress
+      for (let i = 0; i <= 100; i += 15) {
+        setGenerationProgress(i);
+        await new Promise(r => setTimeout(r, 60));
+      }
+
+      if (data?.output) {
+        // We'll generate 3 variants based on the single AI output for now to keep it snappy
+        const coreText = data.output;
+        const variants: CaptionVariant[] = [
+          { label: "Punchy & Short", text: coreText.slice(0, 150) + "...", copied: false, saved: false, toneOpen: false },
+          { label: "Engaging & Medium", text: coreText, copied: false, saved: false, toneOpen: false },
+          { label: "Story-Led & Long", text: coreText + "\n\n" + "Save this for your next growth session. 🚀", copied: false, saved: false, toneOpen: false }
+        ];
+        setCaptions(variants);
+        toast.success("3 Production variants locked!");
+      }
+    } catch (error) {
+      console.error("Caption Gen Error:", error);
+      toast.error("Narrative Synthesis Failed");
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const handleGenerateBio = async () => {
+    if (!bioNiche.trim()) {
+      toast.error("Enter a niche for your bio");
+      return;
+    }
+    
+    setIsGenerating(true);
+    setGenerationProgress(0);
+    setGenerationPhase("Optimizing Profile Signal...");
+
+    try {
+      const { data, error } = await supabase.functions.invoke("studio-engine", {
+        body: { 
+          action: "BIO_OPTIMIZER", 
+          niche: bioNiche
+        },
+      });
+
+      if (error) throw error;
+
+      if (data?.output) {
+        // Output comes separated by "---"
+        const variants = data.output.split("---").map((text: string) => ({
+          platform: "Instagram / Twitter",
+          text: text.trim()
+        }));
+        setBioVariations(variants);
+        toast.success("Bio Variations Calibrated!");
+      }
+    } catch (error) {
+      console.error("Bio Error:", error);
+      toast.error("Profile Optimization Failed");
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const handleGenerateScript = async () => {
+    if (!scriptTopic.trim()) {
+      toast.error("Enter a narrative for your script");
+      return;
+    }
+    
+    setIsGenerating(true);
+    setGenerationProgress(0);
+    setGenerationPhase("Sequencing Narrative Beats...");
+
+    try {
+      const { data, error } = await supabase.functions.invoke("studio-engine", {
+        body: { 
+          action: "SCRIPT_GENERATOR", 
+          inputData: scriptTopic,
+          format: scriptFormat,
+          duration: scriptDuration,
+          audience: scriptAudience
+        },
+      });
+
+      if (error) throw error;
+
+      if (data?.output) {
+        setScriptSections(data.output);
+        toast.success("Sequence Locked & Generated!");
+      }
+    } catch (error) {
+      console.error("Script Error:", error);
+      toast.error("Script Sequencing Failed");
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const handleGenerateReelIdeas = async () => {
+    if (!reelTopic.trim()) {
+      toast.error("Enter a theme for your reels");
+      return;
+    }
+    
+    setIsGenerating(true);
+    setGenerationProgress(0);
+    setGenerationPhase("Synthesizing Engagement Spikes...");
+
+    try {
+      const { data, error } = await supabase.functions.invoke("studio-engine", {
+        body: { 
+          action: "REEL_IDEAS", 
+          inputData: reelTopic,
+          niche: niche
+        },
+      });
+
+      if (error) throw error;
+
+      if (data?.output) {
+        setReelIdeas(data.output);
+        toast.success("3 Production-Ready Concepts!");
+      }
+    } catch (error) {
+      console.error("Reel Ideas Error:", error);
+      toast.error("Concept Synthesis Failed");
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const handleGenerateCarousel = async () => {
+    if (!carouselTopic.trim()) {
+      toast.error("Enter a topic for your carousel");
+      return;
+    }
+    
+    setIsGenerating(true);
+    setGenerationProgress(0);
+    setGenerationPhase("Architecting Slide Stack...");
+
+    try {
+      const { data, error } = await supabase.functions.invoke("studio-engine", {
+        body: { 
+          action: "CAROUSEL_BUILDER", 
+          inputData: carouselTopic 
+        },
+      });
+
+      if (error) throw error;
+
+      if (data?.output) {
+        setCarouselSlides(data.output);
+        toast.success("5-Slide Framework Generated!");
+      }
+    } catch (error) {
+      console.error("Carousel Error:", error);
+      toast.error("Framework Architecture Failed");
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const handleGenerateThumbnail = async () => {
+    setIsGenerating(true);
+    setGenerationProgress(0);
+    setGenerationPhase("Initializing Packaging Analysis...");
+
+    try {
+      const { data, error } = await supabase.functions.invoke("studio-engine", {
+        body: { 
+          action: "THUMBNAIL_ORACLE", 
+          inputData: niche, // Using niche as context
+          niche: niche
+        },
+      });
+
+      if (error) throw error;
+
+      if (data?.output) {
+        setThumbnailConcept(data.output);
+        toast.success("Visual Strategy Synthesized!");
+      }
+    } catch (error) {
+      console.error("Thumbnail Error:", error);
+      toast.error("Packaging Analysis Failed");
     } finally {
       setIsGenerating(false);
     }
@@ -547,7 +857,7 @@ export const ContentStudio = () => {
         </div>
 
         <button
-          onClick={() => runGenerate(() => { setCaptions(SEED_CAPTIONS(niche)); toast.success("3 Professional drafts ready!"); })}
+          onClick={handleGenerateCaptions}
           disabled={isGenerating}
           className="w-full py-5 bg-slate-900 text-white rounded-[2.5rem] font-black uppercase tracking-[0.2em] shadow-xl shadow-blue-500/10 hover:bg-blue-600 transition-all active:scale-[0.99] disabled:opacity-60 flex items-center justify-center gap-4 overflow-hidden relative"
         >
@@ -704,7 +1014,7 @@ export const ContentStudio = () => {
               </select>
             </div>
           </div>
-          <button onClick={() => runGenerate(() => { setScriptSections(SEED_SCRIPT()); toast.success("Sequence Locked & Generated!"); })} disabled={isGenerating} className="w-full py-5 bg-slate-900 text-white rounded-[2rem] font-black uppercase tracking-[0.2em] hover:bg-blue-600 transition-all active:scale-[0.99] disabled:opacity-60 flex items-center justify-center gap-3 shadow-xl shadow-blue-500/10">
+          <button onClick={handleGenerateScript} disabled={isGenerating} className="w-full py-5 bg-slate-900 text-white rounded-[2rem] font-black uppercase tracking-[0.2em] hover:bg-blue-600 transition-all active:scale-[0.99] disabled:opacity-60 flex items-center justify-center gap-3 shadow-xl shadow-blue-500/10">
             {isGenerating ? <><Loader2 className="w-5 h-5 animate-spin" /> <span className="text-[11px] font-black tracking-widest">{thinkingMsg}</span></> : <><Sparkles className="w-5 h-5 text-blue-400" /> Synthesize Script</>}
           </button>
         </div>
@@ -830,7 +1140,7 @@ export const ContentStudio = () => {
           </select>
         </div>
         <div className="md:col-span-2">
-          <button onClick={() => runGenerate(() => { setPitchResult(SEED_PITCH()); toast.success("Professional pitch locked!"); })} disabled={isGenerating} className="w-full py-5 bg-slate-900 text-white rounded-[2rem] font-black uppercase tracking-[0.2em] hover:bg-blue-600 transition-all flex items-center justify-center gap-3 shadow-xl shadow-blue-500/10">
+          <button onClick={handleGeneratePitch} disabled={isGenerating} className="w-full py-5 bg-slate-900 text-white rounded-[2rem] font-black uppercase tracking-[0.2em] hover:bg-blue-600 transition-all flex items-center justify-center gap-3 shadow-xl shadow-blue-500/10">
             {isGenerating ? <><Loader2 className="w-5 h-5 animate-spin" /> <span className="text-[11px] font-black tracking-widest">{thinkingMsg}</span></> : <><Mail className="w-5 h-5 text-blue-400" /> Draft Collaboration Email</>}
           </button>
         </div>
@@ -864,7 +1174,7 @@ export const ContentStudio = () => {
       </div>
       <div className="flex gap-4 bg-slate-50 border border-slate-200 p-4 rounded-[2.5rem] shadow-inner">
         <input placeholder="Aesthetic / Theme (e.g. Gritty morning routine)..." value={reelTopic} onChange={e => setReelTopic(e.target.value)} className="flex-1 h-14 bg-transparent border-none px-6 text-sm font-bold text-slate-900 focus:outline-none" />
-        <button onClick={() => runGenerate(() => { setReelIdeas(SEED_REEL_IDEAS(niche)); toast.success("3 Production-Ready Concepts!"); })} disabled={isGenerating} className="h-14 px-8 bg-slate-900 text-white rounded-2xl font-black uppercase tracking-widest hover:bg-blue-600 transition-all shadow-xl shadow-blue-500/10">
+        <button onClick={handleGenerateReelIdeas} disabled={isGenerating} className="h-14 px-8 bg-slate-900 text-white rounded-2xl font-black uppercase tracking-widest hover:bg-blue-600 transition-all shadow-xl shadow-blue-500/10 active:scale-95">
            Synthesize Concepts
         </button>
       </div>
@@ -899,7 +1209,7 @@ export const ContentStudio = () => {
       </div>
       <div className="flex gap-4 bg-slate-50 border border-slate-200 p-4 rounded-[2.5rem] shadow-inner">
         <input placeholder="Educational Topic (e.g. 5 steps to viral growth)..." value={carouselTopic} onChange={e => setCarouselTopic(e.target.value)} className="flex-1 h-14 bg-transparent border-none px-6 text-sm font-bold text-slate-900 focus:outline-none" />
-        <button onClick={() => runGenerate(() => { setCarouselSlides(SEED_CAROUSEL(carouselTopic)); toast.success("4-Slide Framework Generated!"); })} disabled={isGenerating} className="h-14 px-8 bg-slate-900 text-white rounded-2xl font-black uppercase tracking-widest hover:bg-blue-600 transition-all shadow-xl shadow-blue-500/10">
+        <button onClick={handleGenerateCarousel} disabled={isGenerating} className="h-14 px-8 bg-slate-900 text-white rounded-2xl font-black uppercase tracking-widest hover:bg-blue-600 transition-all shadow-xl shadow-blue-500/10 active:scale-95">
            Build Sequence
         </button>
       </div>
@@ -946,7 +1256,7 @@ export const ContentStudio = () => {
             <h3 className="text-xl font-black text-slate-900 uppercase tracking-tighter">Strategic Packaging</h3>
             <p className="text-sm font-medium text-slate-400 max-w-sm mx-auto leading-relaxed">Let AI analyze your topic and synthesize a high-CTR visual composition.</p>
          </div>
-         <button onClick={() => runGenerate(() => { setThumbnailConcept(`BACKGROUND: Blurred high-energy gym studio with deep blue and orange neon light accents.\nSUBJECT: Center mid-shot, holding a 'Result' chart with a look of genuine surprise.\nOVERLAY TEXT: 'THE 5-MIN GLITCH' in bold, white uppercase with a slight shadow.\nSUB-OVERLAY: '(92% Fail This)' in smaller, yellow circular badge at bottom-right.\nCOMPOSITION: Rule of thirds. Focus on the facial expression + the 'Result' chart.`); toast.success("Visual Strategy Synthesized!"); })} disabled={isGenerating} className="w-full md:w-fit px-12 py-5 bg-slate-900 text-white rounded-[2rem] font-black uppercase tracking-[0.2em] hover:bg-blue-600 transition-all shadow-xl shadow-blue-500/10 active:scale-95">
+        <button onClick={handleGenerateThumbnail} disabled={isGenerating} className="w-full md:w-fit px-12 py-5 bg-slate-900 text-white rounded-[2rem] font-black uppercase tracking-[0.2em] hover:bg-blue-600 transition-all shadow-xl shadow-blue-500/10 active:scale-95">
             Initialize Packaging Analysis
          </button>
       </div>
@@ -980,7 +1290,7 @@ export const ContentStudio = () => {
       </div>
       <div className="flex gap-4 bg-slate-50 border border-slate-200 p-4 rounded-[2.5rem] shadow-inner">
         <input placeholder="Current Niche / Goal (e.g. Minimalist Home Fitness)..." value={bioNiche} onChange={e => setBioNiche(e.target.value)} className="flex-1 h-14 bg-transparent border-none px-6 text-sm font-bold text-slate-900 focus:outline-none" />
-        <button onClick={() => runGenerate(() => { setBioVariations(SEED_BIO(bioNiche)); toast.success("Bio Variations Calibrated!"); })} disabled={isGenerating} className="h-14 px-8 bg-slate-900 text-white rounded-2xl font-black uppercase tracking-widest hover:bg-blue-600 transition-all shadow-xl shadow-blue-500/10">
+        <button onClick={handleGenerateBio} disabled={isGenerating} className="h-14 px-8 bg-slate-900 text-white rounded-2xl font-black uppercase tracking-widest hover:bg-blue-600 transition-all shadow-xl shadow-blue-500/10">
            Optimize Profile
         </button>
       </div>
@@ -1259,14 +1569,44 @@ const HashtagEnginePanel = ({ niche }: { niche: string }) => {
   const [thinkLocal, setThinkLocal] = useState("");
 
   const generate = async () => {
+    if (!topic.trim()) {
+      toast.error("Enter keywords for tagging strategy");
+      return;
+    }
+    
     setRunning(true);
     let i = 0;
     const iv = setInterval(() => { setThinkLocal(THINKING_MESSAGES[i++ % THINKING_MESSAGES.length]); }, 700);
-    await new Promise(r => setTimeout(r, 2000));
-    clearInterval(iv);
-    setRunning(false);
-    setPills(SEED_HASHTAGS(niche));
-    toast.success("30 hashtags generated!", { description: "Tap any to toggle selection." });
+
+    try {
+      const { data, error } = await supabase.functions.invoke("studio-engine", {
+        body: { 
+          action: "HASHTAG_ENGINE", 
+          inputData: topic 
+        },
+      });
+
+      if (error) throw error;
+
+      if (data?.output) {
+        const generatedTags = data.output.split(/[\s,#]+/)
+          .filter((t: string) => t.trim().length > 0)
+          .map((text: string, idx: number) => ({
+            text: text.startsWith("#") ? text : `#${text}`,
+            selected: true,
+            tier: idx < 10 ? "mega" : idx < 20 ? "mid" : "niche"
+          }));
+        
+        setPills(generatedTags);
+        toast.success(`${generatedTags.length} Viral Tags Generated!`);
+      }
+    } catch (error) {
+      console.error("Hashtag Error:", error);
+      toast.error("Neural Tagging Failed");
+    } finally {
+      clearInterval(iv);
+      setRunning(false);
+    }
   };
 
   const selected = pills?.filter(p => p.selected) || [];
