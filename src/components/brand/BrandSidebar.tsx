@@ -21,7 +21,7 @@ export const BrandSidebar = () => {
   const { user, logout } = useAuth();
 
   return (
-    <aside className="w-[280px] h-screen bg-slate-950 border-r border-white/5 flex flex-col p-8 fixed left-0 top-0 z-[100] overflow-hidden">
+    <aside className="w-[280px] h-screen bg-white border-r border-slate-100 flex flex-col p-8 fixed left-0 top-0 z-[100] overflow-hidden">
       {/* GLOW DECO */}
       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-indigo-500 to-transparent opacity-50" />
       
@@ -31,7 +31,7 @@ export const BrandSidebar = () => {
             <Building2 className="w-6 h-6 text-white" />
          </div>
          <div>
-            <h1 className="text-xl font-black uppercase tracking-tighter text-white">Brand Hub</h1>
+            <h1 className="text-xl font-black uppercase tracking-tighter text-slate-950">Brand Hub</h1>
             <p className="text-[9px] font-black uppercase tracking-[0.3em] text-indigo-500">Corporate Ops</p>
          </div>
       </div>
@@ -47,12 +47,12 @@ export const BrandSidebar = () => {
                className={cn(
                  "flex items-center justify-between p-4 rounded-2xl transition-all group relative overflow-hidden",
                  isActive 
-                   ? "bg-white/5 border border-white/5 text-white" 
-                   : "text-slate-500 hover:text-white hover:bg-white/5"
+                   ? "bg-slate-950 text-white shadow-md shadow-slate-200" 
+                   : "text-slate-400 hover:text-slate-900 hover:bg-slate-50"
                )}
              >
                <div className="flex items-center gap-4 relative z-10">
-                  <item.icon className={cn("w-5 h-5", isActive ? "text-indigo-500" : "text-slate-500 group-hover:text-white")} />
+                  <item.icon className={cn("w-5 h-5", isActive ? "text-indigo-500" : "text-slate-500 group-hover:text-slate-900")} />
                   <span className="text-[10px] font-black uppercase tracking-[0.2em]">{item.label}</span>
                </div>
                {isActive && (
@@ -69,30 +69,30 @@ export const BrandSidebar = () => {
 
       {/* FOOTER ACTION */}
       <div className="mt-auto space-y-4">
-         <div className="p-6 rounded-3xl bg-indigo-600/5 border border-indigo-600/20 relative overflow-hidden group hover:border-indigo-600/40 transition-all">
+         <div className="p-6 rounded-3xl bg-indigo-50 border border-indigo-100 relative overflow-hidden group hover:border-indigo-600/40 transition-all">
             <div className="flex items-center justify-between mb-4">
                <Stars className="w-4 h-4 text-indigo-500" />
-               <span className="text-[8px] font-black uppercase text-slate-500">AI Recs</span>
+               <span className="text-[8px] font-black uppercase text-indigo-600">AI Recs</span>
             </div>
-            <p className="text-[10px] font-bold text-slate-400 mb-4 opacity-0 group-hover:opacity-100 transition-opacity">Post a campaign brief to get AI-matched creators instantly.</p>
-            <button className="w-full h-12 bg-white text-slate-950 rounded-xl text-[9px] font-black uppercase tracking-widest shadow-xl flex items-center justify-center gap-2">
+            <p className="text-[10px] font-bold text-slate-500 mb-4 opacity-0 group-hover:opacity-100 transition-opacity">Post a campaign brief to get AI-matched creators instantly.</p>
+            <button className="w-full h-12 bg-slate-950 text-white rounded-xl text-[9px] font-black uppercase tracking-widest shadow-xl flex items-center justify-center gap-2 hover:bg-indigo-600 transition-colors">
                <Plus className="w-3.5 h-3.5" /> Post Campaign
             </button>
          </div>
 
-         <div className="pt-8 border-t border-white/5">
+         <div className="pt-8 border-t border-slate-100">
             <div className="flex items-center gap-4 mb-6 px-2">
-               <div className="w-10 h-10 rounded-full bg-slate-900 border border-white/10 overflow-hidden">
+               <div className="w-10 h-10 rounded-full bg-slate-100 border border-slate-200 overflow-hidden">
                   <img src={`https://api.dicebear.com/7.x/initials/svg?seed=${user?.brandName || 'Brand'}`} alt="" />
                </div>
                <div className="overflow-hidden">
-                  <p className="text-[10px] font-black text-white truncate max-w-[120px] uppercase">{user?.brandName || 'Core Corporate'}</p>
+                  <p className="text-[10px] font-black text-slate-950 truncate max-w-[120px] uppercase">{user?.brandName || 'Core Corporate'}</p>
                   <p className="text-[8px] font-bold text-slate-500 uppercase tracking-widest">Administrator</p>
                </div>
             </div>
             <button 
                onClick={logout}
-               className="w-full h-14 flex items-center justify-center gap-3 text-[9px] font-black uppercase tracking-[0.3em] text-rose-500/60 hover:text-rose-500 hover:bg-rose-500/5 rounded-2xl transition-all"
+               className="w-full h-14 flex items-center justify-center gap-3 text-[9px] font-black uppercase tracking-[0.3em] text-rose-500/60 hover:text-rose-500 hover:bg-rose-50 rounded-2xl transition-all"
             >
                <LogOut className="w-4 h-4" /> Sever Session
             </button>

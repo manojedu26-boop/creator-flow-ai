@@ -157,7 +157,7 @@ export const BrandDashboard = () => {
                    <div className="grid grid-cols-2 gap-4">
                       <button 
                         onClick={() => navigate(`/kit/${creator.handle.replace('@', '')}`)}
-                        className="h-14 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center gap-3 text-[9px] font-black uppercase tracking-widest text-slate-400 hover:bg-white hover:text-slate-950 transition-all active:scale-95"
+                        className="h-14 bg-slate-50 border border-slate-200 rounded-2xl flex items-center justify-center gap-3 text-[9px] font-black uppercase tracking-widest text-slate-500 hover:bg-slate-100 hover:text-slate-950 transition-all active:scale-95"
                       >
                          <Eye className="w-4 h-4" /> Media Kit
                       </button>

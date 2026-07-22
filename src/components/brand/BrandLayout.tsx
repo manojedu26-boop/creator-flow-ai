@@ -35,7 +35,7 @@ export const BrandLayout = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white flex overflow-hidden font-sans">
+    <div className="min-h-screen bg-background text-foreground flex overflow-hidden font-sans">
       <BrandSidebar />
       
       {/* Dynamic Navigation Progress */}
@@ -54,7 +54,7 @@ export const BrandLayout = () => {
       <div className="flex-1 flex flex-col relative z-10 w-full overflow-hidden ml-[280px]">
         <Header title={getBrandPageTitle(location.pathname)} onSearch={() => {}} />
         
-        <main className="flex-1 relative bg-slate-950 overflow-y-auto no-scrollbar scroll-smooth">
+        <main className="flex-1 relative bg-mesh-primary overflow-y-auto no-scrollbar scroll-smooth">
            <div className="px-10 py-8 no-scrollbar max-w-[1700px] mx-auto min-h-screen">
               <AnimatePresence mode="wait">
                 <motion.div
@@ -71,7 +71,7 @@ export const BrandLayout = () => {
         </main>
       </div>
       <TooltipProvider>
-        <Toaster theme="dark" position="top-center" expand={true} />
+        <Toaster theme="light" position="top-center" expand={true} />
       </TooltipProvider>
     </div>
   );

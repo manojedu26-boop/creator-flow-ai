@@ -121,8 +121,8 @@ const App = () => {
 
                       {/* Brand Mode Routes */}
                       <Route path="/brand" element={<ProtectedRoute><BrandLayout /></ProtectedRoute>}>
-                        <Route index element={<BrandHome />} />
-                        <Route path="campaigns" element={<BrandDashboard />} />
+                        <Route index element={<BrandDashboard />} />
+                        <Route path="campaigns" element={<BrandHome />} />
                         <Route path="post-brief" element={<PostBrief />} />
                         <Route path="messages" element={<Messages />} />
                         <Route path="settings" element={<Settings />} />
