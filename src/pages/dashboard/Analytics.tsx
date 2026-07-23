@@ -53,7 +53,13 @@ const heatmapData = [
   { day: "Sun", hour: "12PM", value: 30 }, { day: "Sun", hour: "6PM", value: 70 },
 ];
 
-const tabs = ["Overview", "Audience", "Content Performance", "Competitor Intel"];
+const revenueData = [
+  { month: 'Jan', Instagram: 32000, YouTube: 18000, TikTok: 12000 },
+  { month: 'Feb', Instagram: 45000, YouTube: 22000, TikTok: 15000 },
+  { month: 'Mar', Instagram: 52000, YouTube: 28000, TikTok: 18000 },
+];
+
+const tabs = ["Engagement & Content", "Platform Revenue", "Audience Insights"];
 
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {

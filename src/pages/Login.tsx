@@ -117,9 +117,9 @@ const Login = () => {
         <div className="flex flex-col gap-4 mb-12">
           <div className="flex items-center gap-3 font-black text-3xl tracking-tighter uppercase text-white">
                <Logo iconOnly iconClassName="w-10 h-10 shadow-none bg-transparent" />
-               <span>CreatorForge<span className="text-blue-600">AI</span></span>
+               <span>Dragon<span className="text-indigo-500"> All</span></span>
           </div>
-          <p className="text-slate-400 font-bold text-lg">Authorize Identity Node to access your creator suite.</p>
+          <p className="text-slate-400 font-medium text-base">Sign in to access your creator suite.</p>
         </div>
 
         <div className="rounded-[2.5rem] md:rounded-[3rem] bg-slate-900/50 backdrop-blur-2xl border border-white/5 p-10 md:p-12 shadow-2xl space-y-8 relative overflow-hidden group shimmer-border">

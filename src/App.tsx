@@ -80,7 +80,7 @@ const App = () => {
               <Intro key="intro" onComplete={() => setShowIntro(false)} />
             ) : (
               <AuthProvider>
-                <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
+                <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
                   <ExploreProvider>
                     <PulseProvider>
                       <Suspense fallback={<PageLoader />}>
@@ -97,7 +97,7 @@ const App = () => {
                       <Route path="/marketplace" element={<Marketplace />} />
                       <Route path="/marketplace/:id" element={<MarketplaceDetail />} />
 
-                      {/* Post-Login CreatorForge Architecture */}
+                      {/* Post-Login Dragon All Architecture */}
                       <Route element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
                         <Route path="/dashboard" element={<DashboardHome />} />
                         <Route path="/pulse" element={<PulseFeed />} />

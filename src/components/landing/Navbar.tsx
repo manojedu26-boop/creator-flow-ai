@@ -51,7 +51,7 @@ const Navbar = () => {
             onClick={() => navigate("/register")}
             className="hidden sm:flex h-14 items-center justify-center rounded-2xl bg-blue-600 px-10 text-[10px] font-black uppercase tracking-[0.3em] text-white shadow-[0_10px_30px_rgba(37,99,235,0.2)] hover:bg-blue-500 transition-all active:scale-95"
           >
-            Initiate Forge
+            Launch Dragon All
           </button>
 
           {/* Mobile Menu Trigger */}
@@ -87,14 +87,14 @@ const Navbar = () => {
                       </button>
                       <button 
                         onClick={() => { navigate("/register"); setIsOpen(false); }}
-                        className="w-full h-18 rounded-[2rem] bg-blue-600 text-white text-[10px] font-black uppercase tracking-[0.4em] flex items-center justify-center gap-3 shadow-2xl"
+                        className="w-full h-18 rounded-[2rem] bg-indigo-600 text-white text-[10px] font-black uppercase tracking-[0.4em] flex items-center justify-center gap-3 shadow-2xl"
                       >
-                        Initiate Forge <ArrowRight className="w-5 h-5" />
+                        Launch Dragon All <ArrowRight className="w-5 h-5" />
                       </button>
                     </div>
                   </nav>
                   <div className="p-8 text-center text-[10px] text-slate-600 font-black uppercase tracking-[0.4em] border-t border-white/5">
-                    Forge AI Terminal • ALPHA v4.2
+                    Dragon All Terminal • ALPHA v4.2
                   </div>
                </div>
             </SheetContent>

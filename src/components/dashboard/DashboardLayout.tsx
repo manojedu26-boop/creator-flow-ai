@@ -16,19 +16,19 @@ import { cn } from "../../lib/utils";
 
 const getPageTitle = (pathname: string) => {
   switch (pathname) {
-    case "/dashboard":     return "Command Centre";
-    case "/analytics":     return "Analytics Intelli-Room";
-    case "/deals":         return "Brand Deals Pipeline";
+    case "/dashboard":     return "Dashboard Overview";
+    case "/analytics":     return "Analytics & Insights";
+    case "/deals":         return "Brand Partnerships";
     case "/studio":        return "AI Content Studio";
-    case "/calendar":      return "Smart Content Calendar";
-    case "/growth":        return "Growth Strategy Engine";
+    case "/calendar":      return "Content Calendar";
+    case "/growth":        return "Audience Growth";
     case "/network":       return "Creator Network";
-    case "/revenue":       return "Monetisation Hub";
-    case "/contracts":     return "Contract Shield";
+    case "/revenue":       return "Revenue & Invoices";
+    case "/contracts":     return "Contract Review";
     case "/mediakit":      return "Media Kit Builder";
-    case "/messages":      return "Inbox & DMs";
+    case "/messages":      return "Messages";
     case "/notifications": return "Notifications";
-    case "/settings":      return "Settings";
+    case "/settings":      return "Account Settings";
     default:               return "Dashboard";
   }
 };
@@ -151,9 +151,9 @@ export const DashboardLayout = () => {
 
   useEffect(() => {
     if (user) {
-      document.title = `CF — ${user.name}'s Dashboard`;
+      document.title = `Dragon All — ${user.name}'s Dashboard`;
     } else {
-      document.title = `CreatorForge`;
+      document.title = `Dragon All`;
     }
   }, [user]);
 

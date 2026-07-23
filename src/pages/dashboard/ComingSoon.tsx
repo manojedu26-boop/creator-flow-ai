@@ -11,7 +11,7 @@ export const ComingSoon = ({ title }: { title: string }) => (
     </div>
     <h2 className="text-3xl font-bold tracking-tight">{title}</h2>
     <p className="text-muted-foreground max-w-md">
-      This module is part of the CreatorForge AI architecture and is currently under construction. Check back soon!
+      This module is part of the Dragon All architecture and is currently under construction. Check back soon!
     </p>
     <button className="mt-4 px-8 py-3 bg-primary text-primary-foreground rounded-lg font-semibold hover:shadow-[0_0_20px_-5px_hsl(var(--primary))] transition-all active:scale-[0.98]">
       Notify Me When Live

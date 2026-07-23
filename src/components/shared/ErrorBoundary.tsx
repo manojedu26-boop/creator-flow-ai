@@ -85,7 +85,7 @@ export class ErrorBoundary extends Component<Props, State> {
                   <MessageCircle className="w-4 h-4" /> Support Nexus
                </a>
                <div className="w-1 h-1 bg-slate-200 rounded-full" />
-               <p className="text-[10px] font-black uppercase tracking-widest text-slate-300">CreatorForge Analytics v4.2.0</p>
+               <p className="text-[10px] font-black uppercase tracking-widest text-slate-300">Dragon All Analytics v4.2.0</p>
             </div>
           </motion.div>
         </div>

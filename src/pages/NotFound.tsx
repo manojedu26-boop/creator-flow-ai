@@ -15,7 +15,7 @@ export default function NotFound() {
       >
         <div className="flex items-center gap-4 justify-center mb-12">
           <Sparkles className="w-12 h-12 text-primary animate-pulse" />
-          <span className="font-black tracking-tighter text-4xl uppercase">CreatorForge</span>
+          <span className="font-bold tracking-tight text-3xl uppercase">Dragon All</span>
         </div>
 
         <h1 className="text-[120px] font-black tracking-tighter leading-none mb-4 text-gradient-primary opacity-20">404</h1>

@@ -12,9 +12,9 @@ import { useAuth } from "../../contexts/AuthContext";
 
 const mainNavItems = [
   { icon: Home, label: "Home", href: "/dashboard" },
-  { icon: Compass, label: "Explore", href: "/explore" },
-  { icon: Activity, label: "Pulse", href: "/pulse" },
-  { icon: Sparkles, label: "Studio", href: "/studio" },
+  { icon: BarChart3, label: "Analytics", href: "/analytics" },
+  { icon: Briefcase, label: "Deals", href: "/deals" },
+  { icon: Globe, label: "Network", href: "/network" },
 ];
 
 const secondaryNavItems = [

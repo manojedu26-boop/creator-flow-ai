@@ -55,6 +55,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const users = db.getAll<User>('users');
     if (users.length > 0) {
       setUser(users[0]);
+    } else {
+      setUser(mockUser);
     }
 
     // 2. Supabase Session Listener

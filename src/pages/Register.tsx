@@ -192,7 +192,7 @@ const Register = () => {
                 </button>
               </div>
               <div className="p-8 bg-black/20 border-t border-white/5 text-[10px] text-slate-500 leading-relaxed font-bold">
-                Verification required: Google will share your identity metadata with the CreatorForge security cluster.
+                Verification required: Google will share your identity metadata with the Dragon All security cluster.
               </div>
             </motion.div>
           </div>
@@ -217,9 +217,9 @@ const Register = () => {
         <div className="flex flex-col gap-4 mb-12">
           <div className="flex items-center gap-3 font-black text-3xl tracking-tighter uppercase text-white">
             <Logo iconOnly iconClassName="w-10 h-10 shadow-none bg-transparent" />
-            <span>CreatorForge<span className="text-blue-600">AI</span></span>
+            <span>Dragon<span className="text-indigo-500"> All</span></span>
           </div>
-          <p className="text-slate-400 font-bold text-lg">Join 5,000+ operatives scaling their empire.</p>
+          <p className="text-slate-400 font-bold text-lg">Join 5,000+ creators scaling their audience.</p>
         </div>
 
         <AnimatePresence mode="wait">
@@ -267,7 +267,7 @@ const Register = () => {
                     <Mail className="w-6 h-6 text-slate-500 group-hover/opt:text-slate-950 transition-all" />
                   </div>
                   <div className="text-left relative z-10 flex-1">
-                    <p className="text-[11px] font-black uppercase tracking-[0.2em] text-white mb-1">Establish Neural Link via Email</p>
+                    <p className="text-[11px] font-black uppercase tracking-[0.2em] text-white mb-1">Establish Link via Email</p>
                     <p className="text-[10px] text-slate-500 font-bold">Standard secure encryption protocol</p>
                   </div>
                   <ChevronRight className="w-5 h-5 text-slate-600 group-hover/opt:translate-x-1 group-hover/opt:text-white transition-all relative z-10" />
@@ -275,7 +275,7 @@ const Register = () => {
               </div>
               <div className="pt-8 text-center">
                 <p className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-600">
-                  Secured by CreatorForge Quantum Guard Protocol
+                  Secured by Dragon All Guard Protocol
                 </p>
               </div>
             </motion.div>

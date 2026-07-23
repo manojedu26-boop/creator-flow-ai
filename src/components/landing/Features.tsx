@@ -43,7 +43,7 @@ const Features = () => (
           <span className="text-blue-500 font-black italic">Architecture.</span>
         </h2>
         <p className="text-slate-400 font-medium text-lg md:text-2xl max-w-2xl mx-auto leading-relaxed">
-          The most powerful workspace ever forged for professional creators. Pure technical edge.
+          The most powerful workspace ever built for professional creators. Pure technical edge.
         </p>
       </motion.div>
 

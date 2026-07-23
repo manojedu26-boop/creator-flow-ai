@@ -184,7 +184,7 @@ export const EmailComposer = ({
           <div className="p-4 rounded-2xl bg-primary/5 border border-primary/20 mt-4 flex items-start gap-3">
             <Sparkles className="w-4 h-4 text-primary shrink-0 mt-0.5" />
             <p className="text-[11px] font-bold text-zinc-400">
-              <span className="text-primary font-black uppercase">CreatorForge AI:</span> Since this is a {dealContext.type} for {dealContext.brand}, I've optimized the tone to be professional yet creative.
+              <span className="text-primary font-black uppercase">Dragon All:</span> Since this is a {dealContext.type} for {dealContext.brand}, I've optimized the tone to be professional yet creative.
             </p>
           </div>
         )}

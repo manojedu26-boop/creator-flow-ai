@@ -36,17 +36,11 @@ interface HistoryItem { id: string; type: string; text: string; date: string; pl
 
 // ── Tool Definitions ─────────────────────────────────────────────────────────
 const tools = [
-  { id: "command", icon: Layout, label: "Command Center" },
-  { id: "caption", icon: PenTool, label: "Caption Writer" },
-  { id: "hook", icon: Zap, label: "Hook Generator" },
-  { id: "hashtag", icon: Hash, label: "Hashtag Engine" },
-  { id: "audio", icon: Music, label: "Trending Audio" },
-  { id: "script", icon: Video, label: "Script Generator" },
-  { id: "reel", icon: Lightbulb, label: "Reel & Short Ideas" },
-  { id: "pitch", icon: Mail, label: "Brand Pitch Writer" },
-  { id: "carousel", icon: Grid, label: "Carousel Builder" },
-  { id: "thumbnail", icon: Layout, label: "Thumbnail Concept" },
-  { id: "bio", icon: UserCircle, label: "Bio Optimizer" },
+  { id: "command", icon: Layout, label: "Studio Hub" },
+  { id: "hook", icon: Zap, label: "Viral Hook Generator" },
+  { id: "script", icon: Video, label: "Video Script Architect" },
+  { id: "caption", icon: PenTool, label: "Caption & Hashtags" },
+  { id: "pitch", icon: Mail, label: "Brand Pitch Generator" },
 ];
 
 const THINKING_MESSAGES = [
@@ -79,7 +73,7 @@ const SEED_HOOKS = (): HookItem[] => [
 
 const SEED_HASHTAGS = (niche: string = "fitness"): HashtagItem[] => [
   ...["#fitness", "#lifestyle", "#health", "#wellness", "#creator", "#reels"].map(t => ({ text: t, selected: true, tier: "mega" as const })),
-  ...["#fitnessmotivation", "#workouttips", "#dailyroutine", "#creatorforge", "#motivationmonday"].map(t => ({ text: t, selected: true, tier: "mid" as const })),
+  ...["#fitnessmotivation", "#workouttips", "#dailyroutine", "#dragonall", "#motivationmonday"].map(t => ({ text: t, selected: true, tier: "mid" as const })),
   ...["#mumbaifit", "#deskworkout", "#morningstretch", "#fitfamindia", `#${niche}creator`, "#homegym", "#fitnessindia"].map(t => ({ text: t, selected: true, tier: "niche" as const })),
 ];
 

@@ -90,7 +90,7 @@ const PublicMediaKit = () => {
             <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center shadow-2xl shadow-blue-600/20">
                <Stars className="w-5 h-5 text-white" />
             </div>
-            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white hidden md:block">CreatorForge Protocol</span>
+            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white hidden md:block">Dragon All Protocol</span>
          </div>
          <div className="pointer-events-auto">
             <button 
@@ -241,7 +241,7 @@ const PublicMediaKit = () => {
               </div>
               <div className="pt-6 border-t border-white/5">
                  <p className="text-[9px] font-black uppercase tracking-widest text-emerald-500 italic flex items-center gap-2">
-                    <CheckCircle2 className="w-3 h-3" /> All metrics verified by CreatorForge Autonomous Engine
+                    <CheckCircle2 className="w-3 h-3" /> All metrics verified by Dragon All Autonomous Engine
                  </p>
               </div>
            </motion.div>

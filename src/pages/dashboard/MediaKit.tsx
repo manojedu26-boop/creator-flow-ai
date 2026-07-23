@@ -93,7 +93,7 @@ export const MediaKit = () => {
     doc.setFontSize(26);
     doc.setTextColor(255, 60, 172); // Primary Pink
     doc.setFont("helvetica", "bold");
-    doc.text("CREATORFORGE", 14, 25);
+    doc.text("DRAGON ALL", 14, 25);
     
     doc.setFontSize(10);
     doc.setTextColor(100);
@@ -172,7 +172,7 @@ export const MediaKit = () => {
     doc.setTextColor(150);
     doc.setFont("helvetica", "normal");
     const footerY = 280;
-    doc.text("Verified by CreatorForge Engine • Official Creator Document", 14, footerY);
+    doc.text("Verified by Dragon All Engine • Official Creator Document", 14, footerY);
     doc.text("Mar 2026 Edition", 196, footerY, { align: "right" });
     
     doc.save(`${user?.firstName}_MediaKit_2026.pdf`);
@@ -462,7 +462,7 @@ export const MediaKit = () => {
 
                    {/* PREVIEW FOOTER */}
                    <div className="mt-auto pt-6 border-t border-white/10 flex flex-col gap-2 opacity-50">
-                      <p className="text-[8px] font-black uppercase tracking-widest">CreatorForge AI Kit</p>
+                      <p className="text-[8px] font-black uppercase tracking-widest">Dragon All Kit</p>
                    </div>
                 </div>
              </div>
@@ -589,7 +589,7 @@ export const MediaKit = () => {
 
                   {/* PREVIEW FOOTER */}
                   <div className={`mt-auto pt-10 border-t ${style.border} flex justify-between items-center opacity-40`}>
-                     <p className="text-[10px] font-black uppercase tracking-widest">Generated via CreatorForge AI</p>
+                     <p className="text-[10px] font-black uppercase tracking-widest">Generated via Dragon All</p>
                      <div className="flex items-center gap-2">
                         <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                         <span className="text-[9px] font-black uppercase">Verified Stats: Mar 2026</span>

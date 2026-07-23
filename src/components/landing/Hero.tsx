@@ -34,9 +34,9 @@ const Hero = () => {
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
         >
-          Forge Your <br />
-          <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-indigo-400 to-blue-400 inline-block py-2">
-            Legacy
+          Unleash Your <br />
+          <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-purple-400 to-indigo-400 inline-block py-2">
+            Creative Domain
           </span>
         </motion.h1>
 

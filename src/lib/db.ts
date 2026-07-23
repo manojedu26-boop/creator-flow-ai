@@ -73,6 +73,22 @@ export const db = new Database();
 
 // Seed Initial Data for Demo (Naveen)
 export const initializeDB = () => {
+  // 0. Default Demo User
+  db.seed('users', [{
+    id: "u1",
+    name: "Naveen Kumar",
+    firstName: "Naveen",
+    handle: "@naveenfitlife",
+    email: "naveen@example.com",
+    photo: "https://api.dicebear.com/7.x/avataaars/svg?seed=Naveen",
+    niche: "Fitness & Lifestyle",
+    platforms: ["Instagram", "YouTube", "TikTok"],
+    type: "Creator",
+    role_assigned: true,
+    followerCounts: { "Instagram": "48.2K", "YouTube": "12.8K", "TikTok": "31.5K" },
+    onboarded: true
+  }]);
+
   // 1. Invoices
   db.seed('invoices', [
     { id: 'inv_1', brand: 'MuscleBlaze', amount: 15500, date: '2025-03-22', status: 'Pending', type: 'Reel Collaboration' },

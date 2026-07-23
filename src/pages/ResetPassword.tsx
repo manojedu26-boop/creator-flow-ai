@@ -82,7 +82,7 @@ const ResetPassword = () => {
       >
         <div className="flex items-center gap-3 font-black text-3xl tracking-tighter uppercase text-white mb-10">
           <Logo iconOnly iconClassName="w-10 h-10 shadow-none bg-transparent" />
-          <span>CreatorForge<span className="text-blue-500">AI</span></span>
+          <span>Dragon<span className="text-indigo-500"> All</span></span>
         </div>
 
         <div className="rounded-[2.5rem] bg-black/40 backdrop-blur-3xl p-8 md:p-10 border border-white/10 shadow-2xl mt-8">

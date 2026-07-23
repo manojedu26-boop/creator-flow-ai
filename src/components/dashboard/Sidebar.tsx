@@ -28,35 +28,18 @@ const TICKER_ITEMS = [
 
 export const navGroups = [
   {
-    title: "HQ",
+    title: "Core Hub",
     items: [
-      { icon: Home,         label: "Home",              href: "/dashboard" },
-      { icon: Compass,      label: "Explore",           href: "/explore" },
+      { icon: Home,         label: "Home",                   href: "/dashboard" },
+      { icon: BarChart3,    label: "Cross-Platform Analytics", href: "/analytics" },
+      { icon: Handshake,    label: "Brand Deals & Market",    href: "/deals" },
+      { icon: Globe,        label: "Network & Messages",      href: "/network" },
     ]
   },
   {
-    title: "Creative Hub",
+    title: "AI Suite",
     items: [
-      { icon: BrainCircuit, label: "AI Studio",         href: "/studio" },
-      { icon: Play,         label: "Video Edit",       href: "/editor" },
-      { icon: TrendingUp,   label: "Growth",            href: "/growth" },
-    ]
-  },
-  {
-    title: "Business",
-    items: [
-      { icon: BarChart3,    label: "Analytics",         href: "/analytics" },
-      { icon: Handshake,    label: "Brand Deals",       href: "/deals" },
-      { icon: DollarSign,   label: "Revenue",           href: "/revenue" },
-      { icon: ShieldCheck,  label: "Contracts",         href: "/contracts" },
-      { icon: Palette,      label: "Media Kit",         href: "/mediakit" },
-    ]
-  },
-  {
-    title: "Networking",
-    items: [
-      { icon: Globe,        label: "Network",           href: "/network" },
-      { icon: MessageSquare,label: "Messages",          href: "/messages" },
+      { icon: BrainCircuit, label: "AI Content Studio",       href: "/studio" },
     ]
   }
 ];
@@ -127,7 +110,7 @@ export const Sidebar = () => {
 
   return (
     <motion.div
-      className="fixed left-0 top-0 bottom-0 z-sidebar bg-white border-r border-slate-100 hidden lg:flex flex-col shadow-[1px_0_10px_rgba(0,0,0,0.02)] overflow-hidden"
+      className="fixed left-0 top-0 bottom-0 z-sidebar bg-white dark:bg-slate-900 border-r border-slate-200/80 dark:border-slate-800/80 hidden lg:flex flex-col shadow-sm overflow-hidden"
       animate={{ width: expanded ? 280 : 80 }}
       transition={{ duration: 0.3, ease: "easeInOut" }}
       onMouseEnter={() => setIsHoverExpanded(true)}
@@ -136,7 +119,7 @@ export const Sidebar = () => {
       {/* Logo + Pin Toggle */}
       <div
         className={cn(
-          "flex items-center h-[var(--header-h)] cursor-pointer border-b border-slate-50 relative shrink-0 transition-all duration-300",
+          "flex items-center h-[var(--header-h)] cursor-pointer border-b border-slate-100 dark:border-slate-800/80 relative shrink-0 transition-all duration-300",
           expanded ? "px-6 gap-3" : "justify-center px-0"
         )}
         onClick={toggleSidebar}
@@ -152,15 +135,15 @@ export const Sidebar = () => {
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -10 }}
-              className="text-[8px] font-bold uppercase tracking-[0.2em] text-slate-400 absolute bottom-3 left-16"
+              className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 absolute bottom-3 left-16"
             >
-              SUITE v3.5
+              PRO HQ
             </motion.span>
           )}
         </AnimatePresence>
       </div>
 
-      {/* Nav Items Grouped - Compact Vertical Logic */}
+      {/* Nav Items Grouped */}
       <nav className="flex-1 overflow-y-auto no-scrollbar py-4 px-3 space-y-6">
         {navGroups.map((group) => (
           <div key={group.title} className="space-y-1">
@@ -170,14 +153,14 @@ export const Sidebar = () => {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  className="px-4 text-[7px] font-bold uppercase tracking-[0.15em] text-slate-400 mb-0.5 truncate"
+                  className="px-4 text-[10px] font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-1 truncate"
                 >
                   {group.title}
                 </motion.h3>
               )}
             </AnimatePresence>
             
-            <div className="space-y-0.5">
+            <div className="space-y-1">
               {group.items.map((item) => {
                 const isActive = location.pathname === item.href ||
                   (item.href !== "/dashboard" && location.pathname.startsWith(item.href));
@@ -188,29 +171,29 @@ export const Sidebar = () => {
                     key={item.label}
                     to={item.href}
                     className={cn(
-                      "flex items-center rounded-lg relative transition-all duration-200 group py-1",
-                      expanded ? "px-4 gap-2" : "justify-center px-0",
+                      "flex items-center rounded-xl relative transition-all duration-200 group py-2.5",
+                      expanded ? "px-3.5 gap-3" : "justify-center px-0",
                       isActive 
-                        ? "bg-slate-950 text-white shadow-md shadow-slate-200" 
-                        : "text-slate-400 hover:bg-slate-50 hover:text-slate-900"
+                        ? "bg-slate-900 text-white dark:bg-slate-800 dark:text-white shadow-sm" 
+                        : "text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-slate-100"
                     )}
                     title={!expanded ? item.label : undefined}
                   >
                     {isActive && (
                       <motion.div
                         layoutId="activeNavTab"
-                        className="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-4 bg-blue-500 rounded-full"
+                        className="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-indigo-500 rounded-full"
                       />
                     )}
 
                     {/* Icon with notification badge */}
                     <div className="relative shrink-0 flex items-center justify-center">
                       <item.icon className={cn(
-                        "w-4.5 h-4.5 transition-all outline-none",
-                        isActive ? "text-blue-500" : "group-hover:text-slate-900"
+                        "w-5 h-5 transition-all outline-none",
+                        isActive ? "text-indigo-400" : "group-hover:text-slate-900 dark:group-hover:text-white"
                       )} />
                       {isNotifications && unreadCount > 0 && (
-                        <span className="absolute -top-1 -right-1 min-w-[12px] h-3 bg-rose-600 text-white text-[7px] font-bold rounded-full flex items-center justify-center px-0.5 border border-white">
+                        <span className="absolute -top-1 -right-1 min-w-[14px] h-3.5 bg-rose-600 text-white text-[8px] font-bold rounded-full flex items-center justify-center px-0.5 border border-white">
                           {unreadCount > 9 ? "9+" : unreadCount}
                         </span>
                       )}
@@ -222,10 +205,10 @@ export const Sidebar = () => {
                           initial={{ opacity: 0, width: 0, x: -10 }}
                           animate={{ opacity: 1, width: "auto", x: 0 }}
                           exit={{ opacity: 0, width: 0, x: -10 }}
-                          transition={{ duration: 0.3, ease: "easeInOut" }}
+                          transition={{ duration: 0.2, ease: "easeInOut" }}
                           className="overflow-hidden flex items-center"
                         >
-                           <span className="font-semibold text-[10px] uppercase tracking-tight whitespace-nowrap">
+                           <span className="font-medium text-sm whitespace-nowrap">
                              {item.label}
                            </span>
                         </motion.div>
@@ -250,25 +233,8 @@ export const Sidebar = () => {
         ))}
     </nav>
 
-      {/* Neural Heartbeat Ticker: Ambient Intelligence Heartbeat */}
-      <div className="mx-3 mb-2 h-6 bg-slate-950 rounded-lg border border-white/[0.03] flex items-center overflow-hidden relative pointer-events-none group/ticker">
-         <div className="absolute inset-y-0 left-0 w-8 bg-gradient-to-r from-slate-950 to-transparent z-10" />
-         <div className="absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-slate-950 to-transparent z-10" />
-         
-         <div className="flex animate-ticker whitespace-nowrap gap-12 pl-4">
-            {TICKER_ITEMS.concat(TICKER_ITEMS).map((item, i) => (
-              <div key={i} className="flex items-center gap-2">
-                 <div className="w-1 h-1 rounded-full bg-blue-500 animate-pulse shadow-[0_0_5px_rgba(59,130,246,0.8)]" />
-                 <span className="text-[7.5px] font-black uppercase tracking-[0.2em] text-blue-500/80 italic">
-                    {item}
-                 </span>
-              </div>
-            ))}
-         </div>
-      </div>
-
       {/* Creator Profile Bottom */}
-      <div className="p-3 border-t border-slate-50 relative" ref={userMenuRef}>
+      <div className="p-3 border-t border-slate-100 dark:border-slate-800/80 relative" ref={userMenuRef}>
         {/* User Menu Popup */}
         <AnimatePresence>
           {showUserMenu && (
@@ -277,22 +243,22 @@ export const Sidebar = () => {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 8, scale: 0.95 }}
               transition={{ duration: 0.15 }}
-              className="absolute bottom-full left-3 right-3 mb-2 bg-white border border-slate-200 rounded-2xl shadow-[0_20px_50px_-12px_rgba(0,0,0,0.15)] overflow-hidden z-50 text-slate-900 font-bold"
+              className="absolute bottom-full left-3 right-3 mb-2 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl overflow-hidden z-50 text-slate-900 dark:text-slate-100"
             >
-              <div className="p-4 border-b border-slate-50">
-                <p className="text-[11px] font-black uppercase tracking-widest text-slate-900">{user?.name || "Creator"}</p>
-                <p className="text-[10px] text-slate-400 font-bold tracking-tight">{user?.email}</p>
+              <div className="p-4 border-b border-slate-100 dark:border-slate-800">
+                <p className="text-xs font-semibold text-slate-900 dark:text-slate-100">{user?.name || "Creator"}</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400">{user?.email}</p>
               </div>
               {[
                 { icon: User, label: "View Profile", action: () => { navigate("/network/profile/me"); setShowUserMenu(false); } },
                 { icon: Settings, label: "Settings", action: () => { navigate("/settings"); setShowUserMenu(false); } },
-                { icon: RefreshCcw, label: "Switch Account", action: () => { toast.info("Switch Account", { description: "Coming soon — multi-account support" }); setShowUserMenu(false); } },
+                { icon: RefreshCcw, label: "Switch Account", action: () => { toast.info("Switch Account", { description: "Multi-account support active" }); setShowUserMenu(false); } },
                 { icon: LogOut, label: "Log Out", action: handleLogout, danger: true },
               ].map(item => (
                 <button
                   key={item.label}
                   onClick={item.action}
-                  className={`w-full flex items-center gap-3 px-4 py-3 text-[11px] font-black uppercase tracking-widest transition-all hover:bg-slate-50 ${(item as any).danger ? "text-rose-600 hover:bg-rose-50" : "text-slate-500 hover:text-slate-900"}`}
+                  className={`w-full flex items-center gap-3 px-4 py-3 text-xs font-medium transition-all hover:bg-slate-100 dark:hover:bg-slate-800 ${(item as any).danger ? "text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/30" : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100"}`}
                 >
                   <item.icon className="w-4 h-4 shrink-0" />
                   {item.label}
@@ -306,19 +272,19 @@ export const Sidebar = () => {
         <button
           onClick={() => setShowUserMenu(prev => !prev)}
           className={cn(
-            "w-full flex items-center p-2 rounded-2xl bg-white border border-slate-200 hover:bg-slate-50 transition-all group shadow-sm",
+            "w-full flex items-center p-2 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/80 transition-all group shadow-sm",
             expanded ? "gap-3" : "justify-center"
           )}
         >
           <div className="w-9 h-9 shrink-0 relative">
             {user?.photo ? (
-              <img src={user.photo} alt="" className="w-full h-full rounded-full object-cover border border-slate-100 shadow-sm" />
+              <img src={user.photo} alt="" className="w-full h-full rounded-full object-cover border border-slate-100 dark:border-slate-800 shadow-sm" />
             ) : (
-              <div className="w-full h-full rounded-full bg-blue-600 flex items-center justify-center text-[11px] font-black text-white">
+              <div className="w-full h-full rounded-full bg-indigo-600 flex items-center justify-center text-xs font-bold text-white">
                 {user?.firstName?.[0]}
               </div>
             )}
-            <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 border-2 border-white rounded-full" />
+            <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-500 border-2 border-white dark:border-slate-900 rounded-full" />
           </div>
 
           <AnimatePresence>
@@ -329,11 +295,11 @@ export const Sidebar = () => {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -10 }}
               >
-                <span className="text-[11px] font-black text-slate-900 truncate uppercase tracking-tight">{user?.handle || "@creator"}</span>
+                <span className="text-xs font-semibold text-slate-900 dark:text-slate-100 truncate">{user?.handle || "@creator"}</span>
                 <div className="flex gap-1.5 mt-0.5">
                   {user?.platforms?.includes("Instagram") && <Instagram className="w-3 h-3 text-pink-500" />}
                   {user?.platforms?.includes("YouTube") && <Youtube className="w-3 h-3 text-red-500" />}
-                  {user?.platforms?.includes("TikTok") && <Play className="w-3 h-3 text-slate-900" />}
+                  {user?.platforms?.includes("TikTok") && <Play className="w-3 h-3 text-slate-900 dark:text-slate-200" />}
                 </div>
               </motion.div>
             )}

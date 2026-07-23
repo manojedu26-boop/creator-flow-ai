@@ -106,7 +106,7 @@ export const Contracts = () => {
       const doc = new jsPDF();
       doc.setFontSize(22);
       doc.setTextColor(255, 60, 172);
-      doc.text("CREATORFORGE LEGAL SHIELD", 14, 20);
+      doc.text("DRAGON ALL LEGAL REVIEW", 14, 20);
       doc.setFontSize(14);
       doc.setTextColor(0);
       doc.text(`${type.toUpperCase()} REPORT: ${selectedContract.brand}`, 14, 35);

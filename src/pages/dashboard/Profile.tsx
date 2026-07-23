@@ -20,7 +20,7 @@ export const Profile = () => {
     handle: isMe ? (user?.handle || "operator_01") : "mayahills_vlog",
     category: "Digital Creator",
     bio: isMe ? `Strategic storytelling for the AI era. Building the future of ${user?.niche || 'creative'} nodes.` : "Cinematic travel & wellness routines. Partnered with 20+ global brands. 📍 Mumbai",
-    website: "creatorforge.ai/nexus",
+    website: "dragonall.ai/nexus",
     stats: {
       posts: "128",
       followers: isMe ? "48.2K" : "24.5K",

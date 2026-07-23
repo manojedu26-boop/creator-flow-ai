@@ -206,7 +206,7 @@ export const PulseCard: React.FC<PulseCardProps> = ({ item, isWidget = false }) 
              {renderActions()}
              <div className="px-4 md:px-6 pb-6">
                 <p className="text-sm">
-                   <span className="font-black mr-2">CreatorForge AI</span>
+                   <span className="font-bold mr-2 text-indigo-500">Dragon All</span>
                    <span className="text-slate-700 leading-relaxed tracking-tight">{item.content.message}</span>
                 </p>
                 <div className="mt-4 flex gap-3">

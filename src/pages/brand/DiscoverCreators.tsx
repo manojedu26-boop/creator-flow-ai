@@ -53,7 +53,7 @@ export const DiscoverCreators = () => {
   const handleBulkOutreach = () => {
     setIsCelebrating(true);
     toast.success("Outreach Sent!", {
-      description: `Messages sent to ${selectedCreators.length} creators via CreatorForge AI.`,
+      description: `Messages sent to ${selectedCreators.length} creators via Dragon All.`,
     });
     setTimeout(() => {
       setIsCelebrating(false);

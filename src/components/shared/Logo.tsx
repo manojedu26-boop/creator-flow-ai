@@ -15,7 +15,7 @@ interface LogoProps {
 
 /**
  * RESTORED IDENTITY NODE v4.0
- * Official high-fidelity vector representation for CreatorForge AI.
+ * Official high-fidelity vector representation for Dragon All.
  * Replaces corrupted legacy placeholders with a premium Obsidian Blue technical identifier.
  */
 export const Logo = ({ 
@@ -111,13 +111,13 @@ export const Logo = ({
           className="flex flex-col justify-center"
         >
           <span className={cn(
-            "text-slate-950 font-black text-2xl tracking-tighter uppercase leading-[0.8]",
+            "text-slate-900 dark:text-slate-100 font-bold text-xl tracking-tight uppercase leading-none",
             textClassName
           )}>
-            CREATORFORGE<span className="text-blue-600 italic">AI</span>
+            DRAGON<span className="text-indigo-500 italic ml-1 font-extrabold">ALL</span>
           </span>
-          <span className="text-[7.5px] font-black uppercase tracking-[0.4em] text-slate-400 mt-1.5 ml-0.5">
-            Elite Creator Interface
+          <span className="text-[8px] font-medium uppercase tracking-widest text-slate-400 mt-1">
+            Creator Intelligence HQ
           </span>
         </motion.div>
       )}

@@ -58,7 +58,7 @@ export const InvoiceGenerator = ({ isOpen, onClose, brandName, dealValue, dealTy
     // Header
     doc.setFontSize(24);
     doc.setTextColor(255, 60, 172); // Primary Pink
-    doc.text("CREATORFORGE", 14, 20);
+    doc.text("DRAGON ALL", 14, 20);
     
     doc.setFontSize(10);
     doc.setTextColor(100);

@@ -1,4 +1,4 @@
--- CREATORFORGE MONETIZATION SUITE MIGRATION
+-- DRAGON ALL MONETIZATION SUITE MIGRATION
 -- Establish the tables for the Brand Deal Marketplace
 
 -- 1. Brand Listings (Publicly viewable campaign briefs)

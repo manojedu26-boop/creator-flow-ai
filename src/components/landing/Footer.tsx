@@ -54,7 +54,7 @@ const Footer = () => (
         <div className="flex items-center gap-4">
            <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
            <p className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-600">
-              © 2026 CREATORFORGE AI Ltd. // ALL SYSTEMS NOMINAL v4.2
+              © 2026 DRAGON ALL Ltd. // ALL SYSTEMS NOMINAL v4.2
            </p>
         </div>
         <div className="flex items-center gap-12">

@@ -1,7 +1,7 @@
 
 export const TITAN_DATA = [
   { name: "CarryMinati", followers: "41M+", quote: "The AI script engine is actually legit. It understands the vibe of my niche better than most humans.", photo: "/assets/creators/titan_1.png" },
-  { name: "Dhruv Rathee", followers: "24M+", quote: "CreatorForge AI actually understands the scale of my production. It's like having a neural expansion of my team.", photo: "/assets/creators/titan_6.png" },
+  { name: "Dhruv Rathee", followers: "24M+", quote: "Dragon All actually understands the scale of my production. It's like having a neural expansion of my team.", photo: "/assets/creators/titan_6.png" },
   { name: "Technical Guruji", followers: "23M+", quote: "Managing 5 channels used to be a nightmare. Now it's a single obsidian dashboard.", photo: "/assets/creators/titan_7.png" },
   { name: "Bhuvan Bam", followers: "26M+", quote: "The content calendar is absolute fire. Keeps my consistency on point without the creative burnout.", photo: "/assets/creators/titan_8.png" },
   { name: "Prajakta Koli", followers: "7M+", quote: "My brand deals have 3x conversion since I started using the AI Media Kit. It's too professional.", photo: "/assets/creators/titan_2.png" },

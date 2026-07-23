@@ -4,14 +4,26 @@ import { Logo } from "./Logo";
 
 export const Intro = ({ onComplete }: { onComplete: () => void }) => {
   const [isDone, setIsDone] = useState(false);
-  const text = "CREATORFORGE";
+  const text = "DRAGON ALL";
   const letters = text.split("");
 
+  const handleSkip = () => {
+    try { sessionStorage.setItem('cf_intro_seen', 'true'); } catch {}
+    setIsDone(true);
+    onComplete();
+  };
+
   useEffect(() => {
+    try {
+      if (sessionStorage.getItem('cf_intro_seen') === 'true') {
+        onComplete();
+        return;
+      }
+    } catch {}
+
     const timer = setTimeout(() => {
-      setIsDone(true);
-      setTimeout(onComplete, 1000); // Wait for exit animation
-    }, 3500);
+      handleSkip();
+    }, 1800);
     return () => clearTimeout(timer);
   }, [onComplete]);
 
@@ -57,7 +69,8 @@ export const Intro = ({ onComplete }: { onComplete: () => void }) => {
           initial="hidden"
           animate="visible"
           exit="exit"
-          className="fixed inset-0 z-[9999] bg-black flex flex-col items-center justify-center overflow-hidden perspective-1000"
+          onClick={handleSkip}
+          className="fixed inset-0 z-[9999] bg-black flex flex-col items-center justify-center overflow-hidden perspective-1000 cursor-pointer"
         >
           {/* Logo Identity Node */}
           <motion.div

@@ -295,7 +295,7 @@ export const PitchArchitectModal = ({ isOpen, onClose, brand }: PitchArchitectMo
                   </div>
 
                   <div className="flex items-center gap-3 justify-center text-[8px] font-black text-slate-300 uppercase tracking-widest">
-                    <ShieldCheck className="w-3 h-3" /> Encrypted Transmission via CreatorForge Neural Mesh
+                    <ShieldCheck className="w-3 h-3" /> Encrypted Transmission via Dragon All Network
                   </div>
                 </div>
               )}

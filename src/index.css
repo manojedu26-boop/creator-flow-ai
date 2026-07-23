@@ -94,15 +94,15 @@
     font-weight: 400;
   }
 
-  /* ARCHITECTURAL TYPOGRAPHY SCALE (Sleeker, More Professional) */
-  h1 { font-size: clamp(1.75rem, 6vw, 4rem); }
-  h2 { font-size: clamp(1.25rem, 4vw, 2.5rem); }
-  h3 { font-size: clamp(1.1rem, 2.5vw, 1.5rem); }
+  /* ARCHITECTURAL TYPOGRAPHY SCALE */
+  h1 { font-size: clamp(1.75rem, 6vw, 3.5rem); }
+  h2 { font-size: clamp(1.25rem, 4vw, 2.25rem); }
+  h3 { font-size: clamp(1.1rem, 2.5vw, 1.35rem); }
   
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Outfit', sans-serif;
-    font-weight: 600 !important; /* Force Semibold across all dashboard nodes */
-    @apply tracking-tight uppercase leading-[0.95];
+    font-weight: 600;
+    @apply tracking-tight leading-tight;
   }
 
   p, span, div, button {
@@ -147,16 +147,16 @@
     background: 
     radial-gradient(at 0% 0%, hsla(226, 70%, 55%, 0.03) 0px, transparent 50%),
     radial-gradient(at 100% 0%, hsla(226, 70%, 55%, 0.03) 0px, transparent 50%);
-    background-color: white;
+    @apply bg-background;
   }
 
   .premium-card {
-    @apply transition-all duration-500 ease-out border border-slate-100 bg-white;
+    @apply transition-all duration-300 ease-out border border-slate-200/70 dark:border-slate-800/80 bg-white dark:bg-slate-900/90 rounded-2xl;
     box-shadow: var(--shadow-premium);
   }
 
   .premium-card:hover {
-    @apply -translate-y-2 border-primary/20;
+    @apply -translate-y-1 border-indigo-500/30;
     box-shadow: var(--shadow-floating);
   }
 

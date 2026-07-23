@@ -149,40 +149,40 @@ export const Header = ({ title = "Dashboard", onSearch }: { title?: string; onSe
 
   return (
     <>
-      <header className="sticky top-0 right-0 h-[var(--header-h)] bg-white/80 backdrop-blur-xl border-b border-slate-100 z-[100] flex items-center justify-between px-4 md:px-10 transition-all duration-400 ease-[cubic-bezier(0.175,0.885,0.32,1.275)]">
+      <header className="sticky top-0 right-0 h-[var(--header-h)] bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-slate-200/80 dark:border-slate-800/80 z-[100] flex items-center justify-between px-4 md:px-10 transition-all">
         <div className="flex items-center gap-8">
-          <h1 className="text-base md:text-xl font-black tracking-tight uppercase truncate max-w-[160px] md:max-w-none text-slate-900">{title}</h1>
+          <h1 className="text-base md:text-lg font-bold tracking-tight truncate max-w-[160px] md:max-w-none text-slate-900 dark:text-slate-100">{title}</h1>
         </div>
 
-        <div className="flex items-center gap-3 md:gap-6">
+        <div className="flex items-center gap-3 md:gap-5">
           {/* Desktop Search */}
           <div className="relative hidden lg:block group/search">
-            <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within/search:text-blue-600 transition-colors" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within/search:text-indigo-500 transition-colors" />
             <div 
               onClick={onSearch}
-              className="h-14 w-80 bg-slate-50 border border-slate-200 rounded-[1.25rem] pl-14 pr-6 flex items-center justify-between cursor-pointer hover:border-blue-300 hover:bg-white hover:shadow-premium transition-all group"
+              className="h-10 w-72 bg-slate-100/80 dark:bg-slate-800/80 border border-slate-200/60 dark:border-slate-700/60 rounded-xl pl-11 pr-4 flex items-center justify-between cursor-pointer hover:border-indigo-400 hover:bg-white dark:hover:bg-slate-800 transition-all group"
             >
-              <span className="text-[12px] font-bold text-slate-400 group-hover:text-slate-600 transition-colors">Search for anything...</span>
-              <div className="flex items-center gap-1.5 px-2.5 py-1.5 bg-white border border-slate-200 rounded-xl shadow-sm">
+              <span className="text-xs font-normal text-slate-400 dark:text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-200 transition-colors">Search command or file...</span>
+              <div className="flex items-center gap-1 px-2 py-0.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-md shadow-xs">
                 <CommandIcon className="w-3 h-3 text-slate-400" />
-                <span className="text-[10px] font-black tracking-widest text-slate-400">K</span>
+                <span className="text-[10px] font-semibold text-slate-400">K</span>
               </div>
             </div>
           </div>
 
           {/* Mobile Search */}
-          <button onClick={onSearch} className="lg:hidden p-3 bg-slate-50 border border-slate-100 rounded-2xl text-slate-400 hover:text-slate-900 transition-colors">
-            <Search className="w-5 h-5" />
+          <button onClick={onSearch} className="lg:hidden p-2.5 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors">
+            <Search className="w-4 h-4" />
           </button>
 
           {/* Theme Toggle */}
           {mounted && (
             <button
               onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-              className="p-2 text-slate-400 hover:text-slate-900 transition-colors rounded-xl hover:bg-slate-50"
+              className="p-2 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800"
               aria-label="Toggle Theme"
             >
-              {theme === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+              {theme === "dark" ? <Sun className="w-5 h-5 text-amber-400" /> : <Moon className="w-5 h-5 text-slate-600" />}
             </button>
           )}
 

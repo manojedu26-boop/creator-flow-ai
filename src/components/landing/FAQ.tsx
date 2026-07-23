@@ -3,7 +3,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { HelpCircle, Sparkles, Plus, Minus, Stars } from "lucide-react";
 
 const faqs = [
-  { q: "Is CreatorForge AI free to deploy?", a: "Yes. Our Starter node is permanently free — no credit card required. You gain 1 platform sync, 50 AI generations per month, real-time analytics, and a standard media kit." },
+  { q: "Is Dragon All free to deploy?", a: "Yes. Our Starter node is permanently free — no credit card required. You gain 1 platform sync, 50 AI generations per month, real-time analytics, and a standard media kit." },
   { q: "Which intelligence nodes are supported?", a: "We currently integrate with Instagram, YouTube, and TikTok. Synchronize your accounts via high-security OAuth for automated data ingestion." },
   { q: "How does the Predictive AI Studio operate?", a: "Our models are trained on elite-tier creator data. Input your parameters, and our engine generates high-converting scripts, captions, and strategies tailored specifically to your audience's unique velocity." },
   { q: "Can I terminate my session anytime?", a: "Absolutely. No long-term contracts or lock-in protocols. You can terminate your premium subscription instantly from your secure account settings." },

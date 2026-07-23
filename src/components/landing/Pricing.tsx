@@ -55,8 +55,8 @@ const Pricing = () => {
              <Stars className="w-4 h-4" /> Investment Tiers
           </div>
           <h2 className="text-5xl md:text-7xl font-black tracking-tighter leading-[0.85] mb-10 text-white uppercase">
-            Forge Your <br />
-            <span className="text-blue-500 font-black italic">Legacy</span>
+            Power Your <br />
+            <span className="text-indigo-400 font-black italic">Growth</span>
           </h2>
           <p className="text-slate-400 font-medium text-lg md:text-2xl max-w-2xl mx-auto leading-relaxed">
             Elite-tier intelligence for every phase of your creator evolution.

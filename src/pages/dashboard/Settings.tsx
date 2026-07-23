@@ -348,7 +348,7 @@ export const Settings = () => {
                      <div className="flex flex-col md:flex-row items-center justify-between relative z-10 gap-8">
                         <div className="text-center md:text-left">
                            <p className="text-[10px] font-black uppercase text-blue-400 tracking-[0.5em] mb-4">Account Tier Status</p>
-                           <h3 className="text-5xl font-black text-white tracking-tighter uppercase leading-none italic italic-bold">CreatorForge <span className="text-blue-500 underline decoration-4 underline-offset-8">PRO</span></h3>
+                           <h3 className="text-5xl font-black text-white tracking-tighter uppercase leading-none italic italic-bold">Dragon All <span className="text-blue-500 underline decoration-4 underline-offset-8">PRO</span></h3>
                         </div>
                         <div className="text-center md:text-right">
                            <p className="text-5xl font-black text-white tracking-tight leading-none">$29<span className="text-[10px] font-black text-white/30 uppercase tracking-widest ml-2">/per billing cycle</span></p>
