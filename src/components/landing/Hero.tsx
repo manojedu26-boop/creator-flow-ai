@@ -1,109 +1,80 @@
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, Sparkles, X, Zap, PlayCircle } from "lucide-react";
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { ArrowUpRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { Magnetic } from "../shared/MotionComponents";
-import { TitanArc } from "./TitanArc";
 
-const Hero = () => {
+export const Hero = () => {
   const navigate = useNavigate();
-  const [showVideo, setShowVideo] = useState(false);
-  
+  const [creatorCount, setCreatorCount] = useState(4892);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCreatorCount(prev => prev + (Math.random() > 0.4 ? 1 : 0));
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <section className="relative min-h-[85vh] flex flex-col items-center justify-center overflow-hidden bg-slate-950 px-6 pt-24 pb-12">
-      {/* Ambient Effects */}
-      <div className="absolute inset-0 pointer-events-none -z-10">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:60px_60px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
-        <div className="absolute top-0 left-1/4 w-[50%] h-[50%] bg-blue-600/10 rounded-full blur-[140px] opacity-40 animate-pulse" />
-      </div>
+    <section className="relative min-h-[92vh] flex flex-col items-center justify-between bg-[#0A0A0A] text-white px-6 pt-32 pb-16 overflow-hidden">
+      {/* Live Counter Bar */}
+      <motion.div 
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="flex items-center gap-3 px-4 py-1.5 rounded-full border border-white/10 bg-white/[0.03] text-xs tracking-wider"
+      >
+        <span className="relative flex h-2 w-2">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+          <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+        </span>
+        <span className="text-slate-400 font-mono text-[11px] uppercase tracking-widest">
+          Creators growing right now: <span className="text-white font-bold">{creatorCount.toLocaleString()}</span>
+        </span>
+      </motion.div>
 
-      <div className="container relative z-10 max-w-7xl text-center flex flex-col items-center">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
+      {/* Main Rhetorical Cover Headline */}
+      <div className="my-auto max-w-6xl text-center space-y-8">
+        <motion.h1 
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          className="inline-flex items-center gap-3 rounded-full bg-white/5 border border-white/10 backdrop-blur-md px-5 py-2 text-[9px] font-black uppercase tracking-[0.4em] text-blue-400 mb-8 shadow-2xl"
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="text-4xl sm:text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter uppercase leading-[0.88] select-none"
         >
-          <Sparkles className="w-3.5 h-3.5 fill-blue-500" />
-          Synchronising Creator Intelligence
-        </motion.div>
-
-        <motion.h1
-          className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-[0.85] mb-6 text-white uppercase"
-          initial={{ opacity: 0, scale: 0.9, y: 40 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-        >
-          Unleash Your <br />
-          <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-purple-400 to-indigo-400 inline-block py-2">
-            Creative Domain
-          </span>
+          WHAT IF YOUR <br />
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-slate-400">NEXT POST</span> <br />
+          <span className="underline decoration-pink-500/80 decoration-4 underline-offset-8">WASN'T LUCK?</span>
         </motion.h1>
 
-        <motion.p
-          className="text-base md:text-lg text-slate-400 max-w-2xl mx-auto mb-10 font-medium leading-relaxed italic"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.1 }}
-        >
-          Disrupt the manual grind with obsidian-grade precision. Predict trends, automate production, and scale with the industry's most advanced neural core.
-        </motion.p>
-        
-        {/* TITAN ARC - CENTERPIECE */}
-        <div className="w-full mb-12">
-            <TitanArc />
-        </div>
-
-        <motion.div
+        <motion.p 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-          className="mb-10 text-center"
+          transition={{ delay: 0.3 }}
+          className="text-base sm:text-xl text-slate-400 max-w-2xl mx-auto font-normal leading-relaxed"
         >
-          <p className="text-[10px] font-black uppercase tracking-[0.5em] text-slate-500">
-            Trusted by <span className="text-blue-500">11,240+ Titans</span>
-          </p>
-        </motion.div>
+          Dragon All is an AI-powered growth engine that predicts trends, generates viral hooks, and scales creators across Instagram, YouTube, and TikTok.
+        </motion.p>
 
-        <motion.div
-          className="flex flex-wrap items-center justify-center gap-6"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
+        {/* Minimal CTA */}
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.5 }}
+          className="pt-4"
         >
-          <Magnetic>
-             <button onClick={() => navigate("/register")} className="h-16 px-10 rounded-2xl bg-blue-600 text-white font-black text-[10px] uppercase tracking-[0.4em] shadow-xl hover:bg-blue-500 transition-all flex items-center gap-3">
-               Initiate Deployment <ArrowRight className="w-4 h-4" />
-             </button>
-          </Magnetic>
-          <Magnetic>
-             <button onClick={() => setShowVideo(true)} className="h-16 px-10 rounded-2xl bg-white/5 border border-white/10 text-white font-black text-[10px] uppercase tracking-[0.4em] backdrop-blur-md hover:bg-white/10 transition-all flex items-center gap-3">
-               <Zap className="w-4 h-4 text-blue-400" /> View Intelligence
-             </button>
-          </Magnetic>
+          <button 
+            onClick={() => navigate("/register")}
+            className="group relative inline-flex items-center gap-3 px-12 py-5 rounded-full border border-white/20 bg-white/5 hover:bg-pink-500 hover:border-pink-500 hover:text-black font-semibold text-sm uppercase tracking-widest transition-all duration-300 shadow-xl"
+          >
+            <span>enter</span>
+            <ArrowUpRight className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+          </button>
         </motion.div>
       </div>
 
-      <AnimatePresence>
-        {showVideo && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-modal flex items-center justify-center bg-slate-950/95 backdrop-blur-2xl p-6"
-          >
-            <div className="relative w-full max-w-5xl aspect-video bg-black rounded-[3rem] overflow-hidden shadow-2xl border border-white/5">
-              <button 
-                onClick={() => setShowVideo(false)}
-                className="absolute top-6 right-6 z-10 w-12 h-12 flex items-center justify-center rounded-full bg-white text-slate-950 hover:bg-blue-600 hover:text-white transition-all shadow-2xl"
-              >
-                <X className="w-6 h-6" />
-              </button>
-              <iframe width="100%" height="100%" src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1" title="Demo" frameBorder="0" allowFullScreen></iframe>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Bottom Hint Indicator */}
+      <div className="text-[10px] text-slate-500 uppercase tracking-[0.4em] animate-pulse">
+        Scroll to reveal algorithm secrets
+      </div>
     </section>
   );
 };
