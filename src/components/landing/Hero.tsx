@@ -38,17 +38,17 @@ export const Hero = ({ onEnter, isEntered }: { onEnter: () => void; isEntered: b
   };
 
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-between bg-[#050505] text-white px-6 pt-24 pb-12 overflow-hidden select-none">
+    <section className="relative min-h-[92vh] flex flex-col items-center justify-between bg-gradient-to-b from-[#07080c] via-[#0b0c12] to-[#07080c] text-white px-6 pt-24 pb-12 overflow-hidden select-none">
       {/* Top Controls & Live Counter */}
-      <div className="w-full max-w-7xl flex items-center justify-between z-20">
+      <div className="w-full max-w-6xl flex items-center justify-between z-20">
         <motion.div 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex items-center gap-3 px-4 py-2 rounded-full border border-white/10 bg-white/[0.03] backdrop-blur-md text-xs tracking-wider shadow-xl"
+          className="flex items-center gap-3 px-4 py-1.5 rounded-full border border-white/10 bg-white/[0.03] backdrop-blur-md text-xs tracking-wider shadow-lg"
         >
-          <span className="relative flex h-2.5 w-2.5">
+          <span className="relative flex h-2 w-2">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
           </span>
           <span className="text-slate-400 font-mono text-[11px] uppercase tracking-widest">
             Creators growing right now: <span className="text-white font-bold">{creatorCount.toLocaleString()}</span>
@@ -58,31 +58,31 @@ export const Hero = ({ onEnter, isEntered }: { onEnter: () => void; isEntered: b
         {/* Ambient Sound Toggle Button */}
         <button
           onClick={toggleSound}
-          className="p-3 rounded-full border border-white/10 bg-white/[0.04] text-slate-400 hover:text-pink-400 hover:border-pink-500/40 transition-all shadow-xl flex items-center gap-2 text-xs font-mono"
+          className="p-2.5 px-4 rounded-full border border-white/10 bg-white/[0.04] text-slate-400 hover:text-pink-400 hover:border-pink-500/40 transition-all shadow-md flex items-center gap-2 text-xs font-mono"
         >
-          {soundOn ? <Volume2 className="w-4 h-4 text-pink-400" /> : <VolumeX className="w-4 h-4 text-slate-500" />}
-          <span className="hidden sm:inline uppercase">{soundOn ? "SOUND ON" : "MUTED"}</span>
+          {soundOn ? <Volume2 className="w-3.5 h-3.5 text-pink-400" /> : <VolumeX className="w-3.5 h-3.5 text-slate-500" />}
+          <span className="hidden sm:inline uppercase text-[10px] tracking-widest">{soundOn ? "SOUND ON" : "MUTED"}</span>
         </button>
       </div>
 
       {/* Main Gated Rhetorical Cover Headline */}
-      <div className="my-auto max-w-6xl text-center space-y-8 z-20">
+      <div className="my-auto max-w-5xl text-center space-y-6 z-20">
         <motion.h1 
-          initial={{ opacity: 0, scale: 0.94 }}
+          initial={{ opacity: 0, scale: 0.96 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-          className="text-4xl sm:text-7xl md:text-8xl lg:text-9xl font-black tracking-tighter uppercase leading-[0.85] drop-shadow-2xl"
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight uppercase leading-[0.95] drop-shadow-xl"
         >
           WHAT IF YOUR <br />
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-slate-400">NEXT POST</span> <br />
-          <span className="underline decoration-pink-500 decoration-8 underline-offset-8">WASN'T LUCK?</span>
+          <span className="underline decoration-pink-500/70 decoration-2 underline-offset-8">WASN'T LUCK?</span>
         </motion.h1>
 
         <motion.p 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}
-          className="text-base sm:text-xl text-slate-400 max-w-2xl mx-auto font-normal leading-relaxed"
+          transition={{ delay: 0.2 }}
+          className="text-sm sm:text-lg text-slate-400 max-w-xl mx-auto font-normal leading-relaxed"
         >
           Dragon All is an AI-powered growth engine that predicts trends, generates viral hooks, and scales creators across Instagram, YouTube, and TikTok.
         </motion.p>

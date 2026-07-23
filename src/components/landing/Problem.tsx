@@ -8,21 +8,21 @@ export const Problem = () => {
   ];
 
   return (
-    <section className="py-32 px-6 bg-[#0A0A0A] text-white border-t border-white/5 relative overflow-hidden">
-      <div className="max-w-6xl mx-auto space-y-20">
+    <section className="py-24 px-6 bg-[#07080c] text-white border-t border-white/5 relative overflow-hidden">
+      <div className="max-w-5xl mx-auto space-y-16">
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="text-left max-w-4xl"
+          className="text-left max-w-3xl"
         >
-          <span className="text-[10px] font-mono uppercase tracking-[0.4em] text-emerald-400 mb-4 block">
+          <span className="text-[10px] font-mono uppercase tracking-[0.4em] text-emerald-400 mb-3 block">
             [02 // ALGORITHM RESTRUCTURE]
           </span>
-          <h2 className="text-3xl sm:text-5xl md:text-7xl font-black uppercase tracking-tighter leading-[0.95]">
+          <h2 className="text-2xl sm:text-4xl md:text-5xl font-black uppercase tracking-tight leading-snug">
             WHAT IF THE ALGORITHM <br />
-            <span className="underline decoration-emerald-400 decoration-4 underline-offset-8">WASN'T THE ENEMY?</span>
+            <span className="underline decoration-emerald-400/80 decoration-2 underline-offset-8">WASN'T THE ENEMY?</span>
           </h2>
         </motion.div>
 

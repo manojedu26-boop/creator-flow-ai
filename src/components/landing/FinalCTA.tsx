@@ -6,17 +6,17 @@ export const FinalCTA = () => {
   const navigate = useNavigate();
 
   return (
-    <section className="py-40 px-6 bg-[#0A0A0A] text-white border-t border-white/5 text-center relative overflow-hidden">
-      <div className="max-w-5xl mx-auto space-y-12">
+    <section className="py-28 px-6 bg-[#07080c] text-white border-t border-white/5 text-center relative overflow-hidden">
+      <div className="max-w-4xl mx-auto space-y-10">
         <motion.h2 
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="text-4xl sm:text-6xl md:text-8xl lg:text-9xl font-black uppercase tracking-tighter leading-[0.88]"
+          className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black uppercase tracking-tight leading-[0.95]"
         >
           READY TO STOP <br />
-          <span className="underline decoration-indigo-500 decoration-4 underline-offset-8">GUESSING?</span>
+          <span className="underline decoration-indigo-500/80 decoration-2 underline-offset-8">GUESSING?</span>
         </motion.h2>
 
         <motion.div 

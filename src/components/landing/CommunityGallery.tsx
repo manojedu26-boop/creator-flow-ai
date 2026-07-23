@@ -20,19 +20,19 @@ const TESTIMONIALS: Testimonial[] = [
 
 export const CommunityGallery = () => {
   return (
-    <section className="py-32 px-6 bg-[#0A0A0A] text-white border-t border-white/5 overflow-hidden">
-      <div className="max-w-6xl mx-auto space-y-16">
+    <section className="py-24 px-6 bg-[#07080c] text-white border-t border-white/5 overflow-hidden">
+      <div className="max-w-5xl mx-auto space-y-12">
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
         >
-          <span className="text-[10px] font-mono uppercase tracking-[0.4em] text-emerald-400 mb-4 block">
+          <span className="text-[10px] font-mono uppercase tracking-[0.4em] text-emerald-400 mb-3 block">
             [06 // COMMUNITY COLLECTIVE]
           </span>
-          <h2 className="text-4xl sm:text-6xl md:text-8xl font-black uppercase tracking-tighter leading-none">
-            YOU'RE NOT <span className="underline decoration-emerald-400 decoration-4 underline-offset-8">BUILDING ALONE.</span>
+          <h2 className="text-3xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight leading-none">
+            YOU'RE NOT <span className="underline decoration-emerald-400/80 decoration-2 underline-offset-8">BUILDING ALONE.</span>
           </h2>
         </motion.div>
 

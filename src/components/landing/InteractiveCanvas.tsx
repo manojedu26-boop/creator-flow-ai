@@ -112,15 +112,15 @@ export const InteractiveCanvas = () => {
   };
 
   return (
-    <section className="py-32 px-6 bg-[#050505] text-white border-t border-white/5 relative overflow-hidden">
-      <div className="max-w-6xl mx-auto space-y-8">
+    <section className="py-24 px-6 bg-[#07080c] text-white border-t border-white/5 relative overflow-hidden">
+      <div className="max-w-5xl mx-auto space-y-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div>
             <span className="text-[10px] font-mono uppercase tracking-[0.4em] text-pink-500 mb-2 block">
               [08 // COLLABORATIVE SPRAY CANVAS]
             </span>
-            <h2 className="text-4xl sm:text-6xl md:text-7xl font-black uppercase tracking-tighter leading-none">
-              WTF <span className="underline decoration-pink-500 decoration-4 underline-offset-8">CANVAS.</span>
+            <h2 className="text-3xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight leading-none">
+              WTF <span className="underline decoration-pink-500/80 decoration-2 underline-offset-8">CANVAS.</span>
             </h2>
           </div>
 

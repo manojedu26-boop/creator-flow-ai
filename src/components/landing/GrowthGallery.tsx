@@ -26,14 +26,14 @@ export const GrowthGallery = () => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   return (
-    <section className="py-32 px-6 bg-[#0A0A0A] text-white border-t border-white/5 overflow-hidden">
-      <div className="max-w-6xl mx-auto mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+    <section className="py-24 px-6 bg-[#07080c] text-white border-t border-white/5 overflow-hidden">
+      <div className="max-w-5xl mx-auto mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
-          <span className="text-[10px] font-mono uppercase tracking-[0.4em] text-orange-400 mb-4 block">
+          <span className="text-[10px] font-mono uppercase tracking-[0.4em] text-orange-400 mb-3 block">
             [03 // VERIFIED CASE STUDIES]
           </span>
-          <h2 className="text-4xl sm:text-6xl md:text-8xl font-black uppercase tracking-tighter leading-none">
-            PROOF, NOT <span className="underline decoration-orange-400 decoration-4 underline-offset-8">PROMISES.</span>
+          <h2 className="text-3xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight leading-none">
+            PROOF, NOT <span className="underline decoration-orange-400/80 decoration-2 underline-offset-8">PROMISES.</span>
           </h2>
         </div>
 

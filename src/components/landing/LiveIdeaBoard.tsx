@@ -49,21 +49,21 @@ export const LiveIdeaBoard = () => {
   };
 
   return (
-    <section className="py-32 px-6 bg-[#0A0A0A] text-white border-t border-white/5 relative overflow-hidden">
-      <div className="max-w-6xl mx-auto space-y-16">
+    <section className="py-24 px-6 bg-[#07080c] text-white border-t border-white/5 relative overflow-hidden">
+      <div className="max-w-5xl mx-auto space-y-12">
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
         >
-          <span className="text-[10px] font-mono uppercase tracking-[0.4em] text-hot-pink text-pink-400 mb-4 block">
+          <span className="text-[10px] font-mono uppercase tracking-[0.4em] text-pink-400 mb-3 block">
             [05 // LIVE COMMUNITY CANVAS]
           </span>
-          <h2 className="text-4xl sm:text-6xl md:text-8xl font-black uppercase tracking-tighter leading-none">
-            DROP AN IDEA. <span className="underline decoration-pink-500 decoration-4 underline-offset-8">WATCH IT LAND.</span>
+          <h2 className="text-3xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight leading-none">
+            DROP AN IDEA. <span className="underline decoration-pink-500/80 decoration-2 underline-offset-8">WATCH IT LAND.</span>
           </h2>
-          <p className="text-slate-400 mt-4 text-base sm:text-lg max-w-xl font-normal">
+          <p className="text-slate-400 mt-3 text-sm sm:text-base max-w-xl font-normal">
             Type your next Reel or Short concept below. Live visitors interact with ideas in real time.
           </p>
         </motion.div>
