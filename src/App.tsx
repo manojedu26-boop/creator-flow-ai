@@ -75,12 +75,13 @@ const App = () => {
         <TooltipProvider>
           <Sonner />
           <Toaster />
-          <AnimatePresence mode="wait">
-            {showIntro ? (
+          <AnimatePresence>
+            {showIntro && (
               <Intro key="intro" onComplete={() => setShowIntro(false)} />
-            ) : (
-              <AuthProvider>
-                <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
+            )}
+          </AnimatePresence>
+          <AuthProvider>
+            <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
                   <ExploreProvider>
                     <PulseProvider>
                       <Suspense fallback={<PageLoader />}>
@@ -135,8 +136,6 @@ const App = () => {
                   </ExploreProvider>
                 </ThemeProvider>
               </AuthProvider>
-            )}
-          </AnimatePresence>
         </TooltipProvider>
       </BrowserRouter>
     </QueryClientProvider>
